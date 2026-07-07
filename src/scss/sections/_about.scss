@@ -1,0 +1,143 @@
+// ==========================================================================
+// About Us — portrait photo with a floating video-call PiP card, a
+// vertical "Video Call Support" tag, and an overlapping "Open Hours"
+// card, next to a features checklist + appointment CTA.
+// ==========================================================================
+
+.about {
+  @apply relative overflow-hidden bg-white py-20 sm:py-24;
+}
+
+.about__decor {
+  @apply pointer-events-none absolute -bottom-10 -right-10 h-64 w-64 text-brand-cyan/10;
+}
+
+.about__grid {
+  @apply relative grid grid-cols-1 items-center gap-20 lg:grid-cols-2 lg:gap-16;
+}
+
+// Media column ------------------------------------------------------------
+.about__media {
+  @apply relative mx-auto w-full max-w-md pb-10 pl-8 pt-6 lg:max-w-none;
+}
+
+.about__photo-wrap {
+  @apply relative;
+}
+
+.about__photo {
+  @apply h-[420px] w-full overflow-hidden rounded-[28px] bg-footer-bg object-cover shadow-xl sm:h-[500px] lg:h-[600px];
+}
+
+// Vertical "Video Call Support" tag --------------------------------------
+.about__video-tag {
+  @apply absolute -left-8 top-8 z-20 rounded-xl bg-navy px-3 py-5 shadow-lg;
+}
+
+.about__video-tag-text {
+  @apply text-[11px] font-bold uppercase tracking-widest text-white;
+  writing-mode: vertical-rl;
+}
+
+// Picture-in-picture video call card --------------------------------------
+.about__video-card {
+  @apply absolute -left-2 -top-2 z-20 w-40 rounded-3xl bg-white p-2 shadow-2xl sm:w-48;
+}
+
+.about__video-card-frame {
+  @apply overflow-hidden rounded-2xl;
+}
+
+.about__video-card-img {
+  @apply h-28 w-full overflow-hidden bg-footer-bg object-cover sm:h-32;
+}
+
+.about__video-card-controls {
+  @apply mt-2 flex items-center justify-center gap-1.5 rounded-full bg-navy px-2 py-1.5;
+}
+
+.about__video-control {
+  @apply flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-white/80 transition-colors duration-150 hover:text-brand-cyan;
+
+  &.is-end {
+    @apply h-7 w-7 bg-red-500 text-white hover:text-white;
+  }
+}
+
+// Open Hours card ----------------------------------------------------------
+.about__hours-card {
+  @apply absolute -bottom-6 right-0 z-20 w-60 rounded-2xl bg-brand-cyan p-6 text-white shadow-xl sm:right-6 sm:w-64;
+}
+
+.about__hours-icon {
+  @apply absolute -top-6 right-6 flex h-14 w-14 items-center justify-center rounded-full bg-navy text-white shadow-lg;
+}
+
+.about__hours-title {
+  @apply text-lg font-bold;
+}
+
+.about__hours-list {
+  @apply mt-4 flex flex-col gap-2.5 text-sm;
+}
+
+.about__hours-row {
+  @apply flex items-center justify-between border-b border-white/15 pb-2.5 last:border-0 last:pb-0;
+}
+
+.about__hours-day {
+  @apply font-medium text-white/90;
+}
+
+.about__hours-time {
+  @apply font-bold;
+}
+
+// Content column ------------------------------------------------------------
+.about__title {
+  @apply text-4xl font-extrabold leading-tight text-navy sm:text-[42px];
+}
+
+.about__desc {
+  @apply mt-6 max-w-xl text-base leading-relaxed text-slate-500;
+}
+
+.about__features {
+  @apply mt-8 grid grid-cols-1 gap-x-10 gap-y-3 sm:grid-cols-2;
+}
+
+.about__feature {
+  @apply flex items-center gap-3 text-[15px] font-semibold text-navy;
+}
+
+.about__feature-check {
+  @apply flex h-5 w-5 shrink-0 items-center justify-center text-brand-cyan;
+}
+
+.about__cta-row {
+  @apply mt-10 flex flex-wrap items-center gap-x-8 gap-y-6;
+}
+
+.about__btn {
+  @apply inline-flex items-center gap-6 rounded-full bg-navy py-2 pl-8 pr-2 text-base font-semibold text-white transition-transform duration-200 hover:scale-105;
+}
+
+.about__btn-icon {
+  @apply flex h-11 w-11 items-center justify-center rounded-full bg-white text-navy;
+}
+
+.about__contact {
+  @apply flex items-center gap-3;
+}
+
+.about__contact-icon {
+  @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-footer-bg text-brand-cyan;
+}
+
+.about__contact-label {
+  @apply block text-sm text-slate-400;
+}
+
+.about__contact-value {
+  @apply block text-base font-bold text-navy;
+}

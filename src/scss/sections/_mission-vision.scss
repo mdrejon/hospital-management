@@ -1,0 +1,54 @@
+// ==========================================================================
+// "Mission & Vision" section
+// ==========================================================================
+
+@use "../abstracts/mixins" as m;
+
+.mission-vision {
+  @apply bg-footer-bg py-20;
+}
+
+.mission-vision__grid {
+  @apply grid grid-cols-1 items-center gap-12 lg:grid-cols-2;
+}
+
+.mission-vision__title {
+  @apply text-3xl font-extrabold leading-snug text-navy sm:text-4xl;
+
+  .accent {
+    @apply text-brand-cyan;
+    @include m.accent-pulse;
+  }
+}
+
+.mission-vision__desc {
+  @apply mt-4 max-w-lg text-[15px] leading-relaxed text-muted;
+}
+
+.mission-vision__list {
+  @apply mt-8 space-y-5;
+}
+
+.mission-vision__card {
+  @apply flex items-start gap-4 rounded-2xl bg-white p-5 shadow-sm;
+}
+
+.mission-vision__icon {
+  @apply flex h-11 w-11 flex-shrink-0 items-center justify-center text-brand-cyan;
+}
+
+.mission-vision__card-title {
+  @apply text-lg font-bold text-navy;
+}
+
+.mission-vision__card-desc {
+  @apply mt-1 text-sm leading-relaxed text-muted;
+}
+
+.mission-vision__media {
+  @apply relative mx-auto w-full max-w-md;
+}
+
+.mission-vision__img {
+  @apply aspect-[4/5] w-full rounded-3xl object-cover shadow-xl;
+}

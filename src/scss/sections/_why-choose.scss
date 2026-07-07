@@ -1,0 +1,74 @@
+// ==========================================================================
+// "Why Choose Us" section
+// ==========================================================================
+
+@use "../abstracts/mixins" as m;
+
+.why-choose {
+  @apply relative overflow-hidden bg-navy py-20 text-white;
+
+  &::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0;
+    background: radial-gradient(circle at 85% 15%, rgba(31, 200, 227, 0.12), transparent 55%);
+  }
+}
+
+.why-choose__grid {
+  @apply relative grid items-center gap-16 lg:grid-cols-2;
+}
+
+// Media -------------------------------------------------------------
+.why-choose__media {
+  @apply relative mx-auto w-full max-w-sm pb-10 pr-8;
+}
+
+.why-choose__photo {
+  @apply relative flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-3xl bg-white/5;
+}
+
+.why-choose__photo-figure {
+  @apply text-white/70;
+
+  .accent {
+    @apply text-brand-cyan;
+    @include m.accent-pulse;
+  }
+}
+
+.why-choose__badge {
+  @apply absolute bottom-0 right-0 flex w-36 flex-col items-center justify-center rounded-2xl bg-brand-cyan px-4 py-6 text-center shadow-xl;
+}
+
+.why-choose__badge-number {
+  @apply text-3xl font-extrabold text-white;
+}
+
+.why-choose__badge-label {
+  @apply mt-1 text-sm font-medium text-white;
+}
+
+// Content -------------------------------------------------------------
+.why-choose__title {
+  @apply max-w-md text-3xl font-extrabold leading-snug sm:text-4xl;
+}
+
+.why-choose__features {
+  @apply mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2;
+}
+
+.why-choose__feature {
+  @apply rounded-2xl bg-white/5 p-6 text-center transition-colors duration-200 hover:bg-white/10;
+}
+
+.why-choose__feature-icon {
+  @apply mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-brand-cyan text-white;
+}
+
+.why-choose__feature-title {
+  @apply mt-4 text-base font-bold text-white;
+}
+
+.why-choose__feature-desc {
+  @apply mt-2 text-sm leading-relaxed text-white/60;
+}

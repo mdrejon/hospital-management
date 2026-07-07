@@ -1,0 +1,70 @@
+// ==========================================================================
+// "Our Management" page (management.html) — bordered photo cards with a
+// name/role bar that flips to navy on hover and reveals a social-icon row
+// beneath it. Reuses .team__head for the section heading.
+// ==========================================================================
+
+.management {
+  @apply bg-white py-20 sm:py-24;
+}
+
+.management__grid {
+  @apply mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4;
+}
+
+.mgmt-card {
+  @apply flex flex-col rounded-2xl border border-[#E7EAF0] bg-white p-3 transition-all duration-300;
+
+  &:hover {
+    @apply border-navy shadow-lg;
+  }
+}
+
+.mgmt-card__photo-wrap {
+  @apply overflow-hidden rounded-xl;
+}
+
+.mgmt-card__photo {
+  @apply mx-auto h-64 w-full object-contain object-bottom;
+}
+
+.mgmt-card__bar {
+  @apply mt-3 flex items-center justify-between gap-3 rounded-xl bg-footer-bg px-4 py-4 transition-colors duration-300;
+
+  .mgmt-card:hover & {
+    @apply bg-navy;
+  }
+}
+
+.mgmt-card__name {
+  @apply text-lg font-bold leading-snug text-navy transition-colors duration-300;
+
+  .mgmt-card:hover & {
+    @apply text-white;
+  }
+}
+
+.mgmt-card__role {
+  @apply mt-0.5 text-sm font-medium text-brand-cyan;
+}
+
+.mgmt-card__arrow {
+  @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-transparent bg-navy text-white transition-all duration-300 hover:border-brand-cyan hover:bg-brand-cyan;
+
+  .mgmt-card:hover & {
+    @apply border-white/50 bg-transparent hover:border-brand-cyan hover:bg-brand-cyan;
+  }
+}
+
+// Social row: collapsed by default, expands under the navy bar on hover.
+.mgmt-card__social {
+  @apply flex max-h-0 items-center justify-center gap-6 overflow-hidden opacity-0 transition-all duration-300;
+
+  .mgmt-card:hover & {
+    @apply max-h-16 py-3 opacity-100;
+  }
+}
+
+.mgmt-card__social-link {
+  @apply text-navy transition-colors duration-150 hover:text-brand-cyan;
+}

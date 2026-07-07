@@ -1,0 +1,103 @@
+// ==========================================================================
+// Footer
+// ==========================================================================
+
+.site-footer {
+  @apply bg-footer-bg pt-10 text-navy;
+}
+
+// Contact strip -----------------------------------------------------------
+.footer-contact {
+  @apply container mx-auto flex flex-col gap-8 border-b border-navy/10 pb-8 md:flex-row md:items-center md:justify-between;
+}
+
+.footer-contact__title {
+  @apply text-xl font-bold text-navy;
+}
+
+.footer-contact__subtitle {
+  @apply mt-1 text-sm text-slate-500;
+}
+
+.footer-contact__items {
+  @apply flex flex-col gap-6 sm:flex-row sm:flex-wrap sm:gap-10;
+}
+
+.footer-contact__item {
+  @apply flex items-center gap-4;
+}
+
+.footer-contact__icon {
+  @apply flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-navy text-white;
+}
+
+.footer-contact__label {
+  @apply text-base font-bold text-navy;
+}
+
+.footer-contact__value {
+  @apply text-sm text-slate-500;
+}
+
+// Columns -------------------------------------------------------------
+.footer-columns {
+  @apply container mx-auto grid grid-cols-1 gap-10 border-b border-navy/10 py-12 sm:grid-cols-2 lg:grid-cols-5;
+}
+
+.footer-about {
+  @apply lg:col-span-1 sm:col-span-2;
+}
+
+.footer-about__desc {
+  @apply mt-4 text-sm leading-relaxed text-slate-500;
+}
+
+.footer-col__title {
+  @apply text-lg font-bold text-navy;
+}
+
+.footer-col__list {
+  @apply mt-5 flex flex-col gap-3;
+}
+
+.footer-col__link {
+  @apply text-sm font-medium text-slate-500 transition-colors duration-150 hover:text-brand-cyan;
+}
+
+// Newsletter ------------------------------------------------------------
+.footer-newsletter {
+  @apply container mx-auto flex flex-col gap-6 border-b border-navy/10 py-8 md:flex-row md:items-center md:justify-between;
+}
+
+.footer-newsletter__title {
+  @apply text-xl font-bold text-navy;
+}
+
+.footer-newsletter__subtitle {
+  @apply mt-1 text-sm text-slate-500;
+
+  mark {
+    @apply rounded bg-fuchsia-600 px-1 text-white;
+  }
+}
+
+.footer-newsletter__form {
+  @apply flex w-full max-w-xl overflow-hidden rounded-full bg-white shadow-sm md:w-auto;
+}
+
+.footer-newsletter__input {
+  @apply w-full flex-1 bg-transparent px-6 py-3 text-sm text-navy placeholder:text-slate-400 focus:outline-none;
+}
+
+.footer-newsletter__submit {
+  @apply shrink-0 rounded-full bg-brand-cyan px-6 py-3 text-sm font-semibold text-navy transition-transform duration-200 hover:scale-105;
+}
+
+// Bottom bar ------------------------------------------------------------
+.footer-bottom {
+  @apply py-6 text-center text-sm text-slate-500;
+
+  a {
+    @apply font-semibold text-brand-cyan;
+  }
+}

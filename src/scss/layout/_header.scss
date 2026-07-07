@@ -1,0 +1,121 @@
+// ==========================================================================
+// Header / Top Info Bar / Main Navigation
+// ==========================================================================
+
+.site-header {
+  @apply fixed inset-x-0 top-0 z-50;
+}
+
+// Top info bar -------------------------------------------------------
+.top-header {
+  @apply hidden border-b border-white/10 bg-navy lg:block;
+}
+
+.top-header__inner {
+  @apply container mx-auto flex flex-wrap items-center justify-between gap-6 px-4 py-1.5;
+}
+
+.top-header__left {
+  @apply flex items-center gap-8;
+}
+
+.top-header__item {
+  @apply flex items-center gap-3;
+}
+
+.top-header__icon {
+  @apply flex h-9 w-9 shrink-0 items-center justify-center text-brand-cyan;
+}
+
+.top-header__value {
+  @apply text-sm font-medium text-white/90;
+}
+
+.top-header__right {
+  @apply flex items-center gap-5;
+}
+
+.top-header__lang {
+  @apply flex items-center gap-1.5 text-sm font-medium text-white/90 transition-colors duration-150 hover:text-brand-cyan;
+}
+
+.top-header__divider {
+  @apply h-5 w-px bg-white/15;
+}
+
+.top-header__socials {
+  @apply flex items-center gap-2;
+}
+
+.top-header__social-link {
+  @apply flex h-8 w-8 items-center justify-center rounded-full text-white/80 transition-colors duration-150 hover:bg-white/10 hover:text-brand-cyan;
+}
+
+.top-header__search {
+  @apply flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white/90 transition-colors duration-150 hover:bg-brand-cyan hover:text-navy;
+}
+
+// Main nav row ------------------------------------------------------------
+.site-header__nav {
+  @apply border-b border-slate-100 bg-white;
+}
+
+.site-header__inner {
+  @apply container mx-auto flex items-center justify-between gap-4 py-4;
+}
+
+// Logo -----------------------------------------------------------------
+.site-logo {
+  @apply flex items-center gap-2 text-2xl font-bold text-white whitespace-nowrap;
+
+  &__accent {
+    @apply text-brand-cyan;
+  }
+}
+
+// Primary nav ------------------------------------------------------------
+.main-nav {
+  @apply hidden items-center gap-6 lg:flex;
+}
+
+.main-nav__link {
+  @apply flex items-center gap-1 text-[15px] font-medium text-navy/90 transition-colors duration-200 hover:text-brand-cyan;
+
+  &.is-active {
+    @apply text-brand-cyan;
+  }
+}
+
+.main-nav__caret {
+  @apply text-[10px] opacity-50;
+}
+
+// Dropdown ------------------------------------------------------------
+.has-dropdown {
+  @apply relative;
+
+  .dropdown-menu {
+    @apply invisible absolute left-0 top-full z-20 mt-3 w-56 rounded-md bg-white py-2 opacity-0 shadow-xl transition-all duration-200;
+  }
+
+  &:hover .dropdown-menu {
+    @apply visible mt-2 opacity-100;
+  }
+
+  .dropdown-menu__link {
+    @apply block px-5 py-2 text-sm font-medium text-navy transition-colors duration-150 hover:bg-footer-bg hover:text-brand-cyan;
+  }
+}
+
+// Right-hand actions -----------------------------------------------------
+.site-header__actions {
+  @apply flex items-center gap-3;
+}
+
+.btn-appointment {
+  @apply hidden items-center gap-2 rounded-full bg-brand-cyan px-7 py-3 text-sm font-semibold text-navy transition-transform duration-200 hover:scale-105 sm:inline-flex;
+}
+
+.menu-toggle {
+  @apply flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-footer-bg text-navy shadow-sm ring-1 ring-navy/5 transition-colors duration-200 hover:bg-brand-cyan hover:text-white hover:ring-brand-cyan;
+}

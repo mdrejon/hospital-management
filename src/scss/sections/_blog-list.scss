@@ -1,0 +1,133 @@
+// ==========================================================================
+// "Blog" listing page — post list + sidebar (search / category / latest / tags)
+// ==========================================================================
+
+.blog-list {
+  @apply bg-footer-bg py-20;
+}
+
+.blog-list__grid {
+  @apply grid grid-cols-1 items-start gap-10 lg:grid-cols-[1fr_384px] xl:gap-14;
+}
+
+.blog-list__posts {
+  @apply flex flex-col gap-12;
+}
+
+.blog-list__load-more {
+  @apply inline-flex w-fit items-center self-start rounded-full bg-brand-cyan px-8 py-3 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105;
+}
+
+// Post card ---------------------------------------------------------------
+.blog-post-card {
+  @apply flex flex-col gap-6 sm:flex-row sm:items-start lg:gap-9;
+}
+
+.blog-post-card__media {
+  @apply w-full shrink-0 sm:w-[45%] lg:w-[52%];
+}
+
+.blog-post-card__img {
+  @apply aspect-[10/7] w-full rounded-3xl object-cover;
+}
+
+.blog-post-card__meta {
+  @apply flex items-center gap-2.5 text-sm font-semibold uppercase tracking-wide text-[#8894AB];
+}
+
+.blog-post-card__meta-dot {
+  @apply h-1.5 w-1.5 shrink-0 rounded-full bg-brand-cyan;
+}
+
+.blog-post-card__meta-author {
+  @apply text-brand-cyan;
+}
+
+.blog-post-card__title {
+  @apply mt-3 text-3xl font-extrabold leading-[1.3] text-navy transition-colors duration-150 hover:text-brand-cyan lg:text-[34px];
+}
+
+.blog-post-card__desc {
+  @apply mt-4 max-w-xl text-base leading-relaxed text-muted;
+}
+
+.blog-post-card__btn {
+  @apply mt-6 inline-flex items-center gap-2 rounded-lg bg-brand-cyan px-6 py-3 text-[15px] font-semibold text-white transition-transform duration-200 hover:scale-105;
+}
+
+// Sidebar -------------------------------------------------------------------
+.blog-sidebar {
+  @apply flex flex-col gap-6;
+}
+
+.blog-sidebar__card {
+  @apply rounded-2xl bg-white p-8 shadow-sm;
+}
+
+.blog-sidebar__title {
+  @apply text-2xl font-extrabold text-navy;
+}
+
+.blog-sidebar__search {
+  @apply mt-5 flex items-center gap-2 rounded-xl border-2 border-brand-cyan/70 px-4 py-3;
+}
+
+.blog-sidebar__search-input {
+  @apply w-full border-0 bg-transparent p-0 text-[15px] text-navy placeholder-[#8894AB] focus:outline-none focus:ring-0;
+}
+
+.blog-sidebar__search-btn {
+  @apply flex h-6 w-6 shrink-0 items-center justify-center text-brand-cyan;
+}
+
+.blog-sidebar__cat-list {
+  @apply mt-4 flex flex-col;
+}
+
+.blog-sidebar__cat-link {
+  @apply flex items-center justify-between gap-3 border-t border-footer-bg py-3.5 text-[15px] font-medium text-muted transition-colors duration-150 hover:text-brand-cyan;
+
+  &:first-child {
+    @apply border-0 pt-0;
+  }
+}
+
+.blog-sidebar__cat-left {
+  @apply flex items-center gap-2 text-navy;
+}
+
+.blog-sidebar__cat-arrow {
+  @apply flex h-4 w-4 shrink-0 items-center justify-center text-brand-cyan;
+}
+
+.blog-sidebar__cat-count {
+  @apply text-[#8894AB];
+}
+
+.blog-sidebar__latest-list {
+  @apply mt-5 flex flex-col gap-5;
+}
+
+.blog-sidebar__latest-item {
+  @apply flex items-start gap-4;
+}
+
+.blog-sidebar__latest-thumb {
+  @apply h-20 w-20 shrink-0 rounded-xl object-cover;
+}
+
+.blog-sidebar__latest-date {
+  @apply text-xs font-bold uppercase tracking-wide text-brand-cyan;
+}
+
+.blog-sidebar__latest-title {
+  @apply mt-1 text-[15px] font-bold leading-snug text-navy transition-colors duration-150 hover:text-brand-cyan;
+}
+
+.blog-sidebar__tags {
+  @apply mt-5 flex flex-wrap gap-2.5;
+}
+
+.blog-sidebar__tag {
+  @apply rounded-lg bg-footer-bg px-5 py-2.5 text-sm font-semibold text-navy transition-colors duration-150 hover:bg-brand-cyan hover:text-white;
+}

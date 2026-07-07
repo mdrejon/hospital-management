@@ -1,0 +1,77 @@
+// ==========================================================================
+// "Awards" section — right-hand card row auto-slides right to left.
+// ==========================================================================
+
+.awards {
+  @apply overflow-hidden bg-footer-bg py-20;
+}
+
+.awards__grid {
+  @apply grid items-center gap-10 lg:grid-cols-[320px_1fr];
+}
+
+.awards__intro {
+  @apply relative z-10;
+}
+
+.awards__title {
+  @apply text-3xl font-extrabold text-navy;
+
+  mark {
+    @apply rounded bg-brand-cyan px-3 py-1 text-navy;
+  }
+}
+
+.awards__desc {
+  @apply mt-4 max-w-xs text-sm leading-relaxed text-slate-500;
+}
+
+// Slider -------------------------------------------------------------
+// The track holds the card list twice back-to-back; animating it from
+// translateX(0) to translateX(-50%) and looping creates a seamless,
+// continuous right-to-left slide with no JS required.
+.awards__slider {
+  @apply relative -mx-4 overflow-hidden px-4;
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.awards__track {
+  @apply flex w-max items-stretch gap-6;
+  animation: awards-scroll 28s linear infinite;
+}
+
+.awards__slider:hover .awards__track {
+  animation-play-state: paused;
+}
+
+@keyframes awards-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+// Card ---------------------------------------------------------------
+.award-card {
+  @apply flex w-64 shrink-0 flex-col items-center rounded-2xl bg-white p-8 text-center shadow-sm transition-shadow duration-200 hover:shadow-lg;
+}
+
+.award-card__seal {
+  @apply flex h-24 w-24 items-center justify-center text-navy;
+}
+
+.award-card__title {
+  @apply mt-5 text-lg font-bold text-navy;
+}
+
+.award-card__subtitle {
+  @apply mt-2 text-sm leading-relaxed text-slate-500;
+}
+
+.award-card__link {
+  @apply mt-3 text-sm font-semibold text-brand-cyan;
+}

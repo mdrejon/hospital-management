@@ -1,0 +1,109 @@
+// ==========================================================================
+// "Our History" journey timeline (history.html)
+// Center spine on desktop with alternating media/content sides; on mobile
+// the spine moves to the left edge and every entry stacks below its year.
+// ==========================================================================
+
+@use "../abstracts/mixins" as m;
+
+.history {
+  @apply overflow-hidden bg-white py-20;
+}
+
+.history__eyebrow {
+  @apply flex items-center justify-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-brand-cyan;
+}
+
+.history__eyebrow-dot {
+  @apply h-1.5 w-1.5 rounded-full bg-brand-cyan;
+}
+
+.history__title {
+  @apply mx-auto mt-3 max-w-2xl text-center text-3xl font-extrabold leading-snug text-navy sm:text-4xl;
+
+  .accent {
+    @apply text-brand-cyan;
+    @include m.accent-pulse;
+  }
+}
+
+.history__desc {
+  @apply mx-auto mt-6 max-w-2xl text-center text-[15px] leading-relaxed text-muted;
+}
+
+.history__timeline {
+  @apply relative mt-16 space-y-16 lg:mt-20 lg:space-y-28;
+}
+
+// Vertical spine: hugs the left edge on mobile, moves to center on lg.
+.history__line {
+  @apply absolute bottom-0 left-7 top-0 w-px -translate-x-1/2 bg-navy lg:left-1/2 lg:w-0.5;
+}
+
+.history-item {
+  @apply relative grid grid-cols-1 gap-6 pl-20 lg:grid-cols-[1fr_8rem_1fr] lg:items-center lg:gap-10 lg:pl-0;
+}
+
+.history-item__media {
+  @apply lg:order-1;
+}
+
+.history-item__img {
+  @apply aspect-[4/3] w-full rounded-3xl object-cover shadow-xl;
+}
+
+.history-item__node {
+  @apply absolute left-0 top-0 lg:static lg:order-2 lg:justify-self-center;
+}
+
+.history-item__year {
+  @apply relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-navy text-sm font-bold tracking-wide text-white lg:h-24 lg:w-24 lg:text-xl;
+  box-shadow:
+    0 0 0 4px #fff,
+    0 0 0 5.5px rgb(var(--color-navy)),
+    0 14px 34px rgb(var(--color-navy) / 0.35);
+}
+
+.history-item__content {
+  @apply lg:order-3;
+}
+
+.history-item__badge {
+  @apply inline-block rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-brand-cyan;
+}
+
+.history-item__title {
+  @apply mt-4 text-2xl font-extrabold leading-snug text-navy sm:text-3xl;
+}
+
+.history-item__desc {
+  @apply mt-3 max-w-lg text-[15px] leading-relaxed text-muted;
+}
+
+.history-item__tags {
+  @apply mt-5 flex flex-wrap gap-2;
+}
+
+.history-item__tag {
+  @apply rounded-full bg-footer-bg px-4 py-1.5 text-xs font-semibold text-navy;
+}
+
+// Alternate entry: media flips to the right, content right-aligns against
+// the spine (desktop only — mobile keeps the single stacked column).
+.history-item--reverse {
+  .history-item__media {
+    @apply lg:order-3;
+  }
+
+  .history-item__content {
+    @apply lg:order-1 lg:text-right;
+  }
+
+  .history-item__desc {
+    @apply lg:ml-auto;
+  }
+
+  .history-item__tags {
+    @apply lg:justify-end;
+  }
+}

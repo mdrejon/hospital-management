@@ -1,0 +1,79 @@
+// ==========================================================================
+// "Make An Appointment" section
+// ==========================================================================
+
+@use "../abstracts/mixins" as m;
+
+.appointment {
+  @apply bg-white py-20;
+}
+
+.appointment__grid {
+  @apply grid items-center gap-12 lg:grid-cols-2;
+}
+
+// Media -------------------------------------------------------------
+.appointment__media {
+  @apply relative mx-auto w-full max-w-md;
+}
+
+.appointment__photo {
+  @apply relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-footer-bg to-brand-cyan/10;
+}
+
+.appointment__photo-figure {
+  @apply text-navy;
+
+  .accent {
+    @apply text-brand-cyan;
+    @include m.accent-pulse;
+  }
+}
+
+// Form wrap -----------------------------------------------------------
+.appointment__form-wrap {
+  @apply flex items-start;
+}
+
+.appointment__tab {
+  @apply mt-10 hidden h-28 w-12 shrink-0 items-center justify-center rounded-xl bg-navy text-xs font-semibold tracking-[0.3em] text-white lg:flex;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.appointment__card {
+  @apply relative flex-1 rounded-3xl bg-brand-cyan p-8 shadow-xl sm:p-10;
+}
+
+.appointment__title {
+  @apply text-2xl font-extrabold leading-snug text-white sm:text-3xl;
+
+  .accent {
+    @apply text-[#eaff4f];
+    @include m.accent-pulse;
+  }
+}
+
+.appointment__form {
+  @apply mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2;
+}
+
+.appointment__field-group {
+  @apply sm:col-span-2;
+
+  &.is-half {
+    @apply sm:col-span-1;
+  }
+}
+
+.appointment__field {
+  @apply w-full border-b border-white/40 bg-transparent pb-2 text-sm text-white placeholder-white/70 transition-colors duration-150 focus:border-white focus:outline-none;
+}
+
+.appointment__submit {
+  @apply mt-8 inline-flex items-center gap-4 rounded-full bg-white py-2 pl-6 pr-2 text-sm font-semibold text-navy transition-transform duration-200 hover:scale-105;
+}
+
+.appointment__submit-icon {
+  @apply flex h-9 w-9 items-center justify-center rounded-full bg-navy text-white;
+}

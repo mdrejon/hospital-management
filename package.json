@@ -1,0 +1,24 @@
+{
+  "name": "hospital-management",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClinicMaster hospital website - Tailwind CSS + SCSS + esbuild pipeline",
+  "scripts": {
+    "sass:build": "sass src/scss/main.scss .tmp/main.css --no-source-map --style=expanded",
+    "sass:watch": "sass src/scss/main.scss .tmp/main.css --watch --no-source-map --style=expanded",
+    "css:build": "tailwindcss -i .tmp/main.css -o assets/css/main.css --minify",
+    "css:watch": "tailwindcss -i .tmp/main.css -o assets/css/main.css --watch",
+    "js:build": "esbuild src/js/main.js --bundle --minify --outfile=assets/js/main.js",
+    "js:watch": "esbuild src/js/main.js --bundle --outfile=assets/js/main.js --watch",
+    "build": "npm run sass:build && npm run css:build && npm run js:build",
+    "watch": "npm run sass:build && concurrently -k -n sass,css,js -c blue,cyan,yellow \"npm run sass:watch\" \"npm run css:watch\" \"npm run js:watch\""
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.0",
+    "esbuild": "^0.24.0",
+    "postcss": "^8.4.49",
+    "sass": "^1.83.0",
+    "tailwindcss": "^3.4.17"
+  }
+}

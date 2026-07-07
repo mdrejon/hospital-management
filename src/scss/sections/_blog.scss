@@ -1,0 +1,111 @@
+// ==========================================================================
+// "Stay Informed With Our Latest Health Blogs" section
+// ==========================================================================
+
+.blog {
+  @apply bg-white py-20;
+}
+
+.blog__head {
+  @apply flex flex-wrap items-end justify-between gap-6;
+}
+
+.blog__title {
+  @apply max-w-xl text-3xl font-extrabold leading-snug text-navy sm:text-4xl;
+
+  mark {
+    @apply rounded bg-brand-cyan px-2 text-white;
+  }
+}
+
+.blog__grid {
+  @apply mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:grid-rows-2;
+}
+
+// Shared card bits -----------------------------------------------------
+.blog-card {
+  @apply relative overflow-hidden rounded-3xl bg-footer-bg;
+
+  &.is-tall {
+    @apply lg:row-span-2;
+  }
+}
+
+.blog-card__img {
+  @apply absolute inset-0 h-full w-full bg-navy/5 object-cover;
+}
+
+.blog-card__overlay {
+  @apply pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/10 to-transparent;
+}
+
+.blog-card__date {
+  @apply inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-navy;
+}
+
+.blog-card__date-dot {
+  @apply h-1.5 w-1.5 rounded-full bg-navy;
+}
+
+.blog-card__arrow {
+  @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-navy shadow-md transition-transform duration-200 hover:scale-110;
+}
+
+// Card A — split layout: copy on top, photo filling the rest ------------
+.blog-card--split {
+  @apply flex flex-col;
+}
+
+.blog-card--split__top {
+  @apply relative z-10 p-6 pb-0;
+}
+
+.blog-card--split__title {
+  @apply mt-3 text-xl font-bold leading-snug text-navy;
+}
+
+.blog-card--split__media {
+  @apply relative mt-5 flex-1;
+}
+
+.blog-card--split__cta {
+  @apply absolute bottom-6 left-6 z-10 inline-flex items-center gap-3 rounded-full bg-brand-cyan py-2 pl-5 pr-2 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105;
+}
+
+.blog-card--split__cta-icon {
+  @apply flex h-8 w-8 items-center justify-center rounded-full bg-white text-navy;
+}
+
+.blog-card--split__bubble {
+  @apply pointer-events-none absolute bottom-8 left-[13.5rem] hidden h-4 w-4 rounded-full bg-white/70 sm:block;
+}
+
+// Card B — full-bleed photo, overlay content -----------------------------
+.blog-card--photo {
+  @apply flex min-h-[220px] flex-col justify-between p-5;
+
+  &.is-tall {
+    @apply min-h-[460px];
+  }
+}
+
+.blog-card--photo__title {
+  @apply relative z-10 mt-auto max-w-[75%] text-lg font-bold leading-snug text-white;
+}
+
+.blog-card--photo__footer {
+  @apply relative z-10 mt-4 flex items-end justify-between gap-4;
+}
+
+// Card C — plain copy card, no image --------------------------------
+.blog-card--plain {
+  @apply flex flex-col justify-between p-6;
+}
+
+.blog-card--plain__title {
+  @apply mt-3 text-base font-bold leading-snug text-navy;
+}
+
+.blog-card--plain__footer {
+  @apply mt-4 flex justify-end;
+}

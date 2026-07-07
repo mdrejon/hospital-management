@@ -1,0 +1,46 @@
+// ==========================================================================
+// Root stylesheet — imports Tailwind layers + section-wise partials.
+// Compiled by `sass` into .tmp/main.css, then processed by the Tailwind
+// CLI (which resolves @apply/@tailwind) into assets/css/main.css.
+// ==========================================================================
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @import "base/base";
+}
+
+@layer components {
+  @import "layout/header";
+  @import "layout/side-panel";
+  @import "sections/page-header";
+  @import "sections/hero";
+  @import "sections/about";
+  @import "sections/mission-vision";
+  @import "sections/ceo-message";
+  @import "sections/history";
+  @import "sections/services";
+  @import "sections/service-detail";
+  @import "sections/doctors-page";
+  @import "sections/management";
+  @import "sections/ready-help";
+  @import "sections/contact";
+  @import "sections/gallery";
+  @import "sections/legal";
+  @import "sections/doctor-detail";
+  @import "sections/blog-list";
+  @import "sections/blog-details";
+  @import "sections/departments";
+  @import "sections/team";
+  @import "sections/packages";
+  @import "sections/appointment";
+  @import "sections/why-choose";
+  @import "sections/testimonials";
+  @import "sections/faq";
+  @import "sections/awards";
+  @import "sections/blog";
+  @import "sections/book-appointment";
+  @import "layout/footer";
+}
