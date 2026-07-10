@@ -8,16 +8,18 @@
   @apply bg-white py-20 sm:py-24;
 }
 
+// The intro column gets more room than the form so the title holds two
+// lines and the info cards don't squeeze.
 .contact__grid {
-  @apply grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-16;
+  @apply grid grid-cols-1 items-start gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-14;
 }
 
 .contact__title {
-  @apply text-4xl font-extrabold leading-tight text-navy sm:text-5xl;
+  @apply text-3xl font-extrabold leading-tight text-navy sm:text-4xl;
 }
 
 .contact__desc {
-  @apply mt-5 max-w-xl text-[17px] leading-relaxed text-muted;
+  @apply mt-5 max-w-xl text-base leading-relaxed text-muted;
 }
 
 // "Talk to over 215 doctor" pill + arrow bubble -------------------------
@@ -63,11 +65,11 @@
 }
 
 .contact-info-card {
-  @apply flex items-center gap-5 rounded-2xl bg-footer-bg/70 p-6;
+  @apply flex items-center gap-4 rounded-2xl bg-footer-bg/70 p-5;
 }
 
 .contact-info-card__icon {
-  @apply flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-white text-brand-cyan transition-colors duration-200;
+  @apply flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-brand-cyan transition-colors duration-200;
 
   .contact-info-card:hover & {
     @apply bg-brand-cyan text-white;
@@ -75,28 +77,28 @@
 }
 
 .contact-info-card__title {
-  @apply text-xl font-bold text-navy;
+  @apply text-lg font-bold text-navy;
 }
 
 .contact-info-card__text {
-  @apply mt-1 text-[15px] leading-relaxed text-muted;
+  @apply mt-1 text-sm leading-relaxed text-muted;
 }
 
 // Cyan appointment form card ---------------------------------------------
 .contact__form-card {
-  @apply rounded-[2rem] bg-brand-cyan p-8 sm:p-12 lg:p-14;
+  @apply rounded-[2rem] bg-brand-cyan p-8 sm:p-10;
 }
 
 .contact__form-title {
-  @apply text-3xl font-extrabold leading-snug text-white sm:text-4xl;
+  @apply text-2xl font-extrabold leading-snug text-white sm:text-3xl;
 }
 
 .contact__form {
-  @apply mt-12 grid grid-cols-1 gap-x-12 gap-y-10 sm:grid-cols-2;
+  @apply mt-10 grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2;
 }
 
 .contact__field {
-  @apply w-full border-0 border-b-2 border-white/70 bg-transparent px-0 pb-3 text-lg text-white placeholder-white/80 focus:border-white focus:outline-none focus:ring-0;
+  @apply w-full border-0 border-b-2 border-white/70 bg-transparent px-0 pb-3 text-base text-white placeholder-white/80 focus:border-white focus:outline-none focus:ring-0;
 }
 
 .contact__field--full {
@@ -112,53 +114,21 @@
 }
 
 // ==========================================================================
-// "All Locations" map cards
+// Full-width location map
 // ==========================================================================
 
 .locations {
-  @apply bg-footer-bg py-20;
+  @apply bg-footer-bg;
 }
 
-.locations__title {
-  @apply text-4xl font-extrabold text-navy sm:text-5xl;
-}
-
-.locations__grid {
-  @apply mt-12 grid grid-cols-1 gap-8 lg:grid-cols-2;
-}
-
-.location-card {
-  @apply grid grid-cols-1 gap-8 rounded-3xl bg-white p-6 sm:grid-cols-2 sm:p-7;
-}
-
-.location-card__map {
-  @apply relative min-h-[320px] overflow-hidden rounded-2xl bg-footer-bg;
+.locations__map {
+  @apply relative h-[420px] w-full sm:h-[520px];
 
   iframe {
     @apply absolute inset-0 h-full w-full border-0;
   }
 }
 
-.location-card__open {
-  @apply absolute left-3 top-3 z-10 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-bold text-[#1a73e8] shadow-md transition-colors duration-150 hover:text-navy;
-}
-
-.location-card__country {
-  @apply text-2xl font-extrabold text-navy sm:text-3xl;
-}
-
-.location-card__label {
-  @apply mt-6 text-lg font-bold text-navy;
-}
-
-.location-card__value {
-  @apply mt-2 text-[17px] leading-relaxed text-muted;
-}
-
-.location-card__divider {
-  @apply mt-6 border-t border-[#E7EAF0];
-}
-
-.location-card__directions {
-  @apply mt-5 inline-flex items-center gap-1.5 text-lg font-medium text-brand-cyan transition-colors duration-150 hover:text-navy;
+.locations__open {
+  @apply absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-bold text-[#1a73e8] shadow-md transition-colors duration-150 hover:text-navy;
 }

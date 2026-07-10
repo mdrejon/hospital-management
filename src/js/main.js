@@ -117,8 +117,10 @@ function initHeroSlider() {
 // Shared engine behind any "N cards visible, responsive by breakpoint"
 // slider (team doctors, health packages, ...). `breakpoints` is a list of
 // { width, count } sorted descending; whichever is the first matching
-// min-width wins, falling back to `base`.
-function initResponsiveSlider({ rootAttr, trackAttr, prevAttr, nextAttr, dotsAttr, dotClass, base, breakpoints }) {
+// min-width wins, falling back to `base`. Pass `autoplay` (ms) to advance
+// one slide at that interval, looping back to the start; it pauses on
+// hover and while dragging. All sliders support pointer dragging.
+function initResponsiveSlider({ rootAttr, trackAttr, prevAttr, nextAttr, dotsAttr, dotClass, base, breakpoints, autoplay = 0 }) {
   const root = document.querySelector(`[${rootAttr}]`);
   const track = document.querySelector(`[${trackAttr}]`);
   const slides = track ? Array.from(track.children) : [];
@@ -168,8 +170,26 @@ function initResponsiveSlider({ rootAttr, trackAttr, prevAttr, nextAttr, dotsAtt
       dot.type = "button";
       dot.className = dotClass;
       dot.setAttribute("aria-label", `Go to slide group ${i + 1}`);
-      dot.addEventListener("click", () => goTo(i));
+      dot.addEventListener("click", () => {
+        goTo(i);
+        startAutoplay();
+      });
       dotsWrap.appendChild(dot);
+    }
+  };
+
+  let timer = null;
+
+  const startAutoplay = () => {
+    stopAutoplay();
+    if (!autoplay || slides.length < 2) return;
+    timer = setInterval(() => goTo(index >= maxIndex ? 0 : index + 1), autoplay);
+  };
+
+  const stopAutoplay = () => {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
     }
   };
 
@@ -184,8 +204,69 @@ function initResponsiveSlider({ rootAttr, trackAttr, prevAttr, nextAttr, dotsAtt
     render();
   };
 
-  prevBtn?.addEventListener("click", () => goTo(index - 1));
-  nextBtn?.addEventListener("click", () => goTo(index + 1));
+  prevBtn?.addEventListener("click", () => {
+    goTo(index - 1);
+    startAutoplay();
+  });
+  nextBtn?.addEventListener("click", () => {
+    goTo(index + 1);
+    startAutoplay();
+  });
+
+  // Pointer dragging — grab the track with mouse or touch to pull the
+  // slider; past a quarter-slide it commits to the next/prev position.
+  let dragging = false;
+  let dragStartX = 0;
+  let dragDelta = 0;
+
+  track.style.touchAction = "pan-y";
+  track.style.cursor = "pointer";
+  track.addEventListener("dragstart", (e) => e.preventDefault());
+
+  track.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    dragStartX = e.clientX;
+    dragDelta = 0;
+    stopAutoplay();
+    track.setPointerCapture(e.pointerId);
+    track.style.transition = "none";
+  });
+
+  track.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    dragDelta = e.clientX - dragStartX;
+    track.style.transform = `translateX(calc(-${index * (100 / visible)}% + ${dragDelta}px))`;
+  });
+
+  const endDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    track.style.transition = "";
+    const threshold = Math.min(80, track.clientWidth / visible / 4);
+    if (dragDelta <= -threshold) goTo(index + 1);
+    else if (dragDelta >= threshold) goTo(index - 1);
+    else render();
+    startAutoplay();
+  };
+  track.addEventListener("pointerup", endDrag);
+  track.addEventListener("pointercancel", endDrag);
+
+  // A real drag shouldn't trigger the links inside the slides.
+  track.addEventListener(
+    "click",
+    (e) => {
+      if (Math.abs(dragDelta) > 8) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    true
+  );
+
+  root.addEventListener("mouseenter", stopAutoplay);
+  root.addEventListener("mouseleave", () => {
+    if (!dragging) startAutoplay();
+  });
 
   let resizeTimer = null;
   window.addEventListener("resize", () => {
@@ -194,6 +275,7 @@ function initResponsiveSlider({ rootAttr, trackAttr, prevAttr, nextAttr, dotsAtt
   });
 
   recalc();
+  startAutoplay();
 }
 
 function initTestimonialsSlider() {
@@ -293,9 +375,9 @@ function initPackagesSlider() {
     dotsAttr: "data-packages-dots",
     dotClass: "packages__dot",
     base: 1,
+    autoplay: 2000,
     breakpoints: [
-      { width: 1280, count: 4 },
-      { width: 1024, count: 3 },
+      { width: 1536, count: 4 },
       { width: 768, count: 3 },
       { width: 640, count: 2 },
     ],
@@ -315,6 +397,96 @@ function initDepartmentsSlider() {
       { width: 1024, count: 3 },
       { width: 640, count: 2 },
     ],
+  });
+}
+
+// Awards row: auto-advances one card at a time, right to left, forever.
+// The card in the front slot gets `.is-active` (scaled up via CSS); the
+// track's translateX is stepped by exactly one card+gap on each tick so
+// the active card is always whichever one just slid into place. The card
+// set is cloned once so that wrapping from the last card back to the
+// first is seamless (jump happens instantly, with transitions off, right
+// after the clone's slide-in finishes).
+function initAwardsSlider() {
+  const slider = document.querySelector("[data-awards-slider]");
+  const track = document.querySelector("[data-awards-track]");
+  const original = track ? Array.from(track.children) : [];
+  if (!slider || !track || original.length < 2) return;
+
+  const INTERVAL_MS = 3000;
+  const TRANSITION = "transform 0.45s cubic-bezier(0.65, 0, 0.35, 1)";
+  const total = original.length;
+
+  original.forEach((card) => {
+    const clone = card.cloneNode(true);
+    clone.setAttribute("aria-hidden", "true");
+    clone.querySelectorAll("a").forEach((a) => a.setAttribute("tabindex", "-1"));
+    track.appendChild(clone);
+  });
+  const cards = Array.from(track.children);
+
+  let index = 0;
+  let timer = null;
+
+  // offsetWidth is the untransformed layout size — unlike
+  // getBoundingClientRect(), it ignores the .is-active scale(1.1), so the
+  // step stays exact no matter which card currently happens to be active.
+  // Cached and only re-measured on resize, since it's identical for every
+  // card (all cards share the same base width).
+  let step = 0;
+  const measureStep = () => {
+    const style = getComputedStyle(track);
+    const gap = parseFloat(style.columnGap || style.gap || "0");
+    step = cards[0].offsetWidth + gap;
+  };
+
+  const setActive = (i) => {
+    cards.forEach((card, ci) => card.classList.toggle("is-active", ci === i));
+  };
+
+  const goTo = (i, instant) => {
+    track.style.transition = instant ? "none" : TRANSITION;
+    track.style.transform = `translateX(-${i * step}px)`;
+  };
+
+  track.addEventListener("transitionend", (e) => {
+    if (e.propertyName !== "transform" || index < total) return;
+    index = 0;
+    setActive(index);
+    goTo(index, true);
+    void track.offsetWidth; // flush the instant reset before the next tick re-enables the transition
+  });
+
+  const tick = () => {
+    index += 1;
+    setActive(index);
+    goTo(index, false);
+  };
+
+  const start = () => {
+    stop();
+    timer = setInterval(tick, INTERVAL_MS);
+  };
+
+  const stop = () => {
+    if (timer) clearInterval(timer);
+  };
+
+  measureStep();
+  setActive(index);
+  goTo(index, true);
+  start();
+
+  slider.addEventListener("mouseenter", stop);
+  slider.addEventListener("mouseleave", start);
+
+  let resizeTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      measureStep();
+      goTo(index, true);
+    }, 150);
   });
 }
 
@@ -475,6 +647,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initTeamSlider();
   initPackagesSlider();
   initDepartmentsSlider();
+  initAwardsSlider();
   initStickySidebar();
   initGalleryLightbox();
   initScrollReveal();

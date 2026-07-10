@@ -4,15 +4,23 @@
 
 .site-footer {
   @apply bg-footer-bg pt-10 text-navy;
+  background-image: url("../img/footer-bg.webp");
+  background-size: cover;
+  background-position: center;
 }
 
-// Contact strip -----------------------------------------------------------
+// Contact strip — heading block on the left, the three contact items
+// spread across the remaining width in a single row at lg+.
 .footer-contact {
-  @apply container mx-auto flex flex-col gap-8 border-b border-navy/10 pb-8 md:flex-row md:items-center md:justify-between;
+  @apply container mx-auto flex flex-col gap-8 border-b border-navy/10 pb-10 pt-4 lg:flex-row lg:items-center lg:gap-10;
+
+  > div:first-child {
+    @apply shrink-0 lg:max-w-xs;
+  }
 }
 
 .footer-contact__title {
-  @apply text-xl font-bold text-navy;
+  @apply text-2xl font-bold text-navy;
 }
 
 .footer-contact__subtitle {
@@ -20,7 +28,7 @@
 }
 
 .footer-contact__items {
-  @apply flex flex-col gap-6 sm:flex-row sm:flex-wrap sm:gap-10;
+  @apply flex flex-col gap-6 sm:flex-row sm:flex-wrap sm:gap-10 lg:flex-1 lg:justify-between lg:gap-6 xl:flex-nowrap;
 }
 
 .footer-contact__item {
@@ -36,7 +44,7 @@
 }
 
 .footer-contact__value {
-  @apply text-sm text-slate-500;
+  @apply mt-0.5 max-w-[210px] text-sm text-slate-500;
 }
 
 // Columns -------------------------------------------------------------

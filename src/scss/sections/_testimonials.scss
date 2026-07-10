@@ -8,7 +8,7 @@
 @use "../abstracts/variables" as v;
 
 .testimonials {
-  @apply relative overflow-hidden bg-navy py-20 text-white;
+  @apply relative overflow-hidden bg-navy pt-20 text-white;
 }
 
 .testimonials__bg {
@@ -33,14 +33,18 @@
   @apply relative mx-auto flex aspect-square w-full max-w-md items-end justify-center;
 }
 
+// Rings are sized by width + aspect-ratio (not inset percentages) and
+// centered with auto margins, so they stay perfect circles even though
+// the fixed-height photo stretches the media box out of square.
 .testimonials__ring {
-  @apply pointer-events-none absolute rounded-full border border-dashed border-white/25;
-  inset: 8%;
+  @apply pointer-events-none absolute inset-0 m-auto rounded-full border border-dashed border-white/25;
+  width: 84%;
+  aspect-ratio: 1 / 1;
   animation: testimonialSpin 40s linear infinite;
 
   &.is-inner {
     @apply border-solid border-white/10;
-    inset: 18%;
+    width: 64%;
     animation: testimonialSpin 26s linear infinite reverse;
   }
 }
@@ -48,8 +52,9 @@
 // Invisible spinning circles matching the outer ring; each carries a ping
 // dot pinned to its edge, so the dots travel around the ring border.
 .testimonials__orbit {
-  @apply pointer-events-none absolute rounded-full;
-  inset: 8%;
+  @apply pointer-events-none absolute inset-0 m-auto rounded-full;
+  width: 84%;
+  aspect-ratio: 1 / 1;
   animation: testimonialSpin 18s linear infinite;
 
   &.is-slow {
@@ -77,7 +82,7 @@
 }
 
 .testimonials__photo {
-  @apply relative z-10 h-full w-auto max-w-none object-contain;
+  @apply relative z-10 h-[500px] w-auto max-w-none object-contain;
 }
 
 // Content -------------------------------------------------------------

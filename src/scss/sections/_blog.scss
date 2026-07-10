@@ -18,8 +18,20 @@
   }
 }
 
+// Column 1 is intentionally narrower than column 2 (borrowed width goes
+// to column 2; column 3's stacked mini-cards stay untouched at 1fr) so
+// card A reads as a taller, narrower "editorial" card with its title
+// wrapping across more lines, matching the reference design.
 .blog__grid {
-  @apply mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:grid-rows-2;
+  @apply mt-10 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1.32fr_1fr] lg:grid-rows-2;
+}
+
+.btn-view-all {
+  @apply inline-flex shrink-0 items-center gap-3 rounded-full bg-brand-cyan py-2 pl-5 pr-2 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105;
+}
+
+.btn-view-all__icon {
+  @apply flex h-8 w-8 items-center justify-center rounded-full bg-white text-navy;
 }
 
 // Shared card bits -----------------------------------------------------
@@ -51,25 +63,27 @@
   @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-navy shadow-md transition-transform duration-200 hover:scale-110;
 }
 
-// Card A — split layout: copy on top, photo filling the rest ------------
+// Card A — full-bleed photo with the title overlaid at the top over a
+// soft white scrim (keeps navy text legible no matter what's behind it)
+// and a Read More CTA pinned to the bottom via justify-between.
 .blog-card--split {
-  @apply flex flex-col;
+  @apply relative z-10 flex flex-col justify-between p-6;
+}
+
+.blog-card--split__scrim {
+  @apply pointer-events-none absolute inset-x-0 top-0 h-3/5 bg-gradient-to-b from-white/95 via-white/70 to-transparent;
 }
 
 .blog-card--split__top {
-  @apply relative z-10 p-6 pb-0;
+  @apply relative z-10;
 }
 
 .blog-card--split__title {
   @apply mt-3 text-xl font-bold leading-snug text-navy;
 }
 
-.blog-card--split__media {
-  @apply relative mt-5 flex-1;
-}
-
 .blog-card--split__cta {
-  @apply absolute bottom-6 left-6 z-10 inline-flex items-center gap-3 rounded-full bg-brand-cyan py-2 pl-5 pr-2 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105;
+  @apply relative z-10 inline-flex w-fit items-center gap-3 rounded-full bg-brand-cyan py-2 pl-5 pr-2 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105;
 }
 
 .blog-card--split__cta-icon {

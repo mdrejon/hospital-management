@@ -4,26 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ClinicMaster | Medical & Health Care Services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 <body class="font-sans">
 
   <!-- ===================== Header ===================== -->
   <header class="site-header">
-    <!-- Top info bar -->
+    <!-- Top info bar (original) -->
     <div class="top-header">
       <div class="top-header__inner">
         <div class="top-header__left">
-          <a href="mailto:support@hospital.com" class="top-header__item">
-            <span class="top-header__icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                <path d="m4 6 8 7 8-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-            <span class="top-header__value">support@hospital.com</span>
-          </a>
-
+          <span   class="top-header__item">
+            
+            <span class="top-header__value">Need professional medical & health Care?</span>
+          </span> 
           <span class="top-header__item">
             <span class="top-header__icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -31,9 +28,13 @@
                 <circle cx="12" cy="9.5" r="2.4" stroke="currentColor" stroke-width="1.6"/>
               </svg>
             </span>
-            <span class="top-header__value">36D Street Brooklyn, New York</span>
+            <span class="top-header__value">Call : +1 (234) 5688 9990</span>
           </span>
 
+          
+        </div>
+
+        <div class="top-header__right">
           <span class="top-header__item">
             <span class="top-header__icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -43,10 +44,6 @@
             </span>
             <span class="top-header__value">Mon - Fri: 8:00 am - 7:00 pm</span>
           </span>
-        </div>
-
-        <div class="top-header__right">
-           
           <div class="top-header__socials">
             <a href="#" class="top-header__social-link" aria-label="Facebook">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z"/></svg>
@@ -58,87 +55,124 @@
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z"/></svg>
             </a>
           </div>
- 
         </div>
       </div>
     </div>
 
-    <!-- Main nav -->
-    <div class="site-header__nav">
-      <div class="site-header__inner">
-        <a href="index.html" class="site-logo text-navy">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-brand-cyan">
-            <path d="M12 3c-1.66 0-3 1.34-3 3v3H6c-1.66 0-3 1.34-3 3s1.34 3 3 3h3v3c0 1.66 1.34 3 3 3s3-1.34 3-3v-3h3c1.66 0 3-1.34 3-3s-1.34-3-3-3h-3V6c0-1.66-1.34-3-3-3z" stroke="currentColor" stroke-width="1.6"/>
-          </svg>
-          <span>Clinic<span class="site-logo__accent block -mt-1 text-base leading-none">Master</span></span>
-        </a>
-
-        <nav class="main-nav">
-          <a href="index.html" class="main-nav__link is-active">Home</a>
-
-          <div class="has-dropdown">
-            <button type="button" class="main-nav__link">
-              About Us
-              <span class="main-nav__caret">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </button>
-            <div class="dropdown-menu">
-              <a href="about.html" class="dropdown-menu__link">Company Profile</a>
-              <a href="history.html" class="dropdown-menu__link">Our History</a>
-              <a href="md-message.html" class="dropdown-menu__link">Message From MD/CEO</a>
-              <a href="management.html" class="dropdown-menu__link">Our Management</a>
-              <a href="achievements.html" class="dropdown-menu__link">Our Achievement</a>
-              <a href="faq.html" class="dropdown-menu__link">FAQ</a>
-            </div>
-          </div>
-
-          <div class="has-dropdown">
-            <button type="button" class="main-nav__link">
-              Our Service
-              <span class="main-nav__caret">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </button>
-            <div class="dropdown-menu">
-              <a href="services.html" class="dropdown-menu__link">Service Details</a>
-            </div>
-          </div>
-
-          <div class="has-dropdown">
-            <button type="button" class="main-nav__link">
-              Doctor's
-              <span class="main-nav__caret">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </button>
-            <div class="dropdown-menu">
-              <a href="doctors.html" class="dropdown-menu__link">Doctor's List</a>
-            </div>
-          </div>
-
-          <a href="gallery.html" class="main-nav__link">Gallery</a>
-          <a href="blog-list.html" class="main-nav__link">Blog</a>
-          <a href="contact.html" class="main-nav__link">Contact Us</a>
-        </nav>
-
-        <div class="site-header__actions">
-          <a href="appointment.html" class="btn-appointment">Appointment</a>
-          <button type="button" class="menu-toggle" data-menu-toggle aria-label="Open menu">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <!-- Top info bar (new 5-icon style) -->
+    <div class="top-info-bar">
+      <div class="top-info-bar__inner">
+        <span class="top-info-bar__item">
+            <a href="index.html" class="site-logo text-navy">
+            <img src="assets/img/logo.png" alt="Sitakund Modern Hospital Ltd." height="60" style="height:60px;width:auto" />
+          </a>
+        </span>
+        <a href="mailto:info@example.com" class="top-info-bar__item">
+          <span class="top-info-bar__icon">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M3.5 6.5 12 13l8.5-6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 3.5h6M8 1.5h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
             </svg>
-          </button>
+          </span>
+          <span class="top-info-bar__text">
+            <span class="top-info-bar__label">Email Supports</span>
+            <span class="top-info-bar__value">info@example.com</span>
+          </span>
+        </a>
+ 
+
+        <span class="top-info-bar__item">
+          <span class="top-info-bar__icon">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="m4 3 2.2 2.2M20 3l-2.2 2.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="12" cy="13.5" r="8" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M12 9.3v4.2l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9.5 3.2h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="top-info-bar__text">
+            <span class="top-info-bar__label">Supports</span>
+            <span class="top-info-bar__value">24x7 Supports</span>
+          </span>
+        </span>
+
+        <div class="top-info-bar__item top-info-bar__search">
+          <form action="#" class="header-search" role="search">
+            <input type="search" class="header-search__input" placeholder="Search here..." aria-label="Search" />
+            <button type="submit" class="header-search__submit" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+                <path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </form>
         </div>
       </div>
     </div>
   </header>
+
+  <!-- Main nav (own stacking context, sibling of <header> so it can stay sticky for the full page) -->
+  <div class="site-header__nav">
+    <div class="site-header__inner">
+   
+      <a href="index.html" class="site-logo site-logo--mobile">
+        <img src="assets/img/logo.png" alt="Sitakund Modern Hospital Ltd." height="42" style="height:42px;width:auto" />
+      </a>
+
+      <nav class="main-nav">
+        <a href="index.html" class="main-nav__link is-active">Home</a>
+
+        <div class="has-dropdown">
+          <button type="button" class="main-nav__link">
+            About Us
+            <span class="main-nav__caret">+</span>
+          </button>
+          <div class="dropdown-menu">
+            <a href="about.html" class="dropdown-menu__link">Company Profile</a>
+            <a href="history.html" class="dropdown-menu__link">Our History</a>
+            <a href="md-message.html" class="dropdown-menu__link">Message From MD/CEO</a>
+            <a href="management.html" class="dropdown-menu__link">Our Management</a>
+            <a href="achievements.html" class="dropdown-menu__link">Our Achievement</a>
+            <a href="faq.html" class="dropdown-menu__link">FAQ</a>
+          </div>
+        </div>
+
+        <div class="has-dropdown">
+          <button type="button" class="main-nav__link">
+            Our Service
+            <span class="main-nav__caret">+</span>
+          </button>
+          <div class="dropdown-menu">
+            <a href="services.html" class="dropdown-menu__link">Service List</a>
+          </div>
+        </div>
+
+        <div class="has-dropdown">
+          <button type="button" class="main-nav__link">
+            Doctor's
+            <span class="main-nav__caret">+</span>
+          </button>
+          <div class="dropdown-menu">
+            <a href="doctors.html" class="dropdown-menu__link">Doctor's List</a>
+          </div>
+        </div>
+
+        <a href="gallery.html" class="main-nav__link">Gallery</a>
+        <a href="blog-list.html" class="main-nav__link">Blog</a>
+        <a href="contact.html" class="main-nav__link">Contact Us</a>
+      </nav>
+
+      <div class="site-header__actions">
+        <a href="appointment.html" class="btn-appointment">Appointment</a>
+        <button type="button" class="menu-toggle" data-menu-toggle aria-label="Open menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ===================== Off-canvas side panel ===================== -->
   <div class="side-panel-overlay" data-panel-overlay></div>
@@ -151,10 +185,7 @@
     </button>
 
     <a href="index.html" class="site-logo">
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-brand-cyan">
-        <path d="M12 3c-1.66 0-3 1.34-3 3v3H6c-1.66 0-3 1.34-3 3s1.34 3 3 3h3v3c0 1.66 1.34 3 3 3s3-1.34 3-3v-3h3c1.66 0 3-1.34 3-3s-1.34-3-3-3h-3V6c0-1.66-1.34-3-3-3z" stroke="currentColor" stroke-width="1.6"/>
-      </svg>
-      <span>Clinic<span class="site-logo__accent block -mt-1 text-base leading-none">Master</span></span>
+      <img src="assets/img/logo.png" alt="Sitakund Modern Hospital Ltd." height="56" style="height:56px;width:auto" />
     </a>
 
     <p class="side-panel__desc">
@@ -194,7 +225,7 @@
           </span>
         </button>
         <div class="side-panel__submenu">
-          <a href="services.html" class="side-panel__nav-sublink">Service Details</a>
+          <a href="services.html" class="side-panel__nav-sublink">Service List</a>
         </div>
       </div>
 
@@ -263,7 +294,7 @@
   </aside>
 
   <!-- ===================== Main content ===================== -->
-  <main class="pt-[90px]">
+  <main>
 
     <!-- ===================== Hero ===================== -->
     <section class="hero" data-hero>
@@ -675,10 +706,10 @@
         <div class="team__head">
           <p class="team__eyebrow">
             <span class="team__eyebrow-dot"></span>
-            Our Team Member
+            Our Doctor
             <span class="team__eyebrow-dot"></span>
           </p>
-          <h2 class="team__title">Meet Our Doctor <span class="accent">Meeting</span></h2>
+          <h2 class="team__title">Meet Our <span class="accent">Doctor</span></h2>
         </div>
 
         <div class="team__slider" data-team-slider>
@@ -931,6 +962,93 @@
       </div>
     </section>
 
+    <!-- ===================== Why Choose Us ===================== -->
+    <section class="why-choose">
+      <div class="container mx-auto px-4">
+        <div class="why-choose__grid">
+
+          <!-- Media -->
+          <div class="why-choose__media">
+            <div class="why-choose__photo">
+              <img src="assets/img/choose-us-image.webp" alt="Why choose us" class="why-choose__photo-img" />
+            </div>
+            <div class="why-choose__badge">
+              <span class="why-choose__badge-number">20+</span>
+              <span class="why-choose__badge-label">Years Experienced</span>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="why-choose__content">
+            <h2 class="why-choose__title">
+              Why Choose Us For Your Health Care Needs
+            </h2>
+
+            <div class="why-choose__features">
+
+              <div class="why-choose__feature">
+                <span class="why-choose__feature-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <div class="why-choose__feature-text">
+                  <h3 class="why-choose__feature-title">More Experience</h3>
+                  <p class="why-choose__feature-desc">
+                    Our team of highly qualified specialists delivers exceptional care with years of experience.
+                  </p>
+                </div>
+              </div>
+
+              <div class="why-choose__feature">
+                <span class="why-choose__feature-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <div class="why-choose__feature-text">
+                  <h3 class="why-choose__feature-title">Seamless Care</h3>
+                  <p class="why-choose__feature-desc">
+                    State-of-the-art medical equipment and cutting-edge technology for accurate diagnosis.
+                  </p>
+                </div>
+              </div>
+
+              <div class="why-choose__feature">
+                <span class="why-choose__feature-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <div class="why-choose__feature-text">
+                  <h3 class="why-choose__feature-title">The Right Answers</h3>
+                  <p class="why-choose__feature-desc">
+                    Round-the-clock emergency services with rapid response teams always on standby.
+                  </p>
+                </div>
+              </div>
+
+              <div class="why-choose__feature">
+                <span class="why-choose__feature-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <div class="why-choose__feature-text">
+                  <h3 class="why-choose__feature-title">Unparalleled Expertise</h3>
+                  <p class="why-choose__feature-desc">
+                    Quality healthcare at competitive prices with transparent billing and insurance support.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
     <!-- ===================== Health Packages ===================== -->
     <section class="packages">
       <div class="packages__head">
@@ -1068,7 +1186,124 @@
       <div class="packages__dots" data-packages-dots></div>
     </section>
  
- 
+     <!-- ===================== FAQ ===================== -->
+    <section class="faq">
+      <img src="assets/img/faq-bg.png" alt="" class="faq__bg" aria-hidden="true" />
+
+      <div class="container relative mx-auto px-4">
+        <div class="faq__grid">
+          <div class="faq__copy">
+            <h2 class="faq__title">Frequently Asked Questions</h2>
+            <p class="faq__desc">
+              It is a long established fact that a reader will be distracted by the readable content of a page when
+              looking at its layout.
+            </p>
+
+            <div class="faq__list">
+              <div class="faq-item is-open">
+                <button type="button" class="faq-item__question" data-faq-toggle>
+                  What types of treatments do you offer?
+                  <span class="faq-item__icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </button>
+                <div class="faq-item__answer">
+                  <p>
+                    It is a long established fact that a reader will be distracted by the readable content of a page
+                    when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal
+                    distribution
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <button type="button" class="faq-item__question" data-faq-toggle>
+                  How do i book my appointment ?
+                  <span class="faq-item__icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </button>
+                <div class="faq-item__answer">
+                  <p>
+                    It is a long established fact that a reader will be distracted by the readable content of a page
+                    when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal
+                    distribution
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <button type="button" class="faq-item__question" data-faq-toggle>
+                  Can i cancel my appointment
+                  <span class="faq-item__icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </button>
+                <div class="faq-item__answer">
+                  <p>
+                    It is a long established fact that a reader will be distracted by the readable content of a page
+                    when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal
+                    distribution
+                  </p>
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <button type="button" class="faq-item__question" data-faq-toggle>
+                  How much do you charge for pedicure ?
+                  <span class="faq-item__icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </button>
+                <div class="faq-item__answer">
+                  <p>
+                    It is a long established fact that a reader will be distracted by the readable content of a page
+                    when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal
+                    distribution
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq__media">
+            <img src="assets/img/faq.webp" alt="Smiling doctor on a call, ready to answer your questions" class="faq__photo" />
+
+            <div class="faq__contact-card">
+              <div class="faq__contact-info">
+                <span class="faq__contact-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6"/>
+                  </svg>
+                </span>
+                <div>
+                  <p class="faq__contact-label">Contact us?</p>
+                  <p class="faq__contact-value">1 123 456 7890</p>
+                </div>
+              </div>
+
+              <a href="appointment.html" class="faq__contact-btn">
+                Appointment
+                <span class="faq__contact-btn-icon">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
 
     <!-- ===================== Testimonials ===================== -->
     <section class="testimonials">
@@ -1206,122 +1441,7 @@
       </div>
     </section>
 
-    <!-- ===================== FAQ ===================== -->
-    <section class="faq">
-      <div class="container mx-auto px-4">
-        <div class="faq__grid">
-          <div>
-            <h2 class="faq__title">Frequently Asked Questions</h2>
-            <p class="faq__desc">
-              It is a long established fact that a reader will be distracted by the readable content of a page when
-              looking at its layout.
-            </p>
-
-            <div class="faq__list">
-              <div class="faq-item is-open">
-                <button type="button" class="faq-item__question" data-faq-toggle>
-                  What types of treatments do you offer?
-                  <span class="faq-item__icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                </button>
-                <div class="faq-item__answer">
-                  <p>
-                    It is a long established fact that a reader will be distracted by the readable content of a page
-                    when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal
-                    distribution
-                  </p>
-                </div>
-              </div>
-
-              <div class="faq-item">
-                <button type="button" class="faq-item__question" data-faq-toggle>
-                  How do i book my appointment ?
-                  <span class="faq-item__icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                </button>
-                <div class="faq-item__answer">
-                  <p>
-                    It is a long established fact that a reader will be distracted by the readable content of a page
-                    when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal
-                    distribution
-                  </p>
-                </div>
-              </div>
-
-              <div class="faq-item">
-                <button type="button" class="faq-item__question" data-faq-toggle>
-                  Can i cancel my appointment
-                  <span class="faq-item__icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                </button>
-                <div class="faq-item__answer">
-                  <p>
-                    It is a long established fact that a reader will be distracted by the readable content of a page
-                    when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal
-                    distribution
-                  </p>
-                </div>
-              </div>
-
-              <div class="faq-item">
-                <button type="button" class="faq-item__question" data-faq-toggle>
-                  How much do you charge for pedicure ?
-                  <span class="faq-item__icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                </button>
-                <div class="faq-item__answer">
-                  <p>
-                    It is a long established fact that a reader will be distracted by the readable content of a page
-                    when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal
-                    distribution
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="faq__media">
-            <img src="assets/img/about-image.webp" alt="Smiling doctor ready to answer your questions" class="faq__photo" />
-
-            <div class="faq__contact-card">
-              <div class="faq__contact-info">
-                <span class="faq__contact-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6"/>
-                  </svg>
-                </span>
-                <div>
-                  <p class="faq__contact-label">Contact us?</p>
-                  <p class="faq__contact-value">1 123 456 7890</p>
-                </div>
-              </div>
-
-              <a href="appointment.html" class="faq__contact-btn">
-                Appointment
-                <span class="faq__contact-btn-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
+ 
     <!-- ===================== Awards ===================== -->
     <section class="awards">
       <div class="container mx-auto px-4">
@@ -1334,9 +1454,8 @@
             </p>
           </div>
 
-          <div class="awards__slider">
-            <div class="awards__track">
-              <!-- Card set, rendered twice back-to-back for a seamless CSS loop -->
+          <div class="awards__slider" data-awards-slider>
+            <div class="awards__track" data-awards-track>
               <div class="award-card">
                 <svg class="award-card__seal" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M48 4 86 26v44L48 92 10 70V26z" stroke="currentColor" stroke-width="1.6"/>
@@ -1397,24 +1516,7 @@
                 <a href="#" class="award-card__link">Save the Children</a>
               </div>
 
-              <!-- duplicate set, hidden from assistive tech -->
-              <div class="award-card" aria-hidden="true">
-                <svg class="award-card__seal" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M48 4 86 26v44L48 92 10 70V26z" stroke="currentColor" stroke-width="1.6"/>
-                  <text x="48" y="46" text-anchor="middle" font-size="14" font-weight="800" fill="currentColor">WHO</text>
-                  <text x="48" y="56" text-anchor="middle" font-size="6" fill="currentColor" opacity="0.7">Medizone</text>
-                  <text x="48" y="64" text-anchor="middle" font-size="6" fill="currentColor" opacity="0.7">2024</text>
-                  <text x="17" y="22" font-size="9" fill="currentColor">★</text>
-                  <text x="72" y="22" font-size="9" fill="currentColor">★</text>
-                  <text x="17" y="82" font-size="9" fill="currentColor">★</text>
-                  <text x="72" y="82" font-size="9" fill="currentColor">★</text>
-                </svg>
-                <h3 class="award-card__title">ClinicMaster 2024</h3>
-                <p class="award-card__subtitle">Quality and Accreditation Institute</p>
-                <a href="#" class="award-card__link" tabindex="-1">Save the Children</a>
-              </div>
-
-              <div class="award-card" aria-hidden="true">
+              <div class="award-card">
                 <svg class="award-card__seal" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="48" cy="48" r="40" stroke="currentColor" stroke-width="1.6" stroke-dasharray="3 4"/>
                   <circle cx="48" cy="48" r="32" stroke="currentColor" stroke-width="1.2"/>
@@ -1425,10 +1527,10 @@
                 </svg>
                 <h3 class="award-card__title">ClinicMaster 2024</h3>
                 <p class="award-card__subtitle">Quality and Accreditation Institute</p>
-                <a href="#" class="award-card__link" tabindex="-1">Save the Children</a>
+                <a href="#" class="award-card__link">Save the Children</a>
               </div>
 
-              <div class="award-card" aria-hidden="true">
+              <div class="award-card">
                 <svg class="award-card__seal" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="48" cy="48" r="36" stroke="currentColor" stroke-width="1.6"/>
                   <path d="M18 40c6 20 10 30 20 36M78 40c-6 20-10 30-20 36" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
@@ -1439,23 +1541,7 @@
                 </svg>
                 <h3 class="award-card__title">ClinicMaster 2024</h3>
                 <p class="award-card__subtitle">Quality and Accreditation Institute</p>
-                <a href="#" class="award-card__link" tabindex="-1">Save the Children</a>
-              </div>
-
-              <div class="award-card" aria-hidden="true">
-                <svg class="award-card__seal" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M48 4 86 26v44L48 92 10 70V26z" stroke="currentColor" stroke-width="1.6"/>
-                  <text x="48" y="46" text-anchor="middle" font-size="14" font-weight="800" fill="currentColor">WHO</text>
-                  <text x="48" y="56" text-anchor="middle" font-size="6" fill="currentColor" opacity="0.7">Medizone</text>
-                  <text x="48" y="64" text-anchor="middle" font-size="6" fill="currentColor" opacity="0.7">2024</text>
-                  <text x="17" y="22" font-size="9" fill="currentColor">★</text>
-                  <text x="72" y="22" font-size="9" fill="currentColor">★</text>
-                  <text x="17" y="82" font-size="9" fill="currentColor">★</text>
-                  <text x="72" y="82" font-size="9" fill="currentColor">★</text>
-                </svg>
-                <h3 class="award-card__title">ClinicMaster 2024</h3>
-                <p class="award-card__subtitle">Quality and Accreditation Institute</p>
-                <a href="#" class="award-card__link" tabindex="-1">Save the Children</a>
+                <a href="#" class="award-card__link">Save the Children</a>
               </div>
             </div>
           </div>
@@ -1479,29 +1565,31 @@
         </div>
 
         <div class="blog__grid">
-          <!-- Card A: copy on top, photo filling the rest, Read More CTA -->
+          <!-- Card A: full-bleed photo with a dark navy title overlaid at
+               the top over a soft white scrim (so it stays legible no
+               matter what's behind it) and a Read More CTA at the bottom,
+               mirroring cards B/D's overlay pattern but light-on-photo. -->
           <article class="blog-card blog-card--split is-tall">
+            <img src="assets/img/blog-one.png" alt="Nurse holding a stethoscope" class="blog-card__img" />
+            <span class="blog-card--split__scrim" aria-hidden="true"></span>
             <div class="blog-card--split__top">
               <span class="blog-card__date"><span class="blog-card__date-dot"></span>July 6, 2025</span>
               <h3 class="blog-card--split__title">The Skincare Routine That Works Expert Tips.</h3>
             </div>
-            <div class="blog-card--split__media">
-              <img src="assets/img/sr-1-3.jpg" alt="Facial skincare treatment" class="blog-card__img" />
-              <a href="blog-details.html" class="blog-card--split__cta">
-                Read More
-                <span class="blog-card--split__cta-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-              <span class="blog-card--split__bubble"></span>
-            </div>
+            <a href="blog-details.html" class="blog-card--split__cta">
+              Read More
+              <span class="blog-card--split__cta-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </a>
+            <span class="blog-card--split__bubble"></span>
           </article>
 
           <!-- Card B: full-bleed photo, overlay content -->
           <article class="blog-card blog-card--photo is-tall">
-            <img src="assets/img/appoinment.jpg" alt="Doctor speaking with a patient" class="blog-card__img" style="object-position: 22% center;" />
+            <img src="assets/img/blog-2.png" alt="Doctor speaking with a patient" class="blog-card__img" style="object-position: 50% 20%;" />
             <span class="blog-card__overlay"></span>
             <span class="blog-card__date relative z-10 w-fit"><span class="blog-card__date-dot"></span>July 9, 2025</span>
             <div class="blog-card--photo__footer">
@@ -1531,7 +1619,7 @@
 
           <!-- Card D: full-bleed photo, overlay content (short) -->
           <article class="blog-card blog-card--photo">
-            <img src="assets/img/slider-1.2.jpg" alt="Doctor examining a young patient" class="blog-card__img" />
+            <img src="assets/img/blog-4.jpg" alt="Doctor checking a patient's blood pressure" class="blog-card__img" />
             <span class="blog-card__overlay"></span>
             <span class="blog-card__date relative z-10 w-fit"><span class="blog-card__date-dot"></span>July 9, 2025</span>
             <div class="blog-card--photo__footer">
@@ -1549,114 +1637,111 @@
 
     <!-- ===================== Make an Appointment ===================== -->
     <section class="book-appointment">
-      <div class="book-appointment__frame">
-        <div class="book-appointment__media">
-          <img src="assets/img/appoinment.jpg" alt="Doctor consulting with an elderly patient in a hospital waiting area" class="book-appointment__img" />
-          <button type="button" class="book-appointment__play" aria-label="Play intro video">
-            <span class="book-appointment__play-ring"></span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 6.5v11l9-5.5-9-5.5z" fill="currentColor"/>
-            </svg>
-          </button>
+      <span class="book-appointment__watermark" aria-hidden="true">Make An Appointment</span>
+
+      <div class="container relative mx-auto px-4">
+        <div class="book-appointment__head">
+          <p class="book-appointment__eyebrow">Make an Appointment</p>
+          <h2 class="book-appointment__title">Fast &amp; Easy Scheduling Today!</h2>
         </div>
 
         <div class="book-appointment__card">
-          <h2 class="book-appointment__title">Make an Appointment</h2>
-          <p class="book-appointment__subtitle">Booking an appointment with our healthcare professionals</p>
+          <div class="book-appointment__form-col">
+            <h3 class="book-appointment__form-title">Please enter your info</h3>
+            <p class="book-appointment__subtitle">Strong communication and teamwork skills enable effective collaboration</p>
 
-          <form class="book-appointment__form">
-            <label class="book-appointment__field">
-              <span class="book-appointment__field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/>
-                  <path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                </svg>
-              </span>
-              <input type="text" class="book-appointment__input" placeholder="Name" />
-            </label>
+            <form class="book-appointment__form">
+              <label class="book-appointment__field">
+                <span class="book-appointment__field-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <input type="text" class="book-appointment__input" placeholder="Name" />
+              </label>
 
-            <label class="book-appointment__field">
-              <span class="book-appointment__field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                  <path d="m4 6 8 7 8-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <input type="email" class="book-appointment__input" placeholder="Email Address" />
-            </label>
+              <label class="book-appointment__field">
+                <span class="book-appointment__field-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                    <path d="m4 6 8 7 8-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <input type="email" class="book-appointment__input" placeholder="Email Address" />
+              </label>
 
-            <label class="book-appointment__field">
-              <span class="book-appointment__field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6"/>
-                </svg>
-              </span>
-              <input type="tel" class="book-appointment__input" placeholder="Phone no" />
-              <span class="book-appointment__field-spinner" aria-hidden="true">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="m8 10 4-4 4 4M8 14l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </label>
+              <label class="book-appointment__field">
+                <span class="book-appointment__field-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6"/>
+                  </svg>
+                </span>
+                <input type="tel" class="book-appointment__input" placeholder="Phone no" />
+                <span class="book-appointment__field-spinner" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="m8 10 4-4 4 4M8 14l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </label>
 
-            <label class="book-appointment__field">
-              <span class="book-appointment__field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3.5" y="5" width="17" height="16" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
-                  <path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                </svg>
-              </span>
-              <input type="text" class="book-appointment__input" placeholder="Date &amp; Time" />
-            </label>
+              <label class="book-appointment__field">
+                <span class="book-appointment__field-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3.5" y="5" width="17" height="16" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <input type="text" class="book-appointment__input" placeholder="Date &amp; Time" />
+              </label>
 
-            <label class="book-appointment__field">
-              <span class="book-appointment__field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4 21V9l8-5 8 5v12" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                  <path d="M9 21v-6h6v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <select class="book-appointment__select" required>
-                <option value="" disabled selected hidden>Department</option>
-                <option>Cardiology</option>
-                <option>Pediatrics</option>
-                <option>Neurology</option>
-                <option>Orthopedics</option>
-                <option>Dermatology</option>
-              </select>
-              <span class="book-appointment__field-caret">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </label>
+              <label class="book-appointment__field">
+                <span class="book-appointment__field-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 21V9l8-5 8 5v12" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                    <path d="M9 21v-6h6v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <select class="book-appointment__select" required>
+                  <option value="" disabled selected hidden>Choose Department</option>
+                  <option>Cardiology</option>
+                  <option>Pediatrics</option>
+                  <option>Neurology</option>
+                  <option>Orthopedics</option>
+                  <option>Dermatology</option>
+                </select>
+                <span class="book-appointment__field-caret">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </label>
 
-            <label class="book-appointment__field">
-              <span class="book-appointment__field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 3v6a4 4 0 0 0 8 0V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                  <path d="M6 3H4.5M14 3h1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                  <circle cx="18" cy="14" r="2.2" stroke="currentColor" stroke-width="1.6"/>
-                  <path d="M14 9v3a4 4 0 0 0 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                </svg>
-              </span>
-              <select class="book-appointment__select" required>
-                <option value="" disabled selected hidden>Doctors</option>
-                <option>Dr. Laron Metar</option>
-                <option>Dr. Smith Karo</option>
-                <option>Dr. Merata Baron</option>
-                <option>Dr. Elena Cross</option>
-                <option>Dr. Michael Reyes</option>
-                <option>Dr. Sara Owens</option>
-              </select>
-              <span class="book-appointment__field-caret">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </label>
+              <label class="book-appointment__field">
+                <span class="book-appointment__field-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 3v6a4 4 0 0 0 8 0V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    <path d="M6 3H4.5M14 3h1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    <circle cx="18" cy="14" r="2.2" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M14 9v3a4 4 0 0 0 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <select class="book-appointment__select" required>
+                  <option value="" disabled selected hidden>Doctors</option>
+                  <option>Dr. Laron Metar</option>
+                  <option>Dr. Smith Karo</option>
+                  <option>Dr. Merata Baron</option>
+                  <option>Dr. Elena Cross</option>
+                  <option>Dr. Michael Reyes</option>
+                  <option>Dr. Sara Owens</option>
+                </select>
+                <span class="book-appointment__field-caret">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </label>
 
-            <div class="book-appointment__row">
               <label class="book-appointment__field book-appointment__message">
                 <span class="book-appointment__field-icon">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1664,7 +1749,7 @@
                     <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
                   </svg>
                 </span>
-                <textarea class="book-appointment__textarea" placeholder="Write message..." rows="1"></textarea>
+                <textarea class="book-appointment__textarea" placeholder="Write message..." rows="3"></textarea>
               </label>
 
               <div class="book-appointment__submit-wrap">
@@ -1677,8 +1762,12 @@
                   </span>
                 </button>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
+
+          <div class="book-appointment__media">
+            <img src="assets/img/appoinment-img.jpg" alt="Nurse assisting an elderly patient from a wheelchair" class="book-appointment__img" />
+          </div>
         </div>
       </div>
     </section>
@@ -1714,7 +1803,7 @@
           </span>
           <div>
             <p class="footer-contact__label">Send us a Mail</p>
-            <p class="footer-contact__value">sales@Smart Freamework.com</p>
+            <p class="footer-contact__value">sales@smartfreamework.com</p>
           </div>
         </div>
 
@@ -1736,10 +1825,7 @@
     <div class="footer-columns">
       <div class="footer-about">
         <a href="index.html" class="site-logo text-navy">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-brand-cyan">
-            <path d="M12 3c-1.66 0-3 1.34-3 3v3H6c-1.66 0-3 1.34-3 3s1.34 3 3 3h3v3c0 1.66 1.34 3 3 3s3-1.34 3-3v-3h3c1.66 0 3-1.34 3-3s-1.34-3-3-3h-3V6c0-1.66-1.34-3-3-3z" stroke="currentColor" stroke-width="1.6"/>
-          </svg>
-          <span>Clinic<span class="site-logo__accent block -mt-1 text-base leading-none">Master</span></span>
+          <img src="assets/img/logo.png" alt="Sitakund Modern Hospital Ltd." height="70" style="height:70px;width:auto" />
         </a>
         <p class="footer-about__desc">
           ClinicMaster Ipsum Dolor Sit Amet, Consectuer Adipiscing Elit, Sed Diam
@@ -1792,17 +1878,7 @@
       </div>
     </div>
 
-    <div class="footer-newsletter">
-      <div>
-        <h4 class="footer-newsletter__title">Important Updates Waiting for you</h4>
-        <p class="footer-newsletter__subtitle">Get our latest and best contents right into your inbox</p>
-      </div>
-
-      <form class="footer-newsletter__form">
-        <input type="email" class="footer-newsletter__input" placeholder="Your Email Address" required />
-        <button type="submit" class="footer-newsletter__submit">Subscribe Now</button>
-      </form>
-    </div>
+ 
 
     <div class="footer-bottom">
       &copy; 2025 <a href="#">Smart Freamework</a> Theme. All Rights Reserved.

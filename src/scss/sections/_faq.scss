@@ -3,14 +3,22 @@
 // ==========================================================================
 
 .faq {
-  @apply bg-white py-20;
+  @apply relative overflow-hidden bg-white py-20;
+}
+
+.faq__bg {
+  @apply pointer-events-none absolute inset-0 h-full w-full object-cover object-right-top;
 }
 
 .faq__grid {
-  @apply grid items-center gap-16 lg:grid-cols-2;
+  @apply relative grid items-center gap-16 lg:grid-cols-2;
 }
 
 // Copy + accordion ------------------------------------------------------
+.faq__copy {
+  @apply relative;
+}
+
 .faq__title {
   @apply text-3xl font-extrabold leading-snug text-navy sm:text-4xl;
 }
@@ -56,17 +64,10 @@
 }
 
 // Media -------------------------------------------------------------
-// Portrait photo with a dashed cyan frame peeking out at the top-right
-// and the contact card floating over the bottom-left corner.
+// Contained, rounded photo card with the contact bar floating over
+// its bottom-left corner.
 .faq__media {
-  @apply relative mx-auto w-full max-w-md pb-16 pl-8 pt-4 pr-4;
-
-  &::before {
-    content: "";
-    @apply absolute right-0 top-0 rounded-3xl border-2 border-dashed border-brand-cyan/40;
-    width: 55%;
-    height: 45%;
-  }
+  @apply relative mx-auto w-full max-w-md;
 }
 
 .faq__photo {
@@ -74,7 +75,7 @@
 }
 
 .faq__contact-card {
-  @apply absolute -bottom-4 -left-4 flex w-[calc(100%-1rem)] max-w-sm items-center justify-between gap-4 rounded-2xl bg-white p-4 shadow-2xl;
+  @apply absolute bottom-6 left-6 z-10 flex w-[calc(100%-1.5rem)] max-w-sm items-center justify-between gap-4 rounded-2xl bg-white p-4 shadow-2xl;
 }
 
 .faq__contact-info {

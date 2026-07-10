@@ -1,53 +1,63 @@
 // ==========================================================================
-// "Make an Appointment" banner section (photo + floating form card)
+// "Make an Appointment" section — giant watermark headline behind a
+// centered eyebrow + title, then a white card with the two-column form on
+// the left ("Please enter your info") and a rounded photo on the right.
 // ==========================================================================
 
 .book-appointment {
-  @apply relative bg-white py-20;
+  @apply relative overflow-hidden bg-footer-bg py-20 sm:py-24;
 }
 
-.book-appointment__frame {
-  @apply container relative mx-auto px-4;
+.book-appointment__watermark {
+  @apply pointer-events-none absolute left-1/2 top-8 -translate-x-1/2 whitespace-nowrap text-[13vw] font-extrabold uppercase leading-none tracking-wide text-navy/[0.05] lg:text-[98px];
 }
 
-// Media -------------------------------------------------------------
-.book-appointment__media {
-  @apply relative h-[260px] w-full overflow-hidden rounded-3xl sm:h-[380px] lg:h-[520px];
+// Centered head ---------------------------------------------------------
+.book-appointment__head {
+  @apply relative mx-auto max-w-2xl text-center;
 }
 
-.book-appointment__img {
-  @apply h-full w-full object-cover;
+.book-appointment__eyebrow {
+  @apply text-sm font-bold text-brand-cyan;
 }
 
-.book-appointment__play {
-  @apply absolute left-1/2 top-[38%] flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-[#ff5a44] shadow-lg transition-transform duration-200 hover:scale-105 sm:h-20 sm:w-20;
-}
-
-.book-appointment__play-ring {
-  @apply absolute inset-0 rounded-full border border-white/70;
-  animation: bookAppointmentPulse 2.4s ease-out infinite;
+.book-appointment__title {
+  @apply mt-2 text-3xl font-bold text-navy sm:text-4xl;
 }
 
 // Card ----------------------------------------------------------------
 .book-appointment__card {
-  @apply relative z-10 mx-auto -mt-16 w-[92%] max-w-3xl rounded-3xl bg-white p-6 shadow-2xl sm:-mt-20 sm:p-10 lg:-mt-24 lg:max-w-4xl;
+  @apply relative z-10 mx-auto mt-12 flex max-w-5xl flex-col gap-8 rounded-2xl bg-white p-6 shadow-xl sm:p-8 lg:flex-row;
 }
 
-.book-appointment__title {
-  @apply text-center text-2xl font-extrabold text-navy sm:text-[28px];
+.book-appointment__form-col {
+  @apply min-w-0 flex-1;
+}
+
+.book-appointment__form-title {
+  @apply text-2xl font-bold text-navy;
 }
 
 .book-appointment__subtitle {
-  @apply mt-2 text-center text-sm text-muted;
+  @apply mt-1.5 text-sm text-muted;
+}
+
+// Media ---------------------------------------------------------------
+.book-appointment__media {
+  @apply relative w-full overflow-hidden rounded-xl lg:w-[340px] lg:shrink-0;
+}
+
+.book-appointment__img {
+  @apply h-64 w-full object-cover lg:h-full;
 }
 
 // Form ------------------------------------------------------------------
 .book-appointment__form {
-  @apply mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3;
+  @apply mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2;
 }
 
 .book-appointment__field {
-  @apply relative flex items-center gap-2.5 rounded-xl border border-[#E7EAF0] bg-white px-4 py-3.5 text-sm text-navy transition-colors duration-150 focus-within:border-[#ff5a44];
+  @apply relative flex items-center gap-2.5 rounded-lg border border-[#E7EAF0] bg-white px-4 py-3.5 text-sm text-navy transition-colors duration-150 focus-within:border-brand-cyan;
 }
 
 .book-appointment__field-icon {
@@ -78,37 +88,22 @@
   @apply pointer-events-none flex-shrink-0 text-[#8894AB];
 }
 
-.book-appointment__row {
-  @apply mt-4 grid grid-cols-1 items-center gap-4 sm:col-span-2 sm:grid-cols-3 lg:col-span-3;
-}
-
 .book-appointment__message {
   @apply items-start sm:col-span-2;
 }
 
 .book-appointment__textarea {
-  @apply h-[52px] w-full resize-y border-0 bg-transparent p-0 text-sm leading-relaxed text-navy placeholder-[#8894AB] focus:outline-none focus:ring-0;
+  @apply h-20 w-full resize-y border-0 bg-transparent p-0 text-sm leading-relaxed text-navy placeholder-[#8894AB] focus:outline-none focus:ring-0;
 }
 
 .book-appointment__submit-wrap {
-  @apply flex justify-start sm:justify-center;
+  @apply sm:col-span-2;
 }
 
 .book-appointment__submit {
-  @apply inline-flex items-center gap-4 rounded-full bg-[#ff5a44] py-1.5 pl-7 pr-1.5 text-sm font-semibold text-white shadow-lg shadow-[#ff5a44]/30 transition-transform duration-200 hover:scale-105;
+  @apply inline-flex items-center gap-3 rounded-full bg-brand-cyan px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-cyan/30 transition-transform duration-200 hover:scale-105;
 }
 
 .book-appointment__submit-icon {
-  @apply flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#ff5a44];
-}
-
-@keyframes bookAppointmentPulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-  100% {
-    transform: scale(1.6);
-    opacity: 0;
-  }
+  @apply flex items-center justify-center text-white;
 }

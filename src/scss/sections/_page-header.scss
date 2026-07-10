@@ -38,7 +38,7 @@
 }
 
 .page-header__title {
-  @apply text-4xl font-extrabold text-white sm:text-5xl lg:text-6xl;
+  @apply text-5xl font-extrabold text-white sm:text-6xl lg:text-7xl;
 }
 
 .page-header__breadcrumb {
@@ -53,14 +53,38 @@
   @apply flex text-brand-cyan;
 }
 
+// Call button — a white plate with a rounded top sits flush against the
+// banner's bottom edge, holding a cyan pill; ::after paints the concave
+// fillets that make the plate flow into the section below.
 .page-header__call {
-  @apply absolute bottom-0 right-4 z-10 flex translate-y-1/2 items-center gap-3 rounded-full bg-white py-2 pl-2 pr-6 shadow-xl sm:right-10;
+  @apply absolute bottom-0 right-8 z-10 flex items-center gap-3 bg-white px-10 pb-3 pt-5 sm:right-16;
+  border-radius: 2.25rem 2.25rem 0 0;
+
+  &::before {
+    content: "";
+    @apply absolute rounded-full bg-brand-cyan transition-colors duration-200;
+    inset: 14px 32px 7px;
+  }
+
+  &:hover::before {
+    @apply bg-navy;
+  }
+
+  &::after {
+    content: "";
+    @apply pointer-events-none absolute bottom-0 h-8;
+    left: -32px;
+    right: -32px;
+    background:
+      radial-gradient(circle 32px at 0 0, rgba(255, 255, 255, 0) 31px, #fff 32px) left top / 32px 32px no-repeat,
+      radial-gradient(circle 32px at 100% 0, rgba(255, 255, 255, 0) 31px, #fff 32px) right top / 32px 32px no-repeat;
+  }
 }
 
 .page-header__call-icon {
-  @apply flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-brand-cyan text-white;
+  @apply relative flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-white text-brand-cyan;
 }
 
 .page-header__call-text {
-  @apply text-sm font-bold text-navy;
+  @apply relative text-base font-bold text-white;
 }

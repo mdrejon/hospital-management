@@ -6,69 +6,75 @@
 
 .why-choose {
   @apply relative overflow-hidden bg-navy py-20 text-white;
+  background-image: url("../img/Why-choose-us-bg.webp");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 
   &::before {
     content: "";
-    @apply pointer-events-none absolute inset-0;
-    background: radial-gradient(circle at 85% 15%, rgba(31, 200, 227, 0.12), transparent 55%);
+    @apply absolute inset-0 bg-gradient-to-br from-navy via-navy/95 to-navy;
   }
 }
 
 .why-choose__grid {
-  @apply relative grid items-center gap-16 lg:grid-cols-2;
+  @apply relative grid items-center gap-4 lg:grid-cols-2;
 }
 
 // Media -------------------------------------------------------------
 .why-choose__media {
-  @apply relative mx-auto w-full max-w-sm pb-10 pr-8;
+  @apply relative mx-auto w-full max-w-md;
 }
 
 .why-choose__photo {
-  @apply relative flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-3xl bg-white/5;
+  @apply relative aspect-[4/5] w-full overflow-hidden rounded-3xl shadow-2xl;
 }
 
-.why-choose__photo-figure {
-  @apply text-white/70;
-
-  .accent {
-    @apply text-brand-cyan;
-    @include m.accent-pulse;
-  }
+.why-choose__photo-img {
+  @apply h-full w-full object-cover;
 }
 
 .why-choose__badge {
-  @apply absolute bottom-0 right-0 flex w-36 flex-col items-center justify-center rounded-2xl bg-brand-cyan px-4 py-6 text-center shadow-xl;
+  @apply absolute -bottom-4 -right-4 flex w-32 flex-col items-center justify-center gap-1 rounded-2xl bg-brand-cyan px-4 py-5 text-center shadow-xl sm:w-36 sm:py-6;
 }
 
 .why-choose__badge-number {
-  @apply text-3xl font-extrabold text-white;
+  @apply text-2xl font-extrabold text-white sm:text-3xl;
 }
 
 .why-choose__badge-label {
-  @apply mt-1 text-sm font-medium text-white;
+  @apply text-xs font-medium leading-tight text-white sm:text-sm;
 }
 
 // Content -------------------------------------------------------------
+.why-choose__content {
+  @apply p-0 sm:pl-6;
+}
+
 .why-choose__title {
-  @apply max-w-md text-3xl font-extrabold leading-snug sm:text-4xl;
+  @apply text-3xl font-extrabold leading-tight text-white sm:text-4xl;
 }
 
 .why-choose__features {
-  @apply mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2;
+  @apply mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2;
 }
 
 .why-choose__feature {
-  @apply rounded-2xl bg-white/5 p-6 text-center transition-colors duration-200 hover:bg-white/10;
+  @apply flex flex-col items-center gap-2 rounded-xl bg-white/5 p-6 text-center transition-all duration-200 hover:bg-white/10;
 }
 
 .why-choose__feature-icon {
-  @apply mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-brand-cyan text-white;
+  @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-cyan text-white;
+}
+
+.why-choose__feature-text {
+  @apply min-w-0;
 }
 
 .why-choose__feature-title {
-  @apply mt-4 text-base font-bold text-white;
+  @apply text-base font-bold text-white;
 }
 
 .why-choose__feature-desc {
-  @apply mt-2 text-sm leading-relaxed text-white/60;
+  @apply mt-1 text-sm leading-relaxed text-white/55;
 }

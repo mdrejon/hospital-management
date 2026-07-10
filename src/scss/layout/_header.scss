@@ -3,12 +3,14 @@
 // ==========================================================================
 
 .site-header {
-  @apply fixed inset-x-0 top-0 z-50;
+  @apply relative z-50;
 }
 
-// Top info bar -------------------------------------------------------
+// Top header bar (original) -------------------------------------------
+// Superseded visually by .top-info-bar below; border/background colors
+// intentionally left unset rather than deleting the markup.
 .top-header {
-  @apply hidden border-b border-white/10 bg-navy lg:block;
+  @apply hidden border-b lg:block;
 }
 
 .top-header__inner {
@@ -28,7 +30,7 @@
 }
 
 .top-header__value {
-  @apply text-sm font-medium text-white/90;
+  @apply text-sm font-medium;
 }
 
 .top-header__right {
@@ -55,9 +57,74 @@
   @apply flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white/90 transition-colors duration-150 hover:bg-brand-cyan hover:text-navy;
 }
 
+// Top info bar (new 5-icon style) --------------------------------------
+.top-info-bar {
+  @apply hidden border-b  lg:block;
+  border-color: rgb(var(--color-navy) / 0.08);
+}
+
+.top-info-bar__inner {
+  @apply container mx-auto grid items-stretch px-4;
+  // Info items size to their content so nothing truncates; the search
+  // pill absorbs whatever width is left.
+  grid-template-columns: auto auto auto auto;
+}
+
+.top-info-bar__item {
+  @apply flex items-center gap-3 border-r px-6 py-[0.9rem];
+  border-color: rgb(var(--color-navy) / 0.08);
+
+  &:last-child {
+    @apply border-r-0;
+  }
+}
+
+.top-info-bar__icon {
+  @apply flex h-9 w-9 shrink-0 items-center justify-center  ;
+
+  &--accent {
+    @apply text-brand-cyan;
+  }
+}
+
+.top-info-bar__text {
+  @apply flex min-w-0 flex-col gap-[0.15rem];
+}
+
+.top-info-bar__label {
+  @apply whitespace-nowrap text-[0.8rem] font-medium leading-4 text-brand-cyan;
+}
+
+.top-info-bar__value {
+  @apply overflow-hidden text-ellipsis whitespace-nowrap text-[0.9rem] font-bold leading-[1.2rem] ;
+}
+
+// Search pill filling the bar's remaining space --------------------------
+.top-info-bar__search {
+  @apply justify-end;
+}
+
+.header-search {
+  @apply flex w-full max-w-sm items-center gap-2 rounded-full bg-footer-bg p-1.5 pl-5;
+}
+
+.header-search__input {
+  @apply w-full min-w-0 flex-1 bg-transparent text-sm text-navy placeholder:text-slate-400 focus:outline-none;
+}
+
+.header-search__submit {
+  @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-cyan text-white transition-colors duration-150 hover:bg-navy;
+}
+
 // Main nav row ------------------------------------------------------------
+// Sibling of <header>, not nested, so it can stay sticky for the full page.
 .site-header__nav {
-  @apply border-b border-slate-100 bg-white;
+  @apply sticky top-0 z-50 bg-navy;
+  transition: box-shadow 200ms ease;
+
+  &.is-stuck {
+    box-shadow: 0 4px 16px rgb(var(--color-navy) / 0.1);
+  } 
 }
 
 .site-header__inner {
@@ -73,13 +140,19 @@
   }
 }
 
+// Mobile-only logo in the navy nav row — sits on a white chip so the
+// dark logo text stays readable; the desktop logo lives in the info bar.
+.site-logo--mobile {
+  @apply rounded-lg bg-white px-2.5 py-1 lg:hidden;
+}
+
 // Primary nav ------------------------------------------------------------
 .main-nav {
   @apply hidden items-center gap-6 lg:flex;
 }
 
 .main-nav__link {
-  @apply flex items-center gap-1 text-[15px] font-medium text-navy/90 transition-colors duration-200 hover:text-brand-cyan;
+  @apply flex items-center gap-[0.3rem] text-[16px] font-bold text-white transition-colors duration-200 hover:text-brand-cyan;
 
   &.is-active {
     @apply text-brand-cyan;
@@ -87,7 +160,7 @@
 }
 
 .main-nav__caret {
-  @apply text-[10px] opacity-50;
+  @apply text-[16px] font-medium leading-none text-white/70;
 }
 
 // Dropdown ------------------------------------------------------------
@@ -113,7 +186,7 @@
 }
 
 .btn-appointment {
-  @apply hidden items-center gap-2 rounded-full bg-brand-cyan px-7 py-3 text-sm font-semibold text-navy transition-transform duration-200 hover:scale-105 sm:inline-flex;
+  @apply hidden items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-semibold text-navy transition-transform duration-200 hover:scale-105 sm:inline-flex;
 }
 
 .menu-toggle {
