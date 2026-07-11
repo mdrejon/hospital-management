@@ -13,8 +13,10 @@
   @apply hidden border-b lg:block;
 }
 
+// All three header rows share the container's edges exactly — no extra
+// horizontal padding on top of the container's own, so they align.
 .top-header__inner {
-  @apply container mx-auto flex flex-wrap items-center justify-between gap-6 px-4 py-1.5;
+  @apply container mx-auto flex flex-wrap items-center justify-between gap-6 py-1.5;
 }
 
 .top-header__left {
@@ -46,7 +48,7 @@
 }
 
 .top-header__socials {
-  @apply flex items-center gap-2;
+  @apply hidden items-center gap-2;
 }
 
 .top-header__social-link {
@@ -64,18 +66,24 @@
 }
 
 .top-info-bar__inner {
-  @apply container mx-auto grid items-stretch px-4;
+  @apply container mx-auto grid items-stretch;
   // Info items size to their content so nothing truncates; the search
   // pill absorbs whatever width is left.
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: auto auto auto minmax(0, 1fr);
 }
 
 .top-info-bar__item {
   @apply flex items-center gap-3 border-r px-6 py-[0.9rem];
   border-color: rgb(var(--color-navy) / 0.08);
 
+  // First and last items hug the container edges so the logo lines up
+  // with the rows above and below.
+  &:first-child {
+    @apply pl-0;
+  }
+
   &:last-child {
-    @apply border-r-0;
+    @apply border-r-0 pr-0;
   }
 }
 

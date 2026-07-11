@@ -35,8 +35,9 @@
   background: linear-gradient(90deg, rgba(11, 30, 66, 0.9) 0%, rgba(11, 30, 66, 0.6) 45%, rgba(11, 30, 66, 0.28) 100%);
 }
 
+// Content aligns to the same container edges as the header rows above.
 .hero-slide__inner {
-  @apply relative z-10 mx-auto flex h-full max-w-[1600px] items-center px-6 sm:px-10 lg:pl-24 lg:pr-10;
+  @apply container relative z-10 mx-auto flex h-full items-center;
 }
 
 // Copy block — everything inside starts invisible and only animates in
