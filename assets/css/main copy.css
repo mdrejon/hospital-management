@@ -840,8 +840,6 @@ ul {
   margin-right: auto;
   display: grid;
   align-items: stretch;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
 }
 
 @media (min-width: 1400px) {

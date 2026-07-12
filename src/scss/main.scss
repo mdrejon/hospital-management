@@ -44,3 +44,22 @@
   @import "sections/book-appointment";
   @import "layout/footer";
 }
+
+// Wide-desktop tier — mirrors Bootstrap's xxl container: at >=1400px every
+// container-based block (the .container utility plus the components that
+// @apply it) widens from 1140px to 1330px. Lives after all layers so it
+// wins the cascade over the 1140px cap.
+@media (min-width: 1400px) {
+  .container,
+  .top-header__inner,
+  .top-info-bar__inner,
+  .site-header__inner, 
+  .packages__head, 
+  .departments__body,
+  .footer-contact,
+  .footer-columns,
+  .footer-newsletter {
+    max-width: 1330px;
+  }
+}
+ 
