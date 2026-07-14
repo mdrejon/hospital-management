@@ -30,7 +30,7 @@
 // The rings sit slightly inside the square media box so the un-cropped
 // doctor cutout overflows the circle above and below, like the design.
 .testimonials__media {
-  @apply relative mx-auto flex aspect-square w-full max-w-md items-end justify-center;
+  @apply relative mx-auto flex aspect-square w-full max-w-md items-end justify-center lg:mx-0;
 }
 
 // Rings are sized by width + aspect-ratio (not inset percentages) and

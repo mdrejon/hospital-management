@@ -23,7 +23,7 @@
 
 // Media -------------------------------------------------------------
 .why-choose__media {
-  @apply relative mx-auto w-full max-w-md;
+  @apply relative mx-auto w-full max-w-lg lg:mx-0;
 }
 
 .why-choose__photo {

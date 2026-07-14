@@ -647,8 +647,8 @@ ul {
 @media (min-width: 1024px) {
   .container {
     max-width: 1024px;
-    padding-right: 2rem;
-    padding-left: 2rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }
 
@@ -697,8 +697,8 @@ ul {
 @media (min-width: 1024px) {
   .top-header__inner {
     max-width: 1024px;
-    padding-right: 2rem;
-    padding-left: 2rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }
 
@@ -824,8 +824,8 @@ ul {
 @media (min-width: 1024px) {
   .top-info-bar__inner {
     max-width: 1024px;
-    padding-right: 2rem;
-    padding-left: 2rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }
 
@@ -840,8 +840,6 @@ ul {
   margin-right: auto;
   display: grid;
   align-items: stretch;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
 }
 
 @media (min-width: 1400px) {
@@ -1010,8 +1008,8 @@ ul {
 @media (min-width: 1024px) {
   .site-header__inner {
     max-width: 1024px;
-    padding-right: 2rem;
-    padding-left: 2rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }
 
@@ -1849,8 +1847,8 @@ ul {
 @media (min-width: 1024px) {
   .hero-slide__inner {
     max-width: 1024px;
-    padding-right: 2rem;
-    padding-left: 2rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }
 
@@ -2222,7 +2220,6 @@ ul {
   width: 100%;
   max-width: 28rem;
   padding-bottom: 2.5rem;
-  padding-left: 2rem;
   padding-top: 1.5rem;
 }
 
@@ -6053,8 +6050,8 @@ ul {
 @media (min-width: 1024px) {
   .departments__body {
     max-width: 1024px;
-    padding-right: 2rem;
-    padding-left: 2rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }
 
@@ -6069,8 +6066,6 @@ ul {
   z-index: 10;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
 }
 
 @media (min-width: 1400px) {
@@ -6841,8 +6836,8 @@ ul {
 @media (min-width: 1024px) {
   .packages__head {
     max-width: 1024px;
-    padding-right: 2rem;
-    padding-left: 2rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }
 
@@ -6856,8 +6851,6 @@ ul {
   position: relative;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
   padding-bottom: 3.5rem;
   text-align: center;
 }
@@ -7399,7 +7392,14 @@ ul {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
-  max-width: 28rem;
+  max-width: 32rem;
+}
+
+@media (min-width: 1024px) {
+  .why-choose__media {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
 }
 
 .why-choose__photo {
@@ -7625,6 +7625,13 @@ ul {
   max-width: 28rem;
   align-items: flex-end;
   justify-content: center;
+}
+
+@media (min-width: 1024px) {
+  .testimonials__media {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
 }
 
 .testimonials__ring {
@@ -8824,11 +8831,8 @@ ul {
 .book-appointment__card {
   position: relative;
   z-index: 10;
-  margin-left: auto;
-  margin-right: auto;
   margin-top: 3rem;
   display: flex;
-  max-width: 64rem;
   flex-direction: column;
   gap: 2rem;
   border-radius: 1rem;
@@ -9151,8 +9155,8 @@ ul {
 @media (min-width: 1024px) {
   .footer-contact {
     max-width: 1024px;
-    padding-right: 2rem;
-    padding-left: 2rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }
 
@@ -9302,8 +9306,8 @@ ul {
 @media (min-width: 1024px) {
   .footer-columns {
     max-width: 1024px;
-    padding-right: 2rem;
-    padding-left: 2rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }
 
@@ -9509,11 +9513,6 @@ ul {
   background-color: rgb(153 246 228 / var(--tw-bg-opacity, 1));
 }
 
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
 .font-sans {
   font-family: Poppins, Segoe UI, sans-serif;
 }
@@ -9534,6 +9533,7 @@ ul {
   .top-header__inner,
   .top-info-bar__inner,
   .site-header__inner,
+  .hero-slide__inner,
   .packages__head,
   .departments__body,
   .footer-contact,
