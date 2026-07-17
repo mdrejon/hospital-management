@@ -1,0 +1,16 @@
+// ==========================================================================
+// Single source of truth for shared design tokens.
+// Edit values HERE ONLY. base/_base.scss turns these into CSS custom
+// properties on :root, and tailwind.config.js points its theme colors at
+// those same custom properties — so one edit here updates every
+// @apply utility (bg-navy, text-brand-cyan, text-muted, ...) and every
+// plain SCSS usage (v.$color-navy) at once.
+// ==========================================================================
+$color-navy: #0B1E42;
+$color-navy-dark: #081530;
+$color-primary: #1FC8E3;
+$color-primary-hover: #00A1BE;
+$color-secondary: #EEF3F8;
+$color-text-muted: #5b6b8c;
+
+$header-height: 90px;

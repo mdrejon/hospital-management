@@ -1,0 +1,190 @@
+// ==========================================================================
+// Departments — full-bleed photo banner (navy overlay) with a centered
+// heading, then a card slider (1 up / 2 at sm / 3 at lg+) that overlaps up
+// into the banner. Each card's icon badge straddles the seam between its
+// text body and photo.
+// ==========================================================================
+
+.departments {
+  @apply relative overflow-hidden bg-white pb-20;
+}
+
+.departments__decor {
+  @apply pointer-events-none absolute -bottom-10 -left-10 z-0 h-64 w-64 text-brand-cyan/10;
+}
+
+// Banner -----------------------------------------------------------------
+.departments__banner {
+  @apply relative flex h-[380px] items-center overflow-hidden sm:h-[420px];
+}
+
+.departments__banner-bg {
+  @apply absolute inset-0 h-full w-full scale-105 object-cover blur-sm;
+}
+
+.departments__banner-overlay {
+  @apply absolute inset-0 bg-navy/60;
+  background-image: linear-gradient(180deg, rgba(11, 30, 66, 0.55) 0%, rgba(11, 30, 66, 0.85) 100%);
+}
+
+.departments__head {
+  @apply relative z-10 mx-auto max-w-2xl px-4 text-center;
+}
+
+.departments__eyebrow {
+  @apply text-xl italic text-brand-cyan;
+  font-family: "Georgia", "Times New Roman", serif;
+}
+
+.departments__title {
+  @apply mt-1 text-4xl font-extrabold text-white sm:text-5xl;
+}
+
+.departments__desc {
+  @apply mx-auto mt-5 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base;
+}
+
+// Card slider, pulled up over the banner ----------------------------------
+.departments__body {
+  @apply container relative z-10 mx-auto;
+}
+
+.departments__slider {
+  @apply relative -mt-16 sm:-mt-20;
+}
+
+.departments__viewport {
+  @apply overflow-hidden;
+}
+
+.departments__track {
+  @apply flex -mx-4;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.departments__slide {
+  @apply w-full shrink-0 px-4 sm:w-1/2 lg:w-1/3;
+}
+
+// Prev/next arrows, floating just outside the viewport ---------------------
+.departments__nav {
+  @apply absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-brand-cyan text-white shadow-lg transition-all duration-200 hover:bg-navy;
+
+  &.is-prev {
+    @apply left-0 lg:-left-5;
+  }
+
+  &.is-next {
+    @apply right-0 lg:-right-5;
+  }
+
+  &.is-disabled {
+    @apply pointer-events-none opacity-30;
+  }
+}
+
+// Pagination dots ----------------------------------------------------------
+.departments__dots {
+  @apply mt-8 flex items-center justify-center gap-2;
+}
+
+.departments__dot {
+  @apply h-2.5 w-2.5 rounded-full border-2 border-brand-cyan/40 transition-colors duration-200;
+
+  &.is-active {
+    @apply border-brand-cyan bg-brand-cyan;
+  }
+}
+
+// Hovering a card lifts it, tints the title cyan, zooms the arched photo
+// and swaps the icon badge's color.
+.department-card {
+  @apply overflow-hidden rounded-2xl bg-white text-center shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl;
+}
+
+.department-card__body {
+  @apply px-6 pb-16 pt-10;
+}
+
+.department-card__title {
+  @apply text-2xl font-bold text-navy transition-colors duration-200;
+
+  .department-card:hover & {
+    @apply text-brand-cyan;
+  }
+}
+
+.department-card__desc {
+  @apply mx-auto mt-4 max-w-xs text-sm leading-relaxed text-slate-500;
+}
+
+.department-card__media {
+  @apply relative;
+}
+
+.department-card__img {
+  @apply h-56 w-full rounded-[50%_50%_0_0] bg-footer-bg object-cover transition-transform duration-500;
+
+  .department-card:hover & {
+    @apply scale-105;
+  }
+}
+
+.department-card__badge {
+  @apply absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2;
+}
+
+.department-card__icon {
+  @apply flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-brand-cyan text-white shadow-lg transition-all duration-300;
+
+  .department-card:hover & {
+    @apply scale-110 bg-navy;
+  }
+}
+
+.department-card__arrow {
+  @apply absolute right-[29%] top-[-18px] flex h-9 w-9 items-center justify-center rounded-full bg-navy text-white shadow-md ring-4 ring-white transition-all duration-200 hover:scale-110 hover:bg-brand-cyan;
+}
+
+.department-card.is-alt {
+  .department-card__icon {
+    @apply bg-navy;
+  }
+
+  &:hover .department-card__icon {
+    @apply bg-brand-cyan;
+  }
+
+  .department-card__arrow {
+    @apply bg-brand-cyan;
+
+    &:hover {
+      @apply bg-navy;
+    }
+  }
+}
+
+// Footer row: notice pill + appointment CTA -------------------------------
+.departments__footer {
+  @apply mt-14 flex flex-wrap items-center justify-between gap-6;
+}
+
+.departments__notice {
+  @apply flex flex-wrap items-center gap-3 rounded-2xl bg-white px-6 py-4 text-sm text-slate-500 shadow-md md:rounded-full;
+}
+
+.departments__notice-icon {
+  @apply flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-footer-bg text-brand-cyan;
+}
+
+.departments__notice-link {
+  @apply inline-flex items-center gap-1 font-semibold text-brand-cyan transition-colors duration-150 hover:text-navy;
+}
+
+.departments__cta {
+  @apply inline-flex items-center gap-3 rounded-full bg-brand-cyan py-2 pl-2 pr-7 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105;
+}
+
+.departments__cta-icon {
+  @apply flex h-10 w-10 items-center justify-center rounded-full bg-white text-brand-cyan;
+}

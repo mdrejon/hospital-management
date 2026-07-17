@@ -1,0 +1,134 @@
+// ==========================================================================
+// Contact page (contact.html) — intro + info cards beside a cyan
+// "Make An Appointment" form with underline fields, then the
+// "All Locations" map cards section.
+// ==========================================================================
+
+.contact {
+  @apply bg-white py-20 sm:py-24;
+}
+
+// The intro column gets more room than the form so the title holds two
+// lines and the info cards don't squeeze.
+.contact__grid {
+  @apply grid grid-cols-1 items-start gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-14;
+}
+
+.contact__title {
+  @apply text-3xl font-extrabold leading-tight text-navy sm:text-4xl;
+}
+
+.contact__desc {
+  @apply mt-5 max-w-xl text-base leading-relaxed text-muted;
+}
+
+// "Talk to over 215 doctor" pill + arrow bubble -------------------------
+.contact__talk-row {
+  @apply mt-9 flex flex-wrap items-center gap-4;
+}
+
+.contact__talk {
+  @apply flex items-center gap-8 rounded-full bg-footer-bg/70 py-3.5 pl-5 pr-12;
+}
+
+.contact__avatars {
+  @apply flex -space-x-3;
+}
+
+.contact__avatar {
+  @apply h-12 w-12 rounded-full border-[3px] border-white object-cover object-top;
+}
+
+.contact__talk-text {
+  @apply text-lg font-medium text-navy;
+}
+
+.contact__talk-arrow {
+  @apply flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-footer-bg/70 text-brand-cyan transition-colors duration-200 hover:bg-brand-cyan hover:text-white;
+}
+
+.contact__rating {
+  @apply mt-7 flex flex-wrap items-center gap-2 text-[15px] text-navy;
+
+  strong {
+    @apply font-bold;
+  }
+}
+
+.contact__stars {
+  @apply flex items-center gap-1 text-[#FFC107];
+}
+
+// Info cards (address / phone / mail / hours) ---------------------------
+.contact__cards {
+  @apply mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2;
+}
+
+.contact-info-card {
+  @apply flex items-center gap-4 rounded-2xl bg-footer-bg/70 p-5;
+}
+
+.contact-info-card__icon {
+  @apply flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-brand-cyan transition-colors duration-200;
+
+  .contact-info-card:hover & {
+    @apply bg-brand-cyan text-white;
+  }
+}
+
+.contact-info-card__title {
+  @apply text-lg font-bold text-navy;
+}
+
+.contact-info-card__text {
+  @apply mt-1 text-sm leading-relaxed text-muted;
+}
+
+// Cyan appointment form card ---------------------------------------------
+.contact__form-card {
+  @apply rounded-[2rem] bg-brand-cyan p-8 sm:p-10;
+}
+
+.contact__form-title {
+  @apply text-2xl font-extrabold leading-snug text-white sm:text-3xl;
+}
+
+.contact__form {
+  @apply mt-10 grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2;
+}
+
+.contact__field {
+  @apply w-full border-0 border-b-2 border-white/70 bg-transparent px-0 pb-3 text-base text-white placeholder-white/80 focus:border-white focus:outline-none focus:ring-0;
+}
+
+.contact__field--full {
+  @apply sm:col-span-2;
+}
+
+.contact__submit {
+  @apply mt-2 inline-flex w-fit items-center gap-5 rounded-2xl bg-white py-2.5 pl-8 pr-2.5 text-xl font-medium text-navy transition-transform duration-200 hover:scale-105 sm:col-span-2;
+}
+
+.contact__submit-icon {
+  @apply flex h-12 w-14 items-center justify-center rounded-xl bg-navy text-white;
+}
+
+// ==========================================================================
+// Full-width location map
+// ==========================================================================
+
+.locations {
+  @apply bg-footer-bg;
+}
+
+.locations__map {
+  @apply relative h-[420px] w-full sm:h-[520px];
+
+  iframe {
+    @apply absolute inset-0 h-full w-full border-0;
+  }
+}
+
+.locations__open {
+  @apply absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-bold text-[#1a73e8] shadow-md transition-colors duration-150 hover:text-navy;
+}

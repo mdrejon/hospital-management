@@ -1,0 +1,103 @@
+// ==========================================================================
+// "Frequently Asked Questions" section
+// ==========================================================================
+
+.faq {
+  @apply relative overflow-hidden bg-white py-20;
+}
+
+.faq__bg {
+  @apply pointer-events-none absolute inset-0 h-full w-full object-cover object-right-top;
+}
+
+.faq__grid {
+  @apply relative grid items-center gap-16 lg:grid-cols-2;
+}
+
+// Copy + accordion ------------------------------------------------------
+.faq__copy {
+  @apply relative;
+}
+
+.faq__title {
+  @apply text-3xl font-extrabold leading-snug text-navy sm:text-4xl;
+}
+
+.faq__desc {
+  @apply mt-4 max-w-lg text-sm leading-relaxed text-slate-500;
+}
+
+.faq__list {
+  @apply mt-8 flex flex-col gap-3;
+}
+
+.faq-item {
+  @apply overflow-hidden rounded-xl bg-footer-bg;
+
+  &.is-open {
+    @apply bg-white ring-1 ring-slate-100;
+  }
+}
+
+.faq-item__question {
+  @apply flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-bold text-navy;
+}
+
+.faq-item__icon {
+  @apply flex h-6 w-6 shrink-0 items-center justify-center text-brand-cyan transition-transform duration-200;
+
+  .is-open & {
+    @apply rotate-90;
+  }
+}
+
+.faq-item__answer {
+  @apply grid grid-rows-[0fr] px-5 text-sm leading-relaxed text-slate-500 transition-all duration-300;
+
+  .is-open & {
+    @apply grid-rows-[1fr] pb-4;
+  }
+
+  p {
+    @apply overflow-hidden;
+  }
+}
+
+// Media -------------------------------------------------------------
+// Contained, rounded photo card with the contact bar floating over
+// its bottom-left corner.
+.faq__media {
+  @apply relative mx-auto w-full max-w-md;
+}
+
+.faq__photo {
+  @apply relative aspect-[4/5] w-full rounded-3xl bg-footer-bg object-cover shadow-xl;
+}
+
+.faq__contact-card {
+  @apply absolute bottom-6 left-6 z-10 flex w-[calc(100%-1.5rem)] max-w-sm items-center justify-between gap-4 rounded-2xl bg-white p-4 shadow-2xl;
+}
+
+.faq__contact-info {
+  @apply flex items-center gap-3;
+}
+
+.faq__contact-icon {
+  @apply flex h-10 w-10 shrink-0 items-center justify-center text-brand-cyan;
+}
+
+.faq__contact-label {
+  @apply text-xs text-slate-500;
+}
+
+.faq__contact-value {
+  @apply text-sm font-bold text-navy;
+}
+
+.faq__contact-btn {
+  @apply flex shrink-0 items-center gap-2 rounded-full bg-brand-cyan py-2 pl-4 pr-2 text-sm font-semibold text-navy transition-transform duration-200 hover:scale-105;
+}
+
+.faq__contact-btn-icon {
+  @apply flex h-7 w-7 items-center justify-center rounded-full bg-white text-navy;
+}

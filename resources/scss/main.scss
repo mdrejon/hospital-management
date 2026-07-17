@@ -1,0 +1,67 @@
+// ==========================================================================
+// Root stylesheet — imports Tailwind layers + section-wise partials.
+// Compiled by Vite (sass preprocessor + PostCSS/Tailwind) via
+// vite.frontend.config.js into public/assets/main.css. Entry point is
+// resources/js/frontend.js, which imports this file.
+// ==========================================================================
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @import "base/base";
+}
+
+@layer components {
+  @import "layout/header";
+  @import "layout/side-panel";
+  @import "sections/page-header";
+  @import "sections/hero";
+  @import "sections/about";
+  @import "sections/mission-vision";
+  @import "sections/ceo-message";
+  @import "sections/history";
+  @import "sections/services";
+  @import "sections/service-detail";
+  @import "sections/doctors-page";
+  @import "sections/management";
+  @import "sections/ready-help";
+  @import "sections/contact";
+  @import "sections/gallery";
+  @import "sections/legal";
+  @import "sections/doctor-detail";
+  @import "sections/blog-list";
+  @import "sections/blog-details";
+  @import "sections/departments";
+  @import "sections/team";
+  @import "sections/packages";
+  @import "sections/appointment";
+  @import "sections/why-choose";
+  @import "sections/testimonials";
+  @import "sections/faq";
+  @import "sections/awards";
+  @import "sections/blog";
+  @import "sections/book-appointment";
+  @import "layout/footer";
+}
+
+// Wide-desktop tier — mirrors Bootstrap's xxl container: at >=1400px every
+// container-based block (the .container utility plus the components that
+// @apply it) widens from 1140px to 1330px. Lives after all layers so it
+// wins the cascade over the 1140px cap.
+@media (min-width: 1400px) {
+  .container,
+  .top-header__inner,
+  .top-info-bar__inner,
+  .site-header__inner,
+  .hero-slide__inner,
+  .packages__head,
+  .departments__body,
+  .footer-contact,
+  .footer-columns,
+  .footer-newsletter {
+    max-width: 1330px;
+  }
+}
+ 

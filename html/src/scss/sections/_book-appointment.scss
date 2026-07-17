@@ -1,0 +1,109 @@
+// ==========================================================================
+// "Make an Appointment" section — giant watermark headline behind a
+// centered eyebrow + title, then a white card with the two-column form on
+// the left ("Please enter your info") and a rounded photo on the right.
+// ==========================================================================
+
+.book-appointment {
+  @apply relative overflow-hidden bg-footer-bg py-20 sm:py-24;
+}
+
+.book-appointment__watermark {
+  @apply pointer-events-none absolute left-1/2 top-8 -translate-x-1/2 whitespace-nowrap text-[13vw] font-extrabold uppercase leading-none tracking-wide text-navy/[0.05] lg:text-[98px];
+}
+
+// Centered head ---------------------------------------------------------
+.book-appointment__head {
+  @apply relative mx-auto max-w-2xl text-center;
+}
+
+.book-appointment__eyebrow {
+  @apply text-sm font-bold text-brand-cyan;
+}
+
+.book-appointment__title {
+  @apply mt-2 text-3xl font-bold text-navy sm:text-4xl;
+}
+
+// Card ----------------------------------------------------------------
+.book-appointment__card {
+  @apply relative z-10 mt-12 flex flex-col gap-8 rounded-2xl bg-white p-6 shadow-xl sm:p-8 lg:flex-row;
+}
+
+.book-appointment__form-col {
+  @apply min-w-0 flex-1;
+}
+
+.book-appointment__form-title {
+  @apply text-2xl font-bold text-navy;
+}
+
+.book-appointment__subtitle {
+  @apply mt-1.5 text-sm text-muted;
+}
+
+// Media ---------------------------------------------------------------
+.book-appointment__media {
+  @apply relative w-full overflow-hidden rounded-xl lg:w-[340px] lg:shrink-0;
+}
+
+.book-appointment__img {
+  @apply h-64 w-full object-cover lg:h-full;
+}
+
+// Form ------------------------------------------------------------------
+.book-appointment__form {
+  @apply mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2;
+}
+
+.book-appointment__field {
+  @apply relative flex items-center gap-2.5 rounded-lg border border-[#E7EAF0] bg-white px-4 py-3.5 text-sm text-navy transition-colors duration-150 focus-within:border-brand-cyan;
+}
+
+.book-appointment__field-icon {
+  @apply flex-shrink-0 text-[#8894AB];
+}
+
+.book-appointment__input {
+  @apply w-full border-0 bg-transparent p-0 text-sm text-navy placeholder-[#8894AB] focus:outline-none focus:ring-0;
+}
+
+.book-appointment__select {
+  @apply w-full cursor-pointer appearance-none border-0 bg-transparent p-0 pr-5 text-sm text-navy focus:outline-none focus:ring-0;
+
+  option {
+    @apply text-navy;
+  }
+
+  &:invalid {
+    @apply text-[#8894AB];
+  }
+}
+
+.book-appointment__field-caret {
+  @apply pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#8894AB];
+}
+
+.book-appointment__field-spinner {
+  @apply pointer-events-none flex-shrink-0 text-[#8894AB];
+}
+
+.book-appointment__message {
+  @apply items-start sm:col-span-2;
+}
+
+.book-appointment__textarea {
+  @apply h-20 w-full resize-y border-0 bg-transparent p-0 text-sm leading-relaxed text-navy placeholder-[#8894AB] focus:outline-none focus:ring-0;
+}
+
+.book-appointment__submit-wrap {
+  @apply sm:col-span-2;
+}
+
+.book-appointment__submit {
+  @apply inline-flex items-center gap-3 rounded-full bg-brand-cyan px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-cyan/30 transition-transform duration-200 hover:scale-105;
+}
+
+.book-appointment__submit-icon {
+  @apply flex items-center justify-center text-white;
+}

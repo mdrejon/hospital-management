@@ -1,0 +1,101 @@
+// ==========================================================================
+// Gallery page (gallery.html) — masonry photo grid (CSS columns) with a
+// hover overlay + expand icon per tile, and a fullscreen lightbox.
+// Reuses .team__head / .team__eyebrow / .team__title for the heading.
+// ==========================================================================
+
+.gallery {
+  @apply bg-white py-20 sm:py-24;
+}
+
+.gallery__desc {
+  @apply mx-auto mt-4 max-w-xl text-center text-[15px] leading-relaxed text-muted;
+}
+
+.gallery__grid {
+  @apply mt-14 columns-1 gap-6 sm:columns-2 lg:columns-3;
+}
+
+.gallery-item {
+  @apply relative mb-6 block w-full overflow-hidden rounded-2xl break-inside-avoid;
+}
+
+.gallery-item__img {
+  @apply w-full object-cover transition-transform duration-500;
+
+  .gallery-item:hover & {
+    @apply scale-105;
+  }
+}
+
+// Hover overlay: dark gradient with a cyan expand button at the top-right
+// and a category tag + title caption at the bottom-left.
+.gallery-item__overlay {
+  @apply absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/40 to-navy/10 opacity-0 transition-opacity duration-300;
+
+  .gallery-item:hover & {
+    @apply opacity-100;
+  }
+}
+
+.gallery-item__expand {
+  @apply absolute right-4 top-4 flex h-12 w-12 -translate-y-2 items-center justify-center rounded-full bg-brand-cyan text-white opacity-0 transition-all delay-75 duration-300;
+
+  svg {
+    height: 18px;
+    width: 18px;
+  }
+
+  .gallery-item:hover & {
+    @apply translate-y-0 opacity-100;
+  }
+}
+
+.gallery-item__caption {
+  @apply absolute bottom-5 left-5 right-5 flex translate-y-3 flex-col gap-1 text-left opacity-0 transition-all duration-300;
+
+  .gallery-item:hover & {
+    @apply translate-y-0 opacity-100;
+  }
+}
+
+.gallery-item__tag {
+  @apply flex items-center gap-2 text-sm font-medium text-white/90;
+}
+
+.gallery-item__tag-dot {
+  @apply h-1.5 w-1.5 shrink-0 rounded-full bg-brand-cyan;
+}
+
+.gallery-item__title {
+  @apply text-xl font-bold leading-snug text-white sm:text-2xl;
+}
+
+// Fullscreen lightbox ----------------------------------------------------
+.lightbox {
+  @apply fixed inset-0 z-[100] hidden items-center justify-center bg-navy/90 p-4 sm:p-10;
+
+  &.is-open {
+    @apply flex;
+  }
+}
+
+.lightbox__img {
+  @apply max-h-[85vh] max-w-full rounded-xl object-contain shadow-2xl;
+}
+
+.lightbox__close {
+  @apply absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors duration-150 hover:bg-brand-cyan;
+}
+
+.lightbox__nav {
+  @apply absolute top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors duration-150 hover:bg-brand-cyan;
+
+  &.is-prev {
+    @apply left-4 sm:left-6;
+  }
+
+  &.is-next {
+    @apply right-4 sm:right-6;
+  }
+}

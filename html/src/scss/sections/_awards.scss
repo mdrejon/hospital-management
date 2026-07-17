@@ -1,0 +1,71 @@
+// ==========================================================================
+// "Awards" section — right-hand card row auto-advances one card at a time,
+// right to left, forever (JS: initAwardsSlider). Whichever card is in the
+// front/active slot scales up; it shrinks back as the row slides it out
+// and the next card takes its place.
+// ==========================================================================
+
+.awards {
+  @apply bg-footer-bg py-20;
+}
+
+.awards__grid {
+  @apply grid items-center gap-10 lg:grid-cols-[320px_1fr];
+}
+
+.awards__intro {
+  @apply relative z-10;
+}
+
+.awards__title {
+  @apply text-3xl font-extrabold text-navy;
+
+  mark {
+    @apply rounded bg-brand-cyan px-3 py-1 text-navy;
+  }
+}
+
+.awards__desc {
+  @apply mt-4 max-w-xs text-sm leading-relaxed text-slate-500;
+}
+
+// Slider -------------------------------------------------------------
+// JS moves the track with translateX in fixed one-card steps. Only the
+// horizontal axis clips (hides the off-screen cards); the vertical axis
+// stays visible so the active card's scale-up isn't cropped top/bottom.
+.awards__slider {
+  @apply relative -mx-4 px-4 py-4;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.awards__track {
+  @apply flex w-max items-stretch gap-6;
+  will-change: transform;
+}
+
+// Card ---------------------------------------------------------------
+.award-card {
+  @apply flex w-64 shrink-0 flex-col items-center rounded-2xl bg-white p-8 text-center shadow-sm transition-all duration-300;
+  transform-origin: center;
+
+  &.is-active {
+    @apply relative z-10 scale-110 shadow-xl;
+  }
+}
+
+.award-card__seal {
+  @apply flex h-24 w-24 items-center justify-center text-navy;
+}
+
+.award-card__title {
+  @apply mt-5 text-lg font-bold text-navy;
+}
+
+.award-card__subtitle {
+  @apply mt-2 text-sm leading-relaxed text-slate-500;
+}
+
+.award-card__link {
+  @apply mt-3 text-sm font-semibold text-brand-cyan;
+}

@@ -1,0 +1,79 @@
+// ==========================================================================
+// Single "Service Details" page (sidebar + content)
+// ==========================================================================
+
+.service-detail {
+  @apply bg-white py-20;
+}
+
+.service-detail__grid {
+  @apply grid grid-cols-1 items-start gap-10 lg:grid-cols-[300px_1fr];
+}
+
+// Sidebar -----------------------------------------------------------------
+.service-sidebar {
+  @apply lg:sticky lg:top-[170px];
+}
+
+.service-sidebar__nav {
+  @apply rounded-3xl bg-navy p-6;
+}
+
+.service-sidebar__title {
+  @apply px-2 pb-2 text-xl font-extrabold text-white;
+}
+
+.service-sidebar__link {
+  @apply flex items-center justify-between gap-3 border-t border-white/10 px-2 py-3.5 text-[15px] font-bold text-white transition-colors duration-150 hover:text-brand-cyan;
+}
+
+.service-sidebar__link-icon {
+  @apply flex h-4 w-4 shrink-0 items-center justify-center text-brand-cyan;
+}
+
+.service-sidebar__help {
+  @apply relative mt-6 overflow-hidden rounded-3xl bg-brand-cyan p-8 text-center;
+}
+
+.service-sidebar__help-icon {
+  @apply mx-auto flex h-14 w-14 items-center justify-center text-white;
+}
+
+.service-sidebar__help-title {
+  @apply mt-3 text-lg font-extrabold text-white;
+}
+
+.service-sidebar__help-divider {
+  @apply mx-auto mt-4 h-px w-full bg-white/30;
+}
+
+.service-sidebar__help-contact {
+  @apply mt-4 space-y-1 text-sm font-semibold text-white;
+}
+
+.service-sidebar__help-btn {
+  @apply mt-6 inline-flex items-center gap-4 rounded-full bg-white py-1.5 pl-6 pr-1.5 text-sm font-bold text-navy transition-transform duration-200 hover:scale-105;
+}
+
+.service-sidebar__help-btn-icon {
+  @apply flex h-9 w-9 items-center justify-center rounded-full bg-navy text-white;
+}
+
+// Content -------------------------------------------------------------------
+.service-detail__title {
+  @apply text-3xl font-extrabold text-navy sm:text-4xl;
+}
+
+.service-detail__desc {
+  @apply mt-5 max-w-3xl text-[15px] leading-relaxed text-muted;
+}
+
+.service-detail__subtitle {
+  @apply mt-12 text-2xl font-extrabold text-navy sm:text-[26px];
+}
+
+// Doctors grid ------------------------------------------------------------
+// Cards reuse the homepage's .team-card component (see sections/team).
+.service-doctors {
+  @apply mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4;
+}

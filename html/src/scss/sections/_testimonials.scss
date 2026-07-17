@@ -1,0 +1,227 @@
+// ==========================================================================
+// "Real Patients, Real Stories" testimonials section — full-bleed navy
+// background photo, a slow-rotating ring/ping-dot orbit around the doctor
+// portrait, and a single-card slider (JS: initTestimonialsSlider) with
+// arrow nav + pagination dots.
+// ==========================================================================
+
+@use "../abstracts/variables" as v;
+
+.testimonials {
+  @apply relative overflow-hidden bg-navy pt-20 text-white;
+}
+
+.testimonials__bg {
+  @apply pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20 mix-blend-luminosity;
+}
+
+.testimonials__overlay {
+  @apply pointer-events-none absolute inset-0;
+  background:
+    radial-gradient(circle at 85% 15%, rgba(31, 200, 227, 0.15), transparent 55%),
+    linear-gradient(180deg, rgba(11, 30, 66, 0.55) 0%, rgba(11, 30, 66, 0.92) 60%, v.$color-navy 100%);
+}
+
+.testimonials__grid {
+  @apply relative grid items-center gap-16 lg:grid-cols-2;
+}
+
+// Media -------------------------------------------------------------
+// The rings sit slightly inside the square media box so the un-cropped
+// doctor cutout overflows the circle above and below, like the design.
+.testimonials__media {
+  @apply relative mx-auto flex aspect-square w-full max-w-md items-end justify-center lg:mx-0;
+}
+
+// Rings are sized by width + aspect-ratio (not inset percentages) and
+// centered with auto margins, so they stay perfect circles even though
+// the fixed-height photo stretches the media box out of square.
+.testimonials__ring {
+  @apply pointer-events-none absolute inset-0 m-auto rounded-full border border-dashed border-white/25;
+  width: 84%;
+  aspect-ratio: 1 / 1;
+  animation: testimonialSpin 40s linear infinite;
+
+  &.is-inner {
+    @apply border-solid border-white/10;
+    width: 64%;
+    animation: testimonialSpin 26s linear infinite reverse;
+  }
+}
+
+// Invisible spinning circles matching the outer ring; each carries a ping
+// dot pinned to its edge, so the dots travel around the ring border.
+.testimonials__orbit {
+  @apply pointer-events-none absolute inset-0 m-auto rounded-full;
+  width: 84%;
+  aspect-ratio: 1 / 1;
+  animation: testimonialSpin 18s linear infinite;
+
+  &.is-slow {
+    animation-duration: 28s;
+    animation-delay: -10s;
+  }
+
+  &.is-reverse {
+    animation-duration: 22s;
+    animation-direction: reverse;
+    animation-delay: -6s;
+  }
+
+  .testimonials__ping {
+    top: -4px;
+    left: 50%;
+    margin-left: -4px;
+  }
+}
+
+.testimonials__ping {
+  @apply absolute h-2 w-2 rounded-full bg-brand-cyan;
+  box-shadow: 0 0 0 0 rgba(31, 200, 227, 0.6);
+  animation: testimonialPing 2.6s ease-out infinite;
+}
+
+.testimonials__photo {
+  @apply relative z-10 h-[500px] w-auto max-w-none object-contain;
+}
+
+// Content -------------------------------------------------------------
+.testimonials__content {
+  @apply relative min-w-0;
+}
+
+.testimonials__title {
+  @apply max-w-lg text-3xl font-extrabold leading-snug sm:text-4xl;
+}
+
+// Plain thin arrows floating just outside the card (desktop only —
+// mobile falls back to the pagination dots).
+.testimonials__nav {
+  @apply hidden text-white/70 transition-colors duration-150 hover:text-brand-cyan lg:absolute lg:top-1/2 lg:z-20 lg:flex lg:-translate-y-1/2;
+
+  svg {
+    height: 30px;
+    width: 30px;
+  }
+
+  &.is-prev {
+    @apply lg:-left-12;
+  }
+
+  &.is-next {
+    @apply lg:-right-12;
+  }
+}
+
+// Slider ----------------------------------------------------------------
+// The clipping lives on the viewport, not the slider root, so the
+// absolutely-positioned arrows outside the card stay visible.
+.testimonial-slider {
+  @apply relative mt-10;
+}
+
+.testimonial-slider__viewport {
+  @apply overflow-hidden;
+}
+
+.testimonial-slider__track {
+  @apply flex items-stretch;
+  transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+// Pagination dots ---------------------------------------------------------
+.testimonials__dots {
+  @apply mt-6 flex items-center justify-center gap-2 lg:justify-start;
+}
+
+.testimonials__dot {
+  @apply h-2.5 w-2.5 rounded-full border-2 border-white/30 transition-all duration-200;
+
+  &.is-active {
+    @apply w-6 border-brand-cyan bg-brand-cyan;
+  }
+}
+
+// Testimonial card -----------------------------------------------------
+.testimonial-card {
+  @apply relative flex w-full min-w-0 shrink-0 grow-0 flex-col overflow-hidden rounded-3xl bg-white text-navy shadow-2xl sm:flex-row;
+}
+
+// Patient photo sits flush against the media panel's edges; the light
+// panel only shows below it, behind the name + role.
+.testimonial-card__media {
+  @apply relative flex shrink-0 flex-col items-center bg-footer-bg pb-4 sm:w-48;
+}
+
+.testimonial-card__photo-wrap {
+  @apply relative w-full;
+}
+
+.testimonial-card__photo {
+  @apply aspect-[5/6] w-full bg-navy/5 object-cover;
+}
+
+.testimonial-card__play {
+  @apply absolute inset-x-3 bottom-3 flex items-center gap-2 rounded-full bg-white py-1.5 pl-1.5 pr-4 text-xs font-semibold text-navy shadow-lg;
+}
+
+.testimonial-card__play-icon {
+  @apply flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-cyan text-white;
+}
+
+.testimonial-card__name {
+  @apply mt-3 text-base font-bold text-navy;
+}
+
+.testimonial-card__role {
+  @apply text-sm text-brand-cyan;
+}
+
+.testimonial-card__body {
+  @apply relative flex-1 p-6 sm:p-8;
+}
+
+.testimonial-card__title {
+  @apply text-xl font-bold text-navy;
+}
+
+.testimonial-card__quote {
+  @apply mt-3 text-[15px] leading-relaxed text-slate-500;
+}
+
+// Two big overlapping circle outlines — the abstract quotation mark.
+.testimonial-card__mark {
+  @apply pointer-events-none absolute bottom-8 right-8 hidden sm:block;
+}
+
+.testimonial-card__mark-ring {
+  @apply absolute bottom-0 right-10 h-16 w-16 rounded-full border-2 border-navy/10;
+
+  &.is-offset {
+    @apply right-0;
+  }
+}
+
+@keyframes testimonialSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes testimonialPing {
+  0% {
+    box-shadow: 0 0 0 0 rgba(31, 200, 227, 0.55);
+    transform: scale(1);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(31, 200, 227, 0);
+    transform: scale(1.4);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(31, 200, 227, 0);
+    transform: scale(1);
+  }
+}

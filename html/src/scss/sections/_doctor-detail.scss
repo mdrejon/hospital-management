@@ -1,0 +1,123 @@
+// ==========================================================================
+// Single "Doctor Details" page (photo/schedule sidebar + profile content)
+// ==========================================================================
+
+.doctor-detail {
+  @apply bg-white py-20;
+}
+
+.doctor-detail__grid {
+  @apply grid grid-cols-1 items-start gap-10 lg:grid-cols-[320px_1fr];
+}
+
+// Sidebar -----------------------------------------------------------------
+.doctor-detail__sidebar {
+  @apply space-y-6 lg:sticky lg:top-[170px];
+}
+
+.doctor-photo-card {
+  @apply rounded-2xl bg-footer-bg p-3;
+}
+
+.doctor-photo-card__img {
+  @apply aspect-[4/4.6] w-full rounded-xl object-cover;
+}
+
+.doctor-photo-card__social {
+  @apply mt-3 flex items-center justify-center gap-3 rounded-full bg-white py-3 shadow-sm;
+}
+
+.doctor-photo-card__social-link {
+  @apply flex h-8 w-8 items-center justify-center rounded-md bg-navy text-white transition-colors duration-150 hover:bg-brand-cyan;
+}
+
+.doctor-schedule {
+  @apply rounded-2xl bg-navy p-6;
+}
+
+.doctor-schedule__title {
+  @apply text-lg font-extrabold text-white;
+}
+
+.doctor-schedule__row {
+  @apply flex items-center justify-between border-t border-white/10 py-3 text-sm;
+}
+
+.doctor-schedule__day {
+  @apply font-semibold text-white;
+}
+
+.doctor-schedule__time {
+  @apply text-white/70;
+}
+
+.doctor-contact {
+  @apply space-y-5 rounded-2xl bg-footer-bg p-6;
+}
+
+.doctor-contact__item {
+  @apply flex items-start gap-4;
+}
+
+.doctor-contact__icon {
+  @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-cyan text-white;
+}
+
+.doctor-contact__label {
+  @apply text-sm font-extrabold text-navy;
+}
+
+.doctor-contact__value {
+  @apply mt-0.5 text-sm text-muted;
+}
+
+// Content -------------------------------------------------------------------
+.doctor-detail__name {
+  @apply text-3xl font-extrabold text-navy sm:text-4xl;
+}
+
+.doctor-detail__specialty {
+  @apply mt-2 text-base font-semibold text-brand-cyan;
+}
+
+.doctor-detail__desc {
+  @apply mt-5 max-w-3xl text-[15px] leading-relaxed text-muted;
+}
+
+// Info table ----------------------------------------------------------------
+.doctor-info-table {
+  @apply mt-8 overflow-hidden rounded-2xl;
+}
+
+.doctor-info-table__row {
+  @apply grid grid-cols-1 gap-1 px-6 py-4 sm:grid-cols-[180px_1fr] sm:gap-6;
+
+  &:nth-child(odd) {
+    @apply bg-footer-bg;
+  }
+}
+
+.doctor-info-table__label {
+  @apply text-sm font-extrabold text-navy;
+}
+
+.doctor-info-table__value {
+  @apply text-sm text-muted;
+}
+
+// Full schedule (content column) --------------------------------------------
+.doctor-schedule-full {
+  @apply mt-8 divide-y divide-navy/10 rounded-2xl bg-footer-bg p-6 sm:p-8;
+}
+
+.doctor-schedule-full__row {
+  @apply flex items-center justify-between py-3.5 text-sm first:pt-0 last:pb-0;
+}
+
+.doctor-schedule-full__day {
+  @apply font-bold text-navy;
+}
+
+.doctor-schedule-full__time {
+  @apply text-muted;
+}

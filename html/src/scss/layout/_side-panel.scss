@@ -1,0 +1,94 @@
+// ==========================================================================
+// Off-canvas side panel (opened from the header hamburger button)
+// White panel, navy/muted text, cyan brand accents on hover and icon
+// badges — mirrors the main site nav's light color scheme.
+// ==========================================================================
+
+.side-panel-overlay {
+  @apply invisible fixed inset-0 z-40 bg-navy-dark/70 opacity-0 backdrop-blur-sm transition-opacity duration-300;
+
+  &.is-open {
+    @apply visible opacity-100;
+  }
+}
+
+.side-panel {
+  @apply fixed inset-y-0 right-0 z-50 w-full max-w-sm translate-x-full overflow-y-auto border-l border-navy/10 bg-white px-8 py-10 text-navy shadow-2xl transition-transform duration-300;
+  background-image:
+    radial-gradient(circle at 100% 0%, rgba(31, 200, 227, 0.1), transparent 45%),
+    radial-gradient(circle at 0% 100%, rgba(31, 200, 227, 0.08), transparent 40%);
+
+  &.is-open {
+    @apply translate-x-0;
+  }
+}
+
+.side-panel__close {
+  @apply absolute right-6 top-6 flex h-9 w-9 items-center justify-center rounded-full border border-navy/10 bg-footer-bg text-navy transition-colors duration-150 hover:bg-brand-cyan hover:text-white;
+}
+
+.side-panel__desc {
+  @apply mt-6 text-sm leading-relaxed text-muted;
+}
+
+.side-panel__title {
+  @apply mt-8 text-lg font-bold text-navy;
+}
+
+// Nav links inside the panel — redundant with .main-nav on large screens,
+// where only the description/contact/social sections below stay visible.
+.side-panel__nav {
+  @apply mb-2 flex flex-col divide-y divide-navy/10 border-b border-navy/10 lg:hidden;
+}
+
+.side-panel__nav-link {
+  @apply flex w-full items-center justify-between rounded-lg px-2 py-3 text-base font-semibold text-navy transition-all duration-200 hover:bg-footer-bg hover:pl-4 hover:text-brand-cyan;
+
+  &.is-open .side-panel__nav-caret {
+    @apply rotate-180 text-brand-cyan;
+  }
+}
+
+.side-panel__nav-caret {
+  @apply text-xs text-muted transition-transform duration-200;
+}
+
+.side-panel__submenu {
+  @apply ml-2 hidden flex-col gap-1 pb-3;
+
+  &.is-open {
+    @apply flex;
+  }
+}
+
+.side-panel__nav-sublink {
+  @apply rounded-md px-3 py-1.5 text-sm text-muted transition-all duration-200 hover:bg-footer-bg hover:pl-4 hover:text-brand-cyan;
+}
+
+// Contact list ------------------------------------------------------------
+.side-panel__contact-list {
+  @apply mt-4 flex flex-col gap-3;
+}
+
+.side-panel__contact-item {
+  @apply flex items-center gap-3 text-sm font-medium text-navy/90;
+}
+
+.side-panel__check {
+  @apply flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-cyan text-navy;
+}
+
+// Social links ------------------------------------------------------------
+.side-panel__social-list {
+  @apply mt-4 flex items-center gap-3;
+}
+
+.side-panel__social-link {
+  @apply flex h-10 w-10 items-center justify-center rounded-full border border-navy/10 bg-footer-bg text-navy transition-all duration-200 hover:-translate-y-1 hover:border-brand-cyan hover:bg-brand-cyan hover:text-white;
+  box-shadow: 0 0 0 rgba(31, 200, 227, 0);
+  transition-property: transform, background-color, border-color, color, box-shadow;
+
+  &:hover {
+    box-shadow: 0 8px 20px rgba(31, 200, 227, 0.35);
+  }
+}

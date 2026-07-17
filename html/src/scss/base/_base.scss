@@ -1,0 +1,86 @@
+@use "../abstracts/variables" as v;
+@use "sass:color";
+
+// CSS custom properties bridge: exposes the Sass tokens above to
+// tailwind.config.js (which can't read .scss files) and to plain CSS.
+// Colors are stored as space-separated R G B channels (not hex/rgb()
+// strings) because tailwind.config.js wraps them in rgb(var(...) / <alpha>)
+// so that opacity modifiers like bg-navy/90 keep working.
+@function channels($c) {
+  @return "#{color.channel($c, 'red', $space: rgb)} #{color.channel($c, 'green', $space: rgb)} #{color.channel($c, 'blue', $space: rgb)}";
+}
+
+:root {
+  --color-navy: #{channels(v.$color-navy)};
+  --color-navy-dark: #{channels(v.$color-navy-dark)};
+  --color-primary: #{channels(v.$color-primary)};
+  --color-primary-hover: #{channels(v.$color-primary-hover)};
+  --color-secondary: #{channels(v.$color-secondary)};
+  --color-text-muted: #{channels(v.$color-text-muted)};
+  --header-height: #{v.$header-height};
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  color: v.$color-navy;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+// Scroll-reveal units (classes added by initScrollReveal in src/js/main.js).
+// `is-inview` is toggled on AND off so the animation replays in both scroll
+// directions. Uses the standalone `translate` property (not `transform`) so
+// it never clobbers Tailwind transform utilities on the same element.
+.reveal {
+  opacity: 0;
+  translate: 0 44px;
+  transition: opacity 0.7s ease, translate 0.7s ease;
+}
+
+.reveal.is-inview {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
+}
+
+// Shared by every .accent element via the accent-pulse mixin
+// (abstracts/_mixins.scss) — defined once here rather than duplicated
+// per section.
+@keyframes accentPulseLine {
+  0%, 8%, 45%, 100% {
+    opacity: 0.6;
+    filter: drop-shadow(0 0 2px currentColor);
+  }
+  4%, 32% {
+    opacity: 1;
+    filter: drop-shadow(0 0 9px currentColor);
+  }
+}
+
+@keyframes accentPulseDot {
+  0%, 8%, 45%, 100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 55%, transparent);
+    transform: scale(1);
+  }
+  4%, 32% {
+    box-shadow: 0 0 0 5px color-mix(in srgb, currentColor 0%, transparent);
+    transform: scale(1.25);
+  }
+}

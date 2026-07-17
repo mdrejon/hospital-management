@@ -1,0 +1,162 @@
+// ==========================================================================
+// Hero slider — full-bleed background photo per slide (dark gradient
+// overlay + slow continuous Ken-Burns zoom), left copy block that
+// fades/slides in every time its slide becomes active, a rotated
+// "Follow Social" rail on the left and a vertical dot nav on the right.
+// ==========================================================================
+
+@use "../abstracts/mixins" as m;
+
+.hero {
+  @apply relative overflow-hidden bg-navy;
+}
+
+.hero__viewport {
+  @apply relative overflow-hidden;
+}
+
+.hero__track {
+  @apply flex;
+  transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+// Slide ---------------------------------------------------------------
+.hero-slide {
+  @apply relative h-[430px] w-full shrink-0 grow-0 overflow-hidden sm:h-[520px] lg:h-[630px];
+}
+
+.hero-slide__bg {
+  @apply absolute inset-0 h-full w-full object-cover;
+  animation: heroZoom 12s ease-in-out infinite alternate;
+}
+
+.hero-slide__overlay {
+  @apply absolute inset-0;
+  background: linear-gradient(90deg, rgba(11, 30, 66, 0.9) 0%, rgba(11, 30, 66, 0.6) 45%, rgba(11, 30, 66, 0.28) 100%);
+}
+
+// Content aligns to the same container edges as the header rows above.
+.hero-slide__inner {
+  @apply container relative z-10 mx-auto flex h-full items-center;
+}
+
+// Copy block — everything inside starts invisible and only animates in
+// while its slide is `.is-active`; JS re-toggles that class (with a
+// forced reflow) on every slide change so the entrance replays each time.
+.hero-slide__content {
+  @apply max-w-2xl;
+
+  > * {
+    opacity: 0;
+  }
+
+  &.is-active {
+    .hero-slide__eyebrow {
+      animation: heroRiseIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: 0.15s;
+    }
+
+    .hero-slide__title {
+      animation: heroRiseIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: 0.32s;
+    }
+
+    .hero-slide__desc {
+      animation: heroRiseIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: 0.5s;
+    }
+
+    .hero-slide__cta {
+      animation: heroRiseIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: 0.68s;
+    }
+  }
+}
+
+.hero-slide__eyebrow {
+  @apply flex items-center gap-3 text-base italic font-medium text-white/90;
+}
+
+.hero-slide__eyebrow-dot {
+  @apply h-2 w-2 shrink-0 rounded-full bg-brand-cyan;
+}
+
+.hero-slide__title {
+  @apply mt-4 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl;
+
+  // Accent word gets an EKG-style pulse trace instead of a plain underline
+  // (see abstracts/_mixins.scss for the shared ::before/::after effect).
+  .accent {
+    @apply text-brand-cyan;
+    @include m.accent-pulse;
+  }
+}
+
+.hero-slide__desc {
+  @apply mt-6 max-w-lg text-base leading-relaxed text-white/75;
+}
+
+.hero-slide__cta {
+  @apply mt-9 inline-flex items-center gap-4 rounded-full bg-brand-cyan py-2 pl-8 pr-2 text-base font-semibold text-white transition-transform duration-200 hover:scale-105;
+}
+
+.hero-slide__cta-icon {
+  @apply flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand-cyan;
+}
+
+// Follow-social rail, left edge -----------------------------------------
+.hero__social {
+  @apply absolute left-6 top-1/2 z-20 hidden -translate-y-1/2 flex-col items-center gap-6 lg:flex;
+}
+
+.hero__social-icons {
+  @apply flex flex-col items-center gap-4;
+}
+
+.hero__social-link {
+  @apply flex h-10 w-10 items-center justify-center rounded-full bg-white text-navy shadow-md transition-colors duration-200 hover:bg-brand-cyan hover:text-white;
+}
+
+.hero__social-label {
+  @apply mt-2 rotate-180 text-xs font-semibold uppercase tracking-widest text-white;
+  writing-mode: vertical-rl;
+}
+
+// Vertical dot nav, right edge --------------------------------------------
+.hero__dots {
+  @apply absolute right-6 top-1/2 z-20 hidden -translate-y-1/2 flex-col items-center gap-4 lg:flex;
+}
+
+.hero__dot-tick {
+  @apply mb-2 h-8 w-px bg-white/40;
+}
+
+.hero__dot {
+  @apply h-2.5 w-2.5 shrink-0 rounded-full border-2 border-white/50 bg-transparent transition-all duration-300 hover:border-brand-cyan;
+
+  &.is-active {
+    @apply h-3.5 w-3.5 border-brand-cyan bg-brand-cyan;
+  }
+}
+
+@keyframes heroZoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.15);
+  }
+}
+
+// Fade + rise entrance for the copy block. Animates the standalone
+// `translate` property so it can't interfere with transform utilities.
+@keyframes heroRiseIn {
+  from {
+    opacity: 0;
+    translate: 0 36px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}

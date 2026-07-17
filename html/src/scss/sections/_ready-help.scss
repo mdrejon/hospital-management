@@ -1,0 +1,55 @@
+// ==========================================================================
+// "We Are Always Ready To Help You" strip (achievements.html) — centered
+// heading with an EKG divider, then three circle-icon features joined by
+// dotted connectors (connectors show on lg+ only).
+// ==========================================================================
+
+.ready-help {
+  @apply bg-white py-20 sm:py-24;
+}
+
+.ready-help__head {
+  @apply mx-auto max-w-2xl text-center;
+}
+
+.ready-help__title {
+  @apply text-3xl font-extrabold leading-snug text-navy sm:text-4xl;
+}
+
+.ready-help__pulse {
+  @apply mx-auto mt-6 block w-16 text-brand-cyan;
+}
+
+.ready-help__desc {
+  @apply mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-muted;
+}
+
+.ready-help__grid {
+  @apply mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-3 sm:gap-6 lg:grid-cols-[1fr_auto_1fr_auto_1fr] lg:gap-8;
+}
+
+.ready-help__item {
+  @apply text-center;
+}
+
+.ready-help__icon {
+  @apply mx-auto flex h-24 w-24 items-center justify-center rounded-full border border-slate-200 bg-white text-brand-cyan shadow-sm transition-all duration-300;
+
+  .ready-help__item:hover & {
+    @apply border-brand-cyan shadow-lg;
+  }
+}
+
+// Dotted line between the icon circles; aligned to the circle's vertical
+// center (icon is h-24 → center at 3rem).
+.ready-help__connector {
+  @apply hidden w-24 self-start border-t-2 border-dotted border-brand-cyan lg:mt-12 lg:block;
+}
+
+.ready-help__item-title {
+  @apply mt-6 text-xl font-bold text-navy;
+}
+
+.ready-help__item-desc {
+  @apply mx-auto mt-3 max-w-[260px] text-sm leading-relaxed text-muted;
+}

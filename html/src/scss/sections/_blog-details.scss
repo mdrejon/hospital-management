@@ -1,0 +1,154 @@
+// ==========================================================================
+// Blog details page — article body (quote, tags/share bar, author box),
+// related-blog overlay cards, and the comments/reply form. Reuses
+// .blog-list / .blog-list__grid / .blog-sidebar from _blog-list.scss.
+// ==========================================================================
+
+.blog-details__article {
+  @apply min-w-0;
+}
+
+.blog-details__hero-img {
+  @apply aspect-[16/8] w-full rounded-3xl object-cover;
+}
+
+.blog-details__meta {
+  @apply mt-8 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-wide text-[#8894AB];
+}
+
+.blog-details__title {
+  @apply mt-3 text-3xl font-extrabold leading-[1.3] text-navy lg:text-4xl;
+}
+
+.blog-details__text {
+  @apply mt-6 text-[17px] leading-[1.9] text-muted;
+}
+
+.blog-details__quote {
+  @apply mt-8 rounded-2xl border-l-4 border-brand-cyan bg-white p-8 text-xl font-bold leading-relaxed text-navy sm:text-2xl;
+}
+
+// Tags + share row -----------------------------------------------------
+.blog-details__share {
+  @apply mt-10 flex flex-wrap items-center justify-between gap-4 rounded-xl bg-white px-6 py-4;
+}
+
+.blog-details__share-tags {
+  @apply flex flex-wrap items-center gap-4;
+}
+
+.blog-details__share-label {
+  @apply text-base font-bold text-navy;
+}
+
+.blog-details__share-tag {
+  @apply text-[15px] font-medium text-muted transition-colors duration-150 hover:text-brand-cyan;
+}
+
+.blog-details__share-socials {
+  @apply flex items-center gap-5;
+}
+
+.blog-details__share-social {
+  @apply text-brand-cyan transition-colors duration-150 hover:text-navy;
+}
+
+// Author box -----------------------------------------------------------
+.blog-details__author {
+  @apply mt-10 flex flex-col gap-6 rounded-2xl bg-white p-8 sm:flex-row;
+}
+
+.blog-details__author-photo {
+  @apply h-36 w-36 shrink-0 rounded-xl object-cover;
+}
+
+.blog-details__author-name {
+  @apply text-lg font-bold text-navy;
+}
+
+.blog-details__author-bio {
+  @apply mt-2 text-[15px] leading-relaxed text-muted;
+}
+
+// Related blog ----------------------------------------------------------
+.related-blog {
+  @apply mt-14;
+}
+
+.related-blog__title {
+  @apply text-2xl font-extrabold text-navy;
+}
+
+.related-blog__grid {
+  @apply mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2;
+}
+
+.related-card {
+  @apply relative block overflow-hidden rounded-2xl;
+}
+
+.related-card__img {
+  @apply aspect-[4/4.2] w-full object-cover transition-transform duration-500;
+
+  .related-card:hover & {
+    @apply scale-105;
+  }
+}
+
+.related-card__overlay {
+  @apply pointer-events-none absolute inset-0;
+  background-image: linear-gradient(180deg, rgb(var(--color-navy) / 0) 40%, rgb(var(--color-navy) / 0.85) 100%);
+}
+
+.related-card__date {
+  @apply absolute left-4 top-4 flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wide text-navy;
+}
+
+.related-card__date-dot {
+  @apply h-1.5 w-1.5 shrink-0 rounded-full bg-navy;
+}
+
+.related-card__name {
+  @apply absolute bottom-6 left-6 right-20 text-xl font-bold leading-snug text-white;
+}
+
+.related-card__arrow {
+  @apply absolute bottom-6 right-6 flex h-11 w-11 items-center justify-center rounded-full bg-white text-navy transition-colors duration-200;
+
+  .related-card:hover & {
+    @apply bg-brand-cyan text-white;
+  }
+}
+
+// Comments / reply form --------------------------------------------------
+.comments {
+  @apply mt-14;
+}
+
+.comments__count {
+  @apply text-xl font-extrabold uppercase tracking-wide text-navy;
+}
+
+.comments__title {
+  @apply mt-8 text-2xl font-extrabold text-navy;
+}
+
+.comments__form {
+  @apply mt-6 flex flex-col gap-5;
+}
+
+.comments__row {
+  @apply grid grid-cols-1 gap-5 sm:grid-cols-2;
+}
+
+.comments__input {
+  @apply w-full rounded-xl border-0 bg-white px-5 py-4 text-[15px] text-navy placeholder-[#8894AB] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan/40;
+}
+
+.comments__textarea {
+  @apply min-h-[180px] w-full resize-y rounded-2xl border-0 bg-white px-5 py-4 text-[15px] text-navy placeholder-[#8894AB] shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan/40;
+}
+
+.comments__submit {
+  @apply w-fit rounded-lg bg-brand-cyan px-8 py-3.5 text-[15px] font-semibold text-white transition-transform duration-200 hover:scale-105;
+}
