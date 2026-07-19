@@ -28,16 +28,15 @@
 <body>
 <div class="wrapper">
   <div class="header">
-    <p class="logo-text">Hotel Beach Way</p>
+    <p class="logo-text"><?php echo e(config('app.name')); ?></p>
     <h1>Thank You For Reaching Out</h1>
-    <p>Cox's Bazar, Bangladesh</p>
   </div>
   <div class="gold-bar"></div>
 
   <div class="body">
     <p class="greeting">Dear <strong><?php echo e($inquiry->name); ?></strong>,</p>
     <p class="intro">
-      Thank you for contacting Hotel Beach Way. We have received your message and our team will get back to you as soon as possible — usually within <strong>24 hours</strong>.
+      Thank you for contacting <?php echo e(config('app.name')); ?>. We have received your message and our team will get back to you as soon as possible — usually within <strong>24 hours</strong>.
     </p>
 
     <div class="msg-box">
@@ -52,12 +51,11 @@
 
   <div class="footer">
     <p>
-      <strong>Hotel Beach Way</strong><br>
-      Near Kolatoli Beach, Cox's Bazar, Bangladesh<br>
+      <strong><?php echo e(config('app.name')); ?></strong><br>
       <a href="mailto:<?php echo e(config('mail.from.address')); ?>"><?php echo e(config('mail.from.address')); ?></a>
     </p>
     <p style="margin-top:10px;">
-      &copy; <?php echo e(date('Y')); ?> Hotel Beach Way. All rights reserved.
+      &copy; <?php echo e(date('Y')); ?> <?php echo e(config('app.name')); ?>. All rights reserved.
     </p>
   </div>
 </div>

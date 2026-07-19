@@ -1,4 +1,26 @@
-<?php $__env->startSection('title', 'Message From MD/CEO | ClinicMaster Medical & Health Care Services'); ?>
+<?php
+  $ceoImage      = !empty($about['ceo_image']) ? asset('storage/' . $about['ceo_image']) : asset('assets/img/about-image.webp');
+  $ceoBadgeValue = $about['ceo_badge_value'] ?? '16+';
+  $ceoBadgeLabel = $about['ceo_badge_label'] ?? "Years\nExperienced";
+  $ceoEyebrow    = $about['ceo_eyebrow'] ?? 'A Message From Our MD/CEO';
+  $ceoTitle      = $about['ceo_title'] ?? 'Dr. Natali Jackson';
+  $ceoMessage    = $about['ceo_message'] ?? "As CEO of ClinicMaster, I'm committed to building a hospital where compassionate care meets clinical excellence. Every decision we make, from staffing to technology, starts with what's best for the patients and families who trust us with their health.\n\nWhen we opened our doors over a decade ago, our promise was simple: treat every patient like family. That promise has guided every expansion, every new department, and every hire since — and it's why thousands of families continue to choose ClinicMaster for their care today.\n\nI'm proud of what our doctors, nurses, and support staff accomplish every single day. Whether you're here for a routine check-up or a life-changing procedure, you have my personal commitment that you'll be treated with the dignity, honesty, and warmth every patient deserves.";
+  $ceoFocusLabel = $about['ceo_focus_label'] ?? 'Leadership Focus';
+  $ceoFocusItems = !empty($about['ceo_focus_items']) ? $about['ceo_focus_items'] : [
+    'Patient-Centered Care', 'Clinical Innovation', 'Operational Excellence', 'Community Outreach', 'Quality Assurance', 'Strategic Growth',
+  ];
+  $ceoAwards = !empty($about['ceo_awards']) ? $about['ceo_awards'] : [
+    ['year' => 'ClinicMaster 2024', 'org' => 'Quality and Accreditation Institute', 'label' => 'Healthcare Leadership Award'],
+    ['year' => 'ClinicMaster 2023', 'org' => 'National Hospital Federation',        'label' => 'Excellence in Patient Care'],
+  ];
+  $seoTitle = $about['about_seo_title'] ?? ($ceoTitle . ' | Message From MD/CEO | ClinicMaster Medical & Health Care Services');
+  $seoDesc  = \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMessage), 160);
+?>
+
+<?php $__env->startSection('title', $seoTitle); ?>
+<?php $__env->startSection('meta_description', $seoDesc); ?>
+<?php $__env->startSection('og_title', $seoTitle); ?>
+<?php $__env->startSection('og_description', $seoDesc); ?>
 
 <?php $__env->startSection('content'); ?>
 
@@ -54,89 +76,45 @@
       <div class="container mx-auto">
         <div class="ceo-message__grid">
           <div class="ceo-message__media">
-            <img src="<?php echo e(asset('assets/img/about-image.webp')); ?>" alt="Dr. Natali Jackson, CEO of ClinicMaster" class="ceo-message__img" />
+            <img src="<?php echo e($ceoImage); ?>" alt="<?php echo e($ceoTitle); ?>" class="ceo-message__img" />
             <div class="ceo-message__badge">
-              <span class="ceo-message__badge-value">16+</span>
-              <span class="ceo-message__badge-label">Years<br />Experienced</span>
+              <span class="ceo-message__badge-value"><?php echo e($ceoBadgeValue); ?></span>
+              <span class="ceo-message__badge-label"><?php echo nl2br(e($ceoBadgeLabel)); ?></span>
             </div>
           </div>
 
           <div>
             <p class="ceo-message__eyebrow">
               <span class="ceo-message__eyebrow-dot"></span>
-              A Message From Our MD/CEO
+              <?php echo e($ceoEyebrow); ?>
+
               <span class="ceo-message__eyebrow-dot"></span>
             </p>
-            <h2 class="ceo-message__title">Dr. Natali Jackson</h2>
+            <h2 class="ceo-message__title"><?php echo e($ceoTitle); ?></h2>
+            <?php $__currentLoopData = preg_split('/\n{2,}/', $ceoMessage); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $paragraph): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <p class="ceo-message__desc">
-              As CEO of ClinicMaster, I'm committed to building a hospital where compassionate care meets clinical
-              excellence. Every decision we make, from staffing to technology, starts with what's best for the
-              patients and families who trust us with their health.
-            </p>
-            <p class="ceo-message__desc">
-              When we opened our doors over a decade ago, our promise was simple: treat every patient like family.
-              That promise has guided every expansion, every new department, and every hire since &mdash; and it's
-              why thousands of families continue to choose ClinicMaster for their care today.
-            </p>
-            <p class="ceo-message__desc">
-              I'm proud of what our doctors, nurses, and support staff accomplish every single day. Whether you're
-              here for a routine check-up or a life-changing procedure, you have my personal commitment that you'll
-              be treated with the dignity, honesty, and warmth every patient deserves.
-            </p>
+              <?php echo e(trim($paragraph)); ?>
 
-            <p class="ceo-message__focus-label">Leadership Focus</p>
+            </p>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+            <p class="ceo-message__focus-label"><?php echo e($ceoFocusLabel); ?></p>
             <div class="ceo-message__checklist">
+              <?php $__currentLoopData = $ceoFocusItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <span class="ceo-message__check">
                 <span class="ceo-message__check-icon">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </span>
-                Patient-Centered Care
+                <?php echo e($item); ?>
+
               </span>
-              <span class="ceo-message__check">
-                <span class="ceo-message__check-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                Clinical Innovation
-              </span>
-              <span class="ceo-message__check">
-                <span class="ceo-message__check-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                Operational Excellence
-              </span>
-              <span class="ceo-message__check">
-                <span class="ceo-message__check-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                Community Outreach
-              </span>
-              <span class="ceo-message__check">
-                <span class="ceo-message__check-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                Quality Assurance
-              </span>
-              <span class="ceo-message__check">
-                <span class="ceo-message__check-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                Strategic Growth
-              </span>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
 
             <div class="ceo-message__awards">
+              <?php $__currentLoopData = $ceoAwards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $award): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <div class="ceo-message__award">
                 <span class="ceo-message__award-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -144,24 +122,12 @@
                   </svg>
                 </span>
                 <div>
-                  <p class="ceo-message__award-year">ClinicMaster 2024</p>
-                  <p class="ceo-message__award-org">Quality and Accreditation Institute</p>
-                  <a href="<?php echo e(route('achievements')); ?>" class="ceo-message__award-link">Healthcare Leadership Award</a>
+                  <p class="ceo-message__award-year"><?php echo e($award['year']); ?></p>
+                  <p class="ceo-message__award-org"><?php echo e($award['org']); ?></p>
+                  <a href="<?php echo e(route('achievements')); ?>" class="ceo-message__award-link"><?php echo e($award['label']); ?></a>
                 </div>
               </div>
-
-              <div class="ceo-message__award">
-                <span class="ceo-message__award-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2l2.5 5 5.5.6-4 3.9 1 5.5L12 14.8 7 17l1-5.5-4-3.9L9.5 7 12 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                <div>
-                  <p class="ceo-message__award-year">ClinicMaster 2023</p>
-                  <p class="ceo-message__award-org">National Hospital Federation</p>
-                  <a href="<?php echo e(route('achievements')); ?>" class="ceo-message__award-link">Excellence in Patient Care</a>
-                </div>
-              </div>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
           </div>
         </div>

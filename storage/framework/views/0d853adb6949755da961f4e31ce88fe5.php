@@ -1,11 +1,31 @@
-<?php $__env->startSection('title', 'Blog | ClinicMaster Medical & Health Care Services'); ?>
+<?php
+  $heroTitle = $blog['blog_hero_title'] ?? 'Our Blog';
+  $heroImage = !empty($blog['blog_hero_image']) ? asset('storage/' . $blog['blog_hero_image']) : asset('assets/img/breadcumb.webp');
+  $seoTitle  = $blog['blog_seo_title'] ?? 'Blog | ClinicMaster Medical & Health Care Services';
+  $seoDesc   = $blog['blog_seo_description'] ?? 'Read the latest health tips, medical insights, and hospital news from ClinicMaster.';
+  $fallbackImages = [
+    asset('assets/img/sr-1-3.jpg'), asset('assets/img/projects-3.jpg'), asset('assets/img/sr-1-2.jpg'),
+    asset('assets/img/appoinment.jpg'), asset('assets/img/about-image.webp'), asset('assets/img/slider-1.3.jpg'),
+  ];
+?>
+
+<?php $__env->startSection('title', $seoTitle); ?>
+<?php $__env->startSection('meta_description', $seoDesc); ?>
+<?php $__env->startSection('og_title', $seoTitle); ?>
+<?php $__env->startSection('og_description', $seoDesc); ?>
+<?php if(!empty($blog['blog_seo_keywords'])): ?>
+<?php $__env->startSection('meta_keywords', $blog['blog_seo_keywords']); ?>
+<?php endif; ?>
+<?php if(!empty($blog['blog_seo_og_image'])): ?>
+<?php $__env->startSection('og_image', asset('storage/' . $blog['blog_seo_og_image'])); ?>
+<?php endif; ?>
 
 <?php $__env->startSection('content'); ?>
 
     <!-- ===================== Breadcrumb / Page header ===================== -->
     <section class="page-header">
       <div class="page-header__media">
-        <img src="<?php echo e(asset('assets/img/breadcumb.webp')); ?>" alt="Team of ClinicMaster doctors" class="page-header__bg" />
+        <img src="<?php echo e($heroImage); ?>" alt="Team of ClinicMaster doctors" class="page-header__bg" />
         <span class="page-header__overlay"></span>
       </div>
 
@@ -27,7 +47,7 @@
       </div>
 
       <div class="page-header__inner">
-        <h1 class="page-header__title">Our Blog</h1>
+        <h1 class="page-header__title"><?php echo e($heroTitle); ?></h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
           <a href="<?php echo e(route('home')); ?>">Home</a>
           <span class="page-header__breadcrumb-sep">
@@ -49,172 +69,96 @@
       </a>
     </section>
 
-    <!-- ===================== Services ===================== -->
-    <!-- ===================== Doctors ===================== -->
     <!-- ===================== Blog List ===================== -->
     <section class="blog-list">
       <div class="container mx-auto">
         <div class="blog-list__grid">
           <div class="blog-list__posts">
-            <!-- Aging and Longevity -->
-            <article class="blog-post-card">
-              <div class="blog-post-card__media">
-                <img src="<?php echo e(asset('assets/img/sr-1-3.jpg')); ?>" alt="Doctor reading a book" class="blog-post-card__img" />
-              </div>
-              <div>
-                <p class="blog-post-card__meta">
-                  July 14, 2025
-                  <span class="blog-post-card__meta-dot"></span>
-                  BY <span class="blog-post-card__meta-author">Kelly Smith</span>
-                </p>
-                <h3 class="blog-post-card__title">Aging and Longevity: Exploring the Science of Healthy A ...</h3>
-                <p class="blog-post-card__desc">
-                  Explore how science is redefining aging with breakthroughs in health and longevity. Learn simple,
-                  effective habits to help ...
-                </p>
-                <a href="<?php echo e(route('blog-details')); ?>" class="blog-post-card__btn">
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
 
-            <!-- Cardiovascular Disease -->
-            <article class="blog-post-card">
-              <div class="blog-post-card__media">
-                <img src="<?php echo e(asset('assets/img/projects-3.jpg')); ?>" alt="Doctor holding a heart model" class="blog-post-card__img" />
-              </div>
-              <div>
-                <p class="blog-post-card__meta">
-                  July 14, 2025
-                  <span class="blog-post-card__meta-dot"></span>
-                  BY <span class="blog-post-card__meta-author">Kelly Smith</span>
-                </p>
-                <h3 class="blog-post-card__title">Cardiovascular Disease: New Treatments and Preventative ...</h3>
+            <?php if($blogs->isEmpty()): ?>
+              <?php if($activeCategory || $activeTag || $searchQuery): ?>
                 <p class="blog-post-card__desc">
-                  Heart disease may be common, but it's increasingly preventable. Explore new treatments and
-                  strategies that support a longer ...
+                  No posts found for your search/filter.
+                  <a href="<?php echo e(route('blog-list')); ?>">Clear filters</a>
                 </p>
-                <a href="<?php echo e(route('blog-details')); ?>" class="blog-post-card__btn">
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
+              <?php else: ?>
+                <?php
+                  $demoPosts = [
+                    ['image' => asset('assets/img/sr-1-3.jpg'),     'alt' => 'Doctor reading a book',              'date' => 'July 14, 2025', 'title' => 'Aging and Longevity: Exploring the Science of Healthy A ...',      'desc' => 'Explore how science is redefining aging with breakthroughs in health and longevity. Learn simple, effective habits to help ...'],
+                    ['image' => asset('assets/img/projects-3.jpg'), 'alt' => 'Doctor holding a heart model',       'date' => 'July 14, 2025', 'title' => 'Cardiovascular Disease: New Treatments and Preventative ...',      'desc' => "Heart disease may be common, but it's increasingly preventable. Explore new treatments and strategies that support a longer ..."],
+                    ['image' => asset('assets/img/sr-1-2.jpg'),     'alt' => 'Therapist comforting a patient',     'date' => 'July 14, 2025', 'title' => 'Mental Health in the Modern World: Breaking the Stigma ...',       'desc' => 'Mental health is more visible than ever, but stigma still lingers. Explore how awareness, access, and compassion are ...'],
+                    ['image' => asset('assets/img/appoinment.jpg'), 'alt' => 'Doctor consulting with a patient',   'date' => 'July 9, 2025',  'title' => 'Strategies for Balancing Business Demands with Optimal ...',       'desc' => 'Running a practice while delivering great care is a balancing act. Discover practical strategies for managing both without ...'],
+                    ['image' => asset('assets/img/about-image.webp'), 'alt' => 'Two doctors smiling in a clinic',  'date' => 'July 14, 2025', 'title' => 'The Impact of Artificial Intelligence on Medical.',               'desc' => 'AI is transforming how we diagnose, treat, and manage health. Discover the groundbreaking role it plays in the ...'],
+                    ['image' => asset('assets/img/slider-1.3.jpg'), 'alt' => 'Medical team wearing masks',        'date' => 'July 14, 2025', 'title' => 'The Role of Nutrition in Preventative Medicine',                   'desc' => "Nutrition isn't just about diet—it's a pillar of disease prevention. Explore how the right foods can protect your ..."],
+                  ];
+                ?>
+                <?php $__currentLoopData = $demoPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <article class="blog-post-card">
+                  <div class="blog-post-card__media">
+                    <img src="<?php echo e($p['image']); ?>" alt="<?php echo e($p['alt']); ?>" class="blog-post-card__img" />
+                  </div>
+                  <div>
+                    <p class="blog-post-card__meta">
+                      <?php echo e($p['date']); ?>
 
-            <!-- Mental Health in the Modern World -->
-            <article class="blog-post-card">
-              <div class="blog-post-card__media">
-                <img src="<?php echo e(asset('assets/img/sr-1-2.jpg')); ?>" alt="Therapist comforting a patient" class="blog-post-card__img" />
-              </div>
-              <div>
-                <p class="blog-post-card__meta">
-                  July 14, 2025
-                  <span class="blog-post-card__meta-dot"></span>
-                  BY <span class="blog-post-card__meta-author">Kelly Smith</span>
-                </p>
-                <h3 class="blog-post-card__title">Mental Health in the Modern World: Breaking the Stigma ...</h3>
-                <p class="blog-post-card__desc">
-                  Mental health is more visible than ever, but stigma still lingers. Explore how awareness, access,
-                  and compassion are ...
-                </p>
-                <a href="<?php echo e(route('blog-details')); ?>" class="blog-post-card__btn">
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
+                      <span class="blog-post-card__meta-dot"></span>
+                      BY <span class="blog-post-card__meta-author">ClinicMaster Team</span>
+                    </p>
+                    <h3 class="blog-post-card__title"><?php echo e($p['title']); ?></h3>
+                    <p class="blog-post-card__desc"><?php echo e($p['desc']); ?></p>
+                    <a href="#" class="blog-post-card__btn">
+                      Read More
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+              <?php endif; ?>
+            <?php else: ?>
+              <?php $__currentLoopData = $blogs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <article class="blog-post-card">
+                <div class="blog-post-card__media">
+                  <img src="<?php echo e($post->feature_image ? asset('storage/' . $post->feature_image) : $fallbackImages[$loop->index % count($fallbackImages)]); ?>" alt="<?php echo e($post->title); ?>" class="blog-post-card__img" />
+                </div>
+                <div>
+                  <p class="blog-post-card__meta">
+                    <?php echo e(($post->published_at ?: $post->created_at)->format('F j, Y')); ?>
 
-            <!-- Strategies for Balancing Business Demands -->
-            <article class="blog-post-card">
-              <div class="blog-post-card__media">
-                <img src="<?php echo e(asset('assets/img/appoinment.jpg')); ?>" alt="Doctor consulting with a patient" class="blog-post-card__img" />
-              </div>
-              <div>
-                <p class="blog-post-card__meta">
-                  July 9, 2025
-                  <span class="blog-post-card__meta-dot"></span>
-                  BY <span class="blog-post-card__meta-author">Kelly Smith</span>
-                </p>
-                <h3 class="blog-post-card__title">Strategies for Balancing Business Demands with Optimal ...</h3>
-                <p class="blog-post-card__desc">
-                  Running a practice while delivering great care is a balancing act. Discover practical strategies
-                  for managing both without ...
-                </p>
-                <a href="<?php echo e(route('blog-details')); ?>" class="blog-post-card__btn">
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
+                    <span class="blog-post-card__meta-dot"></span>
+                    BY <span class="blog-post-card__meta-author"><?php echo e($post->author_name ?: 'ClinicMaster Team'); ?></span>
+                  </p>
+                  <h3 class="blog-post-card__title"><?php echo e($post->title); ?></h3>
+                  <p class="blog-post-card__desc">
+                    <?php echo e(\Illuminate\Support\Str::limit($post->excerpt ?: strip_tags($post->content ?? ''), 140)); ?>
 
-            <!-- The Impact of Artificial Intelligence on Medical -->
-            <article class="blog-post-card">
-              <div class="blog-post-card__media">
-                <img src="<?php echo e(asset('assets/img/about-image.webp')); ?>" alt="Two doctors smiling in a clinic" class="blog-post-card__img" />
-              </div>
-              <div>
-                <p class="blog-post-card__meta">
-                  July 14, 2025
-                  <span class="blog-post-card__meta-dot"></span>
-                  BY <span class="blog-post-card__meta-author">Kelly Smith</span>
-                </p>
-                <h3 class="blog-post-card__title">The Impact of Artificial Intelligence on Medical.</h3>
-                <p class="blog-post-card__desc">
-                  AI is transforming how we diagnose, treat, and manage health. Discover the groundbreaking role it
-                  plays in the ...
-                </p>
-                <a href="<?php echo e(route('blog-details')); ?>" class="blog-post-card__btn">
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
+                  </p>
+                  <a href="<?php echo e(route('blog-details', $post->slug)); ?>" class="blog-post-card__btn">
+                    Read More
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
+              </article>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-            <!-- The Role of Nutrition in Preventative Medicine -->
-            <article class="blog-post-card">
-              <div class="blog-post-card__media">
-                <img src="<?php echo e(asset('assets/img/slider-1.3.jpg')); ?>" alt="Medical team wearing masks" class="blog-post-card__img" />
-              </div>
-              <div>
-                <p class="blog-post-card__meta">
-                  July 14, 2025
-                  <span class="blog-post-card__meta-dot"></span>
-                  BY <span class="blog-post-card__meta-author">Kelly Smith</span>
-                </p>
-                <h3 class="blog-post-card__title">The Role of Nutrition in Preventative Medicine</h3>
-                <p class="blog-post-card__desc">
-                  Nutrition isn't just about diet—it's a pillar of disease prevention. Explore how the right foods
-                  can protect your ...
-                </p>
-                <a href="<?php echo e(route('blog-details')); ?>" class="blog-post-card__btn">
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
+              <?php if($blogs->hasMorePages()): ?>
+              <a href="<?php echo e($blogs->nextPageUrl()); ?>" class="blog-list__load-more">Load More</a>
+              <?php endif; ?>
+            <?php endif; ?>
 
-            <button type="button" class="blog-list__load-more">Load More</button>
           </div>
 
           <aside class="blog-sidebar" data-sticky-sidebar>
             <!-- Search -->
             <div class="blog-sidebar__card">
               <h3 class="blog-sidebar__title">Search</h3>
-              <form class="blog-sidebar__search">
-                <input type="text" class="blog-sidebar__search-input" placeholder="Search.." />
+              <form class="blog-sidebar__search" action="<?php echo e(route('blog-list')); ?>" method="GET">
+                <?php if($activeCategory): ?><input type="hidden" name="category" value="<?php echo e($activeCategory); ?>" /><?php endif; ?>
+                <?php if($activeTag): ?><input type="hidden" name="tag" value="<?php echo e($activeTag); ?>" /><?php endif; ?>
+                <input type="text" name="q" value="<?php echo e($searchQuery); ?>" class="blog-sidebar__search-input" placeholder="Search.." />
                 <button type="submit" class="blog-sidebar__search-btn" aria-label="Search">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
@@ -228,6 +172,22 @@
             <div class="blog-sidebar__card">
               <h3 class="blog-sidebar__title">Category</h3>
               <div class="blog-sidebar__cat-list">
+                <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <a href="<?php echo e(route('blog-list', ['category' => $cat->slug])); ?>"
+                  class="blog-sidebar__cat-link <?php echo e($activeCategory === $cat->slug ? 'is-active' : ''); ?>">
+                  <span class="blog-sidebar__cat-left">
+                    <span class="blog-sidebar__cat-arrow">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                    <?php echo e($cat->name); ?>
+
+                  </span>
+                  <span class="blog-sidebar__cat-count">(<?php echo e($cat->blogs_count); ?>)</span>
+                </a>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <?php $__currentLoopData = [['Acupressure',4],['Walking',3],['Food',3],['Therapy',5],['Health',1],['Allgemein',3],['Blood',2],['Mental Health',2]]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as [$name, $count]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <a href="#" class="blog-sidebar__cat-link">
                   <span class="blog-sidebar__cat-left">
                     <span class="blog-sidebar__cat-arrow">
@@ -235,87 +195,13 @@
                         <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
                     </span>
-                    Acupressure
+                    <?php echo e($name); ?>
+
                   </span>
-                  <span class="blog-sidebar__cat-count">(4)</span>
+                  <span class="blog-sidebar__cat-count">(<?php echo e($count); ?>)</span>
                 </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Walking
-                  </span>
-                  <span class="blog-sidebar__cat-count">(3)</span>
-                </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Food
-                  </span>
-                  <span class="blog-sidebar__cat-count">(3)</span>
-                </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Therapy
-                  </span>
-                  <span class="blog-sidebar__cat-count">(5)</span>
-                </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Health
-                  </span>
-                  <span class="blog-sidebar__cat-count">(1)</span>
-                </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Allgemein
-                  </span>
-                  <span class="blog-sidebar__cat-count">(3)</span>
-                </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Blood
-                  </span>
-                  <span class="blog-sidebar__cat-count">(2)</span>
-                </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Mental Health
-                  </span>
-                  <span class="blog-sidebar__cat-count">(2)</span>
-                </a>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php endif; ?>
               </div>
             </div>
 
@@ -323,27 +209,29 @@
             <div class="blog-sidebar__card">
               <h3 class="blog-sidebar__title">Latest Post</h3>
               <div class="blog-sidebar__latest-list">
-                <a href="<?php echo e(route('blog-details')); ?>" class="blog-sidebar__latest-item">
-                  <img src="<?php echo e(asset('assets/img/projects-3.jpg')); ?>" alt="" class="blog-sidebar__latest-thumb" />
+                <?php $__empty_1 = true; $__currentLoopData = $latestPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <a href="<?php echo e(route('blog-details', $lp->slug)); ?>" class="blog-sidebar__latest-item">
+                  <img src="<?php echo e($lp->feature_image ? asset('storage/' . $lp->feature_image) : asset('assets/img/sr-1-3.jpg')); ?>" alt="" class="blog-sidebar__latest-thumb" />
                   <div>
-                    <p class="blog-sidebar__latest-date">July 14, 2025</p>
-                    <p class="blog-sidebar__latest-title">Cardiovascular Disease: New Treatments a ...</p>
+                    <p class="blog-sidebar__latest-date"><?php echo e(($lp->published_at ?: $lp->created_at)->format('F j, Y')); ?></p>
+                    <p class="blog-sidebar__latest-title"><?php echo e(\Illuminate\Support\Str::limit($lp->title, 38)); ?></p>
                   </div>
                 </a>
-                <a href="<?php echo e(route('blog-details')); ?>" class="blog-sidebar__latest-item">
-                  <img src="<?php echo e(asset('assets/img/sr-1-3.jpg')); ?>" alt="" class="blog-sidebar__latest-thumb" />
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <?php $__currentLoopData = [
+                  ['img' => asset('assets/img/projects-3.jpg'), 'date' => 'July 14, 2025', 'title' => 'Cardiovascular Disease: New Treatments a ...'],
+                  ['img' => asset('assets/img/sr-1-3.jpg'),     'date' => 'July 14, 2025', 'title' => 'Aging and Longevity: Exploring the Scien ...'],
+                  ['img' => asset('assets/img/sr-1-2.jpg'),     'date' => 'July 14, 2025', 'title' => 'Mental Health in the Modern World: Break ...'],
+                ]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <a href="#" class="blog-sidebar__latest-item">
+                  <img src="<?php echo e($lp['img']); ?>" alt="" class="blog-sidebar__latest-thumb" />
                   <div>
-                    <p class="blog-sidebar__latest-date">July 14, 2025</p>
-                    <p class="blog-sidebar__latest-title">Aging and Longevity: Exploring the Scien ...</p>
+                    <p class="blog-sidebar__latest-date"><?php echo e($lp['date']); ?></p>
+                    <p class="blog-sidebar__latest-title"><?php echo e($lp['title']); ?></p>
                   </div>
                 </a>
-                <a href="<?php echo e(route('blog-details')); ?>" class="blog-sidebar__latest-item">
-                  <img src="<?php echo e(asset('assets/img/sr-1-2.jpg')); ?>" alt="" class="blog-sidebar__latest-thumb" />
-                  <div>
-                    <p class="blog-sidebar__latest-date">July 14, 2025</p>
-                    <p class="blog-sidebar__latest-title">Mental Health in the Modern World: Break ...</p>
-                  </div>
-                </a>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php endif; ?>
               </div>
             </div>
 
@@ -351,12 +239,13 @@
             <div class="blog-sidebar__card">
               <h3 class="blog-sidebar__title">Tags</h3>
               <div class="blog-sidebar__tags">
-                <a href="#" class="blog-sidebar__tag">Food</a>
-                <a href="#" class="blog-sidebar__tag">Walking</a>
-                <a href="#" class="blog-sidebar__tag">Mental Health</a>
-                <a href="#" class="blog-sidebar__tag">Acupressure</a>
-                <a href="#" class="blog-sidebar__tag">Health</a>
-                <a href="#" class="blog-sidebar__tag">Blood</a>
+                <?php $__empty_1 = true; $__currentLoopData = $tags; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <a href="<?php echo e(route('blog-list', ['tag' => $t['name']])); ?>" class="blog-sidebar__tag <?php echo e($activeTag === $t['name'] ? 'is-active' : ''); ?>"><?php echo e($t['name']); ?></a>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <?php $__currentLoopData = ['Food','Walking','Mental Health','Acupressure','Health','Blood']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tagName): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <a href="#" class="blog-sidebar__tag"><?php echo e($tagName); ?></a>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php endif; ?>
               </div>
             </div>
           </aside>

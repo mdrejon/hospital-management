@@ -19,7 +19,7 @@ class InquiryNotificationMail extends Mailable
     {
         $label = $this->inquiry->typeLabel();
         return new Envelope(
-            subject: "[New {$label}] from {$this->inquiry->name} – Hotel Beach Way",
+            subject: "[New {$label}] from {$this->inquiry->name} – " . config('app.name'),
         );
     }
 

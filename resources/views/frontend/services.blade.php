@@ -1,13 +1,29 @@
 @extends('layouts.frontend')
 
-@section('title', 'Our Services | ClinicMaster Medical & Health Care Services')
+@php
+  $heroTitle = $svc['svc_page_hero_title'] ?? 'Our Services';
+  $heroImage = !empty($svc['svc_page_hero_image']) ? asset('storage/' . $svc['svc_page_hero_image']) : asset('assets/img/breadcumb.webp');
+  $seoTitle  = $svc['svc_seo_title'] ?? 'Our Services | ClinicMaster Medical & Health Care Services';
+  $seoDesc   = $svc['svc_seo_description'] ?? 'Explore the full range of medical and health care services offered by ClinicMaster.';
+@endphp
+
+@section('title', $seoTitle)
+@section('meta_description', $seoDesc)
+@section('og_title', $seoTitle)
+@section('og_description', $seoDesc)
+@if(!empty($svc['svc_seo_keywords']))
+@section('meta_keywords', $svc['svc_seo_keywords'])
+@endif
+@if(!empty($svc['svc_seo_og_image']))
+@section('og_image', asset('storage/' . $svc['svc_seo_og_image']))
+@endif
 
 @section('content')
 
     <!-- ===================== Breadcrumb / Page header ===================== -->
     <section class="page-header">
       <div class="page-header__media">
-        <img src="{{ asset('assets/img/breadcumb.webp') }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
+        <img src="{{ $heroImage }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
         <span class="page-header__overlay"></span>
       </div>
 
@@ -29,7 +45,7 @@
       </div>
 
       <div class="page-header__inner">
-        <h1 class="page-header__title">Our Services</h1>
+        <h1 class="page-header__title">{{ $heroTitle }}</h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
           <a href="{{ route('home') }}">Home</a>
           <span class="page-header__breadcrumb-sep">
@@ -52,6 +68,25 @@
     </section>
 
     <!-- ===================== Services ===================== -->
+    @php
+      $defaultIcon = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3 3 0 0 0 8 17a3 3 0 0 0 3-3V7a3 3 0 0 0-2-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3 3 0 0 1 16 17a3 3 0 0 1-3-3V7a3 3 0 0 1 2-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+      $serviceCards = $services->isNotEmpty()
+        ? $services->map(fn ($s) => [
+            'title'    => $s->title,
+            'desc'     => $s->short_desc,
+            'icon_svg' => $s->icon_svg,
+            'image'    => $s->image ? asset('storage/' . $s->image) : asset('assets/img/sr-1-2.jpg'),
+            'url'      => route('service-details', $s->slug),
+          ])
+        : collect([
+            ['title' => 'Mental Health & Wellness',     'desc' => 'Counseling, therapy, and psychiatric care for mental well-being.', 'icon_svg' => null, 'image' => asset('assets/img/sr-1-2.jpg'), 'url' => '#'],
+            ['title' => 'Emergency & Urgent Care',       'desc' => '24/7 medical assistance for accidents and critical health conditions.', 'icon_svg' => null, 'image' => asset('assets/img/appoinment.jpg'), 'url' => '#'],
+            ['title' => 'Diagnostic & Laboratory',       'desc' => 'Blood tests, imaging (X-rays, MRIs, CT scans), and screenings diagnosis.', 'icon_svg' => null, 'image' => asset('assets/img/projects-4.jpg'), 'url' => '#'],
+            ['title' => 'Maternity & Pediatric Care',    'desc' => "Comprehensive care for expecting mothers, newborns, children's health.", 'icon_svg' => null, 'image' => asset('assets/img/slider-1.2.jpg'), 'url' => '#'],
+            ['title' => 'Dental Care Services',          'desc' => 'Our Dental Care Services are designed to provide comprehensive treatment.', 'icon_svg' => null, 'image' => asset('assets/img/projects-2.jpg'), 'url' => '#'],
+            ['title' => 'Surgery Care',                  'desc' => 'Our Surgery Care services provide expert, compassionate treatment.', 'icon_svg' => null, 'image' => asset('assets/img/sr-1-1.jpg'), 'url' => '#'],
+          ]);
+    @endphp
     <section class="services">
       <div class="container mx-auto">
         <div class="services__head">
@@ -60,21 +95,18 @@
         </div>
 
         <div class="services__grid">
-          <!-- Mental Health & Wellness -->
+          @foreach($serviceCards as $card)
           <article class="service-card">
             <div class="service-card__media">
-              <img src="{{ asset('assets/img/sr-1-2.jpg') }}" alt="Therapist talking with a patient" class="service-card__img" />
+              <img src="{{ $card['image'] }}" alt="{{ $card['title'] }}" class="service-card__img" />
               <span class="service-card__icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3 3 0 0 0 8 17a3 3 0 0 0 3-3V7a3 3 0 0 0-2-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                  <path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3 3 0 0 1 16 17a3 3 0 0 1-3-3V7a3 3 0 0 1 2-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                </svg>
+                {!! $card['icon_svg'] ?: $defaultIcon !!}
               </span>
             </div>
             <div class="service-card__body">
-              <h3 class="service-card__title">Mental Health &amp; Wellness</h3>
-              <p class="service-card__desc">Counseling, therapy, and psychiatric care for mental well-being.</p>
-              <a href="{{ route('service-details') }}" class="service-card__btn">
+              <h3 class="service-card__title">{{ $card['title'] }}</h3>
+              <p class="service-card__desc">{{ $card['desc'] }}</p>
+              <a href="{{ $card['url'] }}" class="service-card__btn">
                 Read more
                 <span class="service-card__btn-icon">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -84,129 +116,7 @@
               </a>
             </div>
           </article>
-
-          <!-- Emergency & Urgent Care -->
-          <article class="service-card">
-            <div class="service-card__media">
-              <img src="{{ asset('assets/img/appoinment.jpg') }}" alt="Doctor attending to an elderly patient" class="service-card__img" />
-              <span class="service-card__icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 3a5 5 0 0 1 5 5v6H7V8a5 5 0 0 1 5-5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                  <path d="M5 14h14v3a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3zM12 3V1M9 21h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                </svg>
-              </span>
-            </div>
-            <div class="service-card__body">
-              <h3 class="service-card__title">Emergency &amp; Urgent Care</h3>
-              <p class="service-card__desc">24/7 medical assistance for accidents and critical health conditions.</p>
-              <a href="{{ route('service-details') }}" class="service-card__btn">
-                Read more
-                <span class="service-card__btn-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </article>
-
-          <!-- Diagnostic & Laboratory -->
-          <article class="service-card">
-            <div class="service-card__media">
-              <img src="{{ asset('assets/img/projects-4.jpg') }}" alt="Lab technician examining a sample under a microscope" class="service-card__img" />
-              <span class="service-card__icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9 2h6M10 2v6.5L5.5 18a2 2 0 0 0 1.8 2.9h9.4a2 2 0 0 0 1.8-2.9L14 8.5V2" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                  <path d="M7.5 15h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                </svg>
-              </span>
-            </div>
-            <div class="service-card__body">
-              <h3 class="service-card__title">Diagnostic &amp; Laboratory</h3>
-              <p class="service-card__desc">Blood tests, imaging (X-rays, MRIs, CT scans), and screenings diagnosis.</p>
-              <a href="{{ route('service-details') }}" class="service-card__btn">
-                Read more
-                <span class="service-card__btn-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </article>
-
-          <!-- Maternity & Pediatric Care -->
-          <article class="service-card">
-            <div class="service-card__media">
-              <img src="{{ asset('assets/img/slider-1.2.jpg') }}" alt="Doctor examining a baby patient" class="service-card__img" />
-              <span class="service-card__icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 20s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 5c-2.5 4.5-9.5 9-9.5 9z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                  <path d="M12 9v4M10 11h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                </svg>
-              </span>
-            </div>
-            <div class="service-card__body">
-              <h3 class="service-card__title">Maternity &amp; Pediatric Care</h3>
-              <p class="service-card__desc">Comprehensive care for expecting mothers, newborns, children's health.</p>
-              <a href="{{ route('service-details') }}" class="service-card__btn">
-                Read more
-                <span class="service-card__btn-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </article>
-
-          <!-- Dental Care Services -->
-          <article class="service-card">
-            <div class="service-card__media">
-              <img src="{{ asset('assets/img/projects-2.jpg') }}" alt="Dentist examining a young patient" class="service-card__img" />
-              <span class="service-card__icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 3c-2.2 0-3.8 1-5 1-1.5 0-2.5 1.3-2.5 3.3 0 2.2.7 4.7 1.4 6.9.5 1.7.9 3.6 1.6 4.9.4.8 1 1.4 1.8 1.4.9 0 1.3-.8 1.6-1.9.3-1.1.4-2.5 1.1-2.5s.8 1.4 1.1 2.5c.3 1.1.7 1.9 1.6 1.9.8 0 1.4-.6 1.8-1.4.7-1.3 1.1-3.2 1.6-4.9.7-2.2 1.4-4.7 1.4-6.9C19.5 5.3 18.5 4 17 4c-1.2 0-2.8-1-5-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </div>
-            <div class="service-card__body">
-              <h3 class="service-card__title">Dental Care Services</h3>
-              <p class="service-card__desc">Our Dental Care Services are designed to provide comprehensive treatment.</p>
-              <a href="{{ route('service-details') }}" class="service-card__btn">
-                Read more
-                <span class="service-card__btn-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </article>
-
-          <!-- Surgery Care -->
-          <article class="service-card">
-            <div class="service-card__media">
-              <img src="{{ asset('assets/img/sr-1-1.jpg') }}" alt="Surgical team performing an operation" class="service-card__img" />
-              <span class="service-card__icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4 20 14 10M14 10l6-6M14 10l3 3M17 4l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </div>
-            <div class="service-card__body">
-              <h3 class="service-card__title">Surgery Care</h3>
-              <p class="service-card__desc">Our Surgery Care services provide expert, compassionate treatment.</p>
-              <a href="{{ route('service-details') }}" class="service-card__btn">
-                Read more
-                <span class="service-card__btn-icon">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </article>
+          @endforeach
         </div>
       </div>
     </section>

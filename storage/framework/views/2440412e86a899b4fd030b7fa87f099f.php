@@ -14,7 +14,7 @@
           </span>
           <div>
             <p class="footer-contact__label">Contact Us</p>
-            <p class="footer-contact__value">1 123 456 7890</p>
+            <p class="footer-contact__value"><?php echo e($footerSettings['footer_phone_1'] ?? '1 123 456 7890'); ?></p>
           </div>
         </div>
 
@@ -27,7 +27,7 @@
           </span>
           <div>
             <p class="footer-contact__label">Send us a Mail</p>
-            <p class="footer-contact__value">sales@smartfreamework.com</p>
+            <p class="footer-contact__value"><?php echo e($footerSettings['footer_email_1'] ?? 'sales@smartfreamework.com'); ?></p>
           </div>
         </div>
 
@@ -40,7 +40,7 @@
           </span>
           <div>
             <p class="footer-contact__label">Opening Time</p>
-            <p class="footer-contact__value">Mon-Thu: 8:00am-5:00pm Fri: 8:00am-1:00pm</p>
+            <p class="footer-contact__value"><?php echo e($footerSettings['footer_opening_time'] ?? 'Mon-Thu: 8:00am-5:00pm Fri: 8:00am-1:00pm'); ?></p>
           </div>
         </div>
       </div>
@@ -49,55 +49,70 @@
     <div class="footer-columns">
       <div class="footer-about">
         <a href="<?php echo e(route('home')); ?>" class="site-logo text-navy">
-          <img src="<?php echo e(asset('assets/img/logo.png')); ?>" alt="Sitakund Modern Hospital Ltd." height="70" style="height:70px;width:auto" />
+          <img src="<?php echo e(!empty($footerSettings['footer_logo']) ? asset('storage/' . $footerSettings['footer_logo']) : asset('assets/img/logo.png')); ?>" alt="Sitakund Modern Hospital Ltd." height="70" style="height:70px;width:auto" />
         </a>
         <p class="footer-about__desc">
-          ClinicMaster Ipsum Dolor Sit Amet, Consectuer Adipiscing Elit, Sed Diam
-          Nonummy Nibh Euismod Tincidunt Ut Laoreet Dolore Agna Aliquam Erat. Wisi
-          Enim Ad Minim Veniam, Quis Tation. Sit Amet, Consec Tetuer. Ipsum Dolor
+          <?php echo e($footerSettings['footer_brand_description'] ?? "ClinicMaster Ipsum Dolor Sit Amet, Consectuer Adipiscing Elit, Sed Diam Nonummy Nibh Euismod Tincidunt Ut Laoreet Dolore Agna Aliquam Erat. Wisi Enim Ad Minim Veniam, Quis Tation. Sit Amet, Consec Tetuer. Ipsum Dolor"); ?>
+
         </p>
       </div>
 
       <div>
         <h4 class="footer-col__title">Our Services</h4>
         <div class="footer-col__list">
-          <a href="<?php echo e(route('service-details')); ?>" class="footer-col__link">Angioplasty</a>
-          <a href="<?php echo e(route('service-details')); ?>" class="footer-col__link">Cardiology</a>
-          <a href="<?php echo e(route('service-details')); ?>" class="footer-col__link">Dental</a>
-          <a href="<?php echo e(route('service-details')); ?>" class="footer-col__link">Endocrinology</a>
-          <a href="<?php echo e(route('service-details')); ?>" class="footer-col__link">Eye Care</a>
+          <?php $__empty_1 = true; $__currentLoopData = ($footerSettings['footer_service_links'] ?? []); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+          <a href="<?php echo e($link['url']); ?>" class="footer-col__link"><?php echo e($link['label']); ?></a>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+          <a href="<?php echo e(route('services')); ?>" class="footer-col__link">Angioplasty</a>
+          <a href="<?php echo e(route('services')); ?>" class="footer-col__link">Cardiology</a>
+          <a href="<?php echo e(route('services')); ?>" class="footer-col__link">Dental</a>
+          <a href="<?php echo e(route('services')); ?>" class="footer-col__link">Endocrinology</a>
+          <a href="<?php echo e(route('services')); ?>" class="footer-col__link">Eye Care</a>
+          <?php endif; ?>
         </div>
       </div>
 
       <div>
         <h4 class="footer-col__title">Our Stores</h4>
         <div class="footer-col__list">
+          <?php $__empty_1 = true; $__currentLoopData = ($footerSettings['footer_store_links'] ?? []); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+          <a href="<?php echo e($link['url']); ?>" class="footer-col__link"><?php echo e($link['label']); ?></a>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
           <a href="<?php echo e(route('contact')); ?>#locations" class="footer-col__link">New York</a>
           <a href="<?php echo e(route('contact')); ?>#locations" class="footer-col__link">London SF</a>
           <a href="<?php echo e(route('contact')); ?>#locations" class="footer-col__link">Edinburgh</a>
           <a href="<?php echo e(route('contact')); ?>#locations" class="footer-col__link">Los Angeles</a>
           <a href="<?php echo e(route('contact')); ?>#locations" class="footer-col__link">Las Vegas</a>
+          <?php endif; ?>
         </div>
       </div>
 
       <div>
         <h4 class="footer-col__title">Useful Links</h4>
         <div class="footer-col__list">
-          <a href="<?php echo e(route('privacy-policy')); ?>" class="footer-col__link">Privacy Policy</a>
-          <a href="<?php echo e(route('terms-conditions')); ?>" class="footer-col__link">Terms &amp; Conditions</a>
+          <?php $__empty_1 = true; $__currentLoopData = ($footerSettings['footer_useful_links'] ?? []); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+          <a href="<?php echo e($link['url']); ?>" class="footer-col__link"><?php echo e($link['label']); ?></a>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+          <a href="<?php echo e(url('/privacy-policy')); ?>" class="footer-col__link">Privacy Policy</a>
+          <a href="<?php echo e(url('/terms-conditions')); ?>" class="footer-col__link">Terms &amp; Conditions</a>
           <a href="<?php echo e(route('contact')); ?>" class="footer-col__link">Contact Us</a>
           <a href="<?php echo e(route('blog-list')); ?>" class="footer-col__link">Latest News</a>
+          <?php endif; ?>
         </div>
       </div>
 
       <div>
         <h4 class="footer-col__title">Quick Links</h4>
         <div class="footer-col__list">
+          <?php $__empty_1 = true; $__currentLoopData = ($footerSettings['footer_quick_links'] ?? []); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+          <a href="<?php echo e($link['url']); ?>" class="footer-col__link"><?php echo e($link['label']); ?></a>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
           <a href="<?php echo e(route('about')); ?>" class="footer-col__link">About Us</a>
           <a href="<?php echo e(route('doctors')); ?>" class="footer-col__link">Team</a>
           <a href="<?php echo e(route('services')); ?>" class="footer-col__link">Services</a>
           <a href="<?php echo e(route('contact')); ?>" class="footer-col__link">Contact Us</a>
           <a href="<?php echo e(route('appointment')); ?>" class="footer-col__link">Appointment</a>
+          <?php endif; ?>
         </div>
       </div>
     </div>
@@ -105,7 +120,8 @@
 
 
     <div class="footer-bottom">
-      &copy; <?php echo e(date('Y')); ?> <a href="#">Smart Freamework</a> Theme. All Rights Reserved.
+      &copy; <?php echo e(date('Y')); ?> <?php echo e($footerSettings['footer_copyright_text'] ?? 'Smart Freamework Theme. All Rights Reserved.'); ?>
+
     </div>
   </footer>
 <?php /**PATH D:\laragon-new\laragon\www\hospital-management\resources\views\components\frontend\footer.blade.php ENDPATH**/ ?>

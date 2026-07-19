@@ -35,9 +35,9 @@ class HandleInertiaRequests extends Middleware
                 'error'   => fn () => $request->session()->get('error'),
             ],
             'site' => fn () => [
-                'name'      => GlobalSetting::get('site_name', 'Hotel Beach Way'),
+                'name'      => GlobalSetting::get('site_name', config('app.name')),
                 'logo'      => GlobalSetting::get('header_logo'),
-                'tagline'   => GlobalSetting::get('site_tagline', 'Your Perfect Beachside Escape'),
+                'tagline'   => GlobalSetting::get('site_tagline', 'Compassionate Care, Trusted Doctors'),
                 'phone'     => GlobalSetting::get('contact_phone', GlobalSetting::get('header_phone', '')),
                 'email'     => GlobalSetting::get('contact_email', GlobalSetting::get('header_email', '')),
                 'address'   => GlobalSetting::get('contact_address', ''),

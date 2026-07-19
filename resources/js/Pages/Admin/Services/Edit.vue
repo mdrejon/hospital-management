@@ -12,7 +12,7 @@
             </div>
 
             <form @submit.prevent="submit" class="space-y-6">
-                <ServiceForm :form="form" :existing="service" @image-change="onImageChange" />
+                <ServiceForm :form="form" :existing="service" :doctors="doctors" @image-change="onImageChange" />
 
                 <div class="flex justify-end">
                     <button type="submit" :disabled="form.processing"
@@ -32,6 +32,7 @@ import ServiceForm from './ServiceForm.vue';
 
 const props = defineProps({
     service: { type: Object, required: true },
+    doctors: { type: Array, default: () => [] },
 });
 
 const s = props.service;
@@ -42,17 +43,16 @@ const form = useForm({
     image:           null,
     short_desc:      s.short_desc     ?? '',
     description:     s.description    ?? '',
-    benefits_title:  s.benefits_title ?? 'We Give The Best Services',
-    benefits_text:   s.benefits_text  ?? '',
-    gallery_image_1: null,
-    gallery_image_2: null,
     features:        Array.isArray(s.features) ? [...s.features] : [],
     faqs:            Array.isArray(s.faqs)     ? s.faqs.map(f => ({ ...f })) : [],
-    btn_text:        s.btn_text       ?? 'View Services',
-    btn_url:         s.btn_url        ?? '#',
+    doctor_ids:      Array.isArray(s.doctor_ids) ? [...s.doctor_ids] : [],
     is_featured:     s.is_featured    ?? false,
     sort_order:      s.sort_order     ?? 0,
     is_active:       s.is_active      ?? true,
+    seo_title:        s.seo_title       ?? '',
+    seo_description:  s.seo_description ?? '',
+    seo_keywords:      s.seo_keywords    ?? '',
+    seo_og_image:      null,
 });
 
 function onImageChange({ field, file }) {

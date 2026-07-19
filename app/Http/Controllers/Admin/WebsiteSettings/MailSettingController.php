@@ -86,14 +86,14 @@ class MailSettingController extends Controller
 
         try {
             Mail::raw(
-                "This is a test email from Hotel Beach Way admin panel.\n\nIf you received this, your SMTP configuration is working correctly.",
+                "This is a test email from the " . config('app.name') . " admin panel.\n\nIf you received this, your SMTP configuration is working correctly.",
                 function ($msg) use ($request) {
                     $fromAddress = GlobalSetting::get('mail_from_address') ?? config('mail.from.address');
                     $fromName    = GlobalSetting::get('mail_from_name')    ?? config('mail.from.name');
 
                     $msg->to($request->test_email)
                         ->from($fromAddress, $fromName)
-                        ->subject('Test Email — Hotel Beach Way');
+                        ->subject('Test Email — ' . config('app.name'));
                 }
             );
 

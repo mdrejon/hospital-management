@@ -8,11 +8,10 @@ class Service extends Model
 {
     protected $fillable = [
         'title', 'slug', 'icon_svg', 'image', 'short_desc',
-        'description', 'benefits_title', 'benefits_text',
-        'gallery_image_1', 'gallery_image_2',
+        'description',
         'features', 'faqs',
-        'btn_text', 'btn_url',
         'is_featured', 'sort_order', 'is_active',
+        'seo_title', 'seo_description', 'seo_keywords', 'seo_og_image',
     ];
 
     protected $casts = [
@@ -32,5 +31,10 @@ class Service extends Model
     {
         return $query->where('is_active', true)->where('is_featured', true)
             ->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function doctors()
+    {
+        return $this->belongsToMany(Doctor::class);
     }
 }

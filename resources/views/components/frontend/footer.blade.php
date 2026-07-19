@@ -14,7 +14,7 @@
           </span>
           <div>
             <p class="footer-contact__label">Contact Us</p>
-            <p class="footer-contact__value">1 123 456 7890</p>
+            <p class="footer-contact__value">{{ $footerSettings['footer_phone_1'] ?? '1 123 456 7890' }}</p>
           </div>
         </div>
 
@@ -27,7 +27,7 @@
           </span>
           <div>
             <p class="footer-contact__label">Send us a Mail</p>
-            <p class="footer-contact__value">sales@smartfreamework.com</p>
+            <p class="footer-contact__value">{{ $footerSettings['footer_email_1'] ?? 'sales@smartfreamework.com' }}</p>
           </div>
         </div>
 
@@ -40,7 +40,7 @@
           </span>
           <div>
             <p class="footer-contact__label">Opening Time</p>
-            <p class="footer-contact__value">Mon-Thu: 8:00am-5:00pm Fri: 8:00am-1:00pm</p>
+            <p class="footer-contact__value">{{ $footerSettings['footer_opening_time'] ?? 'Mon-Thu: 8:00am-5:00pm Fri: 8:00am-1:00pm' }}</p>
           </div>
         </div>
       </div>
@@ -49,55 +49,69 @@
     <div class="footer-columns">
       <div class="footer-about">
         <a href="{{ route('home') }}" class="site-logo text-navy">
-          <img src="{{ asset('assets/img/logo.png') }}" alt="Sitakund Modern Hospital Ltd." height="70" style="height:70px;width:auto" />
+          <img src="{{ !empty($footerSettings['footer_logo']) ? asset('storage/' . $footerSettings['footer_logo']) : asset('assets/img/logo.png') }}" alt="Sitakund Modern Hospital Ltd." height="70" style="height:70px;width:auto" />
         </a>
         <p class="footer-about__desc">
-          ClinicMaster Ipsum Dolor Sit Amet, Consectuer Adipiscing Elit, Sed Diam
-          Nonummy Nibh Euismod Tincidunt Ut Laoreet Dolore Agna Aliquam Erat. Wisi
-          Enim Ad Minim Veniam, Quis Tation. Sit Amet, Consec Tetuer. Ipsum Dolor
+          {{ $footerSettings['footer_brand_description'] ?? "ClinicMaster Ipsum Dolor Sit Amet, Consectuer Adipiscing Elit, Sed Diam Nonummy Nibh Euismod Tincidunt Ut Laoreet Dolore Agna Aliquam Erat. Wisi Enim Ad Minim Veniam, Quis Tation. Sit Amet, Consec Tetuer. Ipsum Dolor" }}
         </p>
       </div>
 
       <div>
         <h4 class="footer-col__title">Our Services</h4>
         <div class="footer-col__list">
-          <a href="{{ route('service-details') }}" class="footer-col__link">Angioplasty</a>
-          <a href="{{ route('service-details') }}" class="footer-col__link">Cardiology</a>
-          <a href="{{ route('service-details') }}" class="footer-col__link">Dental</a>
-          <a href="{{ route('service-details') }}" class="footer-col__link">Endocrinology</a>
-          <a href="{{ route('service-details') }}" class="footer-col__link">Eye Care</a>
+          @forelse(($footerSettings['footer_service_links'] ?? []) as $link)
+          <a href="{{ $link['url'] }}" class="footer-col__link">{{ $link['label'] }}</a>
+          @empty
+          <a href="{{ route('services') }}" class="footer-col__link">Angioplasty</a>
+          <a href="{{ route('services') }}" class="footer-col__link">Cardiology</a>
+          <a href="{{ route('services') }}" class="footer-col__link">Dental</a>
+          <a href="{{ route('services') }}" class="footer-col__link">Endocrinology</a>
+          <a href="{{ route('services') }}" class="footer-col__link">Eye Care</a>
+          @endforelse
         </div>
       </div>
 
       <div>
         <h4 class="footer-col__title">Our Stores</h4>
         <div class="footer-col__list">
+          @forelse(($footerSettings['footer_store_links'] ?? []) as $link)
+          <a href="{{ $link['url'] }}" class="footer-col__link">{{ $link['label'] }}</a>
+          @empty
           <a href="{{ route('contact') }}#locations" class="footer-col__link">New York</a>
           <a href="{{ route('contact') }}#locations" class="footer-col__link">London SF</a>
           <a href="{{ route('contact') }}#locations" class="footer-col__link">Edinburgh</a>
           <a href="{{ route('contact') }}#locations" class="footer-col__link">Los Angeles</a>
           <a href="{{ route('contact') }}#locations" class="footer-col__link">Las Vegas</a>
+          @endforelse
         </div>
       </div>
 
       <div>
         <h4 class="footer-col__title">Useful Links</h4>
         <div class="footer-col__list">
-          <a href="{{ route('privacy-policy') }}" class="footer-col__link">Privacy Policy</a>
-          <a href="{{ route('terms-conditions') }}" class="footer-col__link">Terms &amp; Conditions</a>
+          @forelse(($footerSettings['footer_useful_links'] ?? []) as $link)
+          <a href="{{ $link['url'] }}" class="footer-col__link">{{ $link['label'] }}</a>
+          @empty
+          <a href="{{ url('/privacy-policy') }}" class="footer-col__link">Privacy Policy</a>
+          <a href="{{ url('/terms-conditions') }}" class="footer-col__link">Terms &amp; Conditions</a>
           <a href="{{ route('contact') }}" class="footer-col__link">Contact Us</a>
           <a href="{{ route('blog-list') }}" class="footer-col__link">Latest News</a>
+          @endforelse
         </div>
       </div>
 
       <div>
         <h4 class="footer-col__title">Quick Links</h4>
         <div class="footer-col__list">
+          @forelse(($footerSettings['footer_quick_links'] ?? []) as $link)
+          <a href="{{ $link['url'] }}" class="footer-col__link">{{ $link['label'] }}</a>
+          @empty
           <a href="{{ route('about') }}" class="footer-col__link">About Us</a>
           <a href="{{ route('doctors') }}" class="footer-col__link">Team</a>
           <a href="{{ route('services') }}" class="footer-col__link">Services</a>
           <a href="{{ route('contact') }}" class="footer-col__link">Contact Us</a>
           <a href="{{ route('appointment') }}" class="footer-col__link">Appointment</a>
+          @endforelse
         </div>
       </div>
     </div>
@@ -105,6 +119,6 @@
 
 
     <div class="footer-bottom">
-      &copy; {{ date('Y') }} <a href="#">Smart Freamework</a> Theme. All Rights Reserved.
+      &copy; {{ date('Y') }} {{ $footerSettings['footer_copyright_text'] ?? 'Smart Freamework Theme. All Rights Reserved.' }}
     </div>
   </footer>

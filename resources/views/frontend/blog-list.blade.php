@@ -1,13 +1,33 @@
 @extends('layouts.frontend')
 
-@section('title', 'Blog | ClinicMaster Medical & Health Care Services')
+@php
+  $heroTitle = $blog['blog_hero_title'] ?? 'Our Blog';
+  $heroImage = !empty($blog['blog_hero_image']) ? asset('storage/' . $blog['blog_hero_image']) : asset('assets/img/breadcumb.webp');
+  $seoTitle  = $blog['blog_seo_title'] ?? 'Blog | ClinicMaster Medical & Health Care Services';
+  $seoDesc   = $blog['blog_seo_description'] ?? 'Read the latest health tips, medical insights, and hospital news from ClinicMaster.';
+  $fallbackImages = [
+    asset('assets/img/sr-1-3.jpg'), asset('assets/img/projects-3.jpg'), asset('assets/img/sr-1-2.jpg'),
+    asset('assets/img/appoinment.jpg'), asset('assets/img/about-image.webp'), asset('assets/img/slider-1.3.jpg'),
+  ];
+@endphp
+
+@section('title', $seoTitle)
+@section('meta_description', $seoDesc)
+@section('og_title', $seoTitle)
+@section('og_description', $seoDesc)
+@if(!empty($blog['blog_seo_keywords']))
+@section('meta_keywords', $blog['blog_seo_keywords'])
+@endif
+@if(!empty($blog['blog_seo_og_image']))
+@section('og_image', asset('storage/' . $blog['blog_seo_og_image']))
+@endif
 
 @section('content')
 
     <!-- ===================== Breadcrumb / Page header ===================== -->
     <section class="page-header">
       <div class="page-header__media">
-        <img src="{{ asset('assets/img/breadcumb.webp') }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
+        <img src="{{ $heroImage }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
         <span class="page-header__overlay"></span>
       </div>
 
@@ -29,7 +49,7 @@
       </div>
 
       <div class="page-header__inner">
-        <h1 class="page-header__title">Our Blog</h1>
+        <h1 class="page-header__title">{{ $heroTitle }}</h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
           <a href="{{ route('home') }}">Home</a>
           <span class="page-header__breadcrumb-sep">
@@ -51,172 +71,93 @@
       </a>
     </section>
 
-    <!-- ===================== Services ===================== -->
-    <!-- ===================== Doctors ===================== -->
     <!-- ===================== Blog List ===================== -->
     <section class="blog-list">
       <div class="container mx-auto">
         <div class="blog-list__grid">
           <div class="blog-list__posts">
-            <!-- Aging and Longevity -->
-            <article class="blog-post-card">
-              <div class="blog-post-card__media">
-                <img src="{{ asset('assets/img/sr-1-3.jpg') }}" alt="Doctor reading a book" class="blog-post-card__img" />
-              </div>
-              <div>
-                <p class="blog-post-card__meta">
-                  July 14, 2025
-                  <span class="blog-post-card__meta-dot"></span>
-                  BY <span class="blog-post-card__meta-author">Kelly Smith</span>
-                </p>
-                <h3 class="blog-post-card__title">Aging and Longevity: Exploring the Science of Healthy A ...</h3>
-                <p class="blog-post-card__desc">
-                  Explore how science is redefining aging with breakthroughs in health and longevity. Learn simple,
-                  effective habits to help ...
-                </p>
-                <a href="{{ route('blog-details') }}" class="blog-post-card__btn">
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
 
-            <!-- Cardiovascular Disease -->
-            <article class="blog-post-card">
-              <div class="blog-post-card__media">
-                <img src="{{ asset('assets/img/projects-3.jpg') }}" alt="Doctor holding a heart model" class="blog-post-card__img" />
-              </div>
-              <div>
-                <p class="blog-post-card__meta">
-                  July 14, 2025
-                  <span class="blog-post-card__meta-dot"></span>
-                  BY <span class="blog-post-card__meta-author">Kelly Smith</span>
-                </p>
-                <h3 class="blog-post-card__title">Cardiovascular Disease: New Treatments and Preventative ...</h3>
+            @if($blogs->isEmpty())
+              @if($activeCategory || $activeTag || $searchQuery)
                 <p class="blog-post-card__desc">
-                  Heart disease may be common, but it's increasingly preventable. Explore new treatments and
-                  strategies that support a longer ...
+                  No posts found for your search/filter.
+                  <a href="{{ route('blog-list') }}">Clear filters</a>
                 </p>
-                <a href="{{ route('blog-details') }}" class="blog-post-card__btn">
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
+              @else
+                @php
+                  $demoPosts = [
+                    ['image' => asset('assets/img/sr-1-3.jpg'),     'alt' => 'Doctor reading a book',              'date' => 'July 14, 2025', 'title' => 'Aging and Longevity: Exploring the Science of Healthy A ...',      'desc' => 'Explore how science is redefining aging with breakthroughs in health and longevity. Learn simple, effective habits to help ...'],
+                    ['image' => asset('assets/img/projects-3.jpg'), 'alt' => 'Doctor holding a heart model',       'date' => 'July 14, 2025', 'title' => 'Cardiovascular Disease: New Treatments and Preventative ...',      'desc' => "Heart disease may be common, but it's increasingly preventable. Explore new treatments and strategies that support a longer ..."],
+                    ['image' => asset('assets/img/sr-1-2.jpg'),     'alt' => 'Therapist comforting a patient',     'date' => 'July 14, 2025', 'title' => 'Mental Health in the Modern World: Breaking the Stigma ...',       'desc' => 'Mental health is more visible than ever, but stigma still lingers. Explore how awareness, access, and compassion are ...'],
+                    ['image' => asset('assets/img/appoinment.jpg'), 'alt' => 'Doctor consulting with a patient',   'date' => 'July 9, 2025',  'title' => 'Strategies for Balancing Business Demands with Optimal ...',       'desc' => 'Running a practice while delivering great care is a balancing act. Discover practical strategies for managing both without ...'],
+                    ['image' => asset('assets/img/about-image.webp'), 'alt' => 'Two doctors smiling in a clinic',  'date' => 'July 14, 2025', 'title' => 'The Impact of Artificial Intelligence on Medical.',               'desc' => 'AI is transforming how we diagnose, treat, and manage health. Discover the groundbreaking role it plays in the ...'],
+                    ['image' => asset('assets/img/slider-1.3.jpg'), 'alt' => 'Medical team wearing masks',        'date' => 'July 14, 2025', 'title' => 'The Role of Nutrition in Preventative Medicine',                   'desc' => "Nutrition isn't just about diet—it's a pillar of disease prevention. Explore how the right foods can protect your ..."],
+                  ];
+                @endphp
+                @foreach($demoPosts as $p)
+                <article class="blog-post-card">
+                  <div class="blog-post-card__media">
+                    <img src="{{ $p['image'] }}" alt="{{ $p['alt'] }}" class="blog-post-card__img" />
+                  </div>
+                  <div>
+                    <p class="blog-post-card__meta">
+                      {{ $p['date'] }}
+                      <span class="blog-post-card__meta-dot"></span>
+                      BY <span class="blog-post-card__meta-author">ClinicMaster Team</span>
+                    </p>
+                    <h3 class="blog-post-card__title">{{ $p['title'] }}</h3>
+                    <p class="blog-post-card__desc">{{ $p['desc'] }}</p>
+                    <a href="#" class="blog-post-card__btn">
+                      Read More
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+                @endforeach
+              @endif
+            @else
+              @foreach($blogs as $post)
+              <article class="blog-post-card">
+                <div class="blog-post-card__media">
+                  <img src="{{ $post->feature_image ? asset('storage/' . $post->feature_image) : $fallbackImages[$loop->index % count($fallbackImages)] }}" alt="{{ $post->title }}" class="blog-post-card__img" />
+                </div>
+                <div>
+                  <p class="blog-post-card__meta">
+                    {{ ($post->published_at ?: $post->created_at)->format('F j, Y') }}
+                    <span class="blog-post-card__meta-dot"></span>
+                    BY <span class="blog-post-card__meta-author">{{ $post->author_name ?: 'ClinicMaster Team' }}</span>
+                  </p>
+                  <h3 class="blog-post-card__title">{{ $post->title }}</h3>
+                  <p class="blog-post-card__desc">
+                    {{ \Illuminate\Support\Str::limit($post->excerpt ?: strip_tags($post->content ?? ''), 140) }}
+                  </p>
+                  <a href="{{ route('blog-details', $post->slug) }}" class="blog-post-card__btn">
+                    Read More
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
+              </article>
+              @endforeach
 
-            <!-- Mental Health in the Modern World -->
-            <article class="blog-post-card">
-              <div class="blog-post-card__media">
-                <img src="{{ asset('assets/img/sr-1-2.jpg') }}" alt="Therapist comforting a patient" class="blog-post-card__img" />
-              </div>
-              <div>
-                <p class="blog-post-card__meta">
-                  July 14, 2025
-                  <span class="blog-post-card__meta-dot"></span>
-                  BY <span class="blog-post-card__meta-author">Kelly Smith</span>
-                </p>
-                <h3 class="blog-post-card__title">Mental Health in the Modern World: Breaking the Stigma ...</h3>
-                <p class="blog-post-card__desc">
-                  Mental health is more visible than ever, but stigma still lingers. Explore how awareness, access,
-                  and compassion are ...
-                </p>
-                <a href="{{ route('blog-details') }}" class="blog-post-card__btn">
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
+              @if($blogs->hasMorePages())
+              <a href="{{ $blogs->nextPageUrl() }}" class="blog-list__load-more">Load More</a>
+              @endif
+            @endif
 
-            <!-- Strategies for Balancing Business Demands -->
-            <article class="blog-post-card">
-              <div class="blog-post-card__media">
-                <img src="{{ asset('assets/img/appoinment.jpg') }}" alt="Doctor consulting with a patient" class="blog-post-card__img" />
-              </div>
-              <div>
-                <p class="blog-post-card__meta">
-                  July 9, 2025
-                  <span class="blog-post-card__meta-dot"></span>
-                  BY <span class="blog-post-card__meta-author">Kelly Smith</span>
-                </p>
-                <h3 class="blog-post-card__title">Strategies for Balancing Business Demands with Optimal ...</h3>
-                <p class="blog-post-card__desc">
-                  Running a practice while delivering great care is a balancing act. Discover practical strategies
-                  for managing both without ...
-                </p>
-                <a href="{{ route('blog-details') }}" class="blog-post-card__btn">
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
-
-            <!-- The Impact of Artificial Intelligence on Medical -->
-            <article class="blog-post-card">
-              <div class="blog-post-card__media">
-                <img src="{{ asset('assets/img/about-image.webp') }}" alt="Two doctors smiling in a clinic" class="blog-post-card__img" />
-              </div>
-              <div>
-                <p class="blog-post-card__meta">
-                  July 14, 2025
-                  <span class="blog-post-card__meta-dot"></span>
-                  BY <span class="blog-post-card__meta-author">Kelly Smith</span>
-                </p>
-                <h3 class="blog-post-card__title">The Impact of Artificial Intelligence on Medical.</h3>
-                <p class="blog-post-card__desc">
-                  AI is transforming how we diagnose, treat, and manage health. Discover the groundbreaking role it
-                  plays in the ...
-                </p>
-                <a href="{{ route('blog-details') }}" class="blog-post-card__btn">
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
-
-            <!-- The Role of Nutrition in Preventative Medicine -->
-            <article class="blog-post-card">
-              <div class="blog-post-card__media">
-                <img src="{{ asset('assets/img/slider-1.3.jpg') }}" alt="Medical team wearing masks" class="blog-post-card__img" />
-              </div>
-              <div>
-                <p class="blog-post-card__meta">
-                  July 14, 2025
-                  <span class="blog-post-card__meta-dot"></span>
-                  BY <span class="blog-post-card__meta-author">Kelly Smith</span>
-                </p>
-                <h3 class="blog-post-card__title">The Role of Nutrition in Preventative Medicine</h3>
-                <p class="blog-post-card__desc">
-                  Nutrition isn't just about diet—it's a pillar of disease prevention. Explore how the right foods
-                  can protect your ...
-                </p>
-                <a href="{{ route('blog-details') }}" class="blog-post-card__btn">
-                  Read More
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
-
-            <button type="button" class="blog-list__load-more">Load More</button>
           </div>
 
           <aside class="blog-sidebar" data-sticky-sidebar>
             <!-- Search -->
             <div class="blog-sidebar__card">
               <h3 class="blog-sidebar__title">Search</h3>
-              <form class="blog-sidebar__search">
-                <input type="text" class="blog-sidebar__search-input" placeholder="Search.." />
+              <form class="blog-sidebar__search" action="{{ route('blog-list') }}" method="GET">
+                @if($activeCategory)<input type="hidden" name="category" value="{{ $activeCategory }}" />@endif
+                @if($activeTag)<input type="hidden" name="tag" value="{{ $activeTag }}" />@endif
+                <input type="text" name="q" value="{{ $searchQuery }}" class="blog-sidebar__search-input" placeholder="Search.." />
                 <button type="submit" class="blog-sidebar__search-btn" aria-label="Search">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
@@ -230,6 +171,21 @@
             <div class="blog-sidebar__card">
               <h3 class="blog-sidebar__title">Category</h3>
               <div class="blog-sidebar__cat-list">
+                @forelse($categories as $cat)
+                <a href="{{ route('blog-list', ['category' => $cat->slug]) }}"
+                  class="blog-sidebar__cat-link {{ $activeCategory === $cat->slug ? 'is-active' : '' }}">
+                  <span class="blog-sidebar__cat-left">
+                    <span class="blog-sidebar__cat-arrow">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                    {{ $cat->name }}
+                  </span>
+                  <span class="blog-sidebar__cat-count">({{ $cat->blogs_count }})</span>
+                </a>
+                @empty
+                @foreach([['Acupressure',4],['Walking',3],['Food',3],['Therapy',5],['Health',1],['Allgemein',3],['Blood',2],['Mental Health',2]] as [$name, $count])
                 <a href="#" class="blog-sidebar__cat-link">
                   <span class="blog-sidebar__cat-left">
                     <span class="blog-sidebar__cat-arrow">
@@ -237,87 +193,12 @@
                         <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
                     </span>
-                    Acupressure
+                    {{ $name }}
                   </span>
-                  <span class="blog-sidebar__cat-count">(4)</span>
+                  <span class="blog-sidebar__cat-count">({{ $count }})</span>
                 </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Walking
-                  </span>
-                  <span class="blog-sidebar__cat-count">(3)</span>
-                </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Food
-                  </span>
-                  <span class="blog-sidebar__cat-count">(3)</span>
-                </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Therapy
-                  </span>
-                  <span class="blog-sidebar__cat-count">(5)</span>
-                </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Health
-                  </span>
-                  <span class="blog-sidebar__cat-count">(1)</span>
-                </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Allgemein
-                  </span>
-                  <span class="blog-sidebar__cat-count">(3)</span>
-                </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Blood
-                  </span>
-                  <span class="blog-sidebar__cat-count">(2)</span>
-                </a>
-                <a href="#" class="blog-sidebar__cat-link">
-                  <span class="blog-sidebar__cat-left">
-                    <span class="blog-sidebar__cat-arrow">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                    Mental Health
-                  </span>
-                  <span class="blog-sidebar__cat-count">(2)</span>
-                </a>
+                @endforeach
+                @endforelse
               </div>
             </div>
 
@@ -325,27 +206,29 @@
             <div class="blog-sidebar__card">
               <h3 class="blog-sidebar__title">Latest Post</h3>
               <div class="blog-sidebar__latest-list">
-                <a href="{{ route('blog-details') }}" class="blog-sidebar__latest-item">
-                  <img src="{{ asset('assets/img/projects-3.jpg') }}" alt="" class="blog-sidebar__latest-thumb" />
+                @forelse($latestPosts as $lp)
+                <a href="{{ route('blog-details', $lp->slug) }}" class="blog-sidebar__latest-item">
+                  <img src="{{ $lp->feature_image ? asset('storage/' . $lp->feature_image) : asset('assets/img/sr-1-3.jpg') }}" alt="" class="blog-sidebar__latest-thumb" />
                   <div>
-                    <p class="blog-sidebar__latest-date">July 14, 2025</p>
-                    <p class="blog-sidebar__latest-title">Cardiovascular Disease: New Treatments a ...</p>
+                    <p class="blog-sidebar__latest-date">{{ ($lp->published_at ?: $lp->created_at)->format('F j, Y') }}</p>
+                    <p class="blog-sidebar__latest-title">{{ \Illuminate\Support\Str::limit($lp->title, 38) }}</p>
                   </div>
                 </a>
-                <a href="{{ route('blog-details') }}" class="blog-sidebar__latest-item">
-                  <img src="{{ asset('assets/img/sr-1-3.jpg') }}" alt="" class="blog-sidebar__latest-thumb" />
+                @empty
+                @foreach([
+                  ['img' => asset('assets/img/projects-3.jpg'), 'date' => 'July 14, 2025', 'title' => 'Cardiovascular Disease: New Treatments a ...'],
+                  ['img' => asset('assets/img/sr-1-3.jpg'),     'date' => 'July 14, 2025', 'title' => 'Aging and Longevity: Exploring the Scien ...'],
+                  ['img' => asset('assets/img/sr-1-2.jpg'),     'date' => 'July 14, 2025', 'title' => 'Mental Health in the Modern World: Break ...'],
+                ] as $lp)
+                <a href="#" class="blog-sidebar__latest-item">
+                  <img src="{{ $lp['img'] }}" alt="" class="blog-sidebar__latest-thumb" />
                   <div>
-                    <p class="blog-sidebar__latest-date">July 14, 2025</p>
-                    <p class="blog-sidebar__latest-title">Aging and Longevity: Exploring the Scien ...</p>
+                    <p class="blog-sidebar__latest-date">{{ $lp['date'] }}</p>
+                    <p class="blog-sidebar__latest-title">{{ $lp['title'] }}</p>
                   </div>
                 </a>
-                <a href="{{ route('blog-details') }}" class="blog-sidebar__latest-item">
-                  <img src="{{ asset('assets/img/sr-1-2.jpg') }}" alt="" class="blog-sidebar__latest-thumb" />
-                  <div>
-                    <p class="blog-sidebar__latest-date">July 14, 2025</p>
-                    <p class="blog-sidebar__latest-title">Mental Health in the Modern World: Break ...</p>
-                  </div>
-                </a>
+                @endforeach
+                @endforelse
               </div>
             </div>
 
@@ -353,12 +236,13 @@
             <div class="blog-sidebar__card">
               <h3 class="blog-sidebar__title">Tags</h3>
               <div class="blog-sidebar__tags">
-                <a href="#" class="blog-sidebar__tag">Food</a>
-                <a href="#" class="blog-sidebar__tag">Walking</a>
-                <a href="#" class="blog-sidebar__tag">Mental Health</a>
-                <a href="#" class="blog-sidebar__tag">Acupressure</a>
-                <a href="#" class="blog-sidebar__tag">Health</a>
-                <a href="#" class="blog-sidebar__tag">Blood</a>
+                @forelse($tags as $t)
+                <a href="{{ route('blog-list', ['tag' => $t['name']]) }}" class="blog-sidebar__tag {{ $activeTag === $t['name'] ? 'is-active' : '' }}">{{ $t['name'] }}</a>
+                @empty
+                @foreach(['Food','Walking','Mental Health','Acupressure','Health','Blood'] as $tagName)
+                <a href="#" class="blog-sidebar__tag">{{ $tagName }}</a>
+                @endforeach
+                @endforelse
               </div>
             </div>
           </aside>

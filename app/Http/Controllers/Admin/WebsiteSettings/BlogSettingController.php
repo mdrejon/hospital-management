@@ -7,12 +7,11 @@ use App\Models\GlobalSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class BlogSettingController extends Controller
 {
     private array $keys = [
+        'blog_home_title',
         'blog_hero_image',
         'blog_hero_title',
         'blog_seo_title',
@@ -21,7 +20,8 @@ class BlogSettingController extends Controller
         'blog_seo_og_image',
     ];
 
-    public function edit(): Response
+    /** Used by Admin\BlogController::index() to feed the "Page Settings" tab. */
+    public function currentSettings(): array
     {
         $settings = GlobalSetting::whereIn('key', $this->keys)
             ->pluck('value', 'key')
@@ -31,14 +31,13 @@ class BlogSettingController extends Controller
             $settings[$key] ??= null;
         }
 
-        return Inertia::render('Admin/WebsiteSettings/Blog/Edit', [
-            'settings' => $settings,
-        ]);
+        return $settings;
     }
 
     public function update(Request $request): RedirectResponse
     {
         $data = $request->validate([
+            'blog_home_title'      => 'nullable|string',
             'blog_hero_title'      => 'nullable|string',
             'blog_seo_title'       => 'nullable|string',
             'blog_seo_description' => 'nullable|string',

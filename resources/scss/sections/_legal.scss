@@ -35,3 +35,40 @@
 .legal__list {
   @apply mt-3 list-disc space-y-2 pl-5 text-[15px] leading-relaxed text-muted;
 }
+
+// Generic prose styling for rich-text content coming from the admin "Pages"
+// CMS editor (TipTap output: raw h2/p/ul/strong/em tags, no BEM classes).
+.page-content {
+  > p {
+    @apply mt-4 text-[15px] leading-relaxed text-muted;
+  }
+
+  > h2 {
+    @apply mt-10 text-2xl font-extrabold text-navy;
+  }
+
+  > h3 {
+    @apply mt-8 text-xl font-bold text-navy;
+  }
+
+  > ul,
+  > ol {
+    @apply mt-3 space-y-2 pl-5 text-[15px] leading-relaxed text-muted;
+  }
+
+  > ul {
+    @apply list-disc;
+  }
+
+  > ol {
+    @apply list-decimal;
+  }
+
+  strong {
+    @apply font-bold text-navy;
+  }
+
+  a {
+    @apply text-brand-cyan underline;
+  }
+}

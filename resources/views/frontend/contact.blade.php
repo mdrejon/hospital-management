@@ -1,13 +1,29 @@
 @extends('layouts.frontend')
 
-@section('title', 'Contact Us | ClinicMaster Medical & Health Care Services')
+@php
+  $heroTitle = $contact['contact_hero_title'] ?? 'Contact Us';
+  $heroImage = !empty($contact['contact_hero_image']) ? asset('storage/' . $contact['contact_hero_image']) : asset('assets/img/breadcumb.webp');
+  $seoTitle  = $contact['contact_seo_title'] ?? 'Contact Us | ClinicMaster Medical & Health Care Services';
+  $seoDesc   = $contact['contact_seo_description'] ?? "Get in touch with ClinicMaster. We're happy to help you schedule an appointment or answer your questions.";
+@endphp
+
+@section('title', $seoTitle)
+@section('meta_description', $seoDesc)
+@section('og_title', $seoTitle)
+@section('og_description', $seoDesc)
+@if(!empty($contact['contact_seo_keywords']))
+@section('meta_keywords', $contact['contact_seo_keywords'])
+@endif
+@if(!empty($contact['contact_seo_og_image']))
+@section('og_image', asset('storage/' . $contact['contact_seo_og_image']))
+@endif
 
 @section('content')
 
     <!-- ===================== Breadcrumb / Page header ===================== -->
     <section class="page-header">
       <div class="page-header__media">
-        <img src="{{ asset('assets/img/breadcumb.webp') }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
+        <img src="{{ $heroImage }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
         <span class="page-header__overlay"></span>
       </div>
 
@@ -29,7 +45,7 @@
       </div>
 
       <div class="page-header__inner">
-        <h1 class="page-header__title">Contact Us</h1>
+        <h1 class="page-header__title">{{ $heroTitle }}</h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
           <a href="{{ route('home') }}">Home</a>
           <span class="page-header__breadcrumb-sep">
@@ -56,10 +72,9 @@
       <div class="container mx-auto">
         <div class="contact__grid">
           <div>
-            <h2 class="contact__title">Connect With Us For Your Healthcare Needs</h2>
+            <h2 class="contact__title">{{ $contact['contact_title'] ?? 'Connect With Us For Your Healthcare Needs' }}</h2>
             <p class="contact__desc">
-              Reach out for support, feedback, or to schedule an appointment. Fill out the form, and we'll
-              promptly assist you and confirm your visit with our healthcare professionals.
+              {{ $contact['contact_desc'] ?? "Reach out for support, feedback, or to schedule an appointment. Fill out the form, and we'll promptly assist you and confirm your visit with our healthcare professionals." }}
             </p>
 
             <div class="contact__talk-row">
@@ -70,7 +85,7 @@
                   <img src="{{ asset('assets/img/team-3.png') }}" alt="" class="contact__avatar bg-rose-200" />
                   <img src="{{ asset('assets/img/team-3.png') }}" alt="" class="contact__avatar bg-teal-200" />
                 </span>
-                <span class="contact__talk-text">Talk to over 215 doctor</span>
+                <span class="contact__talk-text">{{ $contact['contact_talk_text'] ?? 'Talk to over 215 doctor' }}</span>
               </div>
               <a href="{{ route('doctors') }}" class="contact__talk-arrow" aria-label="See our doctors">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,7 +102,7 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2l-6.1 3.4 1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2l-6.1 3.4 1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
               </span>
-              <strong>(4.8)</strong> 12k ratings on google
+              <strong>({{ $contact['contact_rating_score'] ?? '4.8' }})</strong> {{ $contact['contact_rating_text'] ?? '12k ratings on google' }}
             </p>
 
             <div class="contact__cards">
@@ -100,7 +115,7 @@
                 </span>
                 <div>
                   <h3 class="contact-info-card__title">Address</h3>
-                  <p class="contact-info-card__text">234 Oak Drive, Villagetown, USA</p>
+                  <p class="contact-info-card__text">{{ trim(($footerSettings['footer_address_line1'] ?? '234 Oak Drive') . ', ' . ($footerSettings['footer_address_line2'] ?? 'Villagetown, USA'), ', ') }}</p>
                 </div>
               </div>
 
@@ -112,7 +127,7 @@
                 </span>
                 <div>
                   <h3 class="contact-info-card__title">Contact Us</h3>
-                  <p class="contact-info-card__text">1 123 456 7890</p>
+                  <p class="contact-info-card__text">{{ $footerSettings['footer_phone_1'] ?? '1 123 456 7890' }}</p>
                 </div>
               </div>
 
@@ -125,7 +140,7 @@
                 </span>
                 <div>
                   <h3 class="contact-info-card__title">Send us a Mail</h3>
-                  <p class="contact-info-card__text">sales@smartfreamework.com</p>
+                  <p class="contact-info-card__text">{{ $footerSettings['footer_email_1'] ?? 'sales@smartfreamework.com' }}</p>
                 </div>
               </div>
 
@@ -138,22 +153,31 @@
                 </span>
                 <div>
                   <h3 class="contact-info-card__title">Opening Time</h3>
-                  <p class="contact-info-card__text">Mon-Thu: 8:00am-5:00pm Fri: 8:00am-1:00pm</p>
+                  <p class="contact-info-card__text">{{ $footerSettings['footer_opening_time'] ?? 'Mon-Thu: 8:00am-5:00pm Fri: 8:00am-1:00pm' }}</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div class="contact__form-card">
-            <h2 class="contact__form-title">Make An Appointment Apply For Treatments</h2>
-            <form class="contact__form">
-              <input type="text" class="contact__field" placeholder="First Name" required />
-              <input type="text" class="contact__field" placeholder="Last Name" required />
-              <input type="email" class="contact__field" placeholder="Your Email" required />
-              <input type="tel" class="contact__field" placeholder="Phone Number" required />
-              <textarea class="contact__field contact__field--full" rows="6" placeholder="Message"></textarea>
+            <h2 class="contact__form-title">{{ $contact['contact_form_title'] ?? 'Make An Appointment Apply For Treatments' }}</h2>
+
+            @if(session('success'))
+            <p class="contact__form-note" style="color: #16a34a;">{{ session('success') }}</p>
+            @endif
+            @if($errors->any())
+            <p class="contact__form-note" style="color: #dc2626;">{{ $errors->first() }}</p>
+            @endif
+
+            <form class="contact__form" action="{{ route('contact.submit') }}" method="POST">
+              @csrf
+              <input type="text" name="first_name" value="{{ old('first_name') }}" class="contact__field" placeholder="First Name" required />
+              <input type="text" name="last_name" value="{{ old('last_name') }}" class="contact__field" placeholder="Last Name" />
+              <input type="email" name="email" value="{{ old('email') }}" class="contact__field" placeholder="Your Email" required />
+              <input type="tel" name="phone" value="{{ old('phone') }}" class="contact__field" placeholder="Phone Number" />
+              <textarea name="message" class="contact__field contact__field--full" rows="6" placeholder="Message">{{ old('message') }}</textarea>
               <button type="submit" class="contact__submit">
-                Appointment
+                {{ $contact['contact_form_btn_text'] ?? 'Appointment' }}
                 <span class="contact__submit-icon">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -169,13 +193,13 @@
     <!-- ===================== Location Map ===================== -->
     <section class="locations" id="locations">
       <div class="locations__map">
-        <a href="https://www.google.com/maps?q=123+Health+Way+Goodland+United+States" target="_blank" rel="noopener" class="locations__open">
+        <a href="{{ $contact['contact_map_open_url'] ?? 'https://www.google.com/maps?q=123+Health+Way+Goodland+United+States' }}" target="_blank" rel="noopener" class="locations__open">
           Open in Maps
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M14 4h6v6M20 4l-9 9M9 5H5a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
-        <iframe src="https://maps.google.com/maps?q=Jaipur&t=&z=11&ie=UTF8&iwloc=&output=embed" loading="lazy" title="Hospital location map" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="{{ $contact['contact_map_embed'] ?? 'https://maps.google.com/maps?q=Jaipur&t=&z=11&ie=UTF8&iwloc=&output=embed' }}" loading="lazy" title="Hospital location map" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </section>
 @endsection

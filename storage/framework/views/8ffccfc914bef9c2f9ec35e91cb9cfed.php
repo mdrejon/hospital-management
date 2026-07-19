@@ -1,14 +1,25 @@
-<?php $__env->startSection('title', 'Our History | ClinicMaster Medical & Health Care Services'); ?>
+<?php
+  $heroTitle = $hist['hist_hero_title'] ?? 'Our History';
+  $heroImage = !empty($hist['hist_hero_image']) ? asset('storage/' . $hist['hist_hero_image']) : asset('assets/img/breadcumb.webp');
+  $seoTitle  = $hist['hist_seo_title'] ?? 'Our History | ClinicMaster Medical & Health Care Services';
+  $seoDesc   = $hist['hist_seo_description'] ?? "From a humble clinic to the region's most trusted hospital — explore the milestones that shaped ClinicMaster.";
+?>
+
+<?php $__env->startSection('title', $seoTitle); ?>
+<?php $__env->startSection('meta_description', $seoDesc); ?>
+<?php $__env->startSection('og_title', $seoTitle); ?>
+<?php $__env->startSection('og_description', $seoDesc); ?>
+<?php if(!empty($hist['hist_seo_keywords'])): ?>
+<?php $__env->startSection('meta_keywords', $hist['hist_seo_keywords']); ?>
+<?php endif; ?>
+<?php if(!empty($hist['hist_seo_og_image'])): ?>
+<?php $__env->startSection('og_image', asset('storage/' . $hist['hist_seo_og_image'])); ?>
+<?php endif; ?>
 
 <?php $__env->startSection('content'); ?>
 
     <!-- ===================== Breadcrumb / Page header ===================== -->
     <section class="page-header">
-      <div class="page-header__media">
-        <img src="<?php echo e(asset('assets/img/breadcumb.webp')); ?>" alt="Team of ClinicMaster doctors" class="page-header__bg" />
-        <span class="page-header__overlay"></span>
-      </div>
-
       <span class="page-header__badge">24/7 Emergency Service</span>
 
       <div class="page-header__social">
@@ -26,8 +37,13 @@
         </a>
       </div>
 
+      <div class="page-header__media">
+        <img src="<?php echo e($heroImage); ?>" alt="Team of ClinicMaster doctors" class="page-header__bg" />
+        <span class="page-header__overlay"></span>
+      </div>
+
       <div class="page-header__inner">
-        <h1 class="page-header__title">Our History</h1>
+        <h1 class="page-header__title"><?php echo e($heroTitle); ?></h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
           <a href="<?php echo e(route('home')); ?>">Home</a>
           <span class="page-header__breadcrumb-sep">
@@ -35,7 +51,7 @@
               <path d="m7 6 5 6-5 6M13 6l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
-          <span>Our History</span>
+          <span><?php echo e($heroTitle); ?></span>
         </nav>
       </div>
 
@@ -50,131 +66,62 @@
     </section>
 
     <!-- ===================== Our History Timeline ===================== -->
+    <?php
+      $histFallbackImages = [asset('assets/img/slider-1.2.jpg'), asset('assets/img/sr-1-1.jpg'), asset('assets/img/sr-1-3.jpg'), asset('assets/img/projects-3.jpg'), asset('assets/img/slider-1.3.jpg')];
+      $timeline = !empty($hist['hist_timeline']) ? $hist['hist_timeline'] : [
+        ['year' => '2013', 'tag' => 'Foundation',   'heading' => 'Grand Opening — ClinicMaster Is Born',           'content' => 'With a vision to redefine community healthcare, ClinicMaster opened its doors on 36D Street, Brooklyn in 2013 with a small team of dedicated physicians.', 'badges' => ['30 Beds Launched', '24/7 Emergency', 'Outpatient Care'], 'image' => null, 'reversed' => false],
+        ['year' => '2016', 'tag' => 'Diagnostics',  'heading' => 'Advanced Diagnostic & Imaging Center',            'content' => 'In 2016, ClinicMaster unveiled a full diagnostic wing — bringing MRI, CT scanning and a modern pathology laboratory together under one roof.', 'badges' => ['MRI & CT Scan', 'Digital X-Ray', 'Pathology Lab'], 'image' => null, 'reversed' => true],
+        ['year' => '2019', 'tag' => 'Critical Care','heading' => 'Dedicated ICU & Cardiac Wing',                    'content' => 'A 20-bed intensive care unit and a specialised cardiac wing opened in 2019, giving the community round-the-clock access to life-saving critical care.', 'badges' => ['20-Bed ICU', 'Cardiology Dept', '24/7 CCU'], 'image' => null, 'reversed' => false],
+        ['year' => '2022', 'tag' => 'Innovation',   'heading' => 'Telemedicine & Digital Care Launch',              'content' => "ClinicMaster went digital in 2022 — online appointment booking, video consultations and e-prescriptions brought expert care into patients' homes.", 'badges' => ['Video Consultations', 'Online Booking', 'E-Prescriptions'], 'image' => null, 'reversed' => true],
+        ['year' => '2025', 'tag' => 'Recognition',  'heading' => 'Award-Winning Patient Care',                      'content' => 'Today ClinicMaster stands nationally accredited — a 150-bed hospital trusted by thousands of families and honoured for excellence in patient care.', 'badges' => ['150+ Beds', '75+ Specialists', 'National Accreditation'], 'image' => null, 'reversed' => false],
+      ];
+    ?>
     <section class="history">
       <div class="container mx-auto">
         <p class="history__eyebrow">
           <span class="history__eyebrow-dot"></span>
-          Our Journey
+          <?php echo e($hist['hist_badge'] ?? 'Our Journey'); ?>
+
           <span class="history__eyebrow-dot"></span>
         </p>
-        <h2 class="history__title">A Decade of Care, Compassion &amp; <span class="accent">Excellence</span></h2>
+        <h2 class="history__title"><?php echo e($hist['hist_title'] ?? 'A Decade of Care, Compassion & Excellence'); ?></h2>
         <p class="history__desc">
-          From a humble clinic to the region's most trusted hospital — explore the milestones
-          that shaped ClinicMaster into the award-winning healthcare destination it is today.
+          <?php echo e($hist['hist_desc'] ?? "From a humble clinic to the region's most trusted hospital — explore the milestones that shaped ClinicMaster into the award-winning healthcare destination it is today."); ?>
+
         </p>
 
         <div class="history__timeline">
           <span class="history__line" aria-hidden="true"></span>
 
-          <article class="history-item">
+          <?php $__currentLoopData = $timeline; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <article class="history-item <?php echo e(!empty($item['reversed']) ? 'history-item--reverse' : ''); ?>">
             <div class="history-item__media">
-              <img src="<?php echo e(asset('assets/img/slider-1.2.jpg')); ?>" alt="ClinicMaster hospital building at its grand opening" class="history-item__img" />
+              <img src="<?php echo e(!empty($item['image']) ? asset('storage/' . $item['image']) : $histFallbackImages[$i % count($histFallbackImages)]); ?>" alt="<?php echo e($item['heading'] ?? ''); ?>" class="history-item__img" />
             </div>
             <div class="history-item__node">
-              <span class="history-item__year">2013</span>
+              <span class="history-item__year"><?php echo e($item['year'] ?? ''); ?></span>
             </div>
             <div class="history-item__content">
-              <span class="history-item__badge">Foundation</span>
-              <h3 class="history-item__title">Grand Opening — ClinicMaster Is Born</h3>
+              <?php if(!empty($item['tag'])): ?>
+              <span class="history-item__badge"><?php echo e($item['tag']); ?></span>
+              <?php endif; ?>
+              <h3 class="history-item__title"><?php echo e($item['heading'] ?? ''); ?></h3>
+              <?php if(!empty($item['content'])): ?>
               <p class="history-item__desc">
-                With a vision to redefine community healthcare, ClinicMaster opened its doors on
-                36D Street, Brooklyn in 2013 with a small team of dedicated physicians.
-              </p>
-              <div class="history-item__tags">
-                <span class="history-item__tag">30 Beds Launched</span>
-                <span class="history-item__tag">24/7 Emergency</span>
-                <span class="history-item__tag">Outpatient Care</span>
-              </div>
-            </div>
-          </article>
+                <?php echo e($item['content']); ?>
 
-          <article class="history-item history-item--reverse">
-            <div class="history-item__media">
-              <img src="<?php echo e(asset('assets/img/sr-1-1.jpg')); ?>" alt="Radiologist reviewing scans in the diagnostic imaging center" class="history-item__img" />
-            </div>
-            <div class="history-item__node">
-              <span class="history-item__year">2016</span>
-            </div>
-            <div class="history-item__content">
-              <span class="history-item__badge">Diagnostics</span>
-              <h3 class="history-item__title">Advanced Diagnostic &amp; Imaging Center</h3>
-              <p class="history-item__desc">
-                In 2016, ClinicMaster unveiled a full diagnostic wing — bringing MRI, CT scanning
-                and a modern pathology laboratory together under one roof.
               </p>
+              <?php endif; ?>
+              <?php if(!empty($item['badges'])): ?>
               <div class="history-item__tags">
-                <span class="history-item__tag">MRI &amp; CT Scan</span>
-                <span class="history-item__tag">Digital X-Ray</span>
-                <span class="history-item__tag">Pathology Lab</span>
+                <?php $__currentLoopData = $item['badges']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $badge): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <span class="history-item__tag"><?php echo e($badge); ?></span>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
               </div>
+              <?php endif; ?>
             </div>
           </article>
-
-          <article class="history-item">
-            <div class="history-item__media">
-              <img src="<?php echo e(asset('assets/img/sr-1-3.jpg')); ?>" alt="Critical care team working in the intensive care unit" class="history-item__img" />
-            </div>
-            <div class="history-item__node">
-              <span class="history-item__year">2019</span>
-            </div>
-            <div class="history-item__content">
-              <span class="history-item__badge">Critical Care</span>
-              <h3 class="history-item__title">Dedicated ICU &amp; Cardiac Wing</h3>
-              <p class="history-item__desc">
-                A 20-bed intensive care unit and a specialised cardiac wing opened in 2019, giving
-                the community round-the-clock access to life-saving critical care.
-              </p>
-              <div class="history-item__tags">
-                <span class="history-item__tag">20-Bed ICU</span>
-                <span class="history-item__tag">Cardiology Dept</span>
-                <span class="history-item__tag">24/7 CCU</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="history-item history-item--reverse">
-            <div class="history-item__media">
-              <img src="<?php echo e(asset('assets/img/projects-3.jpg')); ?>" alt="Doctor holding a video consultation with a patient" class="history-item__img" />
-            </div>
-            <div class="history-item__node">
-              <span class="history-item__year">2022</span>
-            </div>
-            <div class="history-item__content">
-              <span class="history-item__badge">Innovation</span>
-              <h3 class="history-item__title">Telemedicine &amp; Digital Care Launch</h3>
-              <p class="history-item__desc">
-                ClinicMaster went digital in 2022 — online appointment booking, video consultations
-                and e-prescriptions brought expert care into patients' homes.
-              </p>
-              <div class="history-item__tags">
-                <span class="history-item__tag">Video Consultations</span>
-                <span class="history-item__tag">Online Booking</span>
-                <span class="history-item__tag">E-Prescriptions</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="history-item">
-            <div class="history-item__media">
-              <img src="<?php echo e(asset('assets/img/slider-1.3.jpg')); ?>" alt="ClinicMaster medical team celebrating national accreditation" class="history-item__img" />
-            </div>
-            <div class="history-item__node">
-              <span class="history-item__year">2025</span>
-            </div>
-            <div class="history-item__content">
-              <span class="history-item__badge">Recognition</span>
-              <h3 class="history-item__title">Award-Winning Patient Care</h3>
-              <p class="history-item__desc">
-                Today ClinicMaster stands nationally accredited — a 150-bed hospital trusted by
-                thousands of families and honoured for excellence in patient care.
-              </p>
-              <div class="history-item__tags">
-                <span class="history-item__tag">150+ Beds</span>
-                <span class="history-item__tag">75+ Specialists</span>
-                <span class="history-item__tag">National Accreditation</span>
-              </div>
-            </div>
-          </article>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
       </div>
     </section>

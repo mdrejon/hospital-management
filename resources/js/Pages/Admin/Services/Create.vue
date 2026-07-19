@@ -7,7 +7,7 @@
             </div>
 
             <form @submit.prevent="submit" class="space-y-6">
-                <ServiceForm :form="form" @image-change="onImageChange" @gallery-change="onGalleryChange" />
+                <ServiceForm :form="form" :doctors="doctors" @image-change="onImageChange" />
 
                 <div class="flex justify-end">
                     <button type="submit" :disabled="form.processing"
@@ -25,30 +25,29 @@ import { useForm } from '@inertiajs/vue3';
 import AdminLayout   from '@/Layouts/Admin/AdminLayout.vue';
 import ServiceForm   from './ServiceForm.vue';
 
+defineProps({
+    doctors: { type: Array, default: () => [] },
+});
+
 const form = useForm({
     title:          '',
     icon_svg:       '',
     image:          null,
     short_desc:     '',
     description:    '',
-    benefits_title: 'We Give The Best Services',
-    benefits_text:  '',
-    gallery_image_1: null,
-    gallery_image_2: null,
     features:       [],
     faqs:           [],
-    btn_text:       'View Services',
-    btn_url:        '#',
+    doctor_ids:     [],
     is_featured:    false,
     sort_order:     0,
     is_active:      true,
+    seo_title:       '',
+    seo_description: '',
+    seo_keywords:    '',
+    seo_og_image:    null,
 });
 
 function onImageChange({ field, file }) {
-    form[field] = file;
-}
-
-function onGalleryChange({ field, file }) {
     form[field] = file;
 }
 

@@ -9,7 +9,7 @@
 
             <form @submit.prevent="submit" class="space-y-6">
 
-                <!-- Logo -->
+                <!-- Logo / Site name -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Logo</h2>
                     <div>
@@ -18,31 +18,66 @@
                             :existing-preview="currentLogo ? '/storage/' + currentLogo : null" />
                         <InputError :message="form.errors.header_logo" />
                     </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">Site / Hospital Name (logo alt text)</label>
+                        <input v-model="form.header_site_name" type="text" class="input" placeholder="Sitakund Modern Hospital Ltd." />
+                        <InputError :message="form.errors.header_site_name" />
+                    </div>
+                </section>
+
+                <!-- Top bar -->
+                <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                    <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Top Bar</h2>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">Tagline (left side)</label>
+                        <input v-model="form.header_tagline" type="text" class="input" placeholder="Need professional medical &amp; health Care?" />
+                        <InputError :message="form.errors.header_tagline" />
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">Office Hours (right side)</label>
+                        <input v-model="form.header_hours" type="text" class="input" placeholder="Mon - Fri: 8:00 am - 7:00 pm" />
+                        <InputError :message="form.errors.header_hours" />
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">Support Text</label>
+                        <input v-model="form.header_support_text" type="text" class="input" placeholder="24x7 Supports" />
+                        <InputError :message="form.errors.header_support_text" />
+                    </div>
                 </section>
 
                 <!-- Contact info -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
-                    <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Contact Info (Top Bar)</h2>
+                    <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Contact Info</h2>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Phone</label>
-                        <input v-model="form.header_phone" type="text" class="input" placeholder="+88 01777-909595" />
+                        <input v-model="form.header_phone" type="text" class="input" placeholder="+1 (234) 5688 9990" />
                         <InputError :message="form.errors.header_phone" />
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Email</label>
-                        <input v-model="form.header_email" type="email" class="input" placeholder="info@hotelbeachway.com" />
+                        <input v-model="form.header_email" type="email" class="input" placeholder="info@example.com" />
                         <InputError :message="form.errors.header_email" />
                     </div>
                     <div>
-                        <label class="block text-sm text-gray-600 mb-1">Address</label>
-                        <input v-model="form.header_address" type="text" class="input" placeholder="Kolatoli Road, Cox's Bazar, Bangladesh" />
+                        <label class="block text-sm text-gray-600 mb-1">Address (side panel)</label>
+                        <input v-model="form.header_address" type="text" class="input" placeholder="36D Street Brooklyn, New York" />
                         <InputError :message="form.errors.header_address" />
+                    </div>
+                </section>
+
+                <!-- Side panel description -->
+                <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                    <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Off-canvas Side Panel</h2>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">Description</label>
+                        <textarea v-model="form.header_sidebar_description" rows="3" class="input" placeholder="Short description shown in the mobile side panel..."></textarea>
+                        <InputError :message="form.errors.header_sidebar_description" />
                     </div>
                 </section>
 
                 <!-- Social links -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
-                    <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Social Links (Top Bar)</h2>
+                    <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Social Links</h2>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Facebook URL</label>
@@ -60,24 +95,24 @@
                             <InputError :message="form.errors.header_instagram_url" />
                         </div>
                         <div>
-                            <label class="block text-sm text-gray-600 mb-1">Pinterest URL</label>
-                            <input v-model="form.header_pinterest_url" type="text" class="input" placeholder="https://pinterest.com/..." />
-                            <InputError :message="form.errors.header_pinterest_url" />
+                            <label class="block text-sm text-gray-600 mb-1">LinkedIn URL</label>
+                            <input v-model="form.header_linkedin_url" type="text" class="input" placeholder="https://linkedin.com/..." />
+                            <InputError :message="form.errors.header_linkedin_url" />
                         </div>
                     </div>
                 </section>
 
-                <!-- Book button -->
+                <!-- Appointment button -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
-                    <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Book Online Button (Navbar)</h2>
+                    <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Appointment Button (Navbar)</h2>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Button Text</label>
-                            <input v-model="form.header_book_btn_text" type="text" class="input" placeholder="Book Online" />
+                            <input v-model="form.header_book_btn_text" type="text" class="input" placeholder="Appointment" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Button URL</label>
-                            <input v-model="form.header_book_btn_url" type="text" class="input" placeholder="#contact" />
+                            <input v-model="form.header_book_btn_url" type="text" class="input" placeholder="/appointment" />
                         </div>
                     </div>
                 </section>
@@ -106,16 +141,21 @@ const props = defineProps({
 const currentLogo = ref(props.settings.header_logo);
 
 const form = useForm({
-    header_phone:         props.settings.header_phone ?? '',
-    header_email:         props.settings.header_email ?? '',
-    header_address:       props.settings.header_address ?? '',
-    header_facebook_url:  props.settings.header_facebook_url ?? '',
-    header_twitter_url:   props.settings.header_twitter_url ?? '',
-    header_instagram_url: props.settings.header_instagram_url ?? '',
-    header_pinterest_url: props.settings.header_pinterest_url ?? '',
-    header_book_btn_text: props.settings.header_book_btn_text ?? 'Book Online',
-    header_book_btn_url:  props.settings.header_book_btn_url ?? '#contact',
-    header_logo:          null,
+    header_site_name:            props.settings.header_site_name ?? '',
+    header_tagline:               props.settings.header_tagline ?? '',
+    header_hours:                 props.settings.header_hours ?? '',
+    header_support_text:          props.settings.header_support_text ?? '',
+    header_phone:                 props.settings.header_phone ?? '',
+    header_email:                 props.settings.header_email ?? '',
+    header_address:               props.settings.header_address ?? '',
+    header_sidebar_description:   props.settings.header_sidebar_description ?? '',
+    header_facebook_url:          props.settings.header_facebook_url ?? '',
+    header_twitter_url:           props.settings.header_twitter_url ?? '',
+    header_instagram_url:         props.settings.header_instagram_url ?? '',
+    header_linkedin_url:          props.settings.header_linkedin_url ?? '',
+    header_book_btn_text:         props.settings.header_book_btn_text ?? '',
+    header_book_btn_url:          props.settings.header_book_btn_url ?? '',
+    header_logo:                  null,
 });
 
 function onLogoChange(file) {

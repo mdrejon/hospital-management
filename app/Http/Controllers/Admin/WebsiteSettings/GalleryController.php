@@ -59,11 +59,12 @@ class GalleryController extends Controller
         return back()->with('success', 'Gallery image(s) uploaded successfully.');
     }
 
-    /** Update alt / caption / sort_order for a single image */
+    /** Update alt / sub_title / caption(title) / sort_order for a single image */
     public function update(Request $request, GalleryImage $gallery): RedirectResponse
     {
         $data = $request->validate([
             'alt'        => 'nullable|string',
+            'sub_title'  => 'nullable|string',
             'caption'    => 'nullable|string',
             'sort_order' => 'integer|min:0',
         ]);

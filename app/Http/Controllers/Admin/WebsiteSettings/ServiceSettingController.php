@@ -8,8 +8,6 @@ use App\Models\GlobalSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class ServiceSettingController extends Controller
 {
@@ -33,7 +31,8 @@ class ServiceSettingController extends Controller
         'svc_help_desc',
     ];
 
-    public function edit(): Response
+    /** Used by Admin\ServiceController::index() to feed the "Page Settings" tab. */
+    public function currentSettings(): array
     {
         $settings = GlobalSetting::whereIn('key', $this->keys)
             ->pluck('value', 'key')
@@ -43,9 +42,7 @@ class ServiceSettingController extends Controller
             $settings[$key] ??= null;
         }
 
-        return Inertia::render('Admin/WebsiteSettings/Services/Edit', [
-            'settings' => $settings,
-        ]);
+        return $settings;
     }
 
     public function update(Request $request): RedirectResponse
@@ -102,7 +99,7 @@ class ServiceSettingController extends Controller
             'by','from','as','is','was','are','were','be','been','being','have',
             'has','had','do','does','did','will','would','could','should','may',
             'might','can','this','that','these','those','it','its','we','our',
-            'you','your','hotel','beach','way','cox','bazar',
+            'you','your',
         ];
         $text  = implode(' ', array_filter($texts, fn($t) => $t !== null));
         $words = preg_split('/\W+/u', mb_strtolower($text), -1, PREG_SPLIT_NO_EMPTY);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\WebsiteSettings\BlogSettingController;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\BlogComment;
@@ -42,7 +43,8 @@ class BlogController extends Controller
             ]);
 
         return Inertia::render('Admin/Blog/Index', [
-            'blogs' => $blogs,
+            'blogs'        => $blogs,
+            'pageSettings' => app(BlogSettingController::class)->currentSettings(),
         ]);
     }
 

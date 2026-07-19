@@ -18,7 +18,7 @@ class InquiryConfirmationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'We Received Your Message – Hotel Beach Way',
+            subject: 'We Received Your Message – ' . config('app.name'),
         );
     }
 

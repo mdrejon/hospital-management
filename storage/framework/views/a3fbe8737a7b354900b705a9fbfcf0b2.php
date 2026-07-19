@@ -1,11 +1,27 @@
-<?php $__env->startSection('title', 'Our Achievements | ClinicMaster Medical & Health Care Services'); ?>
+<?php
+  $heroTitle = $ach['ach_hero_title'] ?? 'Our Achievements';
+  $heroImage = !empty($ach['ach_hero_image']) ? asset('storage/' . $ach['ach_hero_image']) : asset('assets/img/breadcumb.webp');
+  $seoTitle  = $ach['ach_seo_title'] ?? 'Our Achievements | ClinicMaster Medical & Health Care Services';
+  $seoDesc   = $ach['ach_seo_description'] ?? "Explore ClinicMaster's awards, accreditations, and commitment to patient care.";
+?>
+
+<?php $__env->startSection('title', $seoTitle); ?>
+<?php $__env->startSection('meta_description', $seoDesc); ?>
+<?php $__env->startSection('og_title', $seoTitle); ?>
+<?php $__env->startSection('og_description', $seoDesc); ?>
+<?php if(!empty($ach['ach_seo_keywords'])): ?>
+<?php $__env->startSection('meta_keywords', $ach['ach_seo_keywords']); ?>
+<?php endif; ?>
+<?php if(!empty($ach['ach_seo_og_image'])): ?>
+<?php $__env->startSection('og_image', asset('storage/' . $ach['ach_seo_og_image'])); ?>
+<?php endif; ?>
 
 <?php $__env->startSection('content'); ?>
 
     <!-- ===================== Breadcrumb / Page header ===================== -->
     <section class="page-header">
       <div class="page-header__media">
-        <img src="<?php echo e(asset('assets/img/breadcumb.webp')); ?>" alt="Team of ClinicMaster doctors" class="page-header__bg" />
+        <img src="<?php echo e($heroImage); ?>" alt="Team of ClinicMaster doctors" class="page-header__bg" />
         <span class="page-header__overlay"></span>
       </div>
 
@@ -27,7 +43,7 @@
       </div>
 
       <div class="page-header__inner">
-        <h1 class="page-header__title">Our Achievements</h1>
+        <h1 class="page-header__title"><?php echo e($heroTitle); ?></h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
           <a href="<?php echo e(route('home')); ?>">Home</a>
           <span class="page-header__breadcrumb-sep">
@@ -50,10 +66,17 @@
     </section>
 
     <!-- ===================== Always Ready To Help ===================== -->
+    <?php
+      $readyHelpItems = !empty($ach['ach_items']) ? $ach['ach_items'] : [
+        ['title' => 'Emergency Help',    'desc' => 'Round-the-clock ambulance and emergency response, ready whenever you need us most.'],
+        ['title' => 'Enriched Pharmacy', 'desc' => 'A fully stocked in-house pharmacy with genuine medicines and expert pharmacists.'],
+        ['title' => 'Medical Treatment', 'desc' => 'Comprehensive specialist care and modern treatment across every department.'],
+      ];
+    ?>
     <section class="ready-help">
       <div class="container mx-auto">
         <div class="ready-help__head">
-          <h2 class="ready-help__title">We Are Always Ready To Help You &amp; Your Family</h2>
+          <h2 class="ready-help__title"><?php echo e($ach['ach_title'] ?? 'We Are Always Ready To Help You & Your Family'); ?></h2>
           <span class="ready-help__pulse" aria-hidden="true">
             <svg viewBox="0 0 64 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M2 10h12l4-7 8 14 4-7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -61,7 +84,8 @@
             </svg>
           </span>
           <p class="ready-help__desc">
-            From emergencies to everyday care, our team stands beside you at every step of your health journey.
+            <?php echo e($ach['ach_desc'] ?? 'From emergencies to everyday care, our team stands beside you at every step of your health journey.'); ?>
+
           </p>
         </div>
 
@@ -76,9 +100,10 @@
                 <path d="M8 9.5v4M6 11.5h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <h3 class="ready-help__item-title">Emergency Help</h3>
+            <h3 class="ready-help__item-title"><?php echo e($readyHelpItems[0]['title'] ?? 'Emergency Help'); ?></h3>
             <p class="ready-help__item-desc">
-              Round-the-clock ambulance and emergency response, ready whenever you need us most.
+              <?php echo e($readyHelpItems[0]['desc'] ?? 'Round-the-clock ambulance and emergency response, ready whenever you need us most.'); ?>
+
             </p>
           </div>
 
@@ -92,9 +117,10 @@
                 <path d="M12 12v5M9.5 14.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <h3 class="ready-help__item-title">Enriched Pharmacy</h3>
+            <h3 class="ready-help__item-title"><?php echo e($readyHelpItems[1]['title'] ?? 'Enriched Pharmacy'); ?></h3>
             <p class="ready-help__item-desc">
-              A fully stocked in-house pharmacy with genuine medicines and expert pharmacists.
+              <?php echo e($readyHelpItems[1]['desc'] ?? 'A fully stocked in-house pharmacy with genuine medicines and expert pharmacists.'); ?>
+
             </p>
           </div>
 
@@ -108,9 +134,10 @@
                 <circle cx="19" cy="10.5" r="2.2" stroke="currentColor" stroke-width="1.6"/>
               </svg>
             </span>
-            <h3 class="ready-help__item-title">Medical Treatment</h3>
+            <h3 class="ready-help__item-title"><?php echo e($readyHelpItems[2]['title'] ?? 'Medical Treatment'); ?></h3>
             <p class="ready-help__item-desc">
-              Comprehensive specialist care and modern treatment across every department.
+              <?php echo e($readyHelpItems[2]['desc'] ?? 'Comprehensive specialist care and modern treatment across every department.'); ?>
+
             </p>
           </div>
         </div>
@@ -131,15 +158,19 @@
             <span class="testimonials__orbit" aria-hidden="true"><span class="testimonials__ping"></span></span>
             <span class="testimonials__orbit is-slow" aria-hidden="true"><span class="testimonials__ping"></span></span>
             <span class="testimonials__orbit is-reverse" aria-hidden="true"><span class="testimonials__ping"></span></span>
+            <?php
+              $achTestiImage    = !empty($testi['testi_image']) ? asset('storage/' . $testi['testi_image']) : asset('assets/img/1752043437.img2.png');
+              $achTestiImageAlt = ($testi['testi_image_alt'] ?? null) ?: 'Doctor smiling with arms crossed';
+            ?>
             <img
-              src="<?php echo e(asset('assets/img/1752043437.img2.png')); ?>"
-              alt="Doctor smiling with arms crossed"
+              src="<?php echo e($achTestiImage); ?>"
+              alt="<?php echo e($achTestiImageAlt); ?>"
               class="testimonials__photo"
             />
           </div>
 
           <div class="testimonials__content">
-            <h2 class="testimonials__title">Real Patients, Real Stories. And Our Achievements</h2>
+            <h2 class="testimonials__title"><?php echo e(($testi['testi_title'] ?? null) ?: 'Real Patients, Real Stories. And Our Achievements'); ?></h2>
 
             <div class="testimonial-slider" data-testimonials-slider>
               <button type="button" class="testimonials__nav is-prev" data-testimonials-prev aria-label="Previous testimonial">
@@ -155,10 +186,21 @@
 
               <div class="testimonial-slider__viewport">
                 <div class="testimonial-slider__track" data-testimonials-track>
+                <?php
+                  $achTestimonialDefaults = [
+                    ['name' => 'Emma Carter', 'role' => 'Patient', 'avatar' => asset('assets/img/sr-1-2.jpg'), 'title' => 'Best Treatment', 'review' => "From the first visit, I felt completely at ease. The staff was warm, patient, and incredibly supportive. They took time to listen and explain everything clearly. Their kindness made a real difference in my recovery. I'm thankful for such a caring team."],
+                    ['name' => 'Rihana Roy', 'role' => 'Patient', 'avatar' => asset('assets/img/sr-1-3.jpg'), 'title' => 'Caring Staff', 'review' => "My experience here was nothing short of amazing. The team treated me with kindness and genuine care. Every step of my treatment was handled with professionalism. I felt heard, supported, and completely at ease. I'm truly grateful for the care I received."],
+                    ['name' => 'Daniel Cruz', 'role' => 'Patient', 'avatar' => asset('assets/img/projects-2.jpg'), 'title' => 'Compassionate Care', 'review' => "The team walked me through every step before they even touched an instrument. What could have been stressful turned into the calmest checkup I've ever had. I finally look forward to my visits."],
+                  ];
+                  $achTestimonialCards = (isset($testimonials) && $testimonials->isNotEmpty())
+                    ? $testimonials->map(fn($t) => ['name' => $t->name, 'role' => $t->role, 'avatar' => $t->avatar ? asset('storage/' . $t->avatar) : asset('assets/img/sr-1-2.jpg'), 'title' => null, 'review' => $t->review])
+                    : collect($achTestimonialDefaults);
+                ?>
+                <?php $__currentLoopData = $achTestimonialCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tCard): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="testimonial-card">
                   <div class="testimonial-card__media">
                     <div class="testimonial-card__photo-wrap">
-                      <img src="<?php echo e(asset('assets/img/sr-1-2.jpg')); ?>" alt="Emma Carter" class="testimonial-card__photo" />
+                      <img src="<?php echo e($tCard['avatar']); ?>" alt="<?php echo e($tCard['name']); ?>" class="testimonial-card__photo" />
                       <button type="button" class="testimonial-card__play">
                         <span class="testimonial-card__play-icon">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -166,16 +208,17 @@
                         Watch The Video
                       </button>
                     </div>
-                    <p class="testimonial-card__name">Emma Carter</p>
-                    <p class="testimonial-card__role">Patient</p>
+                    <p class="testimonial-card__name"><?php echo e($tCard['name']); ?></p>
+                    <p class="testimonial-card__role"><?php echo e($tCard['role']); ?></p>
                   </div>
 
                   <div class="testimonial-card__body">
-                    <h3 class="testimonial-card__title">Best Treatment</h3>
+                    <?php if($tCard['title']): ?>
+                      <h3 class="testimonial-card__title"><?php echo e($tCard['title']); ?></h3>
+                    <?php endif; ?>
                     <p class="testimonial-card__quote">
-                      From the first visit, I felt completely at ease. The staff was warm, patient, and incredibly
-                      supportive. They took time to listen and explain everything clearly. Their kindness made a real
-                      difference in my recovery. I'm thankful for such a caring team.
+                      <?php echo e($tCard['review']); ?>
+
                     </p>
 
                     <span class="testimonial-card__mark" aria-hidden="true">
@@ -184,72 +227,73 @@
                     </span>
                   </div>
                 </div>
-
-                <div class="testimonial-card">
-                  <div class="testimonial-card__media">
-                    <div class="testimonial-card__photo-wrap">
-                      <img src="<?php echo e(asset('assets/img/sr-1-3.jpg')); ?>" alt="Rihana Roy" class="testimonial-card__photo" />
-                      <button type="button" class="testimonial-card__play">
-                        <span class="testimonial-card__play-icon">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                        </span>
-                        Watch The Video
-                      </button>
-                    </div>
-                    <p class="testimonial-card__name">Rihana Roy</p>
-                    <p class="testimonial-card__role">Patient</p>
-                  </div>
-
-                  <div class="testimonial-card__body">
-                    <h3 class="testimonial-card__title">Caring Staff</h3>
-                    <p class="testimonial-card__quote">
-                      My experience here was nothing short of amazing. The team treated me with kindness and genuine
-                      care. Every step of my treatment was handled with professionalism. I felt heard, supported, and
-                      completely at ease. I'm truly grateful for the care I received.
-                    </p>
-
-                    <span class="testimonial-card__mark" aria-hidden="true">
-                      <span class="testimonial-card__mark-ring"></span>
-                      <span class="testimonial-card__mark-ring is-offset"></span>
-                    </span>
-                  </div>
-                </div>
-
-                <div class="testimonial-card">
-                  <div class="testimonial-card__media">
-                    <div class="testimonial-card__photo-wrap">
-                      <img src="<?php echo e(asset('assets/img/projects-2.jpg')); ?>" alt="Daniel Cruz" class="testimonial-card__photo" />
-                      <button type="button" class="testimonial-card__play">
-                        <span class="testimonial-card__play-icon">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                        </span>
-                        Watch The Video
-                      </button>
-                    </div>
-                    <p class="testimonial-card__name">Daniel Cruz</p>
-                    <p class="testimonial-card__role">Patient</p>
-                  </div>
-
-                  <div class="testimonial-card__body">
-                    <h3 class="testimonial-card__title">Compassionate Care</h3>
-                    <p class="testimonial-card__quote">
-                      The team walked me through every step before they even touched an instrument. What could have
-                      been stressful turned into the calmest checkup I've ever had. I finally look forward to my
-                      visits.
-                    </p>
-
-                    <span class="testimonial-card__mark" aria-hidden="true">
-                      <span class="testimonial-card__mark-ring"></span>
-                      <span class="testimonial-card__mark-ring is-offset"></span>
-                    </span>
-                  </div>
-                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
               </div>
             </div>
 
             <div class="testimonials__dots" data-testimonials-dots></div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== Awards (list) ===================== -->
+    <?php
+      $achAwardDefaults = [
+        ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 1],
+        ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 2],
+        ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 3],
+        ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 1],
+      ];
+      $achAwardCards = (isset($awards) && $awards->isNotEmpty())
+        ? $awards->map(fn($a) => ['title' => $a->title, 'subtitle' => $a->subtitle, 'link_text' => $a->link_text, 'link_url' => $a->link_url ?: '#', 'seal_variant' => $a->seal_variant])
+        : collect($achAwardDefaults);
+    ?>
+    <section class="awards">
+      <div class="container mx-auto">
+        <div class="ready-help__head">
+          <h2 class="ready-help__title"><?php echo e(($award['ach_award_title'] ?? null) ?: 'Our Awards & Accreditations'); ?></h2>
+          <p class="ready-help__desc">
+            <?php echo e(($award['ach_award_desc'] ?? null) ?: 'Recognitions that reflect our continued commitment to quality care and clinical excellence.'); ?>
+
+          </p>
+        </div>
+
+        <div class="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
+          <?php $__currentLoopData = $achAwardCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $awardCard): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <div class="ready-help__item">
+            <span class="ready-help__icon">
+              <?php if(($awardCard['seal_variant'] ?? 1) === 1): ?>
+              <svg width="40" height="40" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M48 4 86 26v44L48 92 10 70V26z" stroke="currentColor" stroke-width="1.6"/>
+                <text x="48" y="46" text-anchor="middle" font-size="14" font-weight="800" fill="currentColor">WHO</text>
+                <text x="48" y="56" text-anchor="middle" font-size="6" fill="currentColor" opacity="0.7">Medizone</text>
+                <text x="48" y="64" text-anchor="middle" font-size="6" fill="currentColor" opacity="0.7">2024</text>
+              </svg>
+              <?php elseif(($awardCard['seal_variant'] ?? 1) === 2): ?>
+              <svg width="40" height="40" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="48" cy="48" r="40" stroke="currentColor" stroke-width="1.6" stroke-dasharray="3 4"/>
+                <circle cx="48" cy="48" r="32" stroke="currentColor" stroke-width="1.2"/>
+                <text x="48" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="currentColor">WHO</text>
+                <text x="48" y="64" text-anchor="middle" font-size="5.5" fill="currentColor" opacity="0.7">Medizone</text>
+              </svg>
+              <?php else: ?>
+              <svg width="40" height="40" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="48" cy="48" r="36" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M18 40c6 20 10 30 20 36M78 40c-6 20-10 30-20 36" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <text x="48" y="44" text-anchor="middle" font-size="12" font-weight="800" fill="currentColor">WHO</text>
+                <text x="48" y="53" text-anchor="middle" font-size="5.5" fill="currentColor" opacity="0.7">Medizone</text>
+              </svg>
+              <?php endif; ?>
+            </span>
+            <h3 class="ready-help__item-title"><?php echo e($awardCard['title']); ?></h3>
+            <p class="ready-help__item-desc"><?php echo e($awardCard['subtitle']); ?></p>
+            <?php if($awardCard['link_text']): ?>
+              <a href="<?php echo e($awardCard['link_url'] ?: '#'); ?>" class="award-card__link"><?php echo e($awardCard['link_text']); ?></a>
+            <?php endif; ?>
+          </div>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
       </div>
     </section>

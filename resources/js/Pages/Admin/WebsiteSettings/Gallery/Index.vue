@@ -21,13 +21,13 @@
                         </div>
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="settingsForm.gallery_title" type="text" class="input" placeholder="Hotel Gallery" />
+                            <input v-model="settingsForm.gallery_title" type="text" class="input" placeholder="Inside Our Hospital" />
                             <InputError :message="settingsForm.errors.gallery_title" />
                         </div>
                         <div class="col-span-2">
                             <label class="label">Subtitle <span class="text-xs text-gray-400">(shown on gallery page)</span></label>
                             <textarea v-model="settingsForm.gallery_subtitle" rows="2" class="input resize-none"
-                                placeholder="Explore the beauty and comfort of Hotel Beach Way..."></textarea>
+                                placeholder="From modern treatment rooms to advanced diagnostic facilities — take a look at the spaces and people behind ClinicMaster's award-winning care."></textarea>
                             <InputError :message="settingsForm.errors.gallery_subtitle" />
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="col-span-2 md:col-span-1">
                             <label class="label">Page Title (Breadcrumb)</label>
-                            <input v-model="seoForm.gallery_hero_title" type="text" class="input" placeholder="Gallery" />
+                            <input v-model="seoForm.gallery_hero_title" type="text" class="input" placeholder="Our Gallery" />
                         </div>
                     </div>
 
@@ -64,18 +64,18 @@
                             <div class="col-span-2">
                                 <label class="label">Meta Title <span class="text-gray-400 font-normal">({{ seoForm.gallery_seo_title.length }}/160)</span></label>
                                 <input v-model="seoForm.gallery_seo_title" type="text" maxlength="160" class="input"
-                                    placeholder="Gallery – Hotel Beach Way" />
+                                    placeholder="Gallery | ClinicMaster Medical & Health Care Services" />
                             </div>
                             <div class="col-span-2">
                                 <label class="label">Meta Description <span class="text-gray-400 font-normal">({{ seoForm.gallery_seo_description.length }}/320)</span></label>
                                 <textarea v-model="seoForm.gallery_seo_description" rows="3" maxlength="320"
                                     class="input resize-none"
-                                    placeholder="Browse our photo gallery of Hotel Beach Way, Cox's Bazar..."></textarea>
+                                    placeholder="Browse photos of ClinicMaster's treatment rooms, diagnostic facilities, and medical team..."></textarea>
                             </div>
                             <div class="col-span-2">
                                 <label class="label">Keywords</label>
                                 <input v-model="seoForm.gallery_seo_keywords" type="text" class="input"
-                                    placeholder="hotel beach way gallery, cox's bazar hotel photos" />
+                                    placeholder="hospital gallery, medical facility photos, clinicmaster" />
                             </div>
                             <div class="col-span-2 md:col-span-1">
                                 <label class="label">OG / Social Share Image</label>
@@ -126,7 +126,7 @@
             <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                 <div class="flex items-center justify-between border-b pb-2">
                     <h2 class="text-sm font-semibold text-gray-700">Gallery Images ({{ images.length }})</h2>
-                    <p class="text-xs text-gray-400">First image = featured (tall slot on homepage). Drag to reorder.</p>
+                    <p class="text-xs text-gray-400">First image = featured (tall slot on homepage). Drag and drop a card to reorder.</p>
                 </div>
 
                 <div v-if="!images.length" class="py-10 text-center text-gray-400 text-sm">
@@ -136,15 +136,30 @@
                 <!-- Grid -->
                 <div v-else class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                     <div v-for="(img, i) in localImages" :key="img.id"
-                        class="relative group rounded-lg overflow-hidden border"
-                        :class="i === 0 ? 'ring-2 ring-yellow-400' : ''">
+                        draggable="true"
+                        @dragstart="onDragStart(i, $event)"
+                        @dragover="onDragOver(i, $event)"
+                        @dragleave="onDragLeave(i)"
+                        @drop="onDrop(i, $event)"
+                        @dragend="onDragEnd"
+                        class="relative group rounded-lg overflow-hidden border cursor-move transition-shadow"
+                        :class="[
+                            i === 0 ? 'ring-2 ring-yellow-400' : '',
+                            dragIndex === i ? 'opacity-40' : '',
+                            dragOverIndex === i && dragIndex !== i ? 'ring-2 ring-blue-500' : '',
+                        ]">
 
                         <!-- Image -->
                         <div class="relative">
                             <img :src="`/storage/${img.image}`"
-                                class="w-full h-32 object-cover transition-opacity"
+                                class="w-full h-32 object-cover transition-opacity pointer-events-none select-none"
                                 :class="img.is_active ? 'opacity-100' : 'opacity-40'"
                                 :alt="img.alt || ''" />
+
+                            <!-- Drag handle -->
+                            <span class="absolute top-1 right-1 w-6 h-6 rounded bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>
+                            </span>
 
                             <!-- Featured badge -->
                             <span v-if="i === 0"
@@ -170,19 +185,9 @@
                             </div>
                         </div>
 
-                        <!-- Sort controls + info -->
-                        <div class="bg-gray-50 px-2 py-1.5 flex items-center justify-between gap-1">
-                            <span class="text-xs text-gray-500 truncate flex-1">{{ img.alt || '(no alt)' }}</span>
-                            <div class="flex gap-0.5 flex-shrink-0">
-                                <button type="button" @click="moveUp(i)" :disabled="i === 0"
-                                    class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-700 disabled:opacity-30 text-xs">
-                                    ↑
-                                </button>
-                                <button type="button" @click="moveDown(i)" :disabled="i === localImages.length - 1"
-                                    class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-700 disabled:opacity-30 text-xs">
-                                    ↓
-                                </button>
-                            </div>
+                        <!-- Info -->
+                        <div class="bg-gray-50 px-2 py-1.5">
+                            <span class="text-xs text-gray-500 truncate block">{{ img.caption || img.alt || '(untitled)' }}</span>
                         </div>
                     </div>
                 </div>
@@ -207,8 +212,12 @@
                     <input v-model="editForm.alt" type="text" class="input" placeholder="Descriptive alt text..." />
                 </div>
                 <div>
-                    <label class="label">Caption <span class="text-xs text-gray-400">(optional)</span></label>
-                    <input v-model="editForm.caption" type="text" class="input" placeholder="Optional caption..." />
+                    <label class="label">Sub Title / Category <span class="text-xs text-gray-400">(small tag shown above the title, e.g. "Child Care")</span></label>
+                    <input v-model="editForm.sub_title" type="text" class="input" placeholder="e.g. Child Care" />
+                </div>
+                <div>
+                    <label class="label">Title <span class="text-xs text-gray-400">(bold heading shown on hover, e.g. "Gentle Pediatric Checkups")</span></label>
+                    <input v-model="editForm.caption" type="text" class="input" placeholder="e.g. Gentle Pediatric Checkups" />
                 </div>
                 <div>
                     <label class="label">Sort Order</label>
@@ -253,8 +262,8 @@ const props = defineProps({
 
 // ── Section header form ──
 const settingsForm = useForm({
-    gallery_badge:    props.settings.gallery_badge    ?? 'OUR GALLERY',
-    gallery_title:    props.settings.gallery_title    ?? 'Hotel Gallery',
+    gallery_badge:    props.settings.gallery_badge    ?? '',
+    gallery_title:    props.settings.gallery_title    ?? '',
     gallery_subtitle: props.settings.gallery_subtitle ?? '',
 });
 
@@ -327,16 +336,42 @@ const orderChanged = computed(() =>
     localImages.value.map(i => i.id).join(',') !== originalOrder
 );
 
-function moveUp(i) {
-    if (i === 0) return;
-    const arr = localImages.value;
-    [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
+// ── Drag and drop reorder ──
+const dragIndex     = ref(null);
+const dragOverIndex = ref(null);
+
+function onDragStart(i, e) {
+    dragIndex.value = i;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(i));
 }
 
-function moveDown(i) {
+function onDragOver(i, e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    dragOverIndex.value = i;
+}
+
+function onDragLeave(i) {
+    if (dragOverIndex.value === i) dragOverIndex.value = null;
+}
+
+function onDrop(i, e) {
+    e.preventDefault();
+    const from = dragIndex.value;
+    if (from === null || from === i) return;
+
     const arr = localImages.value;
-    if (i === arr.length - 1) return;
-    [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+    const [moved] = arr.splice(from, 1);
+    arr.splice(i, 0, moved);
+
+    dragIndex.value     = null;
+    dragOverIndex.value = null;
+}
+
+function onDragEnd() {
+    dragIndex.value     = null;
+    dragOverIndex.value = null;
 }
 
 function saveOrder() {
@@ -351,11 +386,12 @@ function toggleStatus(img) {
 
 // ── Edit modal ──
 const editTarget = ref(null);
-const editForm   = reactive({ alt: '', caption: '', sort_order: 0 });
+const editForm   = reactive({ alt: '', sub_title: '', caption: '', sort_order: 0 });
 
 function openEdit(img) {
     editTarget.value = img;
     editForm.alt        = img.alt        ?? '';
+    editForm.sub_title  = img.sub_title  ?? '';
     editForm.caption    = img.caption    ?? '';
     editForm.sort_order = img.sort_order ?? 0;
 }

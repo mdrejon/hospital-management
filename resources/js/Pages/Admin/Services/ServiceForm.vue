@@ -8,7 +8,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="label">Service Title <span class="text-red-500">*</span></label>
-                    <input v-model="form.title" type="text" class="input" placeholder="e.g. Swimming Pool" />
+                    <input v-model="form.title" type="text" class="input" placeholder="e.g. Cardiology" />
                     <InputError :message="form.errors.title" />
                 </div>
                 <div>
@@ -17,16 +17,6 @@
                         <input :value="slugPreview" type="text" class="input bg-gray-50 text-gray-500 cursor-not-allowed" readonly />
                         <span class="text-xs text-gray-400 whitespace-nowrap">/services/{{ slugPreview || '…' }}</span>
                     </div>
-                </div>
-                <div>
-                    <label class="label">Button Text</label>
-                    <input v-model="form.btn_text" type="text" class="input" placeholder="View Services" />
-                    <InputError :message="form.errors.btn_text" />
-                </div>
-                <div>
-                    <label class="label">Button URL</label>
-                    <input v-model="form.btn_url" type="text" class="input" placeholder="#" />
-                    <InputError :message="form.errors.btn_url" />
                 </div>
                 <div>
                     <label class="label">Sort Order</label>
@@ -86,7 +76,7 @@
             <div>
                 <label class="label">Short Description <span class="text-xs text-gray-400">(shown on card)</span></label>
                 <textarea v-model="form.short_desc" rows="3" class="input resize-none"
-                    placeholder="Brief description shown on the service card listing..."></textarea>
+                    placeholder="e.g. Diagnosis and treatment of heart and blood vessel conditions."></textarea>
                 <InputError :message="form.errors.short_desc" />
             </div>
         </section>
@@ -101,47 +91,66 @@
             </div>
         </section>
 
-        <!-- ── Benefits Section ── -->
-        <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
-            <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Detail Page — "We Give The Best Services"</h2>
-            <div>
-                <label class="label">Section Sub-Title</label>
-                <input v-model="form.benefits_title" type="text" class="input" placeholder="We Give The Best Services" />
-            </div>
-            <div>
-                <label class="label">Benefits Text <span class="text-xs text-gray-400">(rich text)</span></label>
-                <RichEditor v-model="form.benefits_text" />
-                <InputError :message="form.errors.benefits_text" />
-            </div>
-
-            <!-- Gallery images -->
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="label">Gallery Image 1</label>
-                    <DropZone @change="file => onFile(file, 'gallery_image_1')" hint="JPEG / PNG / WebP — max 5 MB" preview-class="w-full h-44 object-cover"
-                        :existing-preview="existing?.gallery_image_1 ? '/storage/' + existing.gallery_image_1 : null" />
-                    <InputError :message="form.errors.gallery_image_1" />
-                </div>
-                <div>
-                    <label class="label">Gallery Image 2</label>
-                    <DropZone @change="file => onFile(file, 'gallery_image_2')" hint="JPEG / PNG / WebP — max 5 MB" preview-class="w-full h-44 object-cover"
-                        :existing-preview="existing?.gallery_image_2 ? '/storage/' + existing.gallery_image_2 : null" />
-                    <InputError :message="form.errors.gallery_image_2" />
-                </div>
-            </div>
-        </section>
-
         <!-- ── Why Choose This Service ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-3">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Why Choose This Service — Feature List</h2>
             <div v-for="(item, i) in form.features" :key="i" class="flex gap-2">
                 <input v-model="form.features[i]" type="text" class="input"
-                    placeholder="e.g. Rooftop pool with panoramic views" />
+                    placeholder="e.g. 24/7 Emergency Response Team" />
                 <button type="button" @click="form.features.splice(i, 1)"
                     class="px-3 py-2 text-red-500 hover:bg-red-50 rounded text-sm flex-shrink-0">✕</button>
             </div>
             <button type="button" @click="form.features.push('')"
                 class="text-sm text-blue-600 hover:underline">+ Add Feature</button>
+        </section>
+
+        <!-- ── Available Doctors ── -->
+        <section class="bg-white rounded-lg shadow-sm p-6 space-y-3">
+            <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Available Doctors <span class="text-xs font-normal text-gray-400">(shown on the detail page)</span></h2>
+            <p class="text-xs text-gray-400 -mt-1">Hold Ctrl (Windows) or Cmd (Mac) to select multiple doctors.</p>
+            <select v-model="form.doctor_ids" multiple class="input" size="8">
+                <option v-for="d in doctors" :key="d.id" :value="d.id">
+                    {{ d.name }}{{ d.specialty ? ' — ' + d.specialty : '' }}
+                </option>
+            </select>
+            <p v-if="!doctors.length" class="text-xs text-gray-400">No doctors found — add doctors first under Website Management → Doctors.</p>
+
+            <div v-if="selectedDoctors.length" class="flex flex-wrap gap-2 pt-1">
+                <span v-for="d in selectedDoctors" :key="d.id"
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">
+                    {{ d.name }}
+                    <button type="button" @click="removeDoctor(d.id)" class="text-blue-400 hover:text-blue-700 leading-none">&times;</button>
+                </span>
+            </div>
+            <InputError :message="form.errors.doctor_ids" />
+        </section>
+
+        <!-- ── SEO ── -->
+        <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+            <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">SEO Configuration <span class="text-xs font-normal text-gray-400">(service detail page)</span></h2>
+            <div>
+                <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
+                <input v-model="form.seo_title" @input="onMetaTitleInput" type="text" class="input" placeholder="e.g. Angioplasty | ClinicMaster" maxlength="160" />
+                <p class="text-xs text-gray-400 mt-1">{{ (form.seo_title || '').length }}/160</p>
+                <InputError :message="form.errors.seo_title" />
+            </div>
+            <div>
+                <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
+                <textarea v-model="form.seo_description" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
+                <p class="text-xs text-gray-400 mt-1">{{ (form.seo_description || '').length }}/320</p>
+                <InputError :message="form.errors.seo_description" />
+            </div>
+            <div>
+                <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated, auto-filled if left blank)</span></label>
+                <input v-model="form.seo_keywords" @input="onMetaKeywordsInput" type="text" class="input" />
+                <InputError :message="form.errors.seo_keywords" />
+            </div>
+            <div>
+                <label class="label">OG / Social Share Image <span class="text-xs text-gray-400">(recommended 1200×630px)</span></label>
+                <DropZone @change="file => onFile(file, 'seo_og_image')" hint="JPEG / PNG / WebP — max 5 MB" preview-class="w-full h-36 object-cover"
+                    :existing-preview="existing?.seo_og_image ? '/storage/' + existing.seo_og_image : null" />
+                <InputError :message="form.errors.seo_og_image" />
+            </div>
         </section>
 
         <!-- ── FAQ ── -->
@@ -157,7 +166,7 @@
                 <div>
                     <label class="label">Question</label>
                     <input v-model="form.faqs[i].question" type="text" class="input"
-                        placeholder="e.g. What are the swimming pool timings?" />
+                        placeholder="e.g. Do I need a referral to see a specialist?" />
                 </div>
                 <div>
                     <label class="label">Answer</label>
@@ -177,13 +186,32 @@ import { reactive, computed } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import RichEditor from '@/Components/Admin/Shared/RichEditor.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
 
 const props = defineProps({
     form:     { type: Object, required: true },
     existing: { type: Object, default: null },
+    doctors:  { type: Array, default: () => [] },
 });
 
 const emit = defineEmits(['image-change']);
+
+const selectedDoctors = computed(() =>
+    props.doctors.filter(d => (props.form.doctor_ids || []).includes(d.id))
+);
+
+function removeDoctor(id) {
+    props.form.doctor_ids = (props.form.doctor_ids || []).filter(i => i !== id);
+}
+
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(props.form, {
+    titleSource: () => props.form.title,
+    descSource:  () => props.form.short_desc,
+    titleSuffix: ' | ClinicMaster',
+    titleKey:    'seo_title',
+    descKey:     'seo_description',
+    keywordsKey: 'seo_keywords',
+});
 
 const slugPreview = computed(() => {
     return (props.form.title || '')
@@ -203,36 +231,36 @@ const defaultIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
 
 const iconPresets = [
     {
-        name: 'Gym',
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5h11M6.5 6.5a2.5 2.5 0 000 5h11a2.5 2.5 0 000-5"/><path d="M6.5 11.5v5a1 1 0 001 1h9a1 1 0 001-1v-5"/><line x1="9" y1="6.5" x2="9" y2="4"/><line x1="15" y1="6.5" x2="15" y2="4"/></svg>`,
+        name: 'Cardiology',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>`,
     },
     {
-        name: 'Spa',
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 015 5c0 2.5-1.5 4.5-3.5 5.5S9 14 9 17h6"/><path d="M9 17h6v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/><line x1="12" y1="2" x2="12" y2="4"/></svg>`,
+        name: 'Dental',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 3c-2.2 0-3.8 1-5 1-1.5 0-2.5 1.3-2.5 3.3 0 2.2.7 4.7 1.4 6.9.5 1.7.9 3.6 1.6 4.9.4.8 1 1.4 1.8 1.4.9 0 1.3-.8 1.6-1.9.3-1.1.4-2.5 1.1-2.5s.8 1.4 1.1 2.5c.3 1.1.7 1.9 1.6 1.9.8 0 1.4-.6 1.8-1.4.7-1.3 1.1-3.2 1.6-4.9.7-2.2 1.4-4.7 1.4-6.9C19.5 5.3 18.5 4 17 4c-1.2 0-2.8-1-5-1z"/></svg>`,
     },
     {
-        name: 'Pool',
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16c2.5 0 2.5 2 5 2s2.5-2 5-2 2.5 2 5 2 2.5-2 5-2"/><path d="M2 20c2.5 0 2.5 2 5 2s2.5-2 5-2 2.5 2 5 2 2.5-2 5-2"/><path d="M8 10V6a4 4 0 018 0v4"/><line x1="8" y1="10" x2="16" y2="10"/></svg>`,
+        name: 'Pediatrics',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 20s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 5c-2.5 4.5-9.5 9-9.5 9z"/></svg>`,
     },
     {
-        name: 'Restaurant',
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>`,
+        name: 'Emergency',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a5 5 0 0 1 5 5v6H7V8a5 5 0 0 1 5-5z"/><path d="M5 14h14v3a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3zM12 3V1M9 21h6"/></svg>`,
     },
     {
-        name: 'Car',
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
+        name: 'Laboratory',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M9 2h6M10 2v6.5L5.5 18a2 2 0 0 0 1.8 2.9h9.4a2 2 0 0 0 1.8-2.9L14 8.5V2"/><path d="M7.5 15h9" stroke-linecap="round"/></svg>`,
     },
     {
-        name: 'Jogging',
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M5 21l5.5-9L13 15l3-4.5 3 4.5"/><path d="M9 8l2 4h5"/></svg>`,
+        name: 'Mental Health',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3 3 0 0 0 8 17a3 3 0 0 0 3-3V7a3 3 0 0 0-2-3z"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3 3 0 0 1 16 17a3 3 0 0 1-3-3V7a3 3 0 0 1 2-3z"/></svg>`,
     },
     {
-        name: 'Conference',
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>`,
+        name: 'Surgery',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 14 10M14 10l6-6M14 10l3 3M17 4l3 3"/></svg>`,
     },
     {
-        name: 'WiFi',
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>`,
+        name: 'General Medicine',
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a3 3 0 0 0-3 3v3a5 5 0 0 0 5 5h2a5 5 0 0 0 5-5V7a3 3 0 0 0-3-3"/><circle cx="18" cy="6" r="2.5"/><path d="M12 15v3m0 0a3 3 0 1 0 0 0z"/></svg>`,
     },
 ];
 </script>

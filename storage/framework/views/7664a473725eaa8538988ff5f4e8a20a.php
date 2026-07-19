@@ -1,4 +1,43 @@
-<?php $__env->startSection('title', 'Doctor Details | ClinicMaster Medical & Health Care Services'); ?>
+<?php
+  $docName    = $doctor->name;
+  $docPhoto   = $doctor->photo ? asset('storage/' . $doctor->photo) : asset('assets/img/team-3.png');
+  $docDegrees = $doctor->degrees ?: 'MD, Aesthetic & Reconstructive Medical';
+  $docBio     = $doctor->bio ?: 'Dr. '.$docName.' is a dedicated physician committed to providing compassionate and comprehensive care, ensuring the well-being of every patient. Their practice emphasizes preventive health, early diagnosis, and family-centered treatment approaches.';
+  $docSkills  = !empty($doctor->skills) ? $doctor->skills : [
+    'Primary Care & Diagnosis',
+    'Chronic Disease Management',
+    'Patient Education & Preventive Health',
+    'Multidisciplinary Collaboration',
+    'Clinical Decision Making',
+    'Basic Emergency Care',
+  ];
+  $docSchedule = !empty($doctor->schedule) ? $doctor->schedule : [
+    ['day' => 'Monday',    'time' => '11:00 AM – 6:00 PM'],
+    ['day' => 'Tuesday',   'time' => '11:00 AM – 6:00 PM'],
+    ['day' => 'Wednesday', 'time' => '11:00 AM – 6:00 PM'],
+    ['day' => 'Thursday',  'time' => '11:00 AM – 6:00 PM'],
+    ['day' => 'Friday',    'time' => '11:00 AM – 6:00 PM'],
+    ['day' => 'Saturday',  'time' => '11:00 AM – 6:00 PM'],
+  ];
+  $docAddress = $doctor->address ?: '234 Oak Drive, Villagetown, USA';
+  $docPhone   = $doctor->phone   ?: '0 123-456-7890';
+  $docEmail   = $doctor->email   ?: 'info@example.com';
+
+  $seoTitle = $doctor->seo_title ?: ($docName.' | ClinicMaster Medical & Health Care Services');
+  $seoDesc  = $doctor->seo_description ?: \Illuminate\Support\Str::limit(strip_tags($docBio), 160);
+?>
+
+<?php $__env->startSection('title', $seoTitle); ?>
+<?php $__env->startSection('meta_description', $seoDesc); ?>
+<?php $__env->startSection('og_title', $seoTitle); ?>
+<?php $__env->startSection('og_description', $seoDesc); ?>
+<?php if(!empty($doctor->seo_keywords)): ?>
+<?php $__env->startSection('meta_keywords', $doctor->seo_keywords); ?>
+<?php endif; ?>
+<?php $docOgImage = $doctor->seo_og_image ?: $doctor->photo; ?>
+<?php if(!empty($docOgImage)): ?>
+<?php $__env->startSection('og_image', asset('storage/' . $docOgImage)); ?>
+<?php endif; ?>
 
 <?php $__env->startSection('content'); ?>
 
@@ -41,7 +80,7 @@
               <path d="m7 6 5 6-5 6M13 6l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
-          <span>Rihana Roy</span>
+          <span><?php echo e($docName); ?></span>
         </nav>
       </div>
 
@@ -55,8 +94,6 @@
       </a>
     </section>
 
-    <!-- ===================== Services ===================== -->
-    <!-- ===================== Doctors ===================== -->
     <!-- ===================== Doctor Detail ===================== -->
     <section class="doctor-detail">
       <div class="container mx-auto">
@@ -64,21 +101,21 @@
           <!-- Sidebar -->
           <aside class="doctor-detail__sidebar">
             <div class="doctor-photo-card">
-              <img src="<?php echo e(asset('assets/img/team-3.png')); ?>" alt="Dr. Rihana Roy" class="doctor-photo-card__img" />
+              <img src="<?php echo e($docPhoto); ?>" alt="<?php echo e($docName); ?>" class="doctor-photo-card__img" />
               <div class="doctor-photo-card__social">
-                <a href="#" class="doctor-photo-card__social-link" aria-label="LinkedIn">
+                <a href="<?php echo e($doctor->linkedin_url ?: '#'); ?>" class="doctor-photo-card__social-link" aria-label="LinkedIn">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z"/></svg>
                 </a>
-                <a href="#" class="doctor-photo-card__social-link" aria-label="Instagram">
+                <a href="<?php echo e($doctor->instagram_url ?: '#'); ?>" class="doctor-photo-card__social-link" aria-label="Instagram">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
                 </a>
-                <a href="#" class="doctor-photo-card__social-link" aria-label="Facebook">
+                <a href="<?php echo e($doctor->facebook_url ?: '#'); ?>" class="doctor-photo-card__social-link" aria-label="Facebook">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z"/></svg>
                 </a>
-                <a href="#" class="doctor-photo-card__social-link" aria-label="X">
+                <a href="<?php echo e($doctor->twitter_url ?: '#'); ?>" class="doctor-photo-card__social-link" aria-label="X">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.3 3H21l-6.4 7.3L22 21h-6.5l-5-6.6-5.8 6.6H2l6.9-7.9L2 3h6.6l4.6 6.1L18.3 3zM17.2 19h1.5L7.9 4.9H6.3L17.2 19z"/></svg>
                 </a>
-                <a href="#" class="doctor-photo-card__social-link" aria-label="YouTube">
+                <a href="<?php echo e($doctor->youtube_url ?: '#'); ?>" class="doctor-photo-card__social-link" aria-label="YouTube">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.6-.5-5.3c-.3-1-1-1.8-2-2C18.9 4.2 12 4.2 12 4.2s-6.9 0-8.5.5c-1 .3-1.7 1-2 2C1 8.4 1 12 1 12s0 3.6.5 5.3c.3 1 1 1.8 2 2 1.6.5 8.5.5 8.5.5s6.9 0 8.5-.5c1-.3 1.7-1 2-2 .5-1.7.5-5.3.5-5.3zM9.8 15.5V8.5l6.2 3.5-6.2 3.5z"/></svg>
                 </a>
               </div>
@@ -86,30 +123,12 @@
 
             <div class="doctor-schedule">
               <h3 class="doctor-schedule__title">My Time Schedule</h3>
+              <?php $__currentLoopData = $docSchedule; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <div class="doctor-schedule__row">
-                <span class="doctor-schedule__day">Monday</span>
-                <span class="doctor-schedule__time">11:00 AM – 6:00 PM</span>
+                <span class="doctor-schedule__day"><?php echo e($row['day'] ?? ''); ?></span>
+                <span class="doctor-schedule__time"><?php echo e($row['time'] ?? ''); ?></span>
               </div>
-              <div class="doctor-schedule__row">
-                <span class="doctor-schedule__day">Tuesday</span>
-                <span class="doctor-schedule__time">11:00 AM – 6:00 PM</span>
-              </div>
-              <div class="doctor-schedule__row">
-                <span class="doctor-schedule__day">Wednesday</span>
-                <span class="doctor-schedule__time">11:00 AM – 6:00 PM</span>
-              </div>
-              <div class="doctor-schedule__row">
-                <span class="doctor-schedule__day">Thursday</span>
-                <span class="doctor-schedule__time">11:00 AM – 6:00 PM</span>
-              </div>
-              <div class="doctor-schedule__row">
-                <span class="doctor-schedule__day">Friday</span>
-                <span class="doctor-schedule__time">11:00 AM – 6:00 PM</span>
-              </div>
-              <div class="doctor-schedule__row">
-                <span class="doctor-schedule__day">Saturday</span>
-                <span class="doctor-schedule__time">11:00 AM – 6:00 PM</span>
-              </div>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
 
             <div class="doctor-contact">
@@ -122,7 +141,7 @@
                 </span>
                 <div>
                   <p class="doctor-contact__label">Address</p>
-                  <p class="doctor-contact__value">234 Oak Drive, Villagetown, USA</p>
+                  <p class="doctor-contact__value"><?php echo e($docAddress); ?></p>
                 </div>
               </div>
 
@@ -134,7 +153,7 @@
                 </span>
                 <div>
                   <p class="doctor-contact__label">Call Us</p>
-                  <p class="doctor-contact__value">0 123-456-7890</p>
+                  <p class="doctor-contact__value"><?php echo e($docPhone); ?></p>
                 </div>
               </div>
 
@@ -147,7 +166,7 @@
                 </span>
                 <div>
                   <p class="doctor-contact__label">Send us a Mail</p>
-                  <p class="doctor-contact__value">info@example.com</p>
+                  <p class="doctor-contact__value"><?php echo e($docEmail); ?></p>
                 </div>
               </div>
             </div>
@@ -155,133 +174,85 @@
 
           <!-- Content -->
           <div>
-            <h1 class="doctor-detail__name">Rihana Roy</h1>
-            <p class="doctor-detail__specialty">MD, Aesthetic &amp; Reconstructive Medical</p>
-            <p class="doctor-detail__desc">
-              Dr. Rihana Roy is a pediatrician with an MBBS and M.D. in Medicine, practicing at various medical
-              institutions. She specializes in the care of infants, children, and adolescents, addressing a wide
-              range of health concerns from routine check-ups to complex medical conditions. Dr. Roy is committed to
-              providing compassionate and comprehensive care, ensuring the well-being of her young patients. Her
-              practice emphasizes preventive health, early diagnosis, and family-centered treatment approaches. She
-              is associated with multiple hospitals, contributing to the healthcare community through her expertise
-              and dedication.
-            </p>
+            <h1 class="doctor-detail__name"><?php echo e($docName); ?></h1>
+            <p class="doctor-detail__specialty"><?php echo e($docDegrees); ?></p>
+            <div class="doctor-detail__desc">
+              <?php echo $docBio; ?>
+
+            </div>
 
             <div class="doctor-info-table">
               <div class="doctor-info-table__row">
                 <span class="doctor-info-table__label">Specialty</span>
-                <span class="doctor-info-table__value">Gynecology</span>
+                <span class="doctor-info-table__value"><?php echo e($doctor->specialty ?: 'General Medicine'); ?></span>
               </div>
               <div class="doctor-info-table__row">
                 <span class="doctor-info-table__label">Degrees</span>
-                <span class="doctor-info-table__value">MD, Aesthetic &amp; Reconstructive Medical</span>
+                <span class="doctor-info-table__value"><?php echo e($docDegrees); ?></span>
               </div>
               <div class="doctor-info-table__row">
                 <span class="doctor-info-table__label">Experience</span>
-                <span class="doctor-info-table__value">30 years, New York Urgent Medical Care Serving California</span>
+                <span class="doctor-info-table__value"><?php echo e($doctor->experience ?: '30 years, New York Urgent Medical Care Serving California'); ?></span>
               </div>
               <div class="doctor-info-table__row">
                 <span class="doctor-info-table__label">Awards</span>
-                <span class="doctor-info-table__value">World Medical Congress – 2023</span>
+                <span class="doctor-info-table__value"><?php echo e($doctor->awards ?: 'World Medical Congress – 2023'); ?></span>
               </div>
             </div>
 
             <h2 class="service-detail__subtitle">Professional Skills</h2>
             <div class="ceo-message__checklist mt-6">
+              <?php $__currentLoopData = $docSkills; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $skill): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <span class="ceo-message__check">
                 <span class="ceo-message__check-icon">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </span>
-                Primary Care &amp; Diagnosis
+                <?php echo e($skill); ?>
+
               </span>
-              <span class="ceo-message__check">
-                <span class="ceo-message__check-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                Chronic Disease Management
-              </span>
-              <span class="ceo-message__check">
-                <span class="ceo-message__check-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                Patient Education &amp; Preventive Health
-              </span>
-              <span class="ceo-message__check">
-                <span class="ceo-message__check-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                Multidisciplinary Collaboration
-              </span>
-              <span class="ceo-message__check">
-                <span class="ceo-message__check-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                Clinical Decision Making
-              </span>
-              <span class="ceo-message__check">
-                <span class="ceo-message__check-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                Basic Emergency Care
-              </span>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
 
             <h2 class="service-detail__subtitle">My Time Schedule</h2>
             <div class="doctor-schedule-full">
+              <?php $__currentLoopData = $docSchedule; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <div class="doctor-schedule-full__row">
-                <span class="doctor-schedule-full__day">Monday</span>
-                <span class="doctor-schedule-full__time">11:00 AM – 6:00 PM</span>
+                <span class="doctor-schedule-full__day"><?php echo e($row['day'] ?? ''); ?></span>
+                <span class="doctor-schedule-full__time"><?php echo e($row['time'] ?? ''); ?></span>
               </div>
-              <div class="doctor-schedule-full__row">
-                <span class="doctor-schedule-full__day">Tuesday</span>
-                <span class="doctor-schedule-full__time">11:00 AM – 6:00 PM</span>
-              </div>
-              <div class="doctor-schedule-full__row">
-                <span class="doctor-schedule-full__day">Wednesday</span>
-                <span class="doctor-schedule-full__time">11:00 AM – 6:00 PM</span>
-              </div>
-              <div class="doctor-schedule-full__row">
-                <span class="doctor-schedule-full__day">Thursday</span>
-                <span class="doctor-schedule-full__time">11:00 AM – 6:00 PM</span>
-              </div>
-              <div class="doctor-schedule-full__row">
-                <span class="doctor-schedule-full__day">Friday</span>
-                <span class="doctor-schedule-full__time">11:00 AM – 6:00 PM</span>
-              </div>
-              <div class="doctor-schedule-full__row">
-                <span class="doctor-schedule-full__day">Saturday</span>
-                <span class="doctor-schedule-full__time">11:00 AM – 6:00 PM</span>
-              </div>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
 
             <div class="appointment__card mt-8">
-              <form class="appointment__form">
+              <?php if(session('success')): ?>
+              <p class="appointment__field-group" style="color: #16a34a;"><?php echo e(session('success')); ?></p>
+              <?php endif; ?>
+              <?php if($errors->any()): ?>
+              <p class="appointment__field-group" style="color: #dc2626;"><?php echo e($errors->first()); ?></p>
+              <?php endif; ?>
+
+              <form class="appointment__form" action="<?php echo e(route('appointment.submit')); ?>" method="POST">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="source" value="doctor_details_page" />
+                <input type="hidden" name="preferred_doctor" value="<?php echo e($docName); ?>" />
+                <input type="hidden" name="department" value="<?php echo e($doctor->specialty); ?>" />
+
                 <div class="appointment__field-group is-half">
-                  <input type="text" class="appointment__field" placeholder="First Name" />
+                  <input type="text" name="first_name" value="<?php echo e(old('first_name')); ?>" class="appointment__field" placeholder="First Name" required />
                 </div>
                 <div class="appointment__field-group is-half">
-                  <input type="text" class="appointment__field" placeholder="Last Name" />
+                  <input type="text" name="last_name" value="<?php echo e(old('last_name')); ?>" class="appointment__field" placeholder="Last Name" />
                 </div>
                 <div class="appointment__field-group is-half">
-                  <input type="email" class="appointment__field" placeholder="Your Email" />
+                  <input type="email" name="email" value="<?php echo e(old('email')); ?>" class="appointment__field" placeholder="Your Email" required />
                 </div>
                 <div class="appointment__field-group is-half">
-                  <input type="tel" class="appointment__field" placeholder="Phone Number" />
+                  <input type="tel" name="phone" value="<?php echo e(old('phone')); ?>" class="appointment__field" placeholder="Phone Number" />
                 </div>
                 <div class="appointment__field-group">
-                  <textarea class="appointment__field" placeholder="Message" rows="1"></textarea>
+                  <textarea name="message" class="appointment__field" placeholder="Message" rows="1"><?php echo e(old('message')); ?></textarea>
                 </div>
 
                 <div class="appointment__field-group">

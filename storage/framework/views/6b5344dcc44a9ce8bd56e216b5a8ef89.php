@@ -35,7 +35,7 @@
   <div class="header">
     <div class="badge">Admin Notification</div>
     <h1>New <?php echo e($inquiry->typeLabel()); ?></h1>
-    <p>Submitted via Hotel Beach Way website</p>
+    <p>Submitted via <?php echo e(config('app.name')); ?> website</p>
   </div>
   <div class="gold-bar"></div>
   <div class="alert-strip">⚠ A new inquiry has been submitted and requires your attention.</div>
@@ -72,8 +72,9 @@
 
   <div class="footer">
     <p>
-      This notification was sent to the Hotel Beach Way admin team.<br>
-      &copy; <?php echo e(date('Y')); ?> Hotel Beach Way · Cox's Bazar, Bangladesh
+      This notification was sent to the <?php echo e(config('app.name')); ?> admin team.<br>
+      &copy; <?php echo e(date('Y')); ?> <?php echo e(config('app.name')); ?>
+
     </p>
   </div>
 </div>

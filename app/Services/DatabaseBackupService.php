@@ -39,7 +39,7 @@ class DatabaseBackupService
 
         try {
             fwrite($fh, "-- Database backup of `{$database}`\n");
-            fwrite($fh, '-- Generated at ' . now()->toDateTimeString() . " by Hotel Beach Way admin\n\n");
+            fwrite($fh, '-- Generated at ' . now()->toDateTimeString() . ' by ' . config('app.name') . " admin\n\n");
             fwrite($fh, "SET NAMES utf8mb4;\n");
             fwrite($fh, "SET FOREIGN_KEY_CHECKS=0;\n\n");
 

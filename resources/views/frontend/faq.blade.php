@@ -1,13 +1,29 @@
 @extends('layouts.frontend')
 
-@section('title', 'FAQ | ClinicMaster Medical & Health Care Services')
+@php
+  $heroTitle = $faqPage['faq_hero_title'] ?? 'FAQ';
+  $heroImage = !empty($faqPage['faq_hero_image']) ? asset('storage/' . $faqPage['faq_hero_image']) : asset('assets/img/breadcumb.webp');
+  $seoTitle  = $faqPage['faq_seo_title'] ?? 'FAQ | ClinicMaster Medical & Health Care Services';
+  $seoDesc   = $faqPage['faq_seo_description'] ?? "Answers to the questions patients ask us most often. Can't find what you're looking for? Reach out and our team will be glad to help.";
+@endphp
+
+@section('title', $seoTitle)
+@section('meta_description', $seoDesc)
+@section('og_title', $seoTitle)
+@section('og_description', $seoDesc)
+@if(!empty($faqPage['faq_seo_keywords']))
+@section('meta_keywords', $faqPage['faq_seo_keywords'])
+@endif
+@if(!empty($faqPage['faq_seo_og_image']))
+@section('og_image', asset('storage/' . $faqPage['faq_seo_og_image']))
+@endif
 
 @section('content')
 
     <!-- ===================== Breadcrumb / Page header ===================== -->
     <section class="page-header">
       <div class="page-header__media">
-        <img src="{{ asset('assets/img/breadcumb.webp') }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
+        <img src="{{ $heroImage }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
         <span class="page-header__overlay"></span>
       </div>
 
@@ -29,7 +45,7 @@
       </div>
 
       <div class="page-header__inner">
-        <h1 class="page-header__title">FAQ</h1>
+        <h1 class="page-header__title">{{ $heroTitle }}</h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
           <a href="{{ route('home') }}">Home</a>
           <span class="page-header__breadcrumb-sep">
@@ -52,20 +68,33 @@
     </section>
 
     <!-- ===================== FAQ ===================== -->
+    @php
+      $faqTitle = $faqPage['faq_page_title'] ?? 'Frequently Asked Questions';
+      $faqDesc  = $faqPage['faq_page_desc'] ?? "Answers to the questions patients ask us most often. Can't find what you're looking for? Reach out and our team will be glad to help.";
+      $faqPhoto = !empty($faqPage['faq_page_image']) ? asset('storage/' . $faqPage['faq_page_image']) : asset('assets/img/about-image.webp');
+      $faqList = $faqItems->isNotEmpty() ? $faqItems : collect([
+        ['question' => 'What types of treatments do you offer?', 'answer' => 'ClinicMaster offers a full range of services, from routine check-ups and diagnostics to specialist care in cardiology, pediatrics, dental, maternity, surgery, and emergency medicine. Visit our Services page for the complete list.'],
+        ['question' => 'How do I book my appointment?', 'answer' => "You can book online through our Appointment page by choosing a department, preferred doctor, and time slot, or call us directly at 1 123 456 7890. You'll receive a confirmation once your visit is scheduled."],
+        ['question' => 'Can I cancel or reschedule my appointment?', 'answer' => 'Yes. Appointments can be rescheduled or cancelled free of charge up to 24 hours in advance by calling our front desk or emailing support@hospital.com.'],
+        ['question' => 'Do you accept health insurance?', 'answer' => 'We work with most major insurance providers. Bring your insurance card to your first visit, or contact our billing team beforehand to confirm your coverage and any out-of-pocket costs.'],
+        ['question' => 'Is emergency care available 24/7?', 'answer' => 'Yes, our Emergency & Urgent Care department is staffed around the clock, every day of the year, with a dedicated ambulance and trauma team on standby.'],
+        ['question' => 'Can I get a telemedicine consultation?', 'answer' => 'Absolutely. Many of our specialists offer video consultations for follow-ups and non-emergency concerns. Select "Telemedicine" when booking your appointment online.'],
+      ]);
+    @endphp
     <section class="faq">
       <div class="container mx-auto">
         <div class="faq__grid">
           <div>
-            <h2 class="faq__title">Frequently Asked Questions</h2>
+            <h2 class="faq__title">{{ $faqTitle }}</h2>
             <p class="faq__desc">
-              Answers to the questions patients ask us most often. Can't find what you're looking for? Reach out
-              and our team will be glad to help.
+              {{ $faqDesc }}
             </p>
 
             <div class="faq__list">
-              <div class="faq-item is-open">
+              @foreach($faqList as $i => $qa)
+              <div class="faq-item {{ $i === 0 ? 'is-open' : '' }}">
                 <button type="button" class="faq-item__question" data-faq-toggle>
-                  What types of treatments do you offer?
+                  {{ $qa['question'] }}
                   <span class="faq-item__icon">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -74,103 +103,16 @@
                 </button>
                 <div class="faq-item__answer">
                   <p>
-                    ClinicMaster offers a full range of services, from routine check-ups and diagnostics to
-                    specialist care in cardiology, pediatrics, dental, maternity, surgery, and emergency medicine.
-                    Visit our Services page for the complete list.
+                    {{ $qa['answer'] }}
                   </p>
                 </div>
               </div>
-
-              <div class="faq-item">
-                <button type="button" class="faq-item__question" data-faq-toggle>
-                  How do I book my appointment?
-                  <span class="faq-item__icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                </button>
-                <div class="faq-item__answer">
-                  <p>
-                    You can book online through our Appointment page by choosing a department, preferred doctor,
-                    and time slot, or call us directly at 1 123 456 7890. You'll receive a confirmation once your
-                    visit is scheduled.
-                  </p>
-                </div>
-              </div>
-
-              <div class="faq-item">
-                <button type="button" class="faq-item__question" data-faq-toggle>
-                  Can I cancel or reschedule my appointment?
-                  <span class="faq-item__icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                </button>
-                <div class="faq-item__answer">
-                  <p>
-                    Yes. Appointments can be rescheduled or cancelled free of charge up to 24 hours in advance by
-                    calling our front desk or emailing support@hospital.com.
-                  </p>
-                </div>
-              </div>
-
-              <div class="faq-item">
-                <button type="button" class="faq-item__question" data-faq-toggle>
-                  Do you accept health insurance?
-                  <span class="faq-item__icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                </button>
-                <div class="faq-item__answer">
-                  <p>
-                    We work with most major insurance providers. Bring your insurance card to your first visit, or
-                    contact our billing team beforehand to confirm your coverage and any out-of-pocket costs.
-                  </p>
-                </div>
-              </div>
-
-              <div class="faq-item">
-                <button type="button" class="faq-item__question" data-faq-toggle>
-                  Is emergency care available 24/7?
-                  <span class="faq-item__icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                </button>
-                <div class="faq-item__answer">
-                  <p>
-                    Yes, our Emergency & Urgent Care department is staffed around the clock, every day of the
-                    year, with a dedicated ambulance and trauma team on standby.
-                  </p>
-                </div>
-              </div>
-
-              <div class="faq-item">
-                <button type="button" class="faq-item__question" data-faq-toggle>
-                  Can I get a telemedicine consultation?
-                  <span class="faq-item__icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                </button>
-                <div class="faq-item__answer">
-                  <p>
-                    Absolutely. Many of our specialists offer video consultations for follow-ups and non-emergency
-                    concerns. Select "Telemedicine" when booking your appointment online.
-                  </p>
-                </div>
-              </div>
+              @endforeach
             </div>
           </div>
 
           <div class="faq__media">
-            <img src="{{ asset('assets/img/about-image.webp') }}" alt="Smiling doctor ready to answer your questions" class="faq__photo" />
+            <img src="{{ $faqPhoto }}" alt="Smiling doctor ready to answer your questions" class="faq__photo" />
 
             <div class="faq__contact-card">
               <div class="faq__contact-info">
@@ -181,7 +123,7 @@
                 </span>
                 <div>
                   <p class="faq__contact-label">Contact us?</p>
-                  <p class="faq__contact-value">1 123 456 7890</p>
+                  <p class="faq__contact-value">{{ $footerSettings['footer_phone_1'] ?? '1 123 456 7890' }}</p>
                 </div>
               </div>
 

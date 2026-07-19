@@ -1,13 +1,32 @@
 @extends('layouts.frontend')
 
-@section('title', 'Service Details | ClinicMaster Medical & Health Care Services')
+@php
+  $heroImage = !empty($svc['svc_page_hero_image']) ? asset('storage/' . $svc['svc_page_hero_image']) : asset('assets/img/breadcumb.webp');
+  $seoTitle  = $service->seo_title ?: ($svc['svc_seo_title'] ?? null) ?: ($service->title . ' | ClinicMaster Medical & Health Care Services');
+  $seoDesc   = $service->seo_description ?: ($svc['svc_seo_description'] ?? null) ?: $service->short_desc ?: 'Learn more about this service at ClinicMaster.';
+@endphp
+
+@section('title', $seoTitle)
+@section('meta_description', $seoDesc)
+@section('og_title', $seoTitle)
+@section('og_description', $seoDesc)
+@if(!empty($service->seo_keywords))
+@section('meta_keywords', $service->seo_keywords)
+@elseif(!empty($svc['svc_seo_keywords']))
+@section('meta_keywords', $svc['svc_seo_keywords'])
+@endif
+@if(!empty($service->seo_og_image))
+@section('og_image', asset('storage/' . $service->seo_og_image))
+@elseif(!empty($svc['svc_seo_og_image']))
+@section('og_image', asset('storage/' . $svc['svc_seo_og_image']))
+@endif
 
 @section('content')
 
     <!-- ===================== Breadcrumb / Page header ===================== -->
     <section class="page-header">
       <div class="page-header__media">
-        <img src="{{ asset('assets/img/breadcumb.webp') }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
+        <img src="{{ $heroImage }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
         <span class="page-header__overlay"></span>
       </div>
 
@@ -43,7 +62,7 @@
               <path d="m7 6 5 6-5 6M13 6l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
-          <span>Angioplasty</span>
+          <span>{{ $service->title }}</span>
         </nav>
       </div>
 
@@ -67,70 +86,16 @@
             <nav class="service-sidebar__nav">
               <h3 class="service-sidebar__title">All Services</h3>
 
-              <a href="{{ route('service-details') }}" class="service-sidebar__link">
-                Dental
+              @foreach($allServices as $s)
+              <a href="{{ route('service-details', $s->slug) }}" class="service-sidebar__link {{ $s->id === $service->id ? 'is-active' : '' }}">
+                {{ $s->title }}
                 <span class="service-sidebar__link-icon">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </span>
               </a>
-              <a href="{{ route('service-details') }}" class="service-sidebar__link">
-                Endocrinology
-                <span class="service-sidebar__link-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-              <a href="{{ route('service-details') }}" class="service-sidebar__link">
-                Neurology
-                <span class="service-sidebar__link-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-              <a href="{{ route('service-details') }}" class="service-sidebar__link">
-                Eye Care
-                <span class="service-sidebar__link-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-              <a href="{{ route('service-details') }}" class="service-sidebar__link">
-                Orthopedics
-                <span class="service-sidebar__link-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-              <a href="{{ route('service-details') }}" class="service-sidebar__link">
-                MRI
-                <span class="service-sidebar__link-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-              <a href="{{ route('service-details') }}" class="service-sidebar__link">
-                Angioplasty
-                <span class="service-sidebar__link-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-              <a href="{{ route('service-details') }}" class="service-sidebar__link">
-                Cardiology
-                <span class="service-sidebar__link-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
+              @endforeach
             </nav>
 
             <div class="service-sidebar__help">
@@ -140,11 +105,11 @@
                   <path d="M8.5 10.5h7M8.5 14h4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
                 </svg>
               </span>
-              <h4 class="service-sidebar__help-title">Do you need any help?</h4>
+              <h4 class="service-sidebar__help-title">{{ $svc['svc_help_title'] ?? 'Do you need any help?' }}</h4>
               <div class="service-sidebar__help-divider"></div>
               <div class="service-sidebar__help-contact">
-                <p>1 123 456 7890</p>
-                <p>sales@smartfreamework.com</p>
+                <p>{{ $headerSettings['header_phone'] ?? '1 123 456 7890' }}</p>
+                <p>{{ $headerSettings['header_email'] ?? 'sales@smartfreamework.com' }}</p>
               </div>
               <a href="{{ route('contact') }}" class="service-sidebar__help-btn">
                 Contact Us
@@ -158,116 +123,70 @@
           </aside>
 
           <!-- Content -->
+          @php
+            $serviceFeatures = !empty($service->features) ? $service->features : [
+              'Comprehensive Specialties', 'Emergency Services', 'Intensive Care Units (ICUs)', 'Telemedicine Facilities', 'Multidisciplinary Team',
+              'Research and Development', 'Advanced Imaging Services', 'Rehabilitation Services', 'Patient-Centric Approach', 'Health Information Technology',
+            ];
+            $serviceFeatureCols = collect($serviceFeatures)->chunk((int) ceil(count($serviceFeatures) / 2));
+          @endphp
           <div>
-            <h1 class="service-detail__title">Angioplasty</h1>
+            <h1 class="service-detail__title">{{ $service->title }}</h1>
             <p class="service-detail__desc">
-              Angioplasty is a medical procedure used to open blocked or narrowed blood vessels, usually in the heart
-              (coronary arteries). It helps improve blood flow and reduce chest pain (angina) or the risk of a heart
-              attack. A thin tube with a small balloon is inserted into a blood vessel (usually through the groin or
-              wrist) and guided to the blockage. The balloon is inflated to open the artery, and in many cases, a
-              stent (a small mesh tube) is placed to keep it open. The procedure usually takes 1 to 2 hours and may
-              require a short hospital stay.
+              @if($service->description)
+                {!! $service->description !!}
+              @else
+                {{ $service->short_desc ?: 'Learn more about our ' . $service->title . ' service and how our specialists can help you.' }}
+              @endif
             </p>
 
-            <h2 class="service-detail__subtitle">Steps in Angioplasty</h2>
+            <h2 class="service-detail__subtitle">Steps in {{ $service->title }}</h2>
             <div class="about__features">
+              @foreach($serviceFeatureCols as $col)
               <div>
+                @foreach($col as $feature)
                 <div class="about__feature">
                   <span class="about__feature-check">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                   </span>
-                  Comprehensive Specialties
+                  {{ $feature }}
                 </div>
-                <div class="about__feature">
-                  <span class="about__feature-check">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                  Emergency Services
-                </div>
-                <div class="about__feature">
-                  <span class="about__feature-check">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                  Intensive Care Units (ICUs)
-                </div>
-                <div class="about__feature">
-                  <span class="about__feature-check">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                  Telemedicine Facilities
-                </div>
-                <div class="about__feature">
-                  <span class="about__feature-check">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                  Multidisciplinary Team
-                </div>
+                @endforeach
               </div>
-
-              <div>
-                <div class="about__feature">
-                  <span class="about__feature-check">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                  Research and Development
-                </div>
-                <div class="about__feature">
-                  <span class="about__feature-check">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                  Advanced Imaging Services
-                </div>
-                <div class="about__feature">
-                  <span class="about__feature-check">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                  Rehabilitation Services
-                </div>
-                <div class="about__feature">
-                  <span class="about__feature-check">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                  Patient-Centric Approach
-                </div>
-                <div class="about__feature">
-                  <span class="about__feature-check">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                  Health Information Technology
-                </div>
-              </div>
+              @endforeach
             </div>
 
             <h2 class="service-detail__subtitle">Available Doctors</h2>
+            @php
+              $serviceDoctorDefaults = [
+                ['name' => 'Rihana Roy',      'role' => 'Senior Cardiologist',        'photo' => asset('assets/img/team-3.png'), 'url' => route('doctors'), 'facebook' => null, 'instagram' => null, 'linkedin' => null],
+                ['name' => 'Danial Frankie',  'role' => 'Interventional Cardiologist', 'photo' => asset('assets/img/team-3.png'), 'url' => route('doctors'), 'facebook' => null, 'instagram' => null, 'linkedin' => null],
+                ['name' => 'Kenneth Fong',    'role' => 'Cardiac Surgeon',            'photo' => asset('assets/img/team-3.png'), 'url' => route('doctors'), 'facebook' => null, 'instagram' => null, 'linkedin' => null],
+                ['name' => 'Nashla Martines', 'role' => 'Vascular Specialist',         'photo' => asset('assets/img/team-3.png'), 'url' => route('doctors'), 'facebook' => null, 'instagram' => null, 'linkedin' => null],
+              ];
+              $serviceDoctorCards = (isset($serviceDoctors) && $serviceDoctors->isNotEmpty())
+                ? $serviceDoctors->map(fn($d) => [
+                    'name'      => $d->name,
+                    'role'      => $d->role,
+                    'photo'     => $d->photo ? asset('storage/' . $d->photo) : asset('assets/img/team-3.png'),
+                    'url'       => route('doctor-details', $d->slug),
+                    'facebook'  => $d->facebook_url,
+                    'instagram' => $d->instagram_url,
+                    'linkedin'  => $d->linkedin_url,
+                  ])
+                : collect($serviceDoctorDefaults);
+            @endphp
             <div class="service-doctors">
-              <!-- Rihana Roy -->
+              @foreach($serviceDoctorCards as $sd)
               <article class="team-card">
                 <span class="team-card__corner" aria-hidden="true"></span>
 
                 <div class="team-card__photo-wrap">
-                  <img src="{{ asset('assets/img/team-3.png') }}" alt="Dr. Rihana Roy" class="team-card__photo" />
+                  <img src="{{ $sd['photo'] }}" alt="Dr. {{ $sd['name'] }}" class="team-card__photo" />
                   <span class="team-card__overlay">
-                    <a href="{{ route('doctor-details') }}" class="team-card__view" aria-label="View Dr. Rihana Roy profile">
+                    <a href="{{ $sd['url'] }}" class="team-card__view" aria-label="View Dr. {{ $sd['name'] }} profile">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="m10 6 6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
@@ -276,13 +195,13 @@
                 </div>
 
                 <div class="team-card__social">
-                  <a href="#" class="team-card__social-link" aria-label="Facebook">
+                  <a href="{{ $sd['facebook'] ?: '#' }}" class="team-card__social-link" aria-label="Facebook">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z"/></svg>
                   </a>
-                  <a href="#" class="team-card__social-link" aria-label="Instagram">
+                  <a href="{{ $sd['instagram'] ?: '#' }}" class="team-card__social-link" aria-label="Instagram">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
                   </a>
-                  <a href="#" class="team-card__social-link" aria-label="LinkedIn">
+                  <a href="{{ $sd['linkedin'] ?: '#' }}" class="team-card__social-link" aria-label="LinkedIn">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z"/></svg>
                   </a>
                   <a href="#" class="team-card__social-link" aria-label="X">
@@ -291,125 +210,27 @@
                 </div>
 
                 <div class="team-card__body">
-                  <h3 class="team-card__name">Rihana Roy</h3>
-                  <p class="team-card__role">Senior Cardiologist</p>
+                  <h3 class="team-card__name">{{ $sd['name'] }}</h3>
+                  <p class="team-card__role">{{ $sd['role'] }}</p>
                 </div>
               </article>
-
-              <!-- Danial Frankie -->
-              <article class="team-card">
-                <span class="team-card__corner" aria-hidden="true"></span>
-
-                <div class="team-card__photo-wrap">
-                  <img src="{{ asset('assets/img/team-3.png') }}" alt="Dr. Danial Frankie" class="team-card__photo" />
-                  <span class="team-card__overlay">
-                    <a href="{{ route('doctor-details') }}" class="team-card__view" aria-label="View Dr. Danial Frankie profile">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="m10 6 6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </a>
-                  </span>
-                </div>
-
-                <div class="team-card__social">
-                  <a href="#" class="team-card__social-link" aria-label="Facebook">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z"/></svg>
-                  </a>
-                  <a href="#" class="team-card__social-link" aria-label="Instagram">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
-                  </a>
-                  <a href="#" class="team-card__social-link" aria-label="LinkedIn">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z"/></svg>
-                  </a>
-                  <a href="#" class="team-card__social-link" aria-label="X">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.3 3H21l-6.4 7.3L22 21h-6.5l-5-6.6-5.8 6.6H2l6.9-7.9L2 3h6.6l4.6 6.1L18.3 3zM17.2 19h1.5L7.9 4.9H6.3L17.2 19z"/></svg>
-                  </a>
-                </div>
-
-                <div class="team-card__body">
-                  <h3 class="team-card__name">Danial Frankie</h3>
-                  <p class="team-card__role">Interventional Cardiologist</p>
-                </div>
-              </article>
-
-              <!-- Kenneth Fong -->
-              <article class="team-card">
-                <span class="team-card__corner" aria-hidden="true"></span>
-
-                <div class="team-card__photo-wrap">
-                  <img src="{{ asset('assets/img/team-3.png') }}" alt="Dr. Kenneth Fong" class="team-card__photo" />
-                  <span class="team-card__overlay">
-                    <a href="{{ route('doctor-details') }}" class="team-card__view" aria-label="View Dr. Kenneth Fong profile">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="m10 6 6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </a>
-                  </span>
-                </div>
-
-                <div class="team-card__social">
-                  <a href="#" class="team-card__social-link" aria-label="Facebook">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z"/></svg>
-                  </a>
-                  <a href="#" class="team-card__social-link" aria-label="Instagram">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
-                  </a>
-                  <a href="#" class="team-card__social-link" aria-label="LinkedIn">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z"/></svg>
-                  </a>
-                  <a href="#" class="team-card__social-link" aria-label="X">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.3 3H21l-6.4 7.3L22 21h-6.5l-5-6.6-5.8 6.6H2l6.9-7.9L2 3h6.6l4.6 6.1L18.3 3zM17.2 19h1.5L7.9 4.9H6.3L17.2 19z"/></svg>
-                  </a>
-                </div>
-
-                <div class="team-card__body">
-                  <h3 class="team-card__name">Kenneth Fong</h3>
-                  <p class="team-card__role">Cardiac Surgeon</p>
-                </div>
-              </article>
-
-              <!-- Nashla Martines -->
-              <article class="team-card">
-                <span class="team-card__corner" aria-hidden="true"></span>
-
-                <div class="team-card__photo-wrap">
-                  <img src="{{ asset('assets/img/team-3.png') }}" alt="Dr. Nashla Martines" class="team-card__photo" />
-                  <span class="team-card__overlay">
-                    <a href="{{ route('doctor-details') }}" class="team-card__view" aria-label="View Dr. Nashla Martines profile">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="m10 6 6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </a>
-                  </span>
-                </div>
-
-                <div class="team-card__social">
-                  <a href="#" class="team-card__social-link" aria-label="Facebook">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z"/></svg>
-                  </a>
-                  <a href="#" class="team-card__social-link" aria-label="Instagram">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
-                  </a>
-                  <a href="#" class="team-card__social-link" aria-label="LinkedIn">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z"/></svg>
-                  </a>
-                  <a href="#" class="team-card__social-link" aria-label="X">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.3 3H21l-6.4 7.3L22 21h-6.5l-5-6.6-5.8 6.6H2l6.9-7.9L2 3h6.6l4.6 6.1L18.3 3zM17.2 19h1.5L7.9 4.9H6.3L17.2 19z"/></svg>
-                  </a>
-                </div>
-
-                <div class="team-card__body">
-                  <h3 class="team-card__name">Nashla Martines</h3>
-                  <p class="team-card__role">Vascular Specialist</p>
-                </div>
-              </article>
+              @endforeach
             </div>
 
             <h2 class="service-detail__subtitle">Frequently asked questions</h2>
+            @php
+              $serviceFaqs = !empty($service->faqs) ? $service->faqs : [
+                ['question' => 'Can I cancel my appointment', 'answer' => 'Yes, appointments can be cancelled or rescheduled up to 24 hours in advance by contacting our front desk or through your patient portal.'],
+                ['question' => 'What types of treatments do you offer?', 'answer' => 'Our specialists offer a full range of diagnostic, preventive, and treatment options tailored to each patient\'s needs.'],
+                ['question' => 'How do I book my appointment?', 'answer' => 'You can book an appointment online through our Appointment page, or call our front desk directly.'],
+                ['question' => 'Do you accept health insurance?', 'answer' => 'We accept most major health insurance plans. Please contact our billing team to confirm your specific coverage.'],
+              ];
+            @endphp
             <div class="faq__list mt-8">
-              <div class="faq-item is-open">
+              @foreach($serviceFaqs as $i => $faq)
+              <div class="faq-item {{ $i === 0 ? 'is-open' : '' }}">
                 <button type="button" class="faq-item__question" data-faq-toggle>
-                  Can i cancel my appointment
+                  {{ $faq['question'] }}
                   <span class="faq-item__icon">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -418,66 +239,11 @@
                 </button>
                 <div class="faq-item__answer">
                   <p>
-                    It is a long established fact that a reader will be distracted by the readable content of a page
-                    when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal
-                    distribution
+                    {{ $faq['answer'] }}
                   </p>
                 </div>
               </div>
-
-              <div class="faq-item">
-                <button type="button" class="faq-item__question" data-faq-toggle>
-                  What types of treatments do you offer?
-                  <span class="faq-item__icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                </button>
-                <div class="faq-item__answer">
-                  <p>
-                    It is a long established fact that a reader will be distracted by the readable content of a page
-                    when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal
-                    distribution
-                  </p>
-                </div>
-              </div>
-
-              <div class="faq-item">
-                <button type="button" class="faq-item__question" data-faq-toggle>
-                  How do i book my appointment ?
-                  <span class="faq-item__icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                </button>
-                <div class="faq-item__answer">
-                  <p>
-                    It is a long established fact that a reader will be distracted by the readable content of a page
-                    when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal
-                    distribution
-                  </p>
-                </div>
-              </div>
-
-              <div class="faq-item">
-                <button type="button" class="faq-item__question" data-faq-toggle>
-                  How much do you charge for pedicure ?
-                  <span class="faq-item__icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                </button>
-                <div class="faq-item__answer">
-                  <p>
-                    It is a long established fact that a reader will be distracted by the readable content of a page
-                    when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal
-                    distribution
-                  </p>
-                </div>
-              </div>
+              @endforeach
             </div>
           </div>
         </div>

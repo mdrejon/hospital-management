@@ -1,9 +1,9 @@
 <template>
     <AdminLayout>
-        <div class="max-w-6xl space-y-6">
+        <div class="max-w-6xl space-y-4">
             <div class="flex items-center justify-between">
-                <h1 class="text-lg font-semibold text-gray-800">Blog Posts</h1>
-                <Link :href="route('admin.blog.create')"
+                <h1 class="text-lg font-semibold text-gray-800">Blog Management</h1>
+                <Link v-if="tab === 'list'" :href="route('admin.blog.create')"
                     class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
                     + Add New Post
                 </Link>
@@ -14,7 +14,22 @@
                 {{ $page.props.flash.success }}
             </div>
 
-            <div class="bg-white rounded-lg shadow-sm overflow-x-auto">
+            <!-- Tabs -->
+            <div class="border-b border-gray-200 flex gap-6">
+                <button type="button" @click="tab = 'list'"
+                    :class="tab === 'list' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
+                    class="pb-2.5 text-sm font-medium border-b-2 transition-colors">
+                    Blog Posts List
+                </button>
+                <button type="button" @click="tab = 'settings'"
+                    :class="tab === 'settings' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'"
+                    class="pb-2.5 text-sm font-medium border-b-2 transition-colors">
+                    Page Settings
+                </button>
+            </div>
+
+            <!-- ═══════════ Blog Posts List tab ═══════════ -->
+            <div v-if="tab === 'list'" class="bg-white rounded-lg shadow-sm overflow-x-auto">
                 <table class="w-full text-sm">
                     <thead class="bg-gray-50 border-b border-gray-100">
                         <tr>
@@ -91,6 +106,79 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- ═══════════ Page Settings tab ═══════════ -->
+            <div v-else class="max-w-3xl space-y-4">
+                <form @submit.prevent="submitSettings" enctype="multipart/form-data" class="space-y-4">
+
+                    <!-- Home Page Blog Section -->
+                    <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                        <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Home Page — Blog Preview Section</h2>
+                        <p class="text-xs text-gray-400 -mt-2">Shows your 4 most recent published posts.</p>
+                        <div>
+                            <label class="label">Section Title</label>
+                            <input v-model="settingsForm.blog_home_title" type="text" class="input" placeholder="Stay Informed With Our Latest Health Blogs" />
+                            <InputError :message="settingsForm.errors.blog_home_title" />
+                        </div>
+                    </section>
+
+                    <!-- Page Hero & Breadcrumb -->
+                    <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                        <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Blog List Page — Hero &amp; Breadcrumb</h2>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="col-span-2 md:col-span-1">
+                                <label class="label">Hero Background Image</label>
+                                <DropZone @change="file => onImg('hero', file)" hint="JPEG / PNG / WebP — max 5 MB" preview-class="w-full h-44 object-cover"
+                                    :existing-preview="currentHeroImg ? '/storage/' + currentHeroImg : null" />
+                                <InputError :message="settingsForm.errors.blog_hero_image" />
+                            </div>
+                            <div class="col-span-2 md:col-span-1">
+                                <label class="label">Page Title (Breadcrumb)</label>
+                                <input v-model="settingsForm.blog_hero_title" type="text" class="input" placeholder="Our Blog" />
+                                <InputError :message="settingsForm.errors.blog_hero_title" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SEO Configuration -->
+                    <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                        <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Blog List Page — SEO Configuration</h2>
+                        <div>
+                            <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
+                            <input v-model="settingsForm.blog_seo_title" @input="onMetaTitleInput" type="text" maxlength="160" class="input"
+                                placeholder="Blog | ClinicMaster Medical & Health Care Services" />
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.blog_seo_title || '').length }}/160</p>
+                            <InputError :message="settingsForm.errors.blog_seo_title" />
+                        </div>
+                        <div>
+                            <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
+                            <textarea v-model="settingsForm.blog_seo_description" @input="onMetaDescInput" rows="3" maxlength="320" class="input resize-none"
+                                placeholder="Read the latest health tips, medical insights, and hospital news from ClinicMaster..."></textarea>
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.blog_seo_description || '').length }}/320</p>
+                            <InputError :message="settingsForm.errors.blog_seo_description" />
+                        </div>
+                        <div>
+                            <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated, auto-filled if left blank)</span></label>
+                            <input v-model="settingsForm.blog_seo_keywords" @input="onMetaKeywordsInput" type="text" class="input"
+                                placeholder="health blog, medical tips, clinicmaster news" />
+                            <InputError :message="settingsForm.errors.blog_seo_keywords" />
+                        </div>
+                        <div>
+                            <label class="label">OG / Social Share Image <span class="text-xs text-gray-400">(recommended 1200×630px)</span></label>
+                            <DropZone @change="file => onImg('og', file)" hint="JPEG / PNG / WebP — max 5 MB" preview-class="w-full h-36 object-cover"
+                                :existing-preview="currentOgImg ? '/storage/' + currentOgImg : null" />
+                            <InputError :message="settingsForm.errors.blog_seo_og_image" />
+                        </div>
+                    </section>
+
+                    <div class="flex justify-end">
+                        <button type="submit" :disabled="settingsForm.processing"
+                            class="px-6 py-2.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-60">
+                            {{ settingsForm.processing ? 'Saving...' : 'Save Settings' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <!-- Delete Confirm Modal -->
@@ -117,13 +205,18 @@
 
 <script setup>
 import { ref } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
+import InputError from '@/Components/InputError.vue';
+import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
 
 const props = defineProps({
-    blogs: Array,
+    blogs:        { type: Array,  default: () => [] },
+    pageSettings: { type: Object, default: () => ({}) },
 });
 
+const tab = ref('list');
 const deletingBlog = ref(null);
 
 function toggleStatus(blog) {
@@ -139,4 +232,45 @@ function confirmDelete() {
         onFinish: () => { deletingBlog.value = null; },
     });
 }
+
+// ── Page Settings tab ──
+const currentHeroImg = ref(props.pageSettings.blog_hero_image  ?? null);
+const currentOgImg   = ref(props.pageSettings.blog_seo_og_image ?? null);
+
+const settingsForm = useForm({
+    blog_home_title:      props.pageSettings.blog_home_title      ?? '',
+    blog_hero_title:      props.pageSettings.blog_hero_title      ?? '',
+    blog_seo_title:       props.pageSettings.blog_seo_title       ?? '',
+    blog_seo_description: props.pageSettings.blog_seo_description ?? '',
+    blog_seo_keywords:    props.pageSettings.blog_seo_keywords    ?? '',
+    blog_hero_image:      null,
+    blog_seo_og_image:    null,
+});
+
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(settingsForm, {
+    titleSource: () => settingsForm.blog_hero_title,
+    descSource:  () => settingsForm.blog_seo_description,
+    titleKey:    'blog_seo_title',
+    descKey:     'blog_seo_description',
+    keywordsKey: 'blog_seo_keywords',
+    titleSuffix: ' | ClinicMaster',
+});
+
+function onImg(type, file) {
+    if (!file) return;
+    if (type === 'hero') settingsForm.blog_hero_image   = file;
+    if (type === 'og')   settingsForm.blog_seo_og_image = file;
+}
+
+function submitSettings() {
+    settingsForm.post(route('admin.website-settings.blog-page.update'), {
+        forceFormData: true,
+        preserveScroll: true,
+    });
+}
 </script>
+
+<style scoped>
+.label { @apply block text-sm text-gray-600 mb-1; }
+.input { @apply w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none; }
+</style>

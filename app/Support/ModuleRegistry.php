@@ -16,6 +16,7 @@ class ModuleRegistry
         return [
             ['key' => 'dashboard',           'name' => 'Dashboard',           'actions' => ['view']],
             ['key' => 'inquiries',           'name' => 'Inquiries',           'actions' => ['view', 'edit', 'delete']],
+            ['key' => 'appointments',        'name' => 'Appointments',        'actions' => ['view', 'create', 'edit', 'delete']],
             ['key' => 'website-management',  'name' => 'Website Management',  'actions' => ['view', 'create', 'edit', 'delete']],
             ['key' => 'global-settings',     'name' => 'Global Settings',     'actions' => ['view', 'create', 'edit', 'delete']],
             ['key' => 'email-smtp-setting',  'name' => 'Email SMTP Setting',  'actions' => ['view', 'edit']],
@@ -32,32 +33,36 @@ class ModuleRegistry
 
             'admin.inquiries'         => 'inquiries',
 
-            // Website Management menu (About, Services, Gallery, FAQs, Testimonials, Blog)
-            'admin.website-settings.about'    => 'website-management',
+            'admin.appointments'                    => 'appointments',
+            'admin.website-settings.appointment'    => 'appointments',
+
+            // Website Management menu (About, Contact, History, Achievements, Management, Services, Gallery, FAQs, Testimonials, Blog)
+            'admin.website-settings.about'        => 'website-management',
+            'admin.website-settings.contact'      => 'website-management',
+            'admin.website-settings.history'      => 'website-management',
+            'admin.website-settings.achievements' => 'website-management',
+            'admin.management-members'            => 'website-management',
             'admin.website-settings.gallery'  => 'website-management',
             'admin.services'                  => 'website-management',
+            'admin.doctors'                   => 'website-management',
+            'admin.packages'                  => 'website-management',
             'admin.faqs'                       => 'website-management',
             'admin.testimonials'              => 'website-management',
+            'admin.awards'                    => 'website-management',
             'admin.blog-categories'           => 'website-management',
             'admin.blog-comments'             => 'website-management',
             'admin.blog'                      => 'website-management',
+            'admin.pages'                     => 'website-management',
 
-            // Global Settings menu (everything else under website-settings, plus Facilities)
+            // Global Settings menu (everything else under website-settings)
             'admin.website-settings.mail'     => 'email-smtp-setting',
             'admin.website-settings'          => 'global-settings',
-            'admin.facilities'                => 'global-settings',
 
             // User Management menu (Users + Roles)
             'admin.users'             => 'user-management',
             'admin.roles'             => 'user-management',
 
             'admin.backups'           => 'backups',
-
-            // Not linked from the sidebar (no nav item exists for these) — kept
-            // mapped to their own keys so they stay super-admin-only rather than
-            // falling through to "unrestricted" for every logged-in admin.
-            'admin.packages'          => 'packages',
-            'admin.package-bookings'  => 'package-bookings',
         ];
 
         foreach ($map as $prefix => $module) {

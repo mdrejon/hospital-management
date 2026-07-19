@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('sliders', function (Blueprint $table) {
             $table->id();
-            $table->string('label')->nullable();          // e.g. "Welcome To Hotel Beach Way"
+            $table->string('label')->nullable();          // e.g. "Welcome To ClinicMaster"
             $table->string('title');                       // main heading
             $table->string('subtitle')->nullable();        // accent/colored words
             $table->text('description')->nullable();       // paragraph text

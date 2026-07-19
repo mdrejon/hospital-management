@@ -3,11 +3,14 @@
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\Admin\WebsiteSettings\AppointmentSettingController;
 use App\Http\Controllers\Admin\PackageController;
-use App\Http\Controllers\Admin\PackageBookingController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\WebsiteSettings\SliderController;
 use App\Http\Controllers\Admin\WebsiteSettings\HeaderSettingController;
@@ -16,12 +19,17 @@ use App\Http\Controllers\Admin\WebsiteSettings\AboutSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\GalleryController;
 use App\Http\Controllers\Admin\WebsiteSettings\ContactSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\ServiceSettingController;
+use App\Http\Controllers\Admin\WebsiteSettings\DoctorSettingController;
+use App\Http\Controllers\Admin\WebsiteSettings\PackageSettingController;
 use App\Http\Controllers\Admin\TestimonialController;
-use App\Http\Controllers\Admin\FacilityController;
+use App\Http\Controllers\Admin\AwardController;
 use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\WebsiteSettings\HistorySettingController;
+use App\Http\Controllers\Admin\WebsiteSettings\AchievementsSettingController;
+use App\Http\Controllers\Admin\ManagementMemberController;
+use App\Http\Controllers\Admin\WebsiteSettings\ManagementSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\FaqPageSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\BlogSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\EmailSettingController;
@@ -47,20 +55,24 @@ Route::get('/',                    [FrontendController::class, 'home'])->name('h
 Route::get('/about',                [FrontendController::class, 'about'])->name('about');
 Route::get('/achievements',        [FrontendController::class, 'achievements'])->name('achievements');
 Route::get('/appointment',          [FrontendController::class, 'appointment'])->name('appointment');
+Route::post('/appointment',         [FrontendController::class, 'submitAppointment'])->name('appointment.submit');
 Route::get('/blog',                 [FrontendController::class, 'blogList'])->name('blog-list');
-Route::get('/blog/{slug?}',         [FrontendController::class, 'blogDetails'])->name('blog-details');
+Route::get('/blog/{slug}',          [FrontendController::class, 'blogDetails'])->name('blog-details');
+Route::post('/blog/{blog}/comments', [FrontendController::class, 'submitBlogComment'])->name('blog-comments.store');
 Route::get('/contact',              [FrontendController::class, 'contact'])->name('contact');
+Route::post('/contact',             [FrontendController::class, 'submitContact'])->name('contact.submit');
 Route::get('/doctors',              [FrontendController::class, 'doctors'])->name('doctors');
-Route::get('/doctors/{slug?}',      [FrontendController::class, 'doctorDetails'])->name('doctor-details');
+Route::get('/doctors/{slug}',       [FrontendController::class, 'doctorDetails'])->name('doctor-details');
 Route::get('/faq',                  [FrontendController::class, 'faq'])->name('faq');
 Route::get('/gallery',              [FrontendController::class, 'gallery'])->name('gallery');
 Route::get('/history',              [FrontendController::class, 'history'])->name('history');
 Route::get('/management',           [FrontendController::class, 'management'])->name('management');
 Route::get('/md-message',           [FrontendController::class, 'mdMessage'])->name('md-message');
-Route::get('/privacy-policy',       [FrontendController::class, 'privacyPolicy'])->name('privacy-policy');
+Route::get('/packages',             [FrontendController::class, 'packages'])->name('packages');
+Route::get('/packages/{slug}',      [FrontendController::class, 'packageDetails'])->name('package-details');
 Route::get('/services',             [FrontendController::class, 'services'])->name('services');
-Route::get('/services/{slug?}',     [FrontendController::class, 'serviceDetails'])->name('service-details');
-Route::get('/terms-conditions',    [FrontendController::class, 'termsConditions'])->name('terms-conditions');
+Route::get('/services/{slug}',      [FrontendController::class, 'serviceDetails'])->name('service-details');
+Route::get('/search',               [FrontendController::class, 'search'])->name('search');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -82,14 +94,30 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
     Route::patch('/inquiries/{inquiry}/status',      [InquiryController::class, 'updateStatus'])->name('inquiries.update-status');
     Route::delete('/inquiries/{inquiry}',            [InquiryController::class, 'destroy'])->name('inquiries.destroy');
 
-    // Packages Management
-    Route::get('/packages',           [PackageController::class, 'index'])->name('packages.index');
-    Route::get('/packages/create',    [PackageController::class, 'create'])->name('packages.create');
-    Route::get('/packages/{id}/edit', [PackageController::class, 'edit'])->name('packages.edit');
+    // Appointments
+    Route::get('/appointments',                       [AppointmentController::class, 'index'])->name('appointments.index');
+    Route::get('/appointments/create',                [AppointmentController::class, 'create'])->name('appointments.create');
+    Route::post('/appointments',                      [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
+    Route::delete('/appointments/{appointment}',      [AppointmentController::class, 'destroy'])->name('appointments.destroy');
 
-    // Package Bookings
-    Route::get('/package-bookings',      [PackageBookingController::class, 'index'])->name('package-bookings.index');
-    Route::get('/package-bookings/{id}', [PackageBookingController::class, 'show'])->name('package-bookings.show');
+    // Packages Management
+    Route::get('/packages',                [PackageController::class, 'index'])->name('packages.index');
+    Route::get('/packages/create',         [PackageController::class, 'create'])->name('packages.create');
+    Route::post('/packages',               [PackageController::class, 'store'])->name('packages.store');
+    Route::get('/packages/{package}/edit', [PackageController::class, 'edit'])->name('packages.edit');
+    Route::put('/packages/{package}',      [PackageController::class, 'update'])->name('packages.update');
+    Route::delete('/packages/{package}',   [PackageController::class, 'destroy'])->name('packages.destroy');
+    Route::patch('/packages/{package}/toggle', [PackageController::class, 'toggleStatus'])->name('packages.toggle');
+
+    // Pages CMS (common content pages: Privacy Policy, Terms & Conditions, etc.)
+    Route::get('/pages',                [PageController::class, 'index'])->name('pages.index');
+    Route::get('/pages/create',         [PageController::class, 'create'])->name('pages.create');
+    Route::post('/pages',               [PageController::class, 'store'])->name('pages.store');
+    Route::get('/pages/{page}/edit',    [PageController::class, 'edit'])->name('pages.edit');
+    Route::put('/pages/{page}',         [PageController::class, 'update'])->name('pages.update');
+    Route::delete('/pages/{page}',      [PageController::class, 'destroy'])->name('pages.destroy');
+    Route::patch('/pages/{page}/toggle', [PageController::class, 'toggleStatus'])->name('pages.toggle');
 
     // Users Management (full CRUD)
     Route::get('/users',                [UserController::class, 'index'])->name('users.index');
@@ -126,13 +154,23 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
     Route::delete('/services/{service}',   [ServiceController::class, 'destroy'])->name('services.destroy');
     Route::patch('/services/{service}/toggle', [ServiceController::class, 'toggleStatus'])->name('services.toggle');
 
-    // Facilities CRUD
-    Route::get('/facilities',                         [FacilityController::class, 'index'])->name('facilities.index');
-    Route::post('/facilities',                        [FacilityController::class, 'store'])->name('facilities.store');
-    Route::put('/facilities/{facility}',              [FacilityController::class, 'update'])->name('facilities.update');
-    Route::delete('/facilities/{facility}',           [FacilityController::class, 'destroy'])->name('facilities.destroy');
-    Route::patch('/facilities/{facility}/toggle',     [FacilityController::class, 'toggleStatus'])->name('facilities.toggle');
-    Route::post('/facilities/settings',               [FacilityController::class, 'updateSettings'])->name('facilities.settings');
+    // Doctors CRUD
+    Route::get('/doctors',                [DoctorController::class, 'index'])->name('doctors.index');
+    Route::get('/doctors/create',         [DoctorController::class, 'create'])->name('doctors.create');
+    Route::post('/doctors',               [DoctorController::class, 'store'])->name('doctors.store');
+    Route::get('/doctors/{doctor}/edit',  [DoctorController::class, 'edit'])->name('doctors.edit');
+    Route::put('/doctors/{doctor}',       [DoctorController::class, 'update'])->name('doctors.update');
+    Route::delete('/doctors/{doctor}',    [DoctorController::class, 'destroy'])->name('doctors.destroy');
+    Route::patch('/doctors/{doctor}/toggle', [DoctorController::class, 'toggleStatus'])->name('doctors.toggle');
+
+    // Management Team CRUD
+    Route::get('/management-members',                       [ManagementMemberController::class, 'index'])->name('management-members.index');
+    Route::get('/management-members/create',                [ManagementMemberController::class, 'create'])->name('management-members.create');
+    Route::post('/management-members',                      [ManagementMemberController::class, 'store'])->name('management-members.store');
+    Route::get('/management-members/{managementMember}/edit', [ManagementMemberController::class, 'edit'])->name('management-members.edit');
+    Route::put('/management-members/{managementMember}',     [ManagementMemberController::class, 'update'])->name('management-members.update');
+    Route::delete('/management-members/{managementMember}',  [ManagementMemberController::class, 'destroy'])->name('management-members.destroy');
+    Route::patch('/management-members/{managementMember}/toggle', [ManagementMemberController::class, 'toggleStatus'])->name('management-members.toggle');
 
     // Blog Posts CRUD
     Route::get('/blog',                        [BlogController::class, 'index'])->name('blog.index');
@@ -164,6 +202,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
     Route::patch('/testimonials/{testimonial}/toggle',[TestimonialController::class, 'toggleStatus'])->name('testimonials.toggle');
     Route::post('/testimonials/settings',             [TestimonialController::class, 'updateSettings'])->name('testimonials.settings');
 
+    // Awards CRUD
+    Route::get('/awards',                       [AwardController::class, 'index'])->name('awards.index');
+    Route::post('/awards',                      [AwardController::class, 'store'])->name('awards.store');
+    Route::put('/awards/{award}',               [AwardController::class, 'update'])->name('awards.update');
+    Route::delete('/awards/{award}',            [AwardController::class, 'destroy'])->name('awards.destroy');
+    Route::patch('/awards/{award}/toggle',      [AwardController::class, 'toggleStatus'])->name('awards.toggle');
+    Route::post('/awards/settings',             [AwardController::class, 'updateSettings'])->name('awards.settings');
+
     // Website Settings
     Route::prefix('website-settings')->name('website-settings.')->group(function () {
         // Hero Slider CRUD
@@ -191,21 +237,35 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
         Route::get('/history',  [HistorySettingController::class, 'edit'])->name('history.edit');
         Route::put('/history',  [HistorySettingController::class, 'update'])->name('history.update');
 
+        // Achievements Page Settings
+        Route::get('/achievements',  [AchievementsSettingController::class, 'edit'])->name('achievements.edit');
+        Route::post('/achievements', [AchievementsSettingController::class, 'update'])->name('achievements.update');
+
         // FAQ Page Settings
         Route::get('/faq-page',  [FaqPageSettingController::class, 'edit'])->name('faq-page.edit');
         Route::put('/faq-page',  [FaqPageSettingController::class, 'update'])->name('faq-page.update');
-
-        // Blog Page Settings
-        Route::get('/blog-page',  [BlogSettingController::class, 'edit'])->name('blog-page.edit');
-        Route::put('/blog-page',  [BlogSettingController::class, 'update'])->name('blog-page.update');
 
         // Contact Settings
         Route::get('/contact',  [ContactSettingController::class, 'edit'])->name('contact.edit');
         Route::post('/contact', [ContactSettingController::class, 'update'])->name('contact.update');
 
-        // Services Section Settings
-        Route::get('/services',  [ServiceSettingController::class, 'edit'])->name('services.edit');
+        // Services Section Settings (form lives as a tab on the Services list page)
         Route::post('/services', [ServiceSettingController::class, 'update'])->name('services.update');
+
+        // Doctors Section Settings (form lives as a tab on the Doctors list page)
+        Route::post('/doctors', [DoctorSettingController::class, 'update'])->name('doctors.update');
+
+        // Packages Section Settings (form lives as a tab on the Packages list page)
+        Route::post('/packages', [PackageSettingController::class, 'update'])->name('packages.update');
+
+        // Blog Page Settings (form lives as a tab on the Blog Posts list page)
+        Route::post('/blog-page', [BlogSettingController::class, 'update'])->name('blog-page.update');
+
+        // Management Team Settings (form lives as a tab on the Management list page)
+        Route::post('/management', [ManagementSettingController::class, 'update'])->name('management.update');
+
+        // Appointment Settings (form lives as a tab on the Appointments list page)
+        Route::post('/appointment', [AppointmentSettingController::class, 'update'])->name('appointment.update');
 
         // Mail / SMTP Settings
         Route::get('/mail',       [MailSettingController::class, 'edit'])->name('mail.edit');
@@ -238,3 +298,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
 });
 
 require __DIR__.'/auth.php';
+
+// CMS Pages catch-all — MUST stay the last route in the file so it never
+// shadows any of the specific/admin routes registered above it (including
+// the auth routes required just above: /login, /register, etc.). Resolves
+// nested paths (e.g. /parent-slug/child-slug) against Page::fullPath();
+// falls through to the themed 404 view (resources/views/errors/404.blade.php)
+// when nothing matches.
+Route::get('/{path}', [FrontendController::class, 'showPage'])->where('path', '.*')->name('page.show');

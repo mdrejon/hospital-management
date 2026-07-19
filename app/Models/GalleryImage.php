@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GalleryImage extends Model
 {
-    protected $fillable = ['image', 'alt', 'caption', 'is_active', 'sort_order'];
+    protected $fillable = ['image', 'alt', 'sub_title', 'caption', 'is_active', 'sort_order'];
 
     protected $casts = [
         'is_active'  => 'boolean',

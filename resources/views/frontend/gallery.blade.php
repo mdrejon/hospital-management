@@ -1,13 +1,29 @@
 @extends('layouts.frontend')
 
-@section('title', 'Gallery | ClinicMaster Medical & Health Care Services')
+@php
+  $heroTitle = $gallery['gallery_hero_title'] ?? 'Our Gallery';
+  $heroImage = !empty($gallery['gallery_hero_image']) ? asset('storage/' . $gallery['gallery_hero_image']) : asset('assets/img/breadcumb.webp');
+  $seoTitle  = $gallery['gallery_seo_title'] ?? 'Gallery | ClinicMaster Medical & Health Care Services';
+  $seoDesc   = $gallery['gallery_seo_description'] ?? "Browse photos of ClinicMaster's treatment rooms, diagnostic facilities, and medical team.";
+@endphp
+
+@section('title', $seoTitle)
+@section('meta_description', $seoDesc)
+@section('og_title', $seoTitle)
+@section('og_description', $seoDesc)
+@if(!empty($gallery['gallery_seo_keywords']))
+@section('meta_keywords', $gallery['gallery_seo_keywords'])
+@endif
+@if(!empty($gallery['gallery_seo_og_image']))
+@section('og_image', asset('storage/' . $gallery['gallery_seo_og_image']))
+@endif
 
 @section('content')
 
     <!-- ===================== Breadcrumb / Page header ===================== -->
     <section class="page-header">
       <div class="page-header__media">
-        <img src="{{ asset('assets/img/breadcumb.webp') }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
+        <img src="{{ $heroImage }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
         <span class="page-header__overlay"></span>
       </div>
 
@@ -29,7 +45,7 @@
       </div>
 
       <div class="page-header__inner">
-        <h1 class="page-header__title">Our Gallery</h1>
+        <h1 class="page-header__title">{{ $heroTitle }}</h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
           <a href="{{ route('home') }}">Home</a>
           <span class="page-header__breadcrumb-sep">
@@ -52,156 +68,65 @@
     </section>
 
     <!-- ===================== Gallery ===================== -->
+    @php
+      $aspectClasses = ['aspect-[4/3]', 'aspect-[3/4]', 'aspect-square', 'aspect-[4/5]', 'aspect-[16/11]', 'aspect-[3/4]', 'aspect-square', 'aspect-[4/3]', 'aspect-[4/5]'];
+      $galleryCards = $images->isNotEmpty()
+        ? $images->values()->map(fn ($img, $i) => [
+            'image'     => asset('storage/' . $img->image),
+            'alt'       => $img->alt ?: $img->caption ?: 'ClinicMaster gallery photo',
+            'sub_title' => $img->sub_title,
+            'title'     => $img->caption,
+            'aspect'    => $aspectClasses[$i % count($aspectClasses)],
+          ])
+        : collect([
+            ['image' => asset('assets/img/slider-1.2.jpg'),  'alt' => 'ClinicMaster treatment room',            'sub_title' => 'Child Care',     'title' => 'Gentle Pediatric Checkups',   'aspect' => 'aspect-[4/3]'],
+            ['image' => asset('assets/img/sr-1-1.jpg'),      'alt' => 'Radiology and imaging department',       'sub_title' => 'Surgery',        'title' => 'Modern Operating Theatre',    'aspect' => 'aspect-[3/4]'],
+            ['image' => asset('assets/img/projects-2.jpg'),  'alt' => 'Doctors reviewing patient charts',       'sub_title' => 'Consultation',   'title' => 'Patient Case Review',         'aspect' => 'aspect-square'],
+            ['image' => asset('assets/img/sr-1-2.jpg'),      'alt' => 'Doctor consulting with a patient',       'sub_title' => 'Dental Care',    'title' => 'Comfortable Dental Visits',   'aspect' => 'aspect-[4/5]'],
+            ['image' => asset('assets/img/slider-1.3.jpg'),  'alt' => 'Medical team on duty',                   'sub_title' => 'Emergency',      'title' => 'Round-the-Clock Response',    'aspect' => 'aspect-[16/11]'],
+            ['image' => asset('assets/img/projects-3.jpg'),  'alt' => 'Cardiology department',                  'sub_title' => 'Cardiology',     'title' => 'Advanced Cardiac Care',       'aspect' => 'aspect-[3/4]'],
+            ['image' => asset('assets/img/sr-1-3.jpg'),      'alt' => 'Doctor in the medical library',          'sub_title' => 'Dermatology',    'title' => 'Skin & Laser Treatments',     'aspect' => 'aspect-square'],
+            ['image' => asset('assets/img/projects-4.jpg'),  'alt' => 'Surgery preparation room',                'sub_title' => 'Laboratory',     'title' => 'Precision Diagnostics',       'aspect' => 'aspect-[4/3]'],
+            ['image' => asset('assets/img/appoinment.jpg'),  'alt' => 'Reception and appointment desk',         'sub_title' => 'Appointments',   'title' => 'One-on-One Guidance',         'aspect' => 'aspect-[4/5]'],
+          ]);
+    @endphp
     <section class="gallery">
       <div class="container mx-auto">
         <div class="team__head">
           <p class="team__eyebrow">
             <span class="team__eyebrow-dot"></span>
-            Our Gallery
+            {{ $gallery['gallery_badge'] ?? 'Our Gallery' }}
             <span class="team__eyebrow-dot"></span>
           </p>
-          <h2 class="team__title">Inside Our <span class="accent">Hospital</span></h2>
+          <h2 class="team__title">{{ $gallery['gallery_title'] ?? 'Inside Our Hospital' }}</h2>
         </div>
         <p class="gallery__desc">
-          From modern treatment rooms to advanced diagnostic facilities &mdash; take a look at the spaces and
-          people behind ClinicMaster's award-winning care.
+          {{ $gallery['gallery_subtitle'] ?? "From modern treatment rooms to advanced diagnostic facilities — take a look at the spaces and people behind ClinicMaster's award-winning care." }}
         </p>
 
         <div class="gallery__grid">
+          @foreach($galleryCards as $card)
           <a href="#" class="gallery-item" data-gallery-item>
-            <img src="{{ asset('assets/img/slider-1.2.jpg') }}" alt="ClinicMaster treatment room" class="gallery-item__img aspect-[4/3]" />
+            <img src="{{ $card['image'] }}" alt="{{ $card['alt'] }}" class="gallery-item__img {{ $card['aspect'] }}" />
             <span class="gallery-item__overlay">
               <span class="gallery-item__expand">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M15 4h5v5M9 20H4v-5M20 4l-6 6M4 20l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </span>
+              @if($card['sub_title'] || $card['title'])
               <span class="gallery-item__caption">
-                <span class="gallery-item__tag"><span class="gallery-item__tag-dot"></span>Child Care</span>
-                <span class="gallery-item__title">Gentle Pediatric Checkups</span>
+                @if($card['sub_title'])
+                <span class="gallery-item__tag"><span class="gallery-item__tag-dot"></span>{{ $card['sub_title'] }}</span>
+                @endif
+                @if($card['title'])
+                <span class="gallery-item__title">{{ $card['title'] }}</span>
+                @endif
               </span>
+              @endif
             </span>
           </a>
-
-          <a href="#" class="gallery-item" data-gallery-item>
-            <img src="{{ asset('assets/img/sr-1-1.jpg') }}" alt="Radiology and imaging department" class="gallery-item__img aspect-[3/4]" />
-            <span class="gallery-item__overlay">
-              <span class="gallery-item__expand">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15 4h5v5M9 20H4v-5M20 4l-6 6M4 20l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="gallery-item__caption">
-                <span class="gallery-item__tag"><span class="gallery-item__tag-dot"></span>Surgery</span>
-                <span class="gallery-item__title">Modern Operating Theatre</span>
-              </span>
-            </span>
-          </a>
-
-          <a href="#" class="gallery-item" data-gallery-item>
-            <img src="{{ asset('assets/img/projects-2.jpg') }}" alt="Doctors reviewing patient charts" class="gallery-item__img aspect-square" />
-            <span class="gallery-item__overlay">
-              <span class="gallery-item__expand">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15 4h5v5M9 20H4v-5M20 4l-6 6M4 20l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="gallery-item__caption">
-                <span class="gallery-item__tag"><span class="gallery-item__tag-dot"></span>Consultation</span>
-                <span class="gallery-item__title">Patient Case Review</span>
-              </span>
-            </span>
-          </a>
-
-          <a href="#" class="gallery-item" data-gallery-item>
-            <img src="{{ asset('assets/img/sr-1-2.jpg') }}" alt="Doctor consulting with a patient" class="gallery-item__img aspect-[4/5]" />
-            <span class="gallery-item__overlay">
-              <span class="gallery-item__expand">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15 4h5v5M9 20H4v-5M20 4l-6 6M4 20l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="gallery-item__caption">
-                <span class="gallery-item__tag"><span class="gallery-item__tag-dot"></span>Dental Care</span>
-                <span class="gallery-item__title">Comfortable Dental Visits</span>
-              </span>
-            </span>
-          </a>
-
-          <a href="#" class="gallery-item" data-gallery-item>
-            <img src="{{ asset('assets/img/slider-1.3.jpg') }}" alt="Medical team on duty" class="gallery-item__img aspect-[16/11]" />
-            <span class="gallery-item__overlay">
-              <span class="gallery-item__expand">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15 4h5v5M9 20H4v-5M20 4l-6 6M4 20l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="gallery-item__caption">
-                <span class="gallery-item__tag"><span class="gallery-item__tag-dot"></span>Emergency</span>
-                <span class="gallery-item__title">Round-the-Clock Response</span>
-              </span>
-            </span>
-          </a>
-
-          <a href="#" class="gallery-item" data-gallery-item>
-            <img src="{{ asset('assets/img/projects-3.jpg') }}" alt="Cardiology department" class="gallery-item__img aspect-[3/4]" />
-            <span class="gallery-item__overlay">
-              <span class="gallery-item__expand">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15 4h5v5M9 20H4v-5M20 4l-6 6M4 20l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="gallery-item__caption">
-                <span class="gallery-item__tag"><span class="gallery-item__tag-dot"></span>Cardiology</span>
-                <span class="gallery-item__title">Advanced Cardiac Care</span>
-              </span>
-            </span>
-          </a>
-
-          <a href="#" class="gallery-item" data-gallery-item>
-            <img src="{{ asset('assets/img/sr-1-3.jpg') }}" alt="Doctor in the medical library" class="gallery-item__img aspect-square" />
-            <span class="gallery-item__overlay">
-              <span class="gallery-item__expand">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15 4h5v5M9 20H4v-5M20 4l-6 6M4 20l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="gallery-item__caption">
-                <span class="gallery-item__tag"><span class="gallery-item__tag-dot"></span>Dermatology</span>
-                <span class="gallery-item__title">Skin & Laser Treatments</span>
-              </span>
-            </span>
-          </a>
-
-          <a href="#" class="gallery-item" data-gallery-item>
-            <img src="{{ asset('assets/img/projects-4.jpg') }}" alt="Surgery preparation room" class="gallery-item__img aspect-[4/3]" />
-            <span class="gallery-item__overlay">
-              <span class="gallery-item__expand">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15 4h5v5M9 20H4v-5M20 4l-6 6M4 20l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="gallery-item__caption">
-                <span class="gallery-item__tag"><span class="gallery-item__tag-dot"></span>Laboratory</span>
-                <span class="gallery-item__title">Precision Diagnostics</span>
-              </span>
-            </span>
-          </a>
-
-          <a href="#" class="gallery-item" data-gallery-item>
-            <img src="{{ asset('assets/img/appoinment.jpg') }}" alt="Reception and appointment desk" class="gallery-item__img aspect-[4/5]" />
-            <span class="gallery-item__overlay">
-              <span class="gallery-item__expand">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15 4h5v5M9 20H4v-5M20 4l-6 6M4 20l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="gallery-item__caption">
-                <span class="gallery-item__tag"><span class="gallery-item__tag-dot"></span>Appointments</span>
-                <span class="gallery-item__title">One-on-One Guidance</span>
-              </span>
-            </span>
-          </a>
+          @endforeach
         </div>
       </div>
     </section>

@@ -112,6 +112,14 @@ const navItems = [
         ],
     },
 
+    // ── Appointments ─────────────────────────────────────────────────────────
+    {
+        name: 'Appointments',
+        route: 'admin.appointments.index',
+        module: 'appointments',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M16 2v4M8 2v4M3 10h18"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 16 2 2 4-4"/></svg>`,
+    },
+
     // ── Website Management ──────────────────────────────────────────────────
     {
         name: 'Website Management',
@@ -120,12 +128,20 @@ const navItems = [
         icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>`,
         children: [
             { name: 'About Settings', route: 'admin.website-settings.about.edit' },
+            { name: 'Contact Settings', route: 'admin.website-settings.contact.edit' },
+            { name: 'History Settings', route: 'admin.website-settings.history.edit' },
+            { name: 'Achievements Settings', route: 'admin.website-settings.achievements.edit' },
+            { name: 'Management Team', route: 'admin.management-members.index' },
             { name: 'Services',       route: 'admin.services.index' },
+            { name: 'Doctors',        route: 'admin.doctors.index' },
+            { name: 'Packages',       route: 'admin.packages.index' },
             { name: 'Gallery',        route: 'admin.website-settings.gallery.index' },
             { name: "FAQ's",          route: 'admin.faqs.index' },
             { name: 'Testimonials',   route: 'admin.testimonials.index' },
+            { name: 'Awards',         route: 'admin.awards.index' },
             { name: 'Blog Category',  route: 'admin.blog-categories.index' },
             { name: 'Blog Posts',     route: 'admin.blog.index' },
+            { name: 'Pages',          route: 'admin.pages.index' },
         ],
     },
 
@@ -140,12 +156,7 @@ const navItems = [
             { name: 'Header Settings',   route: 'admin.website-settings.header.edit' },
             { name: 'Footer Settings',   route: 'admin.website-settings.footer.edit' },
 
-            { name: 'History Settings',  route: 'admin.website-settings.history.edit' },
-            { name: 'Contact Settings',  route: 'admin.website-settings.contact.edit' },
-            { name: 'Services Settings', route: 'admin.website-settings.services.edit' },
-            { name: 'Blog Settings',     route: 'admin.website-settings.blog-page.edit' },
             { name: 'Email Notifications', route: 'admin.website-settings.email-notifications.edit' },
-            { name: 'Facilities',        route: 'admin.facilities.index' },
             // { name: 'Room Features',     route: null },
             // { name: 'Social Media',      route: null },
             // { name: 'SEO Settings',      route: null },
