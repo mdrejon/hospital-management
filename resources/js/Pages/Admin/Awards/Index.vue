@@ -13,18 +13,19 @@
             <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                 <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Home Page — "Awards" Section</h2>
                 <form @submit.prevent="saveSettings" class="space-y-4">
+                    <LanguageTabs v-model="activeLang" />
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="label">Badge Text</label>
-                            <input v-model="settingsForm.award_badge" type="text" class="input" placeholder="Our Recognition" />
+                            <input v-model="settingsForm.award_badge[activeLang]" type="text" class="input" placeholder="Our Recognition" />
                         </div>
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="settingsForm.award_title" type="text" class="input" placeholder="Awards" />
+                            <input v-model="settingsForm.award_title[activeLang]" type="text" class="input" placeholder="Awards" />
                         </div>
                         <div class="col-span-2">
                             <label class="label">Section Description</label>
-                            <textarea v-model="settingsForm.award_desc" rows="2" class="input resize-none"></textarea>
+                            <textarea v-model="settingsForm.award_desc[activeLang]" rows="2" class="input resize-none"></textarea>
                         </div>
                     </div>
 
@@ -32,11 +33,11 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="settingsForm.ach_award_title" type="text" class="input" placeholder="Our Awards & Accreditations" />
+                            <input v-model="settingsForm.ach_award_title[activeLang]" type="text" class="input" placeholder="Our Awards & Accreditations" />
                         </div>
                         <div>
                             <label class="label">Section Description</label>
-                            <input v-model="settingsForm.ach_award_desc" type="text" class="input" />
+                            <input v-model="settingsForm.ach_award_desc[activeLang]" type="text" class="input" />
                         </div>
                     </div>
 
@@ -55,21 +56,22 @@
                     {{ editingId ? 'Edit Award' : 'Add New Award' }}
                 </h2>
                 <form @submit.prevent="submitAward" class="space-y-4">
+                    <LanguageTabs v-model="activeLang" />
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="label">Title <span class="text-red-500">*</span></label>
-                            <input v-model="form.title" type="text" class="input" placeholder="e.g. ClinicMaster 2024" />
-                            <InputError :message="form.errors.title" />
+                            <input v-model="form.title[activeLang]" type="text" class="input" placeholder="e.g. ClinicMaster 2024" />
+                            <InputError :message="form.errors[`title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Subtitle / Organization</label>
-                            <input v-model="form.subtitle" type="text" class="input" placeholder="e.g. Quality and Accreditation Institute" />
-                            <InputError :message="form.errors.subtitle" />
+                            <input v-model="form.subtitle[activeLang]" type="text" class="input" placeholder="e.g. Quality and Accreditation Institute" />
+                            <InputError :message="form.errors[`subtitle.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Link Text</label>
-                            <input v-model="form.link_text" type="text" class="input" placeholder="e.g. Healthcare Leadership Award" />
-                            <InputError :message="form.errors.link_text" />
+                            <input v-model="form.link_text[activeLang]" type="text" class="input" placeholder="e.g. Healthcare Leadership Award" />
+                            <InputError :message="form.errors[`link_text.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Link URL</label>
@@ -122,10 +124,10 @@
                         class="px-6 py-4 flex items-center gap-4 hover:bg-gray-50 transition-colors">
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2">
-                                <span class="font-semibold text-gray-800 text-sm">{{ a.title }}</span>
+                                <span class="font-semibold text-gray-800 text-sm">{{ displayTranslatable(a.title, languages) }}</span>
                                 <span class="text-xs text-gray-400">Style {{ a.seal_variant }}</span>
                             </div>
-                            <p class="text-xs text-gray-500">{{ a.subtitle }}</p>
+                            <p class="text-xs text-gray-500">{{ displayTranslatable(a.subtitle, languages) }}</p>
                         </div>
                         <div class="flex items-center gap-2 flex-shrink-0">
                             <button @click="toggleStatus(a)"
@@ -152,7 +154,7 @@
             <div class="bg-white rounded-lg p-6 w-80 shadow-xl">
                 <h3 class="font-semibold text-gray-800 mb-2">Delete Award</h3>
                 <p class="text-sm text-gray-600 mb-4">
-                    Remove "<strong>{{ deleteTarget.title }}</strong>"? Cannot be undone.
+                    Remove "<strong>{{ displayTranslatable(deleteTarget?.title, languages) }}</strong>"? Cannot be undone.
                 </p>
                 <div class="flex justify-end gap-2">
                     <button @click="deleteTarget = null"
@@ -166,23 +168,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useForm, router } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import { emptyTranslatable, seedTranslatable, displayTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     awards:   { type: Array,  default: () => [] },
     settings: { type: Object, default: () => ({}) },
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
 // ── Section settings ──
 const settingsForm = useForm({
-    award_badge:     props.settings.award_badge     ?? '',
-    award_title:     props.settings.award_title     ?? '',
-    award_desc:      props.settings.award_desc       ?? '',
-    ach_award_title: props.settings.ach_award_title ?? '',
-    ach_award_desc:  props.settings.ach_award_desc  ?? '',
+    award_badge:     seedTranslatable(languages.value, props.settings.award_badge),
+    award_title:     seedTranslatable(languages.value, props.settings.award_title),
+    award_desc:      seedTranslatable(languages.value, props.settings.award_desc),
+    ach_award_title: seedTranslatable(languages.value, props.settings.ach_award_title),
+    ach_award_desc:  seedTranslatable(languages.value, props.settings.ach_award_desc),
 });
 
 function saveSettings() {
@@ -193,9 +200,9 @@ function saveSettings() {
 const editingId = ref(null);
 
 const form = useForm({
-    title:        '',
-    subtitle:     '',
-    link_text:    '',
+    title:        emptyTranslatable(languages.value),
+    subtitle:     emptyTranslatable(languages.value),
+    link_text:    emptyTranslatable(languages.value),
     link_url:     '',
     seal_variant: 1,
     sort_order:   0,
@@ -204,9 +211,9 @@ const form = useForm({
 
 function startEdit(a) {
     editingId.value    = a.id;
-    form.title         = a.title;
-    form.subtitle      = a.subtitle ?? '';
-    form.link_text     = a.link_text ?? '';
+    form.title         = seedTranslatable(languages.value, a.title);
+    form.subtitle      = seedTranslatable(languages.value, a.subtitle);
+    form.link_text     = seedTranslatable(languages.value, a.link_text);
     form.link_url      = a.link_url ?? '';
     form.seal_variant  = a.seal_variant;
     form.sort_order    = a.sort_order;
@@ -217,6 +224,9 @@ function startEdit(a) {
 function resetForm() {
     editingId.value = null;
     form.reset();
+    form.title = emptyTranslatable(languages.value);
+    form.subtitle = emptyTranslatable(languages.value);
+    form.link_text = emptyTranslatable(languages.value);
     form.seal_variant = 1;
     form.is_active = true;
 }

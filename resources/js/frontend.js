@@ -218,6 +218,8 @@ function initResponsiveSlider({ rootAttr, trackAttr, prevAttr, nextAttr, dotsAtt
   // Pointer dragging — grab the track with mouse or touch to pull the
   // slider; past a quarter-slide it commits to the next/prev position.
   let dragging = false;
+  let captured = false;
+  let dragPointerId = null;
   let dragStartX = 0;
   let dragDelta = 0;
 
@@ -227,22 +229,34 @@ function initResponsiveSlider({ rootAttr, trackAttr, prevAttr, nextAttr, dotsAtt
 
   track.addEventListener("pointerdown", (e) => {
     dragging = true;
+    captured = false;
+    dragPointerId = e.pointerId;
     dragStartX = e.clientX;
     dragDelta = 0;
-    stopAutoplay();
-    track.setPointerCapture(e.pointerId);
-    track.style.transition = "none";
   });
 
+  // Pointer capture is only claimed once the pointer has actually moved
+  // past a small threshold. Capturing eagerly on pointerdown would make
+  // Chrome retarget the resulting click event to the track element,
+  // which silently defeats navigation on links nested inside the slides.
   track.addEventListener("pointermove", (e) => {
     if (!dragging) return;
     dragDelta = e.clientX - dragStartX;
+    if (!captured) {
+      if (Math.abs(dragDelta) < 5) return;
+      captured = true;
+      stopAutoplay();
+      track.setPointerCapture(dragPointerId);
+      track.style.transition = "none";
+    }
     track.style.transform = `translateX(calc(-${index * (100 / visible)}% + ${dragDelta}px))`;
   });
 
   const endDrag = () => {
     if (!dragging) return;
     dragging = false;
+    if (!captured) return;
+    captured = false;
     track.style.transition = "";
     const threshold = Math.min(80, track.clientWidth / visible / 4);
     if (dragDelta <= -threshold) goTo(index + 1);

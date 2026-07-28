@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\WebsiteSettings\ManagementSettingController;
+use App\Models\Language;
 use App\Models\ManagementMember;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -96,7 +97,8 @@ class ManagementMemberController extends Controller
     {
         return $request->validate([
             'name'          => 'required|string',
-            'role'          => 'nullable|string',
+            'role'          => 'nullable|array',
+            'role.*'        => 'nullable|string',
             'photo'         => 'nullable|image|mimes:jpeg,jpg,png,webp',
             'facebook_url'  => 'nullable|string',
             'twitter_url'   => 'nullable|string',

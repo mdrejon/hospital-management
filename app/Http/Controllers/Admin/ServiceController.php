@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\WebsiteSettings\ServiceSettingController;
 use App\Models\Doctor;
+use App\Models\Language;
 use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,10 +45,14 @@ class ServiceController extends Controller
             }
         }
 
-        $data['slug'] = $this->uniqueSlug($data['title']);
+        $data['slug'] = $this->uniqueSlug($data['title'][$this->defaultLocale()] ?? '');
 
         if (empty($data['seo_keywords'])) {
-            $data['seo_keywords'] = $this->autoKeywords($data['seo_title'] ?? '', $data['seo_description'] ?? '', $data['title']);
+            $data['seo_keywords'] = $this->autoKeywords(
+                $data['seo_title'][$this->defaultLocale()] ?? '',
+                $data['seo_description'][$this->defaultLocale()] ?? '',
+                $data['title'][$this->defaultLocale()] ?? ''
+            );
         }
 
         $service = Service::create($data);
@@ -84,10 +89,14 @@ class ServiceController extends Controller
             }
         }
 
-        $data['slug'] = $this->uniqueSlug($data['title'], $service->id);
+        $data['slug'] = $this->uniqueSlug($data['title'][$this->defaultLocale()] ?? '', $service->id);
 
         if (empty($data['seo_keywords'])) {
-            $data['seo_keywords'] = $this->autoKeywords($data['seo_title'] ?? '', $data['seo_description'] ?? '', $data['title']);
+            $data['seo_keywords'] = $this->autoKeywords(
+                $data['seo_title'][$this->defaultLocale()] ?? '',
+                $data['seo_description'][$this->defaultLocale()] ?? '',
+                $data['title'][$this->defaultLocale()] ?? ''
+            );
         }
 
         $service->update($data);
@@ -118,38 +127,55 @@ class ServiceController extends Controller
         return back()->with('success', 'Service status updated.');
     }
 
+    private function defaultLocale(): string
+    {
+        return Language::defaultLanguage()?->code ?? config('app.locale');
+    }
+
     private function validated(Request $request): array
     {
+        $default = $this->defaultLocale();
+
         $data = $request->validate([
-            'title'          => 'required|string',
-            'icon_svg'       => 'nullable|string',
-            'image'          => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'short_desc'     => 'nullable|string',
-            'description'    => 'nullable|string',
-            'features'       => 'nullable|array',
-            'features.*'     => 'nullable|string',
-            'faqs'           => 'nullable|array',
-            'faqs.*.question'=> 'nullable|string',
-            'faqs.*.answer'  => 'nullable|string',
-            'doctor_ids'     => 'nullable|array',
-            'doctor_ids.*'   => 'exists:doctors,id',
-            'is_featured'    => 'boolean',
-            'sort_order'     => 'integer|min:0',
-            'is_active'      => 'boolean',
-            'seo_title'       => 'nullable|string',
-            'seo_description' => 'nullable|string',
-            'seo_keywords'    => 'nullable|string',
-            'seo_og_image'    => 'nullable|image|mimes:jpeg,jpg,png,webp',
+            'title'             => 'required|array',
+            "title.$default"    => 'required|string',
+            'title.*'           => 'nullable|string',
+            'icon_svg'          => 'nullable|string',
+            'image'             => 'nullable|image|mimes:jpeg,jpg,png,webp',
+            'short_desc'        => 'nullable|array',
+            'short_desc.*'      => 'nullable|string',
+            'description'       => 'nullable|array',
+            'description.*'     => 'nullable|string',
+            'features'          => 'nullable|array',
+            'features.*.*'      => 'nullable|string',
+            'faqs'              => 'nullable|array',
+            'faqs.*.question.*' => 'nullable|string',
+            'faqs.*.answer.*'   => 'nullable|string',
+            'doctor_ids'        => 'nullable|array',
+            'doctor_ids.*'      => 'exists:doctors,id',
+            'is_featured'       => 'boolean',
+            'sort_order'        => 'integer|min:0',
+            'is_active'         => 'boolean',
+            'seo_title'         => 'nullable|array',
+            'seo_title.*'       => 'nullable|string',
+            'seo_description'   => 'nullable|array',
+            'seo_description.*' => 'nullable|string',
+            'seo_keywords'      => 'nullable|string',
+            'seo_og_image'      => 'nullable|image|mimes:jpeg,jpg,png,webp',
         ]);
 
-        // Sanitise arrays — remove blank entries
+        // Sanitise arrays — remove entries blank in every locale
         if (isset($data['features'])) {
-            $data['features'] = array_values(array_filter($data['features']));
+            $data['features'] = array_values(array_filter(
+                $data['features'],
+                fn ($f) => is_array($f) && count(array_filter($f)) > 0
+            ));
         }
         if (isset($data['faqs'])) {
-            $data['faqs'] = array_values(
-                array_filter($data['faqs'], fn($f) => !empty($f['question']) || !empty($f['answer']))
-            );
+            $data['faqs'] = array_values(array_filter(
+                $data['faqs'],
+                fn ($f) => !empty(array_filter($f['question'] ?? [])) || !empty(array_filter($f['answer'] ?? []))
+            ));
         }
 
         return $data;

@@ -30,6 +30,10 @@
             </span>
             <span class="top-header__value"><?php echo e($headerSettings['header_hours'] ?? 'Mon - Fri: 8:00 am - 7:00 pm'); ?></span>
           </span>
+          <div class="top-header__divider"></div>
+          <?php $__currentLoopData = $languages ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lang): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <a href="<?php echo e(route('language.switch', $lang->code)); ?>" class="top-header__lang <?php echo e(app()->getLocale() === $lang->code ? 'is-active' : ''); ?>"><?php echo e(strtoupper($lang->code)); ?></a>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           <div class="top-header__socials">
             <a href="<?php echo e($headerSettings['header_facebook_url'] ?? '#'); ?>" class="top-header__social-link" aria-label="Facebook">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z"/></svg>
@@ -62,7 +66,7 @@
             </svg>
           </span>
           <span class="top-info-bar__text">
-            <span class="top-info-bar__label">Email Supports</span>
+            <span class="top-info-bar__label"><?php echo e(__('frontend.header.email_supports')); ?></span>
             <span class="top-info-bar__value"><?php echo e($headerSettings['header_email'] ?? 'info@example.com'); ?></span>
           </span>
         </a>
@@ -78,14 +82,14 @@
             </svg>
           </span>
           <span class="top-info-bar__text">
-            <span class="top-info-bar__label">Supports</span>
+            <span class="top-info-bar__label"><?php echo e(__('frontend.header.supports')); ?></span>
             <span class="top-info-bar__value"><?php echo e($headerSettings['header_support_text'] ?? '24x7 Supports'); ?></span>
           </span>
         </span>
 
         <div class="top-info-bar__item top-info-bar__search">
           <form action="<?php echo e(route('search')); ?>" method="GET" class="header-search" role="search">
-            <input type="search" name="q" value="<?php echo e(request('q')); ?>" class="header-search__input" placeholder="Search here..." aria-label="Search" required />
+            <input type="search" name="q" value="<?php echo e(request('q')); ?>" class="header-search__input" placeholder="<?php echo e(__('frontend.header.search_placeholder')); ?>" aria-label="Search" required />
             <button type="submit" class="header-search__submit" aria-label="Search">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
@@ -107,50 +111,53 @@
       </a>
 
       <nav class="main-nav">
-        <a href="<?php echo e(route('home')); ?>" class="main-nav__link <?php echo e(request()->routeIs('home') ? 'is-active' : ''); ?>">Home</a>
+        <a href="<?php echo e(route('home')); ?>" class="main-nav__link <?php echo e(request()->routeIs('home') ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.home')); ?></a>
 
         <div class="has-dropdown">
           <button type="button" class="main-nav__link <?php echo e(request()->routeIs(['about','history','md-message','management','achievements','faq']) ? 'is-active' : ''); ?>">
-            About Us
+            <?php echo e(__('frontend.nav.about_us')); ?>
+
             <span class="main-nav__caret">+</span>
           </button>
           <div class="dropdown-menu">
-            <a href="<?php echo e(route('about')); ?>" class="dropdown-menu__link">Company Profile</a>
-            <a href="<?php echo e(route('history')); ?>" class="dropdown-menu__link">Our History</a>
-            <a href="<?php echo e(route('md-message')); ?>" class="dropdown-menu__link">Message From MD/CEO</a>
-            <a href="<?php echo e(route('management')); ?>" class="dropdown-menu__link">Our Management</a>
-            <a href="<?php echo e(route('achievements')); ?>" class="dropdown-menu__link">Our Achievement</a>
-            <a href="<?php echo e(route('faq')); ?>" class="dropdown-menu__link">FAQ</a>
+            <a href="<?php echo e(route('about')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.company_profile')); ?></a>
+            <a href="<?php echo e(route('history')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.our_history')); ?></a>
+            <a href="<?php echo e(route('md-message')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.md_message')); ?></a>
+            <a href="<?php echo e(route('management')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.our_management')); ?></a>
+            <a href="<?php echo e(route('achievements')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.our_achievement')); ?></a>
+            <a href="<?php echo e(route('faq')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.faq')); ?></a>
           </div>
         </div>
 
         <div class="has-dropdown">
           <button type="button" class="main-nav__link <?php echo e(request()->routeIs(['services','service-details']) ? 'is-active' : ''); ?>">
-            Our Service
+            <?php echo e(__('frontend.nav.our_service')); ?>
+
             <span class="main-nav__caret">+</span>
           </button>
           <div class="dropdown-menu">
-            <a href="<?php echo e(route('services')); ?>" class="dropdown-menu__link">Service List</a>
+            <a href="<?php echo e(route('services')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.service_list')); ?></a>
           </div>
         </div>
 
         <div class="has-dropdown">
           <button type="button" class="main-nav__link <?php echo e(request()->routeIs(['doctors','doctor-details']) ? 'is-active' : ''); ?>">
-            Doctor's
+            <?php echo e(__('frontend.nav.doctors')); ?>
+
             <span class="main-nav__caret">+</span>
           </button>
           <div class="dropdown-menu">
-            <a href="<?php echo e(route('doctors')); ?>" class="dropdown-menu__link">Doctor's List</a>
+            <a href="<?php echo e(route('doctors')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.doctors_list')); ?></a>
           </div>
         </div>
 
-        <a href="<?php echo e(route('gallery')); ?>" class="main-nav__link <?php echo e(request()->routeIs('gallery') ? 'is-active' : ''); ?>">Gallery</a>
-        <a href="<?php echo e(route('blog-list')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['blog-list','blog-details']) ? 'is-active' : ''); ?>">Blog</a>
-        <a href="<?php echo e(route('contact')); ?>" class="main-nav__link <?php echo e(request()->routeIs('contact') ? 'is-active' : ''); ?>">Contact Us</a>
+        <a href="<?php echo e(route('gallery')); ?>" class="main-nav__link <?php echo e(request()->routeIs('gallery') ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.gallery')); ?></a>
+        <a href="<?php echo e(route('blog-list')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['blog-list','blog-details']) ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.blog')); ?></a>
+        <a href="<?php echo e(route('contact')); ?>" class="main-nav__link <?php echo e(request()->routeIs('contact') ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.contact_us')); ?></a>
       </nav>
 
       <div class="site-header__actions">
-        <a href="<?php echo e($headerSettings['header_book_btn_url'] ?? route('appointment')); ?>" class="btn-appointment"><?php echo e($headerSettings['header_book_btn_text'] ?? 'Appointment'); ?></a>
+        <a href="<?php echo e($headerSettings['header_book_btn_url'] ?? route('appointment')); ?>" class="btn-appointment"><?php echo e($headerSettings['header_book_btn_text'] ?? __('frontend.header.appointment')); ?></a>
         <button type="button" class="menu-toggle" data-menu-toggle aria-label="Open menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -180,11 +187,12 @@
     </p>
 
     <nav class="side-panel__nav">
-      <a href="<?php echo e(route('home')); ?>" class="side-panel__nav-link">Home</a>
+      <a href="<?php echo e(route('home')); ?>" class="side-panel__nav-link"><?php echo e(__('frontend.nav.home')); ?></a>
 
       <div>
         <button type="button" class="side-panel__nav-link" data-submenu-toggle>
-          About Us
+          <?php echo e(__('frontend.nav.about_us')); ?>
+
           <span class="side-panel__nav-caret">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -192,18 +200,19 @@
           </span>
         </button>
         <div class="side-panel__submenu">
-          <a href="<?php echo e(route('about')); ?>" class="side-panel__nav-sublink">Company Profile</a>
-          <a href="<?php echo e(route('history')); ?>" class="side-panel__nav-sublink">Our History</a>
-          <a href="<?php echo e(route('md-message')); ?>" class="side-panel__nav-sublink">Message From MD/CEO</a>
-          <a href="<?php echo e(route('management')); ?>" class="side-panel__nav-sublink">Our Management</a>
-          <a href="<?php echo e(route('achievements')); ?>" class="side-panel__nav-sublink">Our Achievement</a>
-          <a href="<?php echo e(route('faq')); ?>" class="side-panel__nav-sublink">FAQ</a>
+          <a href="<?php echo e(route('about')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.company_profile')); ?></a>
+          <a href="<?php echo e(route('history')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.our_history')); ?></a>
+          <a href="<?php echo e(route('md-message')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.md_message')); ?></a>
+          <a href="<?php echo e(route('management')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.our_management')); ?></a>
+          <a href="<?php echo e(route('achievements')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.our_achievement')); ?></a>
+          <a href="<?php echo e(route('faq')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.faq')); ?></a>
         </div>
       </div>
 
       <div>
         <button type="button" class="side-panel__nav-link" data-submenu-toggle>
-          Our Service
+          <?php echo e(__('frontend.nav.our_service')); ?>
+
           <span class="side-panel__nav-caret">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -211,13 +220,14 @@
           </span>
         </button>
         <div class="side-panel__submenu">
-          <a href="<?php echo e(route('services')); ?>" class="side-panel__nav-sublink">Service List</a>
+          <a href="<?php echo e(route('services')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.service_list')); ?></a>
         </div>
       </div>
 
       <div>
         <button type="button" class="side-panel__nav-link" data-submenu-toggle>
-          Doctor's
+          <?php echo e(__('frontend.nav.doctors')); ?>
+
           <span class="side-panel__nav-caret">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -225,16 +235,16 @@
           </span>
         </button>
         <div class="side-panel__submenu">
-          <a href="<?php echo e(route('doctors')); ?>" class="side-panel__nav-sublink">Doctor's List</a>
+          <a href="<?php echo e(route('doctors')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.doctors_list')); ?></a>
         </div>
       </div>
 
-      <a href="<?php echo e(route('gallery')); ?>" class="side-panel__nav-link">Gallery</a>
-      <a href="<?php echo e(route('blog-list')); ?>" class="side-panel__nav-link">Blog</a>
-      <a href="<?php echo e(route('contact')); ?>" class="side-panel__nav-link">Contact Us</a>
+      <a href="<?php echo e(route('gallery')); ?>" class="side-panel__nav-link"><?php echo e(__('frontend.nav.gallery')); ?></a>
+      <a href="<?php echo e(route('blog-list')); ?>" class="side-panel__nav-link"><?php echo e(__('frontend.nav.blog')); ?></a>
+      <a href="<?php echo e(route('contact')); ?>" class="side-panel__nav-link"><?php echo e(__('frontend.nav.contact_us')); ?></a>
     </nav>
 
-    <h3 class="side-panel__title">Contact Us</h3>
+    <h3 class="side-panel__title"><?php echo e(__('frontend.nav.contact_us')); ?></h3>
     <div class="side-panel__contact-list">
       <div class="side-panel__contact-item">
         <span class="side-panel__check">
@@ -263,6 +273,13 @@
         <?php echo e($headerSettings['header_phone'] ?? '+1 (234) 5688 9990'); ?>
 
       </div>
+    </div>
+
+    <h3 class="side-panel__title"><?php echo e(__('frontend.common.language')); ?></h3>
+    <div class="side-panel__lang-switch">
+      <?php $__currentLoopData = $languages ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lang): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <a href="<?php echo e(route('language.switch', $lang->code)); ?>" class="side-panel__lang-link <?php echo e(app()->getLocale() === $lang->code ? 'is-active' : ''); ?>"><?php echo e($lang->native_name); ?></a>
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
     <h3 class="side-panel__title">Follow Us</h3>

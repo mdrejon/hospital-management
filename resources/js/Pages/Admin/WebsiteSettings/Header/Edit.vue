@@ -28,20 +28,21 @@
                 <!-- Top bar -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Top Bar</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Tagline (left side)</label>
-                        <input v-model="form.header_tagline" type="text" class="input" placeholder="Need professional medical &amp; health Care?" />
-                        <InputError :message="form.errors.header_tagline" />
+                        <input v-model="form.header_tagline[activeLang]" type="text" class="input" placeholder="Need professional medical &amp; health Care?" />
+                        <InputError :message="form.errors[`header_tagline.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Office Hours (right side)</label>
-                        <input v-model="form.header_hours" type="text" class="input" placeholder="Mon - Fri: 8:00 am - 7:00 pm" />
-                        <InputError :message="form.errors.header_hours" />
+                        <input v-model="form.header_hours[activeLang]" type="text" class="input" placeholder="Mon - Fri: 8:00 am - 7:00 pm" />
+                        <InputError :message="form.errors[`header_hours.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Support Text</label>
-                        <input v-model="form.header_support_text" type="text" class="input" placeholder="24x7 Supports" />
-                        <InputError :message="form.errors.header_support_text" />
+                        <input v-model="form.header_support_text[activeLang]" type="text" class="input" placeholder="24x7 Supports" />
+                        <InputError :message="form.errors[`header_support_text.${activeLang}`]" />
                     </div>
                 </section>
 
@@ -50,8 +51,9 @@
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Contact Info</h2>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Phone</label>
-                        <input v-model="form.header_phone" type="text" class="input" placeholder="+1 (234) 5688 9990" />
-                        <InputError :message="form.errors.header_phone" />
+                        <LanguageTabs v-model="activeLang" />
+                        <input v-model="form.header_phone[activeLang]" type="text" class="input" placeholder="+1 (234) 5688 9990" />
+                        <InputError :message="form.errors[`header_phone.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Email</label>
@@ -60,18 +62,20 @@
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Address (side panel)</label>
-                        <input v-model="form.header_address" type="text" class="input" placeholder="36D Street Brooklyn, New York" />
-                        <InputError :message="form.errors.header_address" />
+                        <LanguageTabs v-model="activeLang" />
+                        <input v-model="form.header_address[activeLang]" type="text" class="input" placeholder="36D Street Brooklyn, New York" />
+                        <InputError :message="form.errors[`header_address.${activeLang}`]" />
                     </div>
                 </section>
 
                 <!-- Side panel description -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Off-canvas Side Panel</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Description</label>
-                        <textarea v-model="form.header_sidebar_description" rows="3" class="input" placeholder="Short description shown in the mobile side panel..."></textarea>
-                        <InputError :message="form.errors.header_sidebar_description" />
+                        <textarea v-model="form.header_sidebar_description[activeLang]" rows="3" class="input" placeholder="Short description shown in the mobile side panel..."></textarea>
+                        <InputError :message="form.errors[`header_sidebar_description.${activeLang}`]" />
                     </div>
                 </section>
 
@@ -105,10 +109,11 @@
                 <!-- Appointment button -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Appointment Button (Navbar)</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Button Text</label>
-                            <input v-model="form.header_book_btn_text" type="text" class="input" placeholder="Appointment" />
+                            <input v-model="form.header_book_btn_text[activeLang]" type="text" class="input" placeholder="Appointment" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Button URL</label>
@@ -128,32 +133,39 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError  from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import { emptyTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     settings: { type: Object, required: true },
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
 const currentLogo = ref(props.settings.header_logo);
+
+const seed = (key) => ({ ...emptyTranslatable(languages.value), ...(props.settings[key] || {}) });
 
 const form = useForm({
     header_site_name:            props.settings.header_site_name ?? '',
-    header_tagline:               props.settings.header_tagline ?? '',
-    header_hours:                 props.settings.header_hours ?? '',
-    header_support_text:          props.settings.header_support_text ?? '',
-    header_phone:                 props.settings.header_phone ?? '',
+    header_tagline:               seed('header_tagline'),
+    header_hours:                 seed('header_hours'),
+    header_support_text:          seed('header_support_text'),
+    header_phone:                 seed('header_phone'),
     header_email:                 props.settings.header_email ?? '',
-    header_address:               props.settings.header_address ?? '',
-    header_sidebar_description:   props.settings.header_sidebar_description ?? '',
+    header_address:               seed('header_address'),
+    header_sidebar_description:   seed('header_sidebar_description'),
     header_facebook_url:          props.settings.header_facebook_url ?? '',
     header_twitter_url:           props.settings.header_twitter_url ?? '',
     header_instagram_url:         props.settings.header_instagram_url ?? '',
     header_linkedin_url:          props.settings.header_linkedin_url ?? '',
-    header_book_btn_text:         props.settings.header_book_btn_text ?? '',
+    header_book_btn_text:         seed('header_book_btn_text'),
     header_book_btn_url:          props.settings.header_book_btn_url ?? '',
     header_logo:                  null,
 });

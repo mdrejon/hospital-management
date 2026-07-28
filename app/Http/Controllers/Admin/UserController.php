@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Doctor;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -28,7 +29,8 @@ class UserController extends Controller
     public function create(): Response
     {
         return Inertia::render('Admin/Users/Create', [
-            'roles' => Role::where('is_active', true)->get(['id', 'name', 'is_super_admin']),
+            'roles'   => Role::where('is_active', true)->get(['id', 'name', 'is_super_admin']),
+            'doctors' => Doctor::orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -39,6 +41,7 @@ class UserController extends Controller
             'email'     => 'required|email|unique:users,email',
             'password'  => ['required', 'confirmed', Password::min(8)],
             'role_id'   => 'nullable|exists:roles,id',
+            'doctor_id' => 'nullable|exists:doctors,id',
             'is_active' => 'boolean',
         ]);
 
@@ -47,6 +50,7 @@ class UserController extends Controller
             'email'     => $data['email'],
             'password'  => Hash::make($data['password']),
             'role_id'   => $data['role_id'] ?? null,
+            'doctor_id' => $data['doctor_id'] ?? null,
             'is_active' => $data['is_active'] ?? true,
         ]);
 
@@ -57,8 +61,9 @@ class UserController extends Controller
     public function edit(User $user): Response
     {
         return Inertia::render('Admin/Users/Edit', [
-            'user'  => $user->load('role'),
-            'roles' => Role::where('is_active', true)->get(['id', 'name', 'is_super_admin']),
+            'user'    => $user->load('role'),
+            'roles'   => Role::where('is_active', true)->get(['id', 'name', 'is_super_admin']),
+            'doctors' => Doctor::orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -69,6 +74,7 @@ class UserController extends Controller
             'email'     => 'required|email|unique:users,email,' . $user->id,
             'password'  => ['nullable', 'confirmed', Password::min(8)],
             'role_id'   => 'nullable|exists:roles,id',
+            'doctor_id' => 'nullable|exists:doctors,id',
             'is_active' => 'boolean',
         ]);
 
@@ -76,6 +82,7 @@ class UserController extends Controller
             'name'      => $data['name'],
             'email'     => $data['email'],
             'role_id'   => $data['role_id'] ?? null,
+            'doctor_id' => $data['doctor_id'] ?? null,
             'is_active' => $data['is_active'] ?? true,
         ];
 

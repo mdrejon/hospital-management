@@ -13,6 +13,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'role_id',
+        'doctor_id',
         'name',
         'email',
         'password',
@@ -33,6 +34,21 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class);
+    }
+
+    public function isDoctor(): bool
+    {
+        return $this->role?->slug === 'doctor';
+    }
+
+    public function isOperator(): bool
+    {
+        return $this->role?->slug === 'operator';
     }
 
     /** True if the user has no role assigned or their role is super admin */

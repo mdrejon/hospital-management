@@ -4,11 +4,12 @@
         <!-- Basic Info -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Basic Information</h2>
+            <LanguageTabs v-model="activeLang" />
             <div class="grid grid-cols-2 gap-4">
                 <div class="col-span-2">
                     <label class="label">Post Title <span class="text-red-500">*</span></label>
-                    <input v-model="form.title" type="text" class="input" placeholder="Enter post title..." />
-                    <p v-if="form.errors.title" class="text-xs text-red-500 mt-1">{{ form.errors.title }}</p>
+                    <input v-model="form.title[activeLang]" type="text" class="input" placeholder="Enter post title..." />
+                    <p v-if="form.errors[`title.${activeLang}`]" class="text-xs text-red-500 mt-1">{{ form.errors[`title.${activeLang}`] }}</p>
                 </div>
                 <div class="col-span-2">
                     <label class="label">URL Slug <span class="text-gray-400 font-normal text-xs">(auto-generated)</span></label>
@@ -21,7 +22,7 @@
                     <label class="label">Category</label>
                     <select v-model="form.category_id" class="input">
                         <option :value="null">— No Category —</option>
-                        <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+                        <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ displayTranslatable(cat.name, languages) }}</option>
                     </select>
                 </div>
                 <div>
@@ -40,15 +41,16 @@
         <!-- Excerpt & Content -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Content</h2>
+            <LanguageTabs v-model="activeLang" />
             <div>
                 <label class="label">Excerpt <span class="text-gray-400 font-normal text-xs">(short summary shown on listing pages)</span></label>
-                <textarea v-model="form.excerpt" rows="3" class="input" maxlength="500"
+                <textarea v-model="form.excerpt[activeLang]" rows="3" class="input" maxlength="500"
                     placeholder="Brief summary of the post..."></textarea>
-                <p class="text-xs text-gray-400 mt-1">{{ (form.excerpt || '').length }}/500 characters</p>
+                <p class="text-xs text-gray-400 mt-1">{{ (form.excerpt[activeLang] || '').length }}/500 characters</p>
             </div>
             <div>
                 <label class="label">Full Content</label>
-                <RichEditor v-model="form.content" />
+                <RichEditor v-model="form.content[activeLang]" />
             </div>
         </section>
 
@@ -126,21 +128,22 @@
         <!-- SEO -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">SEO Settings</h2>
+            <LanguageTabs v-model="activeLang" />
             <div>
                 <label class="label">Meta Title <span class="text-gray-400 font-normal text-xs">(max 160 chars)</span></label>
-                <input v-model="form.meta_title" @input="onMetaTitleInput" type="text" class="input" maxlength="160"
-                    :placeholder="form.title ? form.title + ' – Hotel Beach Way Blog' : 'Post title – Hotel Beach Way Blog'" />
-                <p class="text-xs text-gray-400 mt-1">{{ (form.meta_title || '').length }}/160 characters</p>
+                <input v-model="form.meta_title[activeLang]" @input="onMetaTitleInput" type="text" class="input" maxlength="160"
+                    :placeholder="form.title[activeLang] ? form.title[activeLang] + ' – Hotel Beach Way Blog' : 'Post title – Hotel Beach Way Blog'" />
+                <p class="text-xs text-gray-400 mt-1">{{ (form.meta_title[activeLang] || '').length }}/160 characters</p>
             </div>
             <div>
                 <label class="label">Meta Description <span class="text-gray-400 font-normal text-xs">(max 320 chars)</span></label>
-                <textarea v-model="form.meta_description" @input="onMetaDescInput" rows="3" class="input" maxlength="320"
+                <textarea v-model="form.meta_description[activeLang]" @input="onMetaDescInput" rows="3" class="input" maxlength="320"
                     placeholder="A concise description for search engine results..."></textarea>
-                <p class="text-xs text-gray-400 mt-1">{{ (form.meta_description || '').length }}/320 characters</p>
+                <p class="text-xs text-gray-400 mt-1">{{ (form.meta_description[activeLang] || '').length }}/320 characters</p>
             </div>
             <div>
                 <label class="label">Meta Keywords <span class="text-gray-400 font-normal text-xs">(comma-separated)</span></label>
-                <input v-model="form.meta_keywords" @input="onMetaKeywordsInput" type="text" class="input" maxlength="500"
+                <input v-model="form.meta_keywords[activeLang]" @input="onMetaKeywordsInput" type="text" class="input" maxlength="500"
                     placeholder="hotel blog, cox's bazar, travel tips" />
             </div>
 
@@ -177,11 +180,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { ref, reactive, computed } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
 import RichEditor from '@/Components/Admin/Shared/RichEditor.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
+import { defaultLangCode, displayTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     form:                  Object,
@@ -194,9 +199,24 @@ const props = defineProps({
 
 defineEmits(['submit']);
 
-const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(props.form, {
-    titleSource: () => props.form.title,
-    descSource:  () => props.form.excerpt,
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
+// Proxy exposing the current-tab locale value of each translatable SEO field
+// as a plain string, so useSeoAutoFill (which reads/writes flat form keys)
+// can drive the per-locale meta_title[activeLang]/meta_description[activeLang].
+const seoProxy = reactive({
+    get meta_title() { return props.form.meta_title[activeLang.value]; },
+    set meta_title(v) { props.form.meta_title[activeLang.value] = v; },
+    get meta_description() { return props.form.meta_description[activeLang.value]; },
+    set meta_description(v) { props.form.meta_description[activeLang.value] = v; },
+    get meta_keywords() { return props.form.meta_keywords[activeLang.value]; },
+    set meta_keywords(v) { props.form.meta_keywords[activeLang.value] = v; },
+});
+
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(seoProxy, {
+    titleSource: () => props.form.title[activeLang.value],
+    descSource:  () => props.form.excerpt[activeLang.value],
     titleSuffix: ' – Hotel Beach Way Blog',
 });
 
@@ -205,7 +225,7 @@ const removeOgImageFlag       = ref(false);
 const removeAuthorAvatarFlag  = ref(false);
 
 const slugPreview = computed(() => {
-    return (props.form.title || '')
+    return (props.form.title[defaultLangCode(languages.value)] || '')
         .toLowerCase().trim()
         .replace(/[^\w\s-]/g, '')
         .replace(/[\s_-]+/g, '-')

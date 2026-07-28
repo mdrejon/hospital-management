@@ -60,11 +60,11 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3 text-gray-700 max-w-[180px]">
-                                <p class="font-medium truncate">{{ svc.title }}</p>
+                                <p class="font-medium truncate">{{ displayTranslatable(svc.title, languages) }}</p>
                                 <p class="text-xs text-gray-400 truncate">{{ svc.slug }}</p>
                             </td>
                             <td class="px-4 py-3 text-gray-500 text-xs max-w-[200px]">
-                                <span class="line-clamp-2">{{ svc.short_desc || '—' }}</span>
+                                <span class="line-clamp-2">{{ displayTranslatable(svc.short_desc, languages) || '—' }}</span>
                             </td>
                             <td class="px-4 py-3 text-gray-500">{{ svc.sort_order }}</td>
                             <td class="px-4 py-3">
@@ -114,26 +114,27 @@
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Home Page — "Departments" Section</h2>
                         <p class="text-xs text-gray-400 -mt-2">Shows your <strong>Featured</strong> services as cards. Mark a service "Featured" in the list tab to include it.</p>
+                        <LanguageTabs v-model="activeLang" />
 
                         <div>
                             <label class="label">Eyebrow / Badge</label>
-                            <input v-model="settingsForm.svc_badge" type="text" class="input" placeholder="Medical & General Care!" />
-                            <InputError :message="settingsForm.errors.svc_badge" />
+                            <input v-model="settingsForm.svc_badge[activeLang]" type="text" class="input" placeholder="Medical & General Care!" />
+                            <InputError :message="settingsForm.errors[`svc_badge.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="settingsForm.svc_title" type="text" class="input" placeholder="Amazing Services" />
-                            <InputError :message="settingsForm.errors.svc_title" />
+                            <input v-model="settingsForm.svc_title[activeLang]" type="text" class="input" placeholder="Amazing Services" />
+                            <InputError :message="settingsForm.errors[`svc_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Section Description</label>
-                            <textarea v-model="settingsForm.svc_desc" rows="2" class="input"></textarea>
-                            <InputError :message="settingsForm.errors.svc_desc" />
+                            <textarea v-model="settingsForm.svc_desc[activeLang]" rows="2" class="input"></textarea>
+                            <InputError :message="settingsForm.errors[`svc_desc.${activeLang}`]" />
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="label">"View All" Button Text</label>
-                                <input v-model="settingsForm.svc_btn_text" type="text" class="input" placeholder="View All Services" />
+                                <input v-model="settingsForm.svc_btn_text[activeLang]" type="text" class="input" placeholder="View All Services" />
                             </div>
                             <div>
                                 <label class="label">"View All" Button URL</label>
@@ -145,10 +146,11 @@
                     <!-- Service List page hero / breadcrumb -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Service List Page — Hero &amp; Breadcrumb</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Page Title <span class="text-xs text-gray-400">(shown in breadcrumb banner)</span></label>
-                            <input v-model="settingsForm.svc_page_hero_title" type="text" class="input" placeholder="Our Services" />
-                            <InputError :message="settingsForm.errors.svc_page_hero_title" />
+                            <input v-model="settingsForm.svc_page_hero_title[activeLang]" type="text" class="input" placeholder="Our Services" />
+                            <InputError :message="settingsForm.errors[`svc_page_hero_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Banner Background Image</label>
@@ -161,17 +163,18 @@
                     <!-- SEO -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Service List Page — SEO Configuration</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
-                            <input v-model="settingsForm.svc_seo_title" @input="onMetaTitleInput" type="text" class="input" placeholder="Our Services | ClinicMaster" maxlength="160" />
-                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.svc_seo_title || '').length }}/160</p>
-                            <InputError :message="settingsForm.errors.svc_seo_title" />
+                            <input v-model="settingsForm.svc_seo_title[activeLang]" @input="onMetaTitleInput" type="text" class="input" placeholder="Our Services | ClinicMaster" maxlength="160" />
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.svc_seo_title[activeLang] || '').length }}/160</p>
+                            <InputError :message="settingsForm.errors[`svc_seo_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
-                            <textarea v-model="settingsForm.svc_seo_description" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
-                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.svc_seo_description || '').length }}/320</p>
-                            <InputError :message="settingsForm.errors.svc_seo_description" />
+                            <textarea v-model="settingsForm.svc_seo_description[activeLang]" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.svc_seo_description[activeLang] || '').length }}/320</p>
+                            <InputError :message="settingsForm.errors[`svc_seo_description.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated, auto-filled if left blank)</span></label>
@@ -189,15 +192,16 @@
                     <!-- Detail page sidebar help box -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Service Detail Page — "Do You Need Any Help?" Box</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Box Title</label>
-                            <input v-model="settingsForm.svc_help_title" type="text" class="input" placeholder="Do you need any help?" />
-                            <InputError :message="settingsForm.errors.svc_help_title" />
+                            <input v-model="settingsForm.svc_help_title[activeLang]" type="text" class="input" placeholder="Do you need any help?" />
+                            <InputError :message="settingsForm.errors[`svc_help_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Description Text</label>
-                            <textarea v-model="settingsForm.svc_help_desc" rows="3" class="input resize-none"></textarea>
-                            <InputError :message="settingsForm.errors.svc_help_desc" />
+                            <textarea v-model="settingsForm.svc_help_desc[activeLang]" rows="3" class="input resize-none"></textarea>
+                            <InputError :message="settingsForm.errors[`svc_help_desc.${activeLang}`]" />
                         </div>
                     </section>
 
@@ -216,7 +220,7 @@
                     <h3 class="font-semibold text-gray-800 mb-2">Delete Service</h3>
                     <p class="text-sm text-gray-600 mb-4">
                         Are you sure you want to delete
-                        "<strong>{{ deleteTarget.title }}</strong>"?
+                        "<strong>{{ displayTranslatable(deleteTarget?.title, languages) }}</strong>"?
                         This cannot be undone.
                     </p>
                     <div class="flex justify-end gap-2">
@@ -236,17 +240,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { router, useForm } from '@inertiajs/vue3';
+import { ref, reactive, computed } from 'vue';
+import { router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
+import { displayTranslatable, seedTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     services:     { type: Array, default: () => [] },
     pageSettings: { type: Object, default: () => ({}) },
 });
+
+const languages  = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
 
 const tab = ref('list');
 const deleteTarget = ref(null);
@@ -271,23 +280,34 @@ const currentOgImage   = ref(props.pageSettings.svc_seo_og_image ?? null);
 
 const settingsForm = useForm({
     svc_page_hero_image: null,
-    svc_page_hero_title: props.pageSettings.svc_page_hero_title ?? '',
-    svc_seo_title:        props.pageSettings.svc_seo_title       ?? '',
-    svc_seo_description:  props.pageSettings.svc_seo_description ?? '',
+    svc_page_hero_title: seedTranslatable(languages.value, props.pageSettings.svc_page_hero_title),
+    svc_seo_title:        seedTranslatable(languages.value, props.pageSettings.svc_seo_title),
+    svc_seo_description:  seedTranslatable(languages.value, props.pageSettings.svc_seo_description),
     svc_seo_keywords:     props.pageSettings.svc_seo_keywords    ?? '',
     svc_seo_og_image:    null,
-    svc_badge:            props.pageSettings.svc_badge    ?? '',
-    svc_title:            props.pageSettings.svc_title    ?? '',
-    svc_desc:             props.pageSettings.svc_desc     ?? '',
-    svc_btn_text:         props.pageSettings.svc_btn_text ?? '',
+    svc_badge:            seedTranslatable(languages.value, props.pageSettings.svc_badge),
+    svc_title:            seedTranslatable(languages.value, props.pageSettings.svc_title),
+    svc_desc:             seedTranslatable(languages.value, props.pageSettings.svc_desc),
+    svc_btn_text:         seedTranslatable(languages.value, props.pageSettings.svc_btn_text),
     svc_btn_url:          props.pageSettings.svc_btn_url  ?? '',
-    svc_help_title:       props.pageSettings.svc_help_title ?? '',
-    svc_help_desc:        props.pageSettings.svc_help_desc  ?? '',
+    svc_help_title:       seedTranslatable(languages.value, props.pageSettings.svc_help_title),
+    svc_help_desc:        seedTranslatable(languages.value, props.pageSettings.svc_help_desc),
 });
 
-const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(settingsForm, {
-    titleSource: () => settingsForm.svc_title,
-    descSource:  () => settingsForm.svc_desc,
+const seoProxy = reactive({
+    get svc_title() { return settingsForm.svc_title[activeLang.value]; },
+    get svc_desc() { return settingsForm.svc_desc[activeLang.value]; },
+    get svc_seo_title() { return settingsForm.svc_seo_title[activeLang.value]; },
+    set svc_seo_title(v) { settingsForm.svc_seo_title[activeLang.value] = v; },
+    get svc_seo_description() { return settingsForm.svc_seo_description[activeLang.value]; },
+    set svc_seo_description(v) { settingsForm.svc_seo_description[activeLang.value] = v; },
+    get svc_seo_keywords() { return settingsForm.svc_seo_keywords; },
+    set svc_seo_keywords(v) { settingsForm.svc_seo_keywords = v; },
+});
+
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(seoProxy, {
+    titleSource: () => seoProxy.svc_title,
+    descSource:  () => seoProxy.svc_desc,
     titleKey:    'svc_seo_title',
     descKey:     'svc_seo_description',
     keywordsKey: 'svc_seo_keywords',

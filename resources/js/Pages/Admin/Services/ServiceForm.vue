@@ -4,12 +4,13 @@
         <!-- ── Basic Info ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Basic Information</h2>
+            <LanguageTabs v-model="activeLang" />
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="label">Service Title <span class="text-red-500">*</span></label>
-                    <input v-model="form.title" type="text" class="input" placeholder="e.g. Cardiology" />
-                    <InputError :message="form.errors.title" />
+                    <input v-model="form.title[activeLang]" type="text" class="input" placeholder="e.g. Cardiology" />
+                    <InputError :message="form.errors[`title.${activeLang}`]" />
                 </div>
                 <div>
                     <label class="label">URL Slug <span class="text-gray-400 font-normal text-xs">(auto-generated)</span></label>
@@ -75,32 +76,34 @@
 
             <div>
                 <label class="label">Short Description <span class="text-xs text-gray-400">(shown on card)</span></label>
-                <textarea v-model="form.short_desc" rows="3" class="input resize-none"
+                <textarea v-model="form.short_desc[activeLang]" rows="3" class="input resize-none"
                     placeholder="e.g. Diagnosis and treatment of heart and blood vessel conditions."></textarea>
-                <InputError :message="form.errors.short_desc" />
+                <InputError :message="form.errors[`short_desc.${activeLang}`]" />
             </div>
         </section>
 
         <!-- ── Detail Page Content ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Detail Page — Introduction</h2>
+            <LanguageTabs v-model="activeLang" />
             <div>
                 <label class="label">Full Description <span class="text-xs text-gray-400">(rich text, detail page intro)</span></label>
-                <RichEditor v-model="form.description" />
-                <InputError :message="form.errors.description" />
+                <RichEditor v-model="form.description[activeLang]" />
+                <InputError :message="form.errors[`description.${activeLang}`]" />
             </div>
         </section>
 
         <!-- ── Why Choose This Service ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-3">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Why Choose This Service — Feature List</h2>
+            <LanguageTabs v-model="activeLang" />
             <div v-for="(item, i) in form.features" :key="i" class="flex gap-2">
-                <input v-model="form.features[i]" type="text" class="input"
+                <input v-model="form.features[i][activeLang]" type="text" class="input"
                     placeholder="e.g. 24/7 Emergency Response Team" />
                 <button type="button" @click="form.features.splice(i, 1)"
                     class="px-3 py-2 text-red-500 hover:bg-red-50 rounded text-sm flex-shrink-0">✕</button>
             </div>
-            <button type="button" @click="form.features.push('')"
+            <button type="button" @click="form.features.push(emptyTranslatable(languages))"
                 class="text-sm text-blue-600 hover:underline">+ Add Feature</button>
         </section>
 
@@ -128,17 +131,18 @@
         <!-- ── SEO ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">SEO Configuration <span class="text-xs font-normal text-gray-400">(service detail page)</span></h2>
+            <LanguageTabs v-model="activeLang" />
             <div>
                 <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
-                <input v-model="form.seo_title" @input="onMetaTitleInput" type="text" class="input" placeholder="e.g. Angioplasty | ClinicMaster" maxlength="160" />
-                <p class="text-xs text-gray-400 mt-1">{{ (form.seo_title || '').length }}/160</p>
-                <InputError :message="form.errors.seo_title" />
+                <input v-model="form.seo_title[activeLang]" @input="onMetaTitleInput" type="text" class="input" placeholder="e.g. Angioplasty | ClinicMaster" maxlength="160" />
+                <p class="text-xs text-gray-400 mt-1">{{ (form.seo_title[activeLang] || '').length }}/160</p>
+                <InputError :message="form.errors[`seo_title.${activeLang}`]" />
             </div>
             <div>
                 <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
-                <textarea v-model="form.seo_description" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
-                <p class="text-xs text-gray-400 mt-1">{{ (form.seo_description || '').length }}/320</p>
-                <InputError :message="form.errors.seo_description" />
+                <textarea v-model="form.seo_description[activeLang]" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
+                <p class="text-xs text-gray-400 mt-1">{{ (form.seo_description[activeLang] || '').length }}/320</p>
+                <InputError :message="form.errors[`seo_description.${activeLang}`]" />
             </div>
             <div>
                 <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated, auto-filled if left blank)</span></label>
@@ -156,6 +160,7 @@
         <!-- ── FAQ ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">FAQ Section</h2>
+            <LanguageTabs v-model="activeLang" />
             <div v-for="(faq, i) in form.faqs" :key="i"
                 class="border border-gray-100 rounded-lg p-4 space-y-3 bg-gray-50">
                 <div class="flex justify-between items-center">
@@ -165,16 +170,16 @@
                 </div>
                 <div>
                     <label class="label">Question</label>
-                    <input v-model="form.faqs[i].question" type="text" class="input"
+                    <input v-model="form.faqs[i].question[activeLang]" type="text" class="input"
                         placeholder="e.g. Do I need a referral to see a specialist?" />
                 </div>
                 <div>
                     <label class="label">Answer</label>
-                    <textarea v-model="form.faqs[i].answer" rows="3" class="input resize-none"
+                    <textarea v-model="form.faqs[i].answer[activeLang]" rows="3" class="input resize-none"
                         placeholder="Answer..."></textarea>
                 </div>
             </div>
-            <button type="button" @click="form.faqs.push({ question: '', answer: '' })"
+            <button type="button" @click="form.faqs.push({ question: emptyTranslatable(languages), answer: emptyTranslatable(languages) })"
                 class="text-sm text-blue-600 hover:underline">+ Add FAQ</button>
         </section>
 
@@ -182,11 +187,14 @@
 </template>
 
 <script setup>
-import { reactive, computed } from 'vue';
+import { reactive, computed, ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
 import RichEditor from '@/Components/Admin/Shared/RichEditor.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
+import { emptyTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     form:     { type: Object, required: true },
@@ -196,6 +204,9 @@ const props = defineProps({
 
 const emit = defineEmits(['image-change']);
 
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
 const selectedDoctors = computed(() =>
     props.doctors.filter(d => (props.form.doctor_ids || []).includes(d.id))
 );
@@ -204,9 +215,21 @@ function removeDoctor(id) {
     props.form.doctor_ids = (props.form.doctor_ids || []).filter(i => i !== id);
 }
 
-const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(props.form, {
-    titleSource: () => props.form.title,
-    descSource:  () => props.form.short_desc,
+// Proxy exposing the current-tab locale value of each translatable field as a
+// plain string, so useSeoAutoFill (which reads/writes flat form keys) can
+// drive the per-locale seo_title[activeLang]/seo_description[activeLang].
+const seoProxy = reactive({
+    get seo_title() { return props.form.seo_title[activeLang.value]; },
+    set seo_title(v) { props.form.seo_title[activeLang.value] = v; },
+    get seo_description() { return props.form.seo_description[activeLang.value]; },
+    set seo_description(v) { props.form.seo_description[activeLang.value] = v; },
+    get seo_keywords() { return props.form.seo_keywords; },
+    set seo_keywords(v) { props.form.seo_keywords = v; },
+});
+
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(seoProxy, {
+    titleSource: () => props.form.title[activeLang.value],
+    descSource:  () => props.form.short_desc[activeLang.value],
     titleSuffix: ' | ClinicMaster',
     titleKey:    'seo_title',
     descKey:     'seo_description',
@@ -214,7 +237,7 @@ const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFil
 });
 
 const slugPreview = computed(() => {
-    return (props.form.title || '')
+    return (props.form.title[defaultLangCode(languages.value)] || '')
         .toLowerCase()
         .trim()
         .replace(/[^\w\s-]/g, '')

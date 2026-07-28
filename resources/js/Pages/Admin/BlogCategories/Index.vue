@@ -18,11 +18,12 @@
                     {{ editingId ? 'Edit Category' : 'Add New Category' }}
                 </h2>
                 <form @submit.prevent="submitCategory" class="space-y-4">
+                    <LanguageTabs v-model="activeLang" />
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="label">Category Name <span class="text-red-500">*</span></label>
-                            <input v-model="form.name" type="text" class="input" placeholder="Travel Tips" />
-                            <p v-if="form.errors.name" class="text-xs text-red-500 mt-1">{{ form.errors.name }}</p>
+                            <input v-model="form.name[activeLang]" type="text" class="input" placeholder="Travel Tips" />
+                            <p v-if="form.errors[`name.${activeLang}`]" class="text-xs text-red-500 mt-1">{{ form.errors[`name.${activeLang}`] }}</p>
                         </div>
                         <div>
                             <label class="label">Sort Order</label>
@@ -30,7 +31,7 @@
                         </div>
                         <div class="col-span-2">
                             <label class="label">Description</label>
-                            <textarea v-model="form.description" rows="2" class="input"
+                            <textarea v-model="form.description[activeLang]" rows="2" class="input"
                                 placeholder="Brief description of this category..."></textarea>
                         </div>
                     </div>
@@ -71,8 +72,8 @@
                         </tr>
                         <tr v-for="cat in categories" :key="cat.id" class="hover:bg-gray-50 transition-colors">
                             <td class="px-4 py-3">
-                                <p class="font-medium text-gray-800">{{ cat.name }}</p>
-                                <p v-if="cat.description" class="text-xs text-gray-400 line-clamp-1 mt-0.5">{{ cat.description }}</p>
+                                <p class="font-medium text-gray-800">{{ displayTranslatable(cat.name, languages) }}</p>
+                                <p v-if="cat.description" class="text-xs text-gray-400 line-clamp-1 mt-0.5">{{ displayTranslatable(cat.description, languages) }}</p>
                             </td>
                             <td class="px-4 py-3 text-gray-500 text-xs font-mono">{{ cat.slug }}</td>
                             <td class="px-4 py-3 text-gray-600">{{ cat.blogs_count }}</td>
@@ -113,7 +114,7 @@
             <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
                 <h3 class="text-base font-semibold text-gray-800 mb-2">Delete Category</h3>
                 <p class="text-sm text-gray-600 mb-5">
-                    Delete <strong>{{ deletingCat.name }}</strong>? Posts in this category will be uncategorized.
+                    Delete <strong>{{ displayTranslatable(deletingCat?.name, languages) }}</strong>? Posts in this category will be uncategorized.
                 </p>
                 <div class="flex justify-end gap-3">
                     <button @click="deletingCat = null"
@@ -131,20 +132,25 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { Link, useForm, router } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { Link, useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import { emptyTranslatable, seedTranslatable, displayTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     categories: Array,
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
 const editingId  = ref(null);
 const deletingCat = ref(null);
 
 const form = useForm({
-    name:        '',
-    description: '',
+    name:        emptyTranslatable(languages.value),
+    description: emptyTranslatable(languages.value),
     is_active:   true,
     sort_order:  0,
 });
@@ -163,8 +169,8 @@ function submitCategory() {
 
 function startEdit(cat) {
     editingId.value     = cat.id;
-    form.name           = cat.name;
-    form.description    = cat.description ?? '';
+    form.name           = seedTranslatable(languages.value, cat.name);
+    form.description    = seedTranslatable(languages.value, cat.description);
     form.is_active      = cat.is_active;
     form.sort_order     = cat.sort_order ?? 0;
     form.clearErrors();

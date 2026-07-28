@@ -49,6 +49,14 @@ class ContactSettingController extends Controller
         'contact_map_open_url',
     ];
 
+    /** Human-readable copy shown to visitors — edited per-locale. Everything else in $keys stays a plain value. */
+    private array $translatableKeys = [
+        'contact_hero_title', 'contact_title', 'contact_desc', 'contact_talk_text',
+        'contact_rating_text', 'contact_form_title', 'contact_form_btn_text',
+        'contact_seo_title', 'contact_seo_description',
+        'footer_phone_1', 'footer_phone_2', 'footer_phone_3', 'footer_address_line1', 'footer_address_line2',
+    ];
+
     public function edit(): Response
     {
         $settings = GlobalSetting::whereIn('key', $this->keys)
@@ -59,6 +67,10 @@ class ContactSettingController extends Controller
             $settings[$key] ??= null;
         }
 
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
+        }
+
         return Inertia::render('Admin/WebsiteSettings/Contact/Edit', [
             'settings' => $settings,
         ]);
@@ -66,34 +78,26 @@ class ContactSettingController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'contact_hero_title'        => 'nullable|string',
+        $rules = [
             'contact_hero_image'        => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'contact_seo_title'         => 'nullable|string',
-            'contact_seo_description'   => 'nullable|string',
             'contact_seo_keywords'      => 'nullable|string',
             'contact_seo_og_image'      => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'contact_title'          => 'nullable|string',
-            'contact_desc'            => 'nullable|string',
-            'contact_talk_text'       => 'nullable|string',
             'contact_rating_score'    => 'nullable|string',
-            'contact_rating_text'     => 'nullable|string',
-            'footer_phone_1'        => 'nullable|string',
-            'footer_phone_2'        => 'nullable|string',
-            'footer_phone_3'        => 'nullable|string',
             'footer_email_1'        => 'nullable|email',
             'footer_email_2'        => 'nullable|email',
-            'footer_address_line1'  => 'nullable|string',
-            'footer_address_line2'  => 'nullable|string',
             'footer_facebook_url'   => 'nullable|string',
             'footer_twitter_url'    => 'nullable|string',
             'footer_instagram_url'  => 'nullable|string',
             'footer_youtube_url'    => 'nullable|string',
-            'contact_form_title'    => 'nullable|string',
-            'contact_form_btn_text' => 'nullable|string',
             'contact_map_embed'     => 'nullable|string',
             'contact_map_open_url'  => 'nullable|string',
-        ]);
+        ];
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
 
         foreach (['contact_hero_image', 'contact_seo_og_image'] as $imgKey) {
             if ($request->hasFile($imgKey)) {
@@ -105,12 +109,21 @@ class ContactSettingController extends Controller
             }
         }
 
-        // Auto-generate keywords if none provided
+        // Auto-generate keywords if none provided (contact_seo_title/description are {en,bn} arrays)
         if (empty($data['contact_seo_keywords'])) {
+            $titleText = $data['contact_seo_title'] ?? GlobalSetting::getTranslatedArray('contact_seo_title');
+            $descText  = $data['contact_seo_description'] ?? GlobalSetting::getTranslatedArray('contact_seo_description');
             $data['contact_seo_keywords'] = $this->autoKeywords(
-                $data['contact_seo_title'] ?? GlobalSetting::get('contact_seo_title', ''),
-                $data['contact_seo_description'] ?? GlobalSetting::get('contact_seo_description', '')
+                is_array($titleText) ? implode(' ', $titleText) : $titleText,
+                is_array($descText) ? implode(' ', $descText) : $descText
             );
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                GlobalSetting::setTranslated($key, $data[$key] ?? []);
+                unset($data[$key]);
+            }
         }
 
         GlobalSetting::setMany($data);

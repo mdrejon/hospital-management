@@ -107,3 +107,106 @@
 .book-appointment__submit-icon {
   @apply flex items-center justify-center text-white;
 }
+
+.book-appointment__submit:disabled {
+  @apply cursor-not-allowed opacity-50 hover:scale-100;
+}
+
+// Structured booking additions (department -> doctor -> date -> slot) --------
+.book-appointment__section-label {
+  @apply sm:col-span-2 -mb-1 mt-1 text-xs font-bold uppercase tracking-wide text-muted;
+}
+
+.book-appointment__radio-group {
+  @apply flex flex-wrap items-center gap-4 rounded-lg border border-[#E7EAF0] bg-white px-4 py-3.5 text-sm text-navy sm:col-span-2;
+}
+
+.book-appointment__radio {
+  @apply flex cursor-pointer items-center gap-2;
+}
+
+.book-appointment__hint {
+  @apply sm:col-span-2 -mt-2 text-xs text-muted;
+}
+
+.book-appointment__hint.is-error {
+  @apply text-red-500;
+}
+
+.book-appointment__slots {
+  @apply flex flex-wrap gap-2 sm:col-span-2;
+}
+
+.book-appointment__slot {
+  @apply cursor-pointer rounded-full border border-[#E7EAF0] bg-white px-3.5 py-1.5 text-xs font-medium text-navy transition-colors duration-150 hover:border-brand-cyan;
+}
+
+.book-appointment__slot.is-selected {
+  @apply border-brand-cyan bg-brand-cyan text-white;
+}
+
+.book-appointment__slot:disabled {
+  @apply cursor-not-allowed border-[#E7EAF0] bg-[#F3F5F8] text-[#B7C0CE] line-through hover:border-[#E7EAF0];
+}
+
+.book-appointment__alert {
+  @apply mt-3 rounded-lg border px-4 py-2.5 text-sm;
+}
+
+.book-appointment__alert--success {
+  @apply border-emerald-200 bg-emerald-50 text-emerald-700;
+}
+
+.book-appointment__alert--error {
+  @apply border-red-200 bg-red-50 text-red-600;
+}
+
+// Drag & drop medical document upload ----------------------------------------
+.book-appointment__dropzone {
+  @apply relative flex cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-[#D8DEE9] bg-[#FBFCFE] px-6 py-7 text-center transition-colors duration-150 sm:col-span-2;
+}
+
+.book-appointment__dropzone:hover,
+.book-appointment__dropzone:focus-visible {
+  @apply border-brand-cyan/60 bg-brand-cyan/5 outline-none;
+}
+
+.book-appointment__dropzone.is-dragover {
+  @apply border-brand-cyan bg-brand-cyan/10;
+}
+
+.book-appointment__dropzone.has-file {
+  @apply cursor-default items-stretch justify-start bg-white py-4;
+}
+
+.book-appointment__dropzone-icon {
+  @apply flex items-center justify-center text-brand-cyan;
+}
+
+.book-appointment__dropzone-text {
+  @apply text-sm text-navy;
+}
+
+.book-appointment__dropzone-browse {
+  @apply font-semibold text-brand-cyan;
+}
+
+.book-appointment__dropzone-hint {
+  @apply text-xs text-muted;
+}
+
+.book-appointment__dropzone-file {
+  @apply flex w-full items-center gap-3 rounded-lg bg-[#F3F5F8] px-4 py-3 text-left;
+}
+
+.book-appointment__dropzone-file-icon {
+  @apply flex flex-shrink-0 items-center justify-center text-brand-cyan;
+}
+
+.book-appointment__dropzone-file-name {
+  @apply flex-1 truncate text-sm font-medium text-navy;
+}
+
+.book-appointment__dropzone-remove {
+  @apply flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-muted transition-colors duration-150 hover:bg-red-50 hover:text-red-500;
+}

@@ -29,25 +29,31 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import FaqForm     from './FaqForm.vue';
+import { emptyTranslatable, seedTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     faq:   { type: Object, required: true },
     pages: { type: Array,  default: () => [] },
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
 const f = props.faq;
 
 const form = useForm({
     page:        f.page        ?? 'home',
-    badge:       f.badge       ?? "FAQ'S",
-    title:       f.title       ?? '',
-    description: f.description ?? '',
+    badge:       seedTranslatable(languages.value, f.badge),
+    title:       seedTranslatable(languages.value, f.title),
+    description: seedTranslatable(languages.value, f.description),
     image:       null,
-    image_alt:   f.image_alt   ?? '',
-    items:       Array.isArray(f.items) ? f.items.map(i => ({ ...i })) : [{ question: '', answer: '' }],
+    image_alt:   seedTranslatable(languages.value, f.image_alt),
+    items:       Array.isArray(f.items) ? f.items.map(i => ({
+        question: seedTranslatable(languages.value, i.question),
+        answer: seedTranslatable(languages.value, i.answer),
+    })) : [{ question: emptyTranslatable(languages.value), answer: emptyTranslatable(languages.value) }],
     sort_order:  f.sort_order  ?? 0,
     is_active:   f.is_active   ?? true,
 });

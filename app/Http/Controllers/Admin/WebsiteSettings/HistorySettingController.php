@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\WebsiteSettings;
 
 use App\Http\Controllers\Controller;
 use App\Models\GlobalSetting;
+use App\Models\Language;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,6 +27,12 @@ class HistorySettingController extends Controller
         'hist_seo_og_image',
     ];
 
+    /** Human-readable copy shown to visitors — edited per-locale. Timeline item text stays plain for now. */
+    private array $translatableKeys = [
+        'hist_hero_title', 'hist_badge', 'hist_title', 'hist_desc',
+        'hist_seo_title', 'hist_seo_description',
+    ];
+
     public function edit(): Response
     {
         $settings = GlobalSetting::whereIn('key', $this->keys)
@@ -34,6 +41,10 @@ class HistorySettingController extends Controller
 
         foreach ($this->keys as $key) {
             $settings[$key] ??= null;
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
         }
 
         $settings['hist_timeline'] = $settings['hist_timeline']
@@ -47,28 +58,34 @@ class HistorySettingController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        $data = $request->validate([
+        $default = Language::defaultLanguage()?->code ?? config('app.locale');
+
+        $rules = [
             'hist_hero_image'       => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'hist_hero_title'       => 'nullable|string',
-            'hist_badge'            => 'nullable|string',
-            'hist_title'            => 'nullable|string',
-            'hist_desc'             => 'nullable|string',
             'hist_timeline'         => 'nullable|array',
             'hist_timeline.*.year'     => 'nullable|string',
-            'hist_timeline.*.tag'      => 'nullable|string',
-            'hist_timeline.*.heading'  => 'nullable|string',
-            'hist_timeline.*.content'  => 'nullable|string',
+            'hist_timeline.*.tag'      => 'nullable|array',
+            'hist_timeline.*.tag.*'    => 'nullable|string',
+            'hist_timeline.*.heading'  => 'nullable|array',
+            'hist_timeline.*.heading.*'  => 'nullable|string',
+            'hist_timeline.*.content'  => 'nullable|array',
+            'hist_timeline.*.content.*'  => 'nullable|string',
             'hist_timeline.*.badges'   => 'nullable|array',
-            'hist_timeline.*.badges.*' => 'nullable|string',
+            'hist_timeline.*.badges.*' => 'nullable|array',
+            'hist_timeline.*.badges.*.*' => 'nullable|string',
             'hist_timeline.*.image'    => 'nullable|string',
             'hist_timeline.*.reversed' => 'nullable|boolean',
             'timeline_images'          => 'nullable|array',
             'timeline_images.*'        => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'hist_seo_title'        => 'nullable|string',
-            'hist_seo_description'  => 'nullable|string',
             'hist_seo_keywords'     => 'nullable|string',
             'hist_seo_og_image'     => 'nullable|image|mimes:jpeg,jpg,png,webp',
-        ]);
+        ];
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
 
         // Hero image
         if ($request->hasFile('hist_hero_image')) {
@@ -101,10 +118,15 @@ class HistorySettingController extends Controller
             }
         }
 
-        // Clean up timeline: filter empty items, ensure badges is array
-        $timeline = array_values(array_filter($timeline, fn($i) => !empty($i['year']) || !empty($i['heading'])));
+        // Clean up timeline: filter empty items, ensure badges is array.
+        // tag/heading/content and each badge are now {locale => text} — "empty" means every locale is blank.
+        $hasText = fn ($v) => !empty(array_filter(is_array($v) ? $v : [$v]));
+        $timeline = array_values(array_filter(
+            $timeline,
+            fn ($i) => !empty($i['year']) || $hasText($i['heading'] ?? null)
+        ));
         foreach ($timeline as &$item) {
-            $item['badges']   = array_values(array_filter($item['badges'] ?? []));
+            $item['badges']   = array_values(array_filter($item['badges'] ?? [], $hasText));
             $item['reversed'] = (bool) ($item['reversed'] ?? false);
         }
         unset($item);
@@ -115,10 +137,17 @@ class HistorySettingController extends Controller
         // Auto-generate keywords if none provided
         if (empty($data['hist_seo_keywords'])) {
             $data['hist_seo_keywords'] = $this->autoKeywords(
-                $data['hist_seo_title'] ?? GlobalSetting::get('hist_seo_title', ''),
-                $data['hist_seo_description'] ?? GlobalSetting::get('hist_seo_description', ''),
-                $data['hist_title'] ?? GlobalSetting::get('hist_title', '')
+                $data['hist_seo_title'][$default] ?? GlobalSetting::getTranslated('hist_seo_title', $default, ''),
+                $data['hist_seo_description'][$default] ?? GlobalSetting::getTranslated('hist_seo_description', $default, ''),
+                $data['hist_title'][$default] ?? GlobalSetting::getTranslated('hist_title', $default, '')
             );
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                GlobalSetting::setTranslated($key, $data[$key] ?? []);
+                unset($data[$key]);
+            }
         }
 
         GlobalSetting::setMany($data);

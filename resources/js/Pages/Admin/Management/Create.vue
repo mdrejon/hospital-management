@@ -21,13 +21,17 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import MemberForm   from './MemberForm.vue';
+import { emptyTranslatable } from '@/Composables/useTranslatable';
+
+const languages = computed(() => usePage().props.languages ?? []);
 
 const form = useForm({
     name:            '',
-    role:            '',
+    role:            emptyTranslatable(languages.value),
     photo:           null,
     facebook_url:    '',
     twitter_url:     '',

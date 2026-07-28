@@ -83,7 +83,7 @@
 
                             <!-- Post -->
                             <td class="px-4 py-3">
-                                <p class="text-gray-700 text-xs line-clamp-2 max-w-[160px]">{{ comment.blog?.title ?? '—' }}</p>
+                                <p class="text-gray-700 text-xs line-clamp-2 max-w-[160px]">{{ displayTranslatable(comment.blog?.title, languages) || '—' }}</p>
                             </td>
 
                             <!-- Status -->
@@ -134,8 +134,9 @@
 
 <script setup>
 import { computed } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
+import { displayTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     comments:      { type: Array,  default: () => [] },
@@ -144,6 +145,8 @@ const props = defineProps({
     approvedCount: { type: Number, default: 0 },
     totalCount:    { type: Number, default: 0 },
 });
+
+const languages = computed(() => usePage().props.languages ?? []);
 
 const activeFilter = computed(() => props.filter);
 

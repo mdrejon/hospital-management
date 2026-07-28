@@ -21,28 +21,32 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import AdminLayout   from '@/Layouts/Admin/AdminLayout.vue';
 import ServiceForm   from './ServiceForm.vue';
+import { emptyTranslatable } from '@/Composables/useTranslatable';
 
 defineProps({
     doctors: { type: Array, default: () => [] },
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
+
 const form = useForm({
-    title:          '',
+    title:          emptyTranslatable(languages.value),
     icon_svg:       '',
     image:          null,
-    short_desc:     '',
-    description:    '',
+    short_desc:     emptyTranslatable(languages.value),
+    description:    emptyTranslatable(languages.value),
     features:       [],
     faqs:           [],
     doctor_ids:     [],
     is_featured:    false,
     sort_order:     0,
     is_active:      true,
-    seo_title:       '',
-    seo_description: '',
+    seo_title:       emptyTranslatable(languages.value),
+    seo_description: emptyTranslatable(languages.value),
     seo_keywords:    '',
     seo_og_image:    null,
 });

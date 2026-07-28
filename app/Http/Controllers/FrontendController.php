@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Appointment;
 use App\Models\Award;
 use App\Models\Blog;
 use App\Models\BlogCategory;
@@ -12,6 +11,7 @@ use App\Models\Faq;
 use App\Models\GalleryImage;
 use App\Models\GlobalSetting;
 use App\Models\Inquiry;
+use App\Models\Language;
 use App\Models\ManagementMember;
 use App\Models\Package;
 use App\Models\Page;
@@ -44,8 +44,7 @@ class FrontendController extends Controller
             'featuredPackages' => $this->featuredPackages(),
             'pkg'              => $this->packageSettings(),
             'appt'                    => $this->appointmentSettings(),
-            'appointmentDoctors'      => $this->appointmentDoctorNames(),
-            'appointmentDepartments'  => $this->appointmentDepartments(),
+            'appointmentDoctors'      => $this->appointmentBookingDoctors(),
             'homeFaqs'         => $this->faqItems('home'),
             'testimonials'     => $this->activeTestimonials(),
             'testi'            => $this->testimonialSettings(),
@@ -64,55 +63,14 @@ class FrontendController extends Controller
         }
     }
 
-    /** Active doctor names for the "Book Appointment" form's doctor dropdown. Empty collection if the DB isn't ready. */
-    private function appointmentDoctorNames(): Collection
+    /** Active doctors (id/name/role/fee) for the "Book Appointment" form's doctor dropdown. Empty collection if the DB isn't ready. */
+    private function appointmentBookingDoctors(): Collection
     {
         try {
-            return Doctor::active()->pluck('name');
+            return Doctor::active()->get(['id', 'name', 'role', 'consultation_fee']);
         } catch (\Throwable) {
             return collect();
         }
-    }
-
-    /** Active service titles for the "Book Appointment" form's department dropdown. Empty collection if the DB isn't ready. */
-    private function appointmentDepartments(): Collection
-    {
-        try {
-            return Service::active()->pluck('title');
-        } catch (\Throwable) {
-            return collect();
-        }
-    }
-
-    public function submitAppointment(Request $request): RedirectResponse
-    {
-        $data = $request->validate([
-            'name'             => 'nullable|string|max:255',
-            'first_name'       => 'nullable|string|max:255',
-            'last_name'        => 'nullable|string|max:255',
-            'email'            => 'required|email|max:255',
-            'phone'            => 'nullable|string|max:30',
-            'department'       => 'nullable|string',
-            'preferred_doctor' => 'nullable|string',
-            'preferred_date'   => 'nullable|string',
-            'message'          => 'nullable|string',
-            'source'           => 'nullable|in:home,appointment_page,doctor_details_page',
-        ]);
-
-        $name = $data['name'] ?? trim(($data['first_name'] ?? '') . ' ' . ($data['last_name'] ?? ''));
-        if ($name === '') {
-            return back()->withErrors(['name' => 'Please enter your name.'])->withInput();
-        }
-        unset($data['first_name'], $data['last_name']);
-
-        $data['name']      = $name;
-        $data['source']    = $data['source'] ?? 'appointment_page';
-        $data['status']    = 'pending';
-        $data['is_manual']  = false;
-
-        Appointment::create($data);
-
-        return back()->with('success', "Thank you! Your appointment request has been received — we'll contact you shortly to confirm.");
     }
 
     /** Featured packages for the home page "Health Packages" section. Empty collection if the DB isn't ready. */
@@ -149,7 +107,15 @@ class FrontendController extends Controller
     private function serviceSettings(): array
     {
         try {
-            return GlobalSetting::where('key', 'like', 'svc_%')->pluck('value', 'key')->toArray();
+            $settings = GlobalSetting::where('key', 'like', 'svc_%')->pluck('value', 'key')->toArray();
+
+            foreach (['svc_badge', 'svc_title', 'svc_desc', 'svc_btn_text', 'svc_page_hero_title', 'svc_help_title', 'svc_help_desc', 'svc_seo_title', 'svc_seo_description'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                }
+            }
+
+            return $settings;
         } catch (\Throwable) {
             return [];
         }
@@ -169,7 +135,15 @@ class FrontendController extends Controller
     private function doctorSettings(): array
     {
         try {
-            return GlobalSetting::where('key', 'like', 'doc_%')->pluck('value', 'key')->toArray();
+            $settings = GlobalSetting::where('key', 'like', 'doc_%')->pluck('value', 'key')->toArray();
+
+            foreach (['doc_home_badge', 'doc_home_title', 'doc_page_hero_title', 'doc_badge', 'doc_title', 'doc_seo_title', 'doc_seo_description'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                }
+            }
+
+            return $settings;
         } catch (\Throwable) {
             return [];
         }
@@ -201,9 +175,44 @@ class FrontendController extends Controller
             return [];
         }
 
+        foreach ([
+            'about_hero_title', 'about_seo_title', 'about_seo_description',
+            'about_title', 'about_desc', 'about_hours_title', 'about_more_btn_text',
+            'about_mv_title', 'about_mv_desc',
+            'ceo_badge_label', 'ceo_eyebrow', 'ceo_title', 'ceo_message', 'ceo_focus_label',
+            'why_badge', 'why_title', 'why_desc',
+        ] as $key) {
+            if (array_key_exists($key, $settings)) {
+                $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+            }
+        }
+
         foreach (self::ABOUT_JSON_KEYS as $jsonKey) {
             $settings[$jsonKey] = !empty($settings[$jsonKey]) ? json_decode($settings[$jsonKey], true) : [];
         }
+
+        // Reshape repeater text sub-fields to the resolved-locale string (mirrors the {en,bn} shape written by AboutSettingController).
+        $tr = fn ($v) => is_array($v) ? ($v[app()->getLocale()] ?: $v[config('app.fallback_locale')] ?? '') : $v;
+
+        $settings['about_hours'] = collect($settings['about_hours'] ?? [])->map(fn ($item) => [
+            'day' => $tr($item['day'] ?? ''), 'time' => $tr($item['time'] ?? ''),
+        ])->values()->all();
+
+        $settings['about_features'] = collect($settings['about_features'] ?? [])->map($tr)->values()->all();
+
+        $settings['about_mv_cards'] = collect($settings['about_mv_cards'] ?? [])->map(fn ($item) => [
+            'title' => $tr($item['title'] ?? ''), 'description' => $tr($item['description'] ?? ''),
+        ])->values()->all();
+
+        $settings['ceo_focus_items'] = collect($settings['ceo_focus_items'] ?? [])->map($tr)->values()->all();
+
+        $settings['ceo_awards'] = collect($settings['ceo_awards'] ?? [])->map(fn ($item) => array_merge($item, [
+            'label' => $tr($item['label'] ?? ''),
+        ]))->values()->all();
+
+        $settings['why_features'] = collect($settings['why_features'] ?? [])->map(fn ($item) => array_merge($item, [
+            'title' => $tr($item['title'] ?? ''), 'description' => $tr($item['description'] ?? ''),
+        ]))->values()->all();
 
         return $settings;
     }
@@ -232,11 +241,28 @@ class FrontendController extends Controller
     {
         try {
             $settings = GlobalSetting::where('key', 'like', 'ach_%')->pluck('value', 'key')->toArray();
+
+            foreach (['ach_hero_title', 'ach_title', 'ach_desc', 'ach_seo_title', 'ach_seo_description'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                }
+            }
         } catch (\Throwable) {
             return [];
         }
 
-        $settings['ach_items'] = !empty($settings['ach_items']) ? json_decode($settings['ach_items'], true) : [];
+        $items    = !empty($settings['ach_items']) ? json_decode($settings['ach_items'], true) : [];
+        $locale   = app()->getLocale();
+        $fallback = Language::defaultLanguage()?->code ?? config('app.fallback_locale');
+        $resolve  = function ($value) use ($locale, $fallback) {
+            if (!is_array($value)) return $value;
+            return $value[$locale] ?: ($value[$fallback] ?? reset($value));
+        };
+        $settings['ach_items'] = collect($items)->map(function ($item) use ($resolve) {
+            $item['title'] = $resolve($item['title'] ?? null);
+            $item['desc']  = $resolve($item['desc'] ?? null);
+            return $item;
+        })->all();
 
         return $settings;
     }
@@ -244,9 +270,8 @@ class FrontendController extends Controller
     public function appointment(): View
     {
         return view('frontend.appointment', [
-            'appt'                   => $this->appointmentSettings(),
-            'appointmentDoctors'     => $this->appointmentDoctorNames(),
-            'appointmentDepartments' => $this->appointmentDepartments(),
+            'appt'               => $this->appointmentSettings(),
+            'appointmentDoctors' => $this->appointmentBookingDoctors(),
         ]);
     }
 
@@ -333,7 +358,15 @@ class FrontendController extends Controller
     private function blogSettings(): array
     {
         try {
-            return GlobalSetting::where('key', 'like', 'blog_%')->pluck('value', 'key')->toArray();
+            $settings = GlobalSetting::where('key', 'like', 'blog_%')->pluck('value', 'key')->toArray();
+
+            foreach (['blog_home_title', 'blog_hero_title', 'blog_seo_title', 'blog_seo_description'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                }
+            }
+
+            return $settings;
         } catch (\Throwable) {
             return [];
         }
@@ -400,7 +433,15 @@ class FrontendController extends Controller
     private function contactSettings(): array
     {
         try {
-            return GlobalSetting::where('key', 'like', 'contact_%')->pluck('value', 'key')->toArray();
+            $settings = GlobalSetting::where('key', 'like', 'contact_%')->pluck('value', 'key')->toArray();
+
+            foreach (['contact_hero_title', 'contact_title', 'contact_desc', 'contact_talk_text', 'contact_rating_text', 'contact_form_title', 'contact_form_btn_text', 'contact_seo_title', 'contact_seo_description'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                }
+            }
+
+            return $settings;
         } catch (\Throwable) {
             return [];
         }
@@ -436,10 +477,18 @@ class FrontendController extends Controller
     private function faqPageSettings(): array
     {
         try {
-            return GlobalSetting::where('key', 'like', 'faq_page_%')
+            $settings = GlobalSetting::where('key', 'like', 'faq_page_%')
                 ->orWhere('key', 'like', 'faq_hero_%')
                 ->orWhere('key', 'like', 'faq_seo_%')
                 ->pluck('value', 'key')->toArray();
+
+            foreach (['faq_hero_title', 'faq_seo_title', 'faq_seo_description', 'faq_page_badge', 'faq_page_title', 'faq_page_desc'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                }
+            }
+
+            return $settings;
         } catch (\Throwable) {
             return [];
         }
@@ -448,8 +497,15 @@ class FrontendController extends Controller
     /** Merged Q&A items from all active FAQ groups assigned to the given page. Empty collection if the DB isn't ready. */
     private function faqItems(string $page): Collection
     {
+        $tr = fn ($v) => is_array($v) ? ($v[app()->getLocale()] ?: $v[config('app.fallback_locale')] ?? '') : $v;
+
         try {
-            return Faq::forPage($page)->get()->flatMap(fn ($group) => $group->items ?? []);
+            return Faq::forPage($page)->get()
+                ->flatMap(fn ($group) => $group->items ?? [])
+                ->map(fn ($item) => [
+                    'question' => $tr($item['question'] ?? ''),
+                    'answer'   => $tr($item['answer'] ?? ''),
+                ]);
         } catch (\Throwable) {
             return collect();
         }
@@ -469,7 +525,15 @@ class FrontendController extends Controller
     private function testimonialSettings(): array
     {
         try {
-            return GlobalSetting::where('key', 'like', 'testi_%')->pluck('value', 'key')->toArray();
+            $settings = GlobalSetting::where('key', 'like', 'testi_%')->pluck('value', 'key')->toArray();
+
+            foreach (['testi_badge', 'testi_title', 'testi_image_alt'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                }
+            }
+
+            return $settings;
         } catch (\Throwable) {
             return [];
         }
@@ -489,10 +553,18 @@ class FrontendController extends Controller
     private function awardSettings(): array
     {
         try {
-            return GlobalSetting::where('key', 'like', 'award_%')
+            $settings = GlobalSetting::where('key', 'like', 'award_%')
                 ->orWhere('key', 'like', 'ach_award_%')
                 ->pluck('value', 'key')
                 ->toArray();
+
+            foreach (['award_badge', 'award_title', 'award_desc', 'ach_award_title', 'ach_award_desc'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                }
+            }
+
+            return $settings;
         } catch (\Throwable) {
             return [];
         }
@@ -520,7 +592,15 @@ class FrontendController extends Controller
     private function gallerySettings(): array
     {
         try {
-            return GlobalSetting::where('key', 'like', 'gallery_%')->pluck('value', 'key')->toArray();
+            $settings = GlobalSetting::where('key', 'like', 'gallery_%')->pluck('value', 'key')->toArray();
+
+            foreach (['gallery_badge', 'gallery_title', 'gallery_subtitle', 'gallery_hero_title', 'gallery_seo_title', 'gallery_seo_description'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                }
+            }
+
+            return $settings;
         } catch (\Throwable) {
             return [];
         }
@@ -538,11 +618,30 @@ class FrontendController extends Controller
     {
         try {
             $settings = GlobalSetting::where('key', 'like', 'hist_%')->pluck('value', 'key')->toArray();
+
+            foreach (['hist_hero_title', 'hist_badge', 'hist_title', 'hist_desc', 'hist_seo_title', 'hist_seo_description'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                }
+            }
         } catch (\Throwable) {
             return [];
         }
 
-        $settings['hist_timeline'] = !empty($settings['hist_timeline']) ? json_decode($settings['hist_timeline'], true) : [];
+        $timeline = !empty($settings['hist_timeline']) ? json_decode($settings['hist_timeline'], true) : [];
+        $locale   = app()->getLocale();
+        $fallback = Language::defaultLanguage()?->code ?? config('app.fallback_locale');
+        $resolve  = function ($value) use ($locale, $fallback) {
+            if (!is_array($value)) return $value;
+            return $value[$locale] ?: ($value[$fallback] ?? reset($value));
+        };
+        $settings['hist_timeline'] = collect($timeline)->map(function ($item) use ($resolve) {
+            $item['tag']     = $resolve($item['tag'] ?? null);
+            $item['heading'] = $resolve($item['heading'] ?? null);
+            $item['content'] = $resolve($item['content'] ?? null);
+            $item['badges']  = collect($item['badges'] ?? [])->map($resolve)->filter()->values()->all();
+            return $item;
+        })->all();
 
         return $settings;
     }

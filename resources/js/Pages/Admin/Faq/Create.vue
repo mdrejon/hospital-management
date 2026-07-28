@@ -20,22 +20,26 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import FaqForm     from './FaqForm.vue';
+import { emptyTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     pages: { type: Array, default: () => [] },
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
+
 const form = useForm({
     page:        'home',
-    badge:       "FAQ'S",
-    title:       '',
-    description: '',
+    badge:       { ...emptyTranslatable(languages.value), en: "FAQ'S" },
+    title:       emptyTranslatable(languages.value),
+    description: emptyTranslatable(languages.value),
     image:       null,
-    image_alt:   '',
-    items:       [{ question: '', answer: '' }],
+    image_alt:   emptyTranslatable(languages.value),
+    items:       [{ question: emptyTranslatable(languages.value), answer: emptyTranslatable(languages.value) }],
     sort_order:  0,
     is_active:   true,
 });

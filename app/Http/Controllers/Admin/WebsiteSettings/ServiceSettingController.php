@@ -31,6 +31,13 @@ class ServiceSettingController extends Controller
         'svc_help_desc',
     ];
 
+    /** Human-readable copy shown to visitors — edited per-locale. Everything else in $keys stays a plain value. */
+    private array $translatableKeys = [
+        'svc_badge', 'svc_title', 'svc_desc', 'svc_btn_text',
+        'svc_page_hero_title', 'svc_help_title', 'svc_help_desc',
+        'svc_seo_title', 'svc_seo_description',
+    ];
+
     /** Used by Admin\ServiceController::index() to feed the "Page Settings" tab. */
     public function currentSettings(): array
     {
@@ -42,30 +49,30 @@ class ServiceSettingController extends Controller
             $settings[$key] ??= null;
         }
 
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
+        }
+
         return $settings;
     }
 
     public function update(Request $request): RedirectResponse
     {
-        $data = $request->validate([
+        $rules = [
             // Hero / breadcrumb
             'svc_page_hero_image'   => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'svc_page_hero_title'   => 'nullable|string',
             // SEO
-            'svc_seo_title'         => 'nullable|string',
-            'svc_seo_description'   => 'nullable|string',
             'svc_seo_keywords'      => 'nullable|string',
             'svc_seo_og_image'      => 'nullable|image|mimes:jpeg,jpg,png,webp',
             // Homepage section
-            'svc_badge'             => 'nullable|string',
-            'svc_title'             => 'nullable|string',
-            'svc_desc'              => 'nullable|string',
-            'svc_btn_text'          => 'nullable|string',
             'svc_btn_url'           => 'nullable|string',
-            // Detail page sidebar
-            'svc_help_title'        => 'nullable|string',
-            'svc_help_desc'         => 'nullable|string',
-        ]);
+        ];
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
 
         foreach (['svc_page_hero_image', 'svc_seo_og_image'] as $field) {
             if ($request->hasFile($field)) {
@@ -79,12 +86,21 @@ class ServiceSettingController extends Controller
             }
         }
 
-        // Auto-generate keywords if none provided
+        // Auto-generate keywords if none provided (svc_seo_title/description are {en,bn} arrays)
         if (empty($data['svc_seo_keywords'])) {
+            $titleText = $data['svc_seo_title'] ?? GlobalSetting::getTranslatedArray('svc_seo_title');
+            $descText  = $data['svc_seo_description'] ?? GlobalSetting::getTranslatedArray('svc_seo_description');
             $data['svc_seo_keywords'] = $this->autoKeywords(
-                $data['svc_seo_title'] ?? GlobalSetting::get('svc_seo_title', ''),
-                $data['svc_seo_description'] ?? GlobalSetting::get('svc_seo_description', '')
+                is_array($titleText) ? implode(' ', $titleText) : $titleText,
+                is_array($descText) ? implode(' ', $descText) : $descText
             );
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                GlobalSetting::setTranslated($key, $data[$key] ?? []);
+                unset($data[$key]);
+            }
         }
 
         GlobalSetting::setMany($data);

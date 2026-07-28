@@ -21,21 +21,36 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import DoctorForm   from './DoctorForm.vue';
+import { emptyTranslatable } from '@/Composables/useTranslatable';
+
+const languages = computed(() => usePage().props.languages ?? []);
+
+function defaultAvailabilities() {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days.map((label, weekday) => ({
+        weekday, label, is_active: false, start_time: '09:00', end_time: '17:00', slot_duration_minutes: 15,
+    }));
+}
 
 const form = useForm({
     name:            '',
-    role:            '',
+    role:            emptyTranslatable(languages.value),
     photo:           null,
-    specialty:       '',
-    degrees:         '',
-    experience:      '',
-    awards:          '',
-    bio:             '',
+    specialty:       emptyTranslatable(languages.value),
+    degrees:         emptyTranslatable(languages.value),
+    experience:      emptyTranslatable(languages.value),
+    awards:          emptyTranslatable(languages.value),
+    bio:             emptyTranslatable(languages.value),
     skills:          [],
     schedule:        [],
+    consultation_fee: '',
+    chambers:        [],
+    availabilities:  defaultAvailabilities(),
+    leaves:          [],
     address:         '',
     phone:           '',
     email:           '',
@@ -47,8 +62,8 @@ const form = useForm({
     is_featured:     false,
     sort_order:      0,
     is_active:       true,
-    seo_title:        '',
-    seo_description:  '',
+    seo_title:        emptyTranslatable(languages.value),
+    seo_description:  emptyTranslatable(languages.value),
     seo_keywords:     '',
     seo_og_image:     null,
 });

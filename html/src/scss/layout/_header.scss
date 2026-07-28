@@ -40,11 +40,15 @@
 }
 
 .top-header__lang {
-  @apply flex items-center gap-1.5 text-sm font-medium text-white/90 transition-colors duration-150 hover:text-brand-cyan;
+  @apply flex items-center gap-1.5 text-sm font-medium text-navy/70 transition-colors duration-150 hover:text-brand-cyan;
+}
+
+.top-header__lang.is-active {
+  @apply text-brand-cyan;
 }
 
 .top-header__divider {
-  @apply h-5 w-px bg-white/15;
+  @apply h-5 w-px bg-navy/15;
 }
 
 .top-header__socials {
@@ -52,7 +56,7 @@
 }
 
 .top-header__social-link {
-  @apply flex h-8 w-8 items-center justify-center rounded-full text-white/80 transition-colors duration-150 hover:bg-white/10 hover:text-brand-cyan;
+  @apply flex h-8 w-8 items-center justify-center rounded-full text-navy/60 transition-colors duration-150 hover:bg-navy/5 hover:text-brand-cyan;
 }
 
 .top-header__search {

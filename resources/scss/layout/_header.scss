@@ -40,7 +40,11 @@
 }
 
 .top-header__lang {
-  @apply flex items-center gap-1.5 text-sm font-medium text-white/90 transition-colors duration-150 hover:text-brand-cyan;
+  @apply flex items-center gap-1.5 text-sm font-medium text-black/90 transition-colors duration-150 hover:text-brand-cyan;
+
+  &.is-active {
+    @apply font-bold text-brand-cyan;
+  }
 }
 
 .top-header__divider {
@@ -118,7 +122,8 @@
 
 .header-search__input {
   @apply w-full min-w-0 flex-1 bg-transparent text-sm text-navy placeholder:text-slate-400 focus:outline-none;
-}
+  border: none !important;
+} 
 
 .header-search__submit {
   @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-cyan text-white transition-colors duration-150 hover:bg-navy;

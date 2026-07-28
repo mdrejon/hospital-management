@@ -4,6 +4,7 @@
         <!-- Group settings -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">FAQ Group Settings</h2>
+            <LanguageTabs v-model="activeLang" />
 
             <div class="grid grid-cols-2 gap-4">
                 <!-- Page selector -->
@@ -31,15 +32,15 @@
 
                 <div>
                     <label class="label">Badge Text</label>
-                    <input v-model="form.badge" type="text" class="input" placeholder="FAQ'S" />
-                    <InputError :message="form.errors.badge" />
+                    <input v-model="form.badge[activeLang]" type="text" class="input" placeholder="FAQ'S" />
+                    <InputError :message="form.errors[`badge.${activeLang}`]" />
                 </div>
 
                 <div class="col-span-2">
                     <label class="label">Section Title</label>
-                    <input v-model="form.title" type="text" class="input"
+                    <input v-model="form.title[activeLang]" type="text" class="input"
                         placeholder="e.g. Clear Answers To Your Questions" />
-                    <InputError :message="form.errors.title" />
+                    <InputError :message="form.errors[`title.${activeLang}`]" />
                 </div>
 
                 <div class="col-span-2">
@@ -47,9 +48,9 @@
                         Section Description
                         <span class="text-xs text-gray-400 ml-1">(shown on about page below title)</span>
                     </label>
-                    <textarea v-model="form.description" rows="2" class="input resize-none"
+                    <textarea v-model="form.description[activeLang]" rows="2" class="input resize-none"
                         placeholder="Optional short description..."></textarea>
-                    <InputError :message="form.errors.description" />
+                    <InputError :message="form.errors[`description.${activeLang}`]" />
                 </div>
 
                 <!-- Side Image -->
@@ -62,9 +63,9 @@
                     </div>
                     <div>
                         <label class="label">Image Alt Text</label>
-                        <input v-model="form.image_alt" type="text" class="input"
+                        <input v-model="form.image_alt[activeLang]" type="text" class="input"
                             placeholder="e.g. FAQ section image" />
-                        <InputError :message="form.errors.image_alt" />
+                        <InputError :message="form.errors[`image_alt.${activeLang}`]" />
                     </div>
                 </div>
 
@@ -88,6 +89,7 @@
             </div>
 
             <InputError :message="form.errors.items" />
+            <LanguageTabs v-model="activeLang" />
 
             <!-- Items list -->
             <div class="space-y-3">
@@ -101,7 +103,7 @@
                                 {{ i + 1 }}
                             </span>
                             <span class="text-xs font-medium text-gray-600 truncate max-w-xs">
-                                {{ item.question || 'New FAQ Item' }}
+                                {{ item.question[activeLang] || 'New FAQ Item' }}
                             </span>
                         </div>
                         <div class="flex items-center gap-1">
@@ -118,15 +120,15 @@
                     <div class="p-3 space-y-2">
                         <div>
                             <label class="text-xs text-gray-500 mb-1 block">Question</label>
-                            <input v-model="form.items[i].question" type="text" class="input"
+                            <input v-model="form.items[i].question[activeLang]" type="text" class="input"
                                 :placeholder="`e.g. Can I Check In Early?`" />
-                            <InputError :message="form.errors[`items.${i}.question`]" />
+                            <InputError :message="form.errors[`items.${i}.question.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="text-xs text-gray-500 mb-1 block">Answer</label>
-                            <textarea v-model="form.items[i].answer" rows="3" class="input resize-none"
+                            <textarea v-model="form.items[i].answer[activeLang]" rows="3" class="input resize-none"
                                 placeholder="Write the answer..."></textarea>
-                            <InputError :message="form.errors[`items.${i}.answer`]" />
+                            <InputError :message="form.errors[`items.${i}.answer.${activeLang}`]" />
                         </div>
                     </div>
                 </div>
@@ -147,21 +149,21 @@
                 Add FAQ items above to see preview
             </div>
             <div v-else class="space-y-2">
-                <p v-if="form.badge" class="text-xs font-semibold tracking-widest text-amber-600 uppercase">
-                    {{ form.badge }}
+                <p v-if="form.badge[activeLang]" class="text-xs font-semibold tracking-widest text-amber-600 uppercase">
+                    {{ form.badge[activeLang] }}
                 </p>
-                <h3 v-if="form.title" class="text-base font-semibold text-gray-800">{{ form.title }}</h3>
-                <p v-if="form.description" class="text-xs text-gray-500">{{ form.description }}</p>
+                <h3 v-if="form.title[activeLang]" class="text-base font-semibold text-gray-800">{{ form.title[activeLang] }}</h3>
+                <p v-if="form.description[activeLang]" class="text-xs text-gray-500">{{ form.description[activeLang] }}</p>
                 <div class="mt-3 space-y-2">
                     <div v-for="(item, i) in form.items" :key="i"
                         class="border border-gray-200 rounded-lg overflow-hidden">
                         <div class="px-3 py-2 bg-gray-50 flex justify-between items-center cursor-pointer"
                             @click="togglePreview(i)">
-                            <span class="text-sm font-medium text-gray-700">{{ item.question || '—' }}</span>
+                            <span class="text-sm font-medium text-gray-700">{{ item.question[activeLang] || '—' }}</span>
                             <span class="text-gray-400 text-sm">{{ openPreview === i ? '−' : '+' }}</span>
                         </div>
                         <div v-if="openPreview === i" class="px-3 py-2 text-sm text-gray-600">
-                            {{ item.answer || '—' }}
+                            {{ item.answer[activeLang] || '—' }}
                         </div>
                     </div>
                 </div>
@@ -172,15 +174,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import { emptyTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     form:          { type: Object, required: true },
     pages:         { type: Array,  default: () => [] },
     existingImage: { type: String, default: null },
 });
+
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
 
 const openPreview  = ref(null);
 
@@ -194,7 +202,7 @@ function togglePreview(i) {
 }
 
 function addItem() {
-    props.form.items.push({ question: '', answer: '' });
+    props.form.items.push({ question: emptyTranslatable(languages.value), answer: emptyTranslatable(languages.value) });
 }
 
 function removeItem(i) {

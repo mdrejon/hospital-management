@@ -26,6 +26,10 @@ function buildKeywords(a, b) {
  * @param {string} titleKey       - form key for meta title     (default 'meta_title')
  * @param {string} descKey        - form key for meta desc      (default 'meta_description')
  * @param {string} keywordsKey    - form key for meta keywords  (default 'meta_keywords')
+ * @param {import('vue').Ref<string>} [activeLang] - optional. When a form key's current value is a
+ *   translatable {en,bn} object (spatie-style), pass the active-language ref so this composable reads/writes
+ *   `form[key][activeLang.value]` instead of `form[key]` directly. Keys whose value is still a plain string
+ *   (e.g. an un-translated keywords field) are unaffected — detected automatically per key.
  */
 export function useSeoAutoFill(form, {
     titleSource,
@@ -34,19 +38,27 @@ export function useSeoAutoFill(form, {
     titleKey     = 'meta_title',
     descKey      = 'meta_description',
     keywordsKey  = 'meta_keywords',
+    activeLang   = null,
 } = {}) {
-    const titleAuto    = ref(!form[titleKey]);
-    const descAuto     = ref(!form[descKey]);
-    const keywordsAuto = ref(!form[keywordsKey]);
+    const isTranslatable = (key) => !!activeLang && form[key] !== null && typeof form[key] === 'object';
+    const getField = (key) => isTranslatable(key) ? form[key][activeLang.value] : form[key];
+    const setField = (key, val) => {
+        if (isTranslatable(key)) { form[key][activeLang.value] = val; }
+        else { form[key] = val; }
+    };
+
+    const titleAuto    = ref(!getField(titleKey));
+    const descAuto     = ref(!getField(descKey));
+    const keywordsAuto = ref(!getField(keywordsKey));
 
     watch(titleSource, (val) => {
-        if (titleAuto.value)    form[titleKey]    = val ? (val + titleSuffix) : '';
-        if (keywordsAuto.value) form[keywordsKey] = buildKeywords(val, descSource());
+        if (titleAuto.value)    setField(titleKey, val ? (val + titleSuffix) : '');
+        if (keywordsAuto.value) setField(keywordsKey, buildKeywords(val, descSource()));
     });
 
     watch(descSource, (val) => {
-        if (descAuto.value)     form[descKey]     = val || '';
-        if (keywordsAuto.value) form[keywordsKey] = buildKeywords(titleSource(), val);
+        if (descAuto.value)     setField(descKey, val || '');
+        if (keywordsAuto.value) setField(keywordsKey, buildKeywords(titleSource(), val));
     });
 
     return {

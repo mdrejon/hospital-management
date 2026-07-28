@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="<?php echo e(app()->getLocale()); ?>">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><?php echo $__env->yieldContent('title', 'ClinicMaster | Medical & Health Care Services'); ?></title>
-  <meta name="description" content="<?php echo $__env->yieldContent('meta_description', 'ClinicMaster provides compassionate, modern medical and health care services.'); ?>" />
+  <title><?php echo $__env->yieldContent('title', __('frontend.meta.default_title')); ?></title>
+  <meta name="description" content="<?php echo $__env->yieldContent('meta_description', __('frontend.meta.default_description')); ?>" />
   <?php if (! empty(trim($__env->yieldContent('meta_keywords')))): ?>
   <meta name="keywords" content="<?php echo $__env->yieldContent('meta_keywords'); ?>" />
   <?php endif; ?>
-  <meta property="og:title" content="<?php echo $__env->yieldContent('og_title', 'ClinicMaster | Medical & Health Care Services'); ?>" />
-  <meta property="og:description" content="<?php echo $__env->yieldContent('og_description', 'ClinicMaster provides compassionate, modern medical and health care services.'); ?>" />
+  <meta property="og:title" content="<?php echo $__env->yieldContent('og_title', __('frontend.meta.default_title')); ?>" />
+  <meta property="og:description" content="<?php echo $__env->yieldContent('og_description', __('frontend.meta.default_description')); ?>" />
   <?php if (! empty(trim($__env->yieldContent('og_image')))): ?>
   <meta property="og:image" content="<?php echo $__env->yieldContent('og_image'); ?>" />
   <?php endif; ?>

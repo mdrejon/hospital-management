@@ -47,7 +47,7 @@
       <div class="page-header__inner">
         <h1 class="page-header__title">{{ $heroTitle }}</h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
-          <a href="{{ route('home') }}">Home</a>
+          <a href="{{ route('home') }}">{{ __('frontend.nav.home') }}</a>
           <span class="page-header__breadcrumb-sep">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m7 6 5 6-5 6M13 6l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -66,5 +66,5 @@
         <span class="page-header__call-text">1 123 456 7890</span>
       </a>
     </section>
-    <x-frontend.book-appointment :settings="$appt" :doctors="$appointmentDoctors" :departments="$appointmentDepartments" source="appointment_page" />
+    <x-frontend.book-appointment :settings="$appt" :doctors="$appointmentDoctors" source="appointment_page" />
 @endsection

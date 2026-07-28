@@ -4,6 +4,7 @@
         <!-- ── Basic Info ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Basic Information</h2>
+            <LanguageTabs v-model="activeLang" />
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
@@ -17,8 +18,8 @@
                 </div>
                 <div>
                     <label class="label">Role / Title</label>
-                    <input v-model="form.role" type="text" class="input" placeholder="e.g. Chief Executive Officer" />
-                    <InputError :message="form.errors.role" />
+                    <input v-model="form.role[activeLang]" type="text" class="input" placeholder="e.g. Chief Executive Officer" />
+                    <InputError :message="form.errors[`role.${activeLang}`]" />
                 </div>
                 <div>
                     <label class="label">Sort Order</label>
@@ -73,9 +74,12 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import { defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     form:     { type: Object, required: true },
@@ -83,6 +87,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['image-change']);
+
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
 
 const slugPreview = computed(() => {
     return (props.form.name || '')

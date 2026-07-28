@@ -28,6 +28,12 @@ class DoctorSettingController extends Controller
         'doc_seo_og_image',
     ];
 
+    /** Human-readable copy shown to visitors — edited per-locale. Everything else in $keys stays a plain value. */
+    private array $translatableKeys = [
+        'doc_home_badge', 'doc_home_title', 'doc_page_hero_title',
+        'doc_badge', 'doc_title', 'doc_seo_title', 'doc_seo_description',
+    ];
+
     /** Used by Admin\DoctorController::index() to feed the "Page Settings" tab. */
     public function currentSettings(): array
     {
@@ -39,23 +45,26 @@ class DoctorSettingController extends Controller
             $settings[$key] ??= null;
         }
 
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
+        }
+
         return $settings;
     }
 
     public function update(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'doc_home_badge'        => 'nullable|string',
-            'doc_home_title'        => 'nullable|string',
+        $rules = [
             'doc_page_hero_image'   => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'doc_page_hero_title'   => 'nullable|string',
-            'doc_badge'             => 'nullable|string',
-            'doc_title'             => 'nullable|string',
-            'doc_seo_title'         => 'nullable|string',
-            'doc_seo_description'   => 'nullable|string',
             'doc_seo_keywords'      => 'nullable|string',
             'doc_seo_og_image'      => 'nullable|image|mimes:jpeg,jpg,png,webp',
-        ]);
+        ];
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
 
         foreach (['doc_page_hero_image', 'doc_seo_og_image'] as $field) {
             if ($request->hasFile($field)) {
@@ -70,9 +79,11 @@ class DoctorSettingController extends Controller
         }
 
         if (empty($data['doc_seo_keywords'])) {
+            $titleText = $data['doc_seo_title'] ?? GlobalSetting::getTranslatedArray('doc_seo_title');
+            $descText  = $data['doc_seo_description'] ?? GlobalSetting::getTranslatedArray('doc_seo_description');
             $data['doc_seo_keywords'] = $this->autoKeywords(
-                $data['doc_seo_title'] ?? GlobalSetting::get('doc_seo_title', ''),
-                $data['doc_seo_description'] ?? GlobalSetting::get('doc_seo_description', '')
+                is_array($titleText) ? implode(' ', $titleText) : $titleText,
+                is_array($descText) ? implode(' ', $descText) : $descText
             );
         }
 

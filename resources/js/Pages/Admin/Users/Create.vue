@@ -48,6 +48,15 @@
                     <p class="text-xs text-gray-500 mt-1">Users without a role or with a Super Admin role can access all modules.</p>
                 </div>
 
+                <div v-if="doctors?.length">
+                    <label class="label">Linked Doctor Profile <span class="text-xs text-gray-400 font-normal">(for the "Doctor" role's own dashboard)</span></label>
+                    <select v-model="form.doctor_id" class="input">
+                        <option :value="null">— None —</option>
+                        <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ doc.name }}</option>
+                    </select>
+                    <p v-if="form.errors.doctor_id" class="text-red-500 text-xs mt-1">{{ form.errors.doctor_id }}</p>
+                </div>
+
                 <div class="flex items-center gap-3">
                     <input v-model="form.is_active" type="checkbox" id="is_active" class="w-4 h-4 rounded border-gray-300 text-blue-600" />
                     <label for="is_active" class="text-sm text-gray-700 font-medium">Active (can log in)</label>
@@ -70,6 +79,7 @@ import { Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
     roles: Array,
+    doctors: { type: Array, default: () => [] },
 });
 
 const form = useForm({
@@ -78,6 +88,7 @@ const form = useForm({
     password: '',
     password_confirmation: '',
     role_id: null,
+    doctor_id: null,
     is_active: true,
 });
 

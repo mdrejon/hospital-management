@@ -96,6 +96,85 @@
   @apply h-20 w-full resize-y border-0 bg-transparent p-0 text-sm leading-relaxed text-navy placeholder-[#8894AB] focus:outline-none focus:ring-0;
 }
 
+// File dropzone ---------------------------------------------------------
+.book-appointment__dropzone {
+  @apply relative flex cursor-pointer flex-col items-center gap-1 rounded-xl border-2 border-dashed border-[#D7DEE9] bg-[#F8FAFC] px-6 py-8 text-center transition-all duration-200;
+
+  &:hover,
+  &:focus-visible {
+    @apply border-brand-cyan bg-brand-cyan/[0.04];
+  }
+
+  &:focus-visible {
+    @apply outline-none ring-2 ring-brand-cyan/30 ring-offset-2;
+  }
+
+  &.is-dragover {
+    @apply border-brand-cyan bg-brand-cyan/[0.06];
+    transform: scale(1.005);
+  }
+
+  &.has-file {
+    @apply cursor-default items-stretch gap-3 border-solid border-brand-cyan/40 bg-brand-cyan/[0.04] px-4 py-4 text-left;
+  }
+}
+
+.book-appointment__dropzone-prompt {
+  @apply flex w-full flex-col items-center gap-1;
+
+  .book-appointment__dropzone.has-file & {
+    @apply flex-row justify-center gap-2 border-t border-dashed border-[#D7DEE9] pt-3;
+  }
+}
+
+.book-appointment__dropzone-icon {
+  @apply mx-auto mb-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-cyan/10 text-brand-cyan transition-transform duration-200;
+
+  .book-appointment__dropzone.is-dragover & {
+    @apply scale-110;
+  }
+
+  .book-appointment__dropzone.has-file & {
+    @apply mb-0 h-8 w-8;
+  }
+}
+
+.book-appointment__dropzone-text {
+  @apply text-sm text-navy;
+}
+
+.book-appointment__dropzone-browse {
+  @apply font-semibold text-brand-cyan underline decoration-brand-cyan/40 underline-offset-2;
+}
+
+.book-appointment__dropzone-hint {
+  @apply mt-1 text-xs leading-relaxed text-muted;
+
+  .book-appointment__dropzone.has-file & {
+    @apply hidden;
+  }
+}
+
+.book-appointment__dropzone-list {
+  @apply flex w-full flex-col gap-2;
+}
+
+.book-appointment__dropzone-file {
+  @apply flex w-full items-center gap-3 rounded-lg border border-[#E7EAF0] bg-white px-4 py-3 shadow-sm;
+}
+
+.book-appointment__dropzone-file-icon {
+  @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-cyan/10 text-brand-cyan;
+}
+
+.book-appointment__dropzone-file-name {
+  @apply min-w-0 flex-1 truncate text-sm font-medium text-navy;
+}
+
+.book-appointment__dropzone-remove {
+  @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#8894AB] transition-colors duration-150 hover:bg-red-50 hover:text-red-500;
+}
+
 .book-appointment__submit-wrap {
   @apply sm:col-span-2;
 }

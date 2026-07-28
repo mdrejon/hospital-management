@@ -13,10 +13,11 @@
                 <!-- ─── Page Hero ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Page Hero &amp; Breadcrumb</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="label">Page Title <span class="text-xs text-gray-400">(shown in breadcrumb hero)</span></label>
-                        <input v-model="form.ach_hero_title" type="text" class="input" placeholder="Our Achievements" />
-                        <InputError :message="form.errors.ach_hero_title" />
+                        <input v-model="form.ach_hero_title[activeLang]" type="text" class="input" placeholder="Our Achievements" />
+                        <InputError :message="form.errors[`ach_hero_title.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Hero Background Image</label>
@@ -29,16 +30,17 @@
                 <!-- ─── Section Header ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">"Always Ready To Help" Section</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="label">Section Title</label>
-                        <input v-model="form.ach_title" type="text" class="input" placeholder="We Are Always Ready To Help You & Your Family" />
-                        <InputError :message="form.errors.ach_title" />
+                        <input v-model="form.ach_title[activeLang]" type="text" class="input" placeholder="We Are Always Ready To Help You & Your Family" />
+                        <InputError :message="form.errors[`ach_title.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Section Description</label>
-                        <textarea v-model="form.ach_desc" rows="2" class="input resize-none"
+                        <textarea v-model="form.ach_desc[activeLang]" rows="2" class="input resize-none"
                             placeholder="From emergencies to everyday care, our team stands beside you at every step of your health journey."></textarea>
-                        <InputError :message="form.errors.ach_desc" />
+                        <InputError :message="form.errors[`ach_desc.${activeLang}`]" />
                     </div>
                 </section>
 
@@ -48,15 +50,16 @@
                         Help Items
                         <span class="text-xs text-gray-400 font-normal ml-2">exactly 3 items — icons are fixed (Emergency / Pharmacy / Treatment)</span>
                     </h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div v-for="(item, i) in form.ach_items" :key="i" class="border border-gray-100 rounded-lg p-4 space-y-2 bg-gray-50">
                         <span class="text-xs font-semibold text-gray-500 uppercase">Item {{ i + 1 }}</span>
                         <div>
                             <label class="label">Title</label>
-                            <input v-model="item.title" type="text" class="input" placeholder="e.g. Emergency Help" />
+                            <input v-model="item.title[activeLang]" type="text" class="input" placeholder="e.g. Emergency Help" />
                         </div>
                         <div>
                             <label class="label">Description</label>
-                            <textarea v-model="item.desc" rows="2" class="input resize-none" placeholder="Short description..."></textarea>
+                            <textarea v-model="item.desc[activeLang]" rows="2" class="input resize-none" placeholder="Short description..."></textarea>
                         </div>
                     </div>
                 </section>
@@ -64,19 +67,20 @@
                 <!-- ─── SEO ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">SEO Configuration</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
-                        <input v-model="form.ach_seo_title" @input="onMetaTitleInput" type="text" class="input" maxlength="160"
+                        <input v-model="form.ach_seo_title[activeLang]" @input="onMetaTitleInput" type="text" class="input" maxlength="160"
                             placeholder="Our Achievements | ClinicMaster Medical & Health Care Services" />
-                        <p class="text-xs text-gray-400 mt-1">{{ (form.ach_seo_title || '').length }}/160</p>
-                        <InputError :message="form.errors.ach_seo_title" />
+                        <p class="text-xs text-gray-400 mt-1">{{ (form.ach_seo_title[activeLang] || '').length }}/160</p>
+                        <InputError :message="form.errors[`ach_seo_title.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
-                        <textarea v-model="form.ach_seo_description" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"
+                        <textarea v-model="form.ach_seo_description[activeLang]" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"
                             placeholder="Explore ClinicMaster's awards, accreditations, and commitment to patient care."></textarea>
-                        <p class="text-xs text-gray-400 mt-1">{{ (form.ach_seo_description || '').length }}/320</p>
-                        <InputError :message="form.errors.ach_seo_description" />
+                        <p class="text-xs text-gray-400 mt-1">{{ (form.ach_seo_description[activeLang] || '').length }}/320</p>
+                        <InputError :message="form.errors[`ach_seo_description.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated, auto-filled if left blank)</span></label>
@@ -104,37 +108,58 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { ref, reactive, computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
+import { seedTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     settings: { type: Object, required: true },
 });
 
 const s = props.settings;
+const languages  = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
 
 const currentHeroImg = ref(s.ach_hero_image    ?? null);
 const currentOgImg   = ref(s.ach_seo_og_image  ?? null);
 
 const form = useForm({
-    ach_hero_title:       s.ach_hero_title       ?? '',
+    ach_hero_title:       seedTranslatable(languages.value, s.ach_hero_title),
     ach_hero_image:       null,
-    ach_title:            s.ach_title            ?? '',
-    ach_desc:             s.ach_desc             ?? '',
-    ach_items:            Array.isArray(s.ach_items) ? s.ach_items.map(i => ({ ...i })) : [],
-    ach_seo_title:        s.ach_seo_title        ?? '',
-    ach_seo_description:  s.ach_seo_description  ?? '',
+    ach_title:            seedTranslatable(languages.value, s.ach_title),
+    ach_desc:             seedTranslatable(languages.value, s.ach_desc),
+    ach_items:            Array.isArray(s.ach_items)
+                            ? s.ach_items.map(i => ({
+                                ...i,
+                                title: seedTranslatable(languages.value, i.title),
+                                desc:  seedTranslatable(languages.value, i.desc),
+                            }))
+                            : [],
+    ach_seo_title:        seedTranslatable(languages.value, s.ach_seo_title),
+    ach_seo_description:  seedTranslatable(languages.value, s.ach_seo_description),
     ach_seo_keywords:     s.ach_seo_keywords     ?? '',
     ach_seo_og_image:     null,
 });
 
-const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(form, {
-    titleSource: () => form.ach_title,
-    descSource:  () => form.ach_desc,
+const seoProxy = reactive({
+    get ach_title() { return form.ach_title[activeLang.value]; },
+    get ach_desc() { return form.ach_desc[activeLang.value]; },
+    get ach_seo_title() { return form.ach_seo_title[activeLang.value]; },
+    set ach_seo_title(v) { form.ach_seo_title[activeLang.value] = v; },
+    get ach_seo_description() { return form.ach_seo_description[activeLang.value]; },
+    set ach_seo_description(v) { form.ach_seo_description[activeLang.value] = v; },
+    get ach_seo_keywords() { return form.ach_seo_keywords; },
+    set ach_seo_keywords(v) { form.ach_seo_keywords = v; },
+});
+
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(seoProxy, {
+    titleSource: () => seoProxy.ach_title,
+    descSource:  () => seoProxy.ach_desc,
     titleKey:    'ach_seo_title',
     descKey:     'ach_seo_description',
     keywordsKey: 'ach_seo_keywords',

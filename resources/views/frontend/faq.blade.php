@@ -47,13 +47,13 @@
       <div class="page-header__inner">
         <h1 class="page-header__title">{{ $heroTitle }}</h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
-          <a href="{{ route('home') }}">Home</a>
+          <a href="{{ route('home') }}">{{ __('frontend.nav.home') }}</a>
           <span class="page-header__breadcrumb-sep">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m7 6 5 6-5 6M13 6l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
-          <span>FAQ</span>
+          <span>{{ __('frontend.breadcrumb.faq') }}</span>
         </nav>
       </div>
 
@@ -80,6 +80,7 @@
         ['question' => 'Is emergency care available 24/7?', 'answer' => 'Yes, our Emergency & Urgent Care department is staffed around the clock, every day of the year, with a dedicated ambulance and trauma team on standby.'],
         ['question' => 'Can I get a telemedicine consultation?', 'answer' => 'Absolutely. Many of our specialists offer video consultations for follow-ups and non-emergency concerns. Select "Telemedicine" when booking your appointment online.'],
       ]);
+      $tr = fn($v) => is_array($v) ? ($v[app()->getLocale()] ?: $v[config('app.fallback_locale')] ?? '') : $v;
     @endphp
     <section class="faq">
       <div class="container mx-auto">
@@ -94,7 +95,7 @@
               @foreach($faqList as $i => $qa)
               <div class="faq-item {{ $i === 0 ? 'is-open' : '' }}">
                 <button type="button" class="faq-item__question" data-faq-toggle>
-                  {{ $qa['question'] }}
+                  {{ $tr($qa['question']) }}
                   <span class="faq-item__icon">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -103,7 +104,7 @@
                 </button>
                 <div class="faq-item__answer">
                   <p>
-                    {{ $qa['answer'] }}
+                    {{ $tr($qa['answer']) }}
                   </p>
                 </div>
               </div>

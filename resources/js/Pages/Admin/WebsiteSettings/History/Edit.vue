@@ -13,10 +13,11 @@
                 <!-- ─── Page Hero ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Page Hero &amp; Breadcrumb</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="label">Page Title <span class="text-xs text-gray-400">(shown in breadcrumb hero)</span></label>
-                        <input v-model="form.hist_hero_title" type="text" class="input" placeholder="Our History" />
-                        <InputError :message="form.errors.hist_hero_title" />
+                        <input v-model="form.hist_hero_title[activeLang]" type="text" class="input" placeholder="Our History" />
+                        <InputError :message="form.errors[`hist_hero_title.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Hero Background Image</label>
@@ -29,19 +30,20 @@
                 <!-- ─── SEO ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">SEO Configuration</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars)</span></label>
-                        <input v-model="form.hist_seo_title" @input="onMetaTitleInput" type="text" class="input" maxlength="160"
+                        <input v-model="form.hist_seo_title[activeLang]" @input="onMetaTitleInput" type="text" class="input" maxlength="160"
                             placeholder="Our History – Hotel Beach Way, Cox's Bazar" />
-                        <p class="text-xs text-gray-400 mt-1">{{ (form.hist_seo_title || '').length }}/160</p>
-                        <InputError :message="form.errors.hist_seo_title" />
+                        <p class="text-xs text-gray-400 mt-1">{{ (form.hist_seo_title[activeLang] || '').length }}/160</p>
+                        <InputError :message="form.errors[`hist_seo_title.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
-                        <textarea v-model="form.hist_seo_description" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"
+                        <textarea v-model="form.hist_seo_description[activeLang]" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"
                             placeholder="Discover the history of Hotel Beach Way — Cox's Bazar's premier coastal retreat since 2013."></textarea>
-                        <p class="text-xs text-gray-400 mt-1">{{ (form.hist_seo_description || '').length }}/320</p>
-                        <InputError :message="form.errors.hist_seo_description" />
+                        <p class="text-xs text-gray-400 mt-1">{{ (form.hist_seo_description[activeLang] || '').length }}/320</p>
+                        <InputError :message="form.errors[`hist_seo_description.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated)</span></label>
@@ -60,22 +62,23 @@
                 <!-- ─── Section Header ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Timeline Section Header</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="label">Badge Text</label>
-                        <input v-model="form.hist_badge" type="text" class="input" placeholder="OUR JOURNEY" />
-                        <InputError :message="form.errors.hist_badge" />
+                        <input v-model="form.hist_badge[activeLang]" type="text" class="input" placeholder="OUR JOURNEY" />
+                        <InputError :message="form.errors[`hist_badge.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Section Title <span class="text-xs text-gray-400">(use &lt;br&gt; for line break)</span></label>
-                        <input v-model="form.hist_title" type="text" class="input"
+                        <input v-model="form.hist_title[activeLang]" type="text" class="input"
                             placeholder="A Decade of Warmth,&lt;br&gt;Hospitality &amp; Excellence" />
-                        <InputError :message="form.errors.hist_title" />
+                        <InputError :message="form.errors[`hist_title.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Section Description</label>
-                        <textarea v-model="form.hist_desc" rows="3" class="input resize-none"
+                        <textarea v-model="form.hist_desc[activeLang]" rows="3" class="input resize-none"
                             placeholder="Short description shown below the section title..."></textarea>
-                        <InputError :message="form.errors.hist_desc" />
+                        <InputError :message="form.errors[`hist_desc.${activeLang}`]" />
                     </div>
                 </section>
 
@@ -91,6 +94,7 @@
                             + Add Item
                         </button>
                     </div>
+                    <LanguageTabs v-model="activeLang" />
 
                     <div class="space-y-4">
                         <div v-for="(item, i) in form.hist_timeline" :key="i"
@@ -104,7 +108,7 @@
                                         {{ item.year || (i + 1) }}
                                     </span>
                                     <span class="text-sm font-medium text-gray-700 truncate max-w-xs">
-                                        {{ item.heading || 'New Timeline Item' }}
+                                        {{ displayTranslatable(item.heading, languages) || 'New Timeline Item' }}
                                     </span>
                                     <span v-if="item.reversed" class="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded">Reversed</span>
                                 </div>
@@ -128,17 +132,17 @@
                                     </div>
                                     <div>
                                         <label class="label">Tag / Category</label>
-                                        <input v-model="form.hist_timeline[i].tag" type="text" class="input" placeholder="Foundation" />
+                                        <input v-model="form.hist_timeline[i].tag[activeLang]" type="text" class="input" placeholder="Foundation" />
                                     </div>
                                 </div>
                                 <div>
                                     <label class="label">Heading</label>
-                                    <input v-model="form.hist_timeline[i].heading" type="text" class="input"
+                                    <input v-model="form.hist_timeline[i].heading[activeLang]" type="text" class="input"
                                         placeholder="Grand Opening — Hotel Beach Way Is Born" />
                                 </div>
                                 <div>
                                     <label class="label">Content</label>
-                                    <textarea v-model="form.hist_timeline[i].content" rows="4" class="input resize-none"
+                                    <textarea v-model="form.hist_timeline[i].content[activeLang]" rows="4" class="input resize-none"
                                         placeholder="Describe this milestone..."></textarea>
                                 </div>
 
@@ -146,7 +150,7 @@
                                 <div>
                                     <label class="label">Badges <span class="text-xs text-gray-400">(small highlight chips)</span></label>
                                     <div v-for="(badge, bi) in form.hist_timeline[i].badges" :key="bi" class="flex gap-2 mb-2">
-                                        <input v-model="form.hist_timeline[i].badges[bi]" type="text" class="input"
+                                        <input v-model="form.hist_timeline[i].badges[bi][activeLang]" type="text" class="input"
                                             placeholder="e.g. 30 Rooms Launched" />
                                         <button type="button" @click="removeBadge(i, bi)"
                                             class="px-2 text-red-400 hover:text-red-600 text-sm">✕</button>
@@ -192,18 +196,22 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { ref, reactive, computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError   from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
+import { seedTranslatable, defaultLangCode, emptyTranslatable, displayTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     settings: { type: Object, required: true },
 });
 
 const s = props.settings;
+const languages  = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
 
 const currentHeroImg = ref(s.hist_hero_image);
 const currentOgImg   = ref(s.hist_seo_og_image);
@@ -215,28 +223,49 @@ const timelineImgPreviews = reactive({});
 const openItems = reactive(new Set([0]));
 
 const defaultItem = () => ({
-    year: '', tag: '', heading: '', content: '', badges: [], image: '', reversed: false,
+    year: '', tag: emptyTranslatable(languages.value), heading: emptyTranslatable(languages.value),
+    content: emptyTranslatable(languages.value), badges: [], image: '', reversed: false,
 });
 
 const form = useForm({
     hist_hero_image:      null,
-    hist_hero_title:      s.hist_hero_title      ?? 'Our History',
-    hist_badge:           s.hist_badge           ?? 'OUR JOURNEY',
-    hist_title:           s.hist_title           ?? 'A Decade of Warmth,<br>Hospitality & Excellence',
-    hist_desc:            s.hist_desc            ?? '',
+    hist_hero_title:      seedTranslatable(languages.value, s.hist_hero_title),
+    hist_badge:           seedTranslatable(languages.value, s.hist_badge),
+    hist_title:           seedTranslatable(languages.value, s.hist_title),
+    hist_desc:            seedTranslatable(languages.value, s.hist_desc),
     hist_timeline:        Array.isArray(s.hist_timeline) && s.hist_timeline.length
-                            ? s.hist_timeline.map(i => ({ ...i, badges: [...(i.badges || [])] }))
+                            ? s.hist_timeline.map(i => ({
+                                ...i,
+                                tag:     seedTranslatable(languages.value, i.tag),
+                                heading: seedTranslatable(languages.value, i.heading),
+                                content: seedTranslatable(languages.value, i.content),
+                                badges:  (i.badges || []).map(b => seedTranslatable(languages.value, b)),
+                            }))
                             : [],
     timeline_images:      {},
-    hist_seo_title:       s.hist_seo_title       ?? '',
-    hist_seo_description: s.hist_seo_description ?? '',
+    hist_seo_title:       seedTranslatable(languages.value, s.hist_seo_title),
+    hist_seo_description: seedTranslatable(languages.value, s.hist_seo_description),
     hist_seo_keywords:    s.hist_seo_keywords    ?? '',
     hist_seo_og_image:    null,
 });
 
-const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(form, {
-    titleSource: () => form.hist_title,
-    descSource:  () => form.hist_desc,
+// Proxy exposing the current-tab locale value of each translatable field as a
+// plain string, so useSeoAutoFill (which reads/writes flat form keys) can
+// drive the per-locale hist_seo_title[activeLang]/hist_seo_description[activeLang].
+const seoProxy = reactive({
+    get hist_title() { return form.hist_title[activeLang.value]; },
+    get hist_desc() { return form.hist_desc[activeLang.value]; },
+    get hist_seo_title() { return form.hist_seo_title[activeLang.value]; },
+    set hist_seo_title(v) { form.hist_seo_title[activeLang.value] = v; },
+    get hist_seo_description() { return form.hist_seo_description[activeLang.value]; },
+    set hist_seo_description(v) { form.hist_seo_description[activeLang.value] = v; },
+    get hist_seo_keywords() { return form.hist_seo_keywords; },
+    set hist_seo_keywords(v) { form.hist_seo_keywords = v; },
+});
+
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(seoProxy, {
+    titleSource: () => seoProxy.hist_title,
+    descSource:  () => seoProxy.hist_desc,
     titleKey:    'hist_seo_title',
     descKey:     'hist_seo_description',
     keywordsKey: 'hist_seo_keywords',
@@ -279,7 +308,7 @@ function moveDown(i) {
     [form.hist_timeline[i], form.hist_timeline[i + 1]] = [form.hist_timeline[i + 1], form.hist_timeline[i]];
 }
 
-function addBadge(i)        { form.hist_timeline[i].badges.push(''); }
+function addBadge(i)        { form.hist_timeline[i].badges.push(emptyTranslatable(languages.value)); }
 function removeBadge(i, bi) { form.hist_timeline[i].badges.splice(bi, 1); }
 
 function submit() {

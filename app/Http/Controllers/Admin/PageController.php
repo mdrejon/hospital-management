@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Language;
 use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,10 +22,10 @@ class PageController extends Controller
             ->get()
             ->map(fn ($p) => [
                 'id'         => $p->id,
-                'title'      => $p->title,
+                'title'      => $p->getTranslations('title'),
                 'slug'       => $p->slug,
                 'full_path'  => $p->fullPath(),
-                'parent'     => $p->parent?->title,
+                'parent'     => $p->parent?->getTranslations('title'),
                 'sort_order' => $p->sort_order,
                 'is_active'  => $p->is_active,
             ]);
@@ -52,7 +53,7 @@ class PageController extends Controller
             $data['seo_og_image'] = $request->file('seo_og_image')->store('pages', 'public');
         }
 
-        $data['slug'] = $this->uniqueSlug($data['title'], $data['parent_id'] ?? null);
+        $data['slug'] = $this->uniqueSlug($data['title'][$this->defaultLocale()] ?? '', $data['parent_id'] ?? null);
 
         Page::create($data);
 
@@ -91,7 +92,7 @@ class PageController extends Controller
             }
         }
 
-        $data['slug'] = $this->uniqueSlug($data['title'], $data['parent_id'] ?? null, $page->id);
+        $data['slug'] = $this->uniqueSlug($data['title'][$this->defaultLocale()] ?? '', $data['parent_id'] ?? null, $page->id);
 
         $page->update($data);
 
@@ -134,7 +135,7 @@ class PageController extends Controller
         return Page::whereNotIn('id', $excludedIds)
             ->orderBy('title')
             ->get()
-            ->map(fn ($p) => ['id' => $p->id, 'title' => $p->title, 'full_path' => $p->fullPath()])
+            ->map(fn ($p) => ['id' => $p->id, 'title' => $p->getTranslations('title'), 'full_path' => $p->fullPath()])
             ->toArray();
     }
 
@@ -154,20 +155,33 @@ class PageController extends Controller
         return in_array($candidateParentId, $ids, true);
     }
 
+    private function defaultLocale(): string
+    {
+        return Language::defaultLanguage()?->code ?? config('app.locale');
+    }
+
     private function validated(Request $request): array
     {
+        $default = $this->defaultLocale();
+
         $data = $request->validate([
-            'parent_id'        => 'nullable|exists:pages,id',
-            'title'            => 'required|string',
-            'breadcrumb_title' => 'nullable|string',
-            'hero_image'       => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'content'          => 'nullable|string',
-            'is_active'        => 'boolean',
-            'sort_order'       => 'integer|min:0',
-            'seo_title'        => 'nullable|string',
-            'seo_description'  => 'nullable|string',
-            'seo_keywords'     => 'nullable|string',
-            'seo_og_image'     => 'nullable|image|mimes:jpeg,jpg,png,webp',
+            'parent_id'             => 'nullable|exists:pages,id',
+            'title'                 => 'required|array',
+            "title.$default"        => 'required|string',
+            'title.*'               => 'nullable|string',
+            'breadcrumb_title'      => 'nullable|array',
+            'breadcrumb_title.*'    => 'nullable|string',
+            'hero_image'            => 'nullable|image|mimes:jpeg,jpg,png,webp',
+            'content'               => 'nullable|array',
+            'content.*'             => 'nullable|string',
+            'is_active'             => 'boolean',
+            'sort_order'            => 'integer|min:0',
+            'seo_title'             => 'nullable|array',
+            'seo_title.*'           => 'nullable|string',
+            'seo_description'       => 'nullable|array',
+            'seo_description.*'     => 'nullable|string',
+            'seo_keywords'          => 'nullable|string',
+            'seo_og_image'          => 'nullable|image|mimes:jpeg,jpg,png,webp',
         ]);
 
         return $data;

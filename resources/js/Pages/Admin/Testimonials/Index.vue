@@ -13,14 +13,15 @@
             <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                 <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Section Settings</h2>
                 <form @submit.prevent="saveSettings" enctype="multipart/form-data" class="space-y-4">
+                    <LanguageTabs v-model="activeLang" />
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="label">Badge Text</label>
-                            <input v-model="settingsForm.testi_badge" type="text" class="input" placeholder="TESTIMONIALS" />
+                            <input v-model="settingsForm.testi_badge[activeLang]" type="text" class="input" placeholder="TESTIMONIALS" />
                         </div>
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="settingsForm.testi_title" type="text" class="input"
+                            <input v-model="settingsForm.testi_title[activeLang]" type="text" class="input"
                                 placeholder="Hear From Our Satisfied Customers" />
                         </div>
                         <div class="col-span-2 grid grid-cols-2 gap-4">
@@ -31,7 +32,7 @@
                             </div>
                             <div>
                                 <label class="label">Image Alt Text</label>
-                                <input v-model="settingsForm.testi_image_alt" type="text" class="input"
+                                <input v-model="settingsForm.testi_image_alt[activeLang]" type="text" class="input"
                                     placeholder="Happy guests at Hotel Beach Way" />
                             </div>
                         </div>
@@ -55,9 +56,10 @@
                         <!-- Review -->
                         <div class="col-span-2">
                             <label class="label">Review Text <span class="text-red-500">*</span></label>
-                            <textarea v-model="form.review" rows="3" class="input resize-none"
+                            <LanguageTabs v-model="activeLang" />
+                            <textarea v-model="form.review[activeLang]" rows="3" class="input resize-none"
                                 placeholder='"Very clean place — staffs are really nice..."'></textarea>
-                            <InputError :message="form.errors.review" />
+                            <InputError :message="form.errors[`review.${activeLang}`]" />
                         </div>
                         <!-- Name -->
                         <div>
@@ -68,9 +70,9 @@
                         <!-- Role -->
                         <div>
                             <label class="label">Role / Location</label>
-                            <input v-model="form.role" type="text" class="input"
+                            <input v-model="form.role[activeLang]" type="text" class="input"
                                 placeholder="Leisure Trip, United Kingdom" />
-                            <InputError :message="form.errors.role" />
+                            <InputError :message="form.errors[`role.${activeLang}`]" />
                         </div>
                         <!-- Rating -->
                         <div>
@@ -159,7 +161,7 @@
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2 mb-1">
                                 <span class="font-semibold text-gray-800 text-sm">{{ t.name }}</span>
-                                <span class="text-xs text-gray-400">{{ t.role }}</span>
+                                <span class="text-xs text-gray-400">{{ displayTranslatable(t.role, languages) }}</span>
                                 <!-- Stars -->
                                 <div class="flex items-center gap-0.5 ml-auto">
                                     <svg v-for="n in 5" :key="n" class="w-3 h-3"
@@ -170,7 +172,7 @@
                                     <span class="text-xs text-gray-500 ml-1">{{ t.rating.toFixed(1) }}</span>
                                 </div>
                             </div>
-                            <p class="text-sm text-gray-600 italic line-clamp-2">"{{ t.review }}"</p>
+                            <p class="text-sm text-gray-600 italic line-clamp-2">"{{ displayTranslatable(t.review, languages) }}"</p>
                         </div>
                         <!-- Actions -->
                         <div class="flex items-center gap-2 flex-shrink-0">
@@ -212,23 +214,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useForm, router } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError  from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import { emptyTranslatable, seedTranslatable, displayTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     testimonials: { type: Array,  default: () => [] },
     settings:     { type: Object, default: () => ({}) },
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
 // ── Section settings ──
 const settingsForm = useForm({
-    testi_badge:     props.settings.testi_badge     ?? 'TESTIMONIALS',
-    testi_title:     props.settings.testi_title     ?? 'Hear From Our Satisfied Customers',
+    testi_badge:     { ...emptyTranslatable(languages.value), ...(props.settings.testi_badge || { en: 'TESTIMONIALS' }) },
+    testi_title:     { ...emptyTranslatable(languages.value), ...(props.settings.testi_title || { en: 'Hear From Our Satisfied Customers' }) },
     testi_image:     null,
-    testi_image_alt: props.settings.testi_image_alt ?? 'Happy guests at Hotel Beach Way',
+    testi_image_alt: { ...emptyTranslatable(languages.value), ...(props.settings.testi_image_alt || { en: 'Happy guests at Hotel Beach Way' }) },
 });
 
 function onImgChange(file) {
@@ -244,9 +251,9 @@ function saveSettings() {
 const editingId    = ref(null);
 
 const form = useForm({
-    review:         '',
+    review:         emptyTranslatable(languages.value),
     name:           '',
-    role:           '',
+    role:           emptyTranslatable(languages.value),
     avatar:         null,
     existingAvatar: null,
     rating:         5.0,
@@ -261,9 +268,9 @@ function onAvatarChange(file) {
 
 function startEdit(t) {
     editingId.value = t.id;
-    form.review         = t.review;
+    form.review         = seedTranslatable(languages.value, t.review);
     form.name           = t.name;
-    form.role           = t.role ?? '';
+    form.role           = seedTranslatable(languages.value, t.role);
     form.avatar         = null;
     form.existingAvatar = t.avatar;
     form.rating         = t.rating;

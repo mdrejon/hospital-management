@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\GlobalSetting;
+use App\Models\Language;
 use App\Models\Testimonial;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,8 @@ class TestimonialController extends Controller
         'testi_badge', 'testi_title', 'testi_image', 'testi_image_alt',
     ];
 
+    private array $sectionTranslatableKeys = ['testi_badge', 'testi_title', 'testi_image_alt'];
+
     public function index(): Response
     {
         $settings = GlobalSetting::whereIn('key', $this->sectionKeys)
@@ -25,6 +28,10 @@ class TestimonialController extends Controller
 
         foreach ($this->sectionKeys as $key) {
             $settings[$key] ??= null;
+        }
+
+        foreach ($this->sectionTranslatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
         }
 
         return Inertia::render('Admin/Testimonials/Index', [
@@ -83,12 +90,13 @@ class TestimonialController extends Controller
 
     public function updateSettings(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'testi_badge'     => 'nullable|string',
-            'testi_title'     => 'nullable|string',
-            'testi_image'     => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'testi_image_alt' => 'nullable|string',
-        ]);
+        $rules = ['testi_image' => 'nullable|image|mimes:jpeg,jpg,png,webp'];
+        foreach ($this->sectionTranslatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
 
         if ($request->hasFile('testi_image')) {
             $existing = GlobalSetting::get('testi_image');
@@ -100,6 +108,13 @@ class TestimonialController extends Controller
             unset($data['testi_image']);
         }
 
+        foreach ($this->sectionTranslatableKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                GlobalSetting::setTranslated($key, $data[$key] ?? []);
+                unset($data[$key]);
+            }
+        }
+
         GlobalSetting::setMany($data);
 
         return back()->with('success', 'Section settings saved.');
@@ -107,10 +122,15 @@ class TestimonialController extends Controller
 
     private function validated(Request $request): array
     {
+        $default = Language::defaultLanguage()?->code ?? config('app.locale');
+
         return $request->validate([
-            'review'     => 'required|string',
-            'name'       => 'required|string',
-            'role'       => 'nullable|string',
+            'review'          => 'required|array',
+            "review.$default" => 'required|string',
+            'review.*'        => 'nullable|string',
+            'name'            => 'required|string',
+            'role'            => 'nullable|array',
+            'role.*'          => 'nullable|string',
             'avatar'     => 'nullable|image|mimes:jpeg,jpg,png,webp',
             'rating'     => 'required|numeric|min:1',
             'sort_order' => 'integer|min:0',

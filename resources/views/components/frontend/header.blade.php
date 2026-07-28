@@ -30,6 +30,10 @@
             </span>
             <span class="top-header__value">{{ $headerSettings['header_hours'] ?? 'Mon - Fri: 8:00 am - 7:00 pm' }}</span>
           </span>
+          <div class="top-header__divider"></div>
+          @foreach ($languages ?? [] as $lang)
+            <a href="{{ route('language.switch', $lang->code) }}" class="top-header__lang {{ app()->getLocale() === $lang->code ? 'is-active' : '' }}">{{ strtoupper($lang->code) }}</a>
+          @endforeach
           <div class="top-header__socials">
             <a href="{{ $headerSettings['header_facebook_url'] ?? '#' }}" class="top-header__social-link" aria-label="Facebook">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z"/></svg>
@@ -62,7 +66,7 @@
             </svg>
           </span>
           <span class="top-info-bar__text">
-            <span class="top-info-bar__label">Email Supports</span>
+            <span class="top-info-bar__label">{{ __('frontend.header.email_supports') }}</span>
             <span class="top-info-bar__value">{{ $headerSettings['header_email'] ?? 'info@example.com' }}</span>
           </span>
         </a>
@@ -78,14 +82,14 @@
             </svg>
           </span>
           <span class="top-info-bar__text">
-            <span class="top-info-bar__label">Supports</span>
+            <span class="top-info-bar__label">{{ __('frontend.header.supports') }}</span>
             <span class="top-info-bar__value">{{ $headerSettings['header_support_text'] ?? '24x7 Supports' }}</span>
           </span>
         </span>
 
         <div class="top-info-bar__item top-info-bar__search">
           <form action="{{ route('search') }}" method="GET" class="header-search" role="search">
-            <input type="search" name="q" value="{{ request('q') }}" class="header-search__input" placeholder="Search here..." aria-label="Search" required />
+            <input type="search" name="q" value="{{ request('q') }}" class="header-search__input" placeholder="{{ __('frontend.header.search_placeholder') }}" aria-label="Search" required />
             <button type="submit" class="header-search__submit" aria-label="Search">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
@@ -107,50 +111,50 @@
       </a>
 
       <nav class="main-nav">
-        <a href="{{ route('home') }}" class="main-nav__link {{ request()->routeIs('home') ? 'is-active' : '' }}">Home</a>
+        <a href="{{ route('home') }}" class="main-nav__link {{ request()->routeIs('home') ? 'is-active' : '' }}">{{ __('frontend.nav.home') }}</a>
 
         <div class="has-dropdown">
           <button type="button" class="main-nav__link {{ request()->routeIs(['about','history','md-message','management','achievements','faq']) ? 'is-active' : '' }}">
-            About Us
+            {{ __('frontend.nav.about_us') }}
             <span class="main-nav__caret">+</span>
           </button>
           <div class="dropdown-menu">
-            <a href="{{ route('about') }}" class="dropdown-menu__link">Company Profile</a>
-            <a href="{{ route('history') }}" class="dropdown-menu__link">Our History</a>
-            <a href="{{ route('md-message') }}" class="dropdown-menu__link">Message From MD/CEO</a>
-            <a href="{{ route('management') }}" class="dropdown-menu__link">Our Management</a>
-            <a href="{{ route('achievements') }}" class="dropdown-menu__link">Our Achievement</a>
-            <a href="{{ route('faq') }}" class="dropdown-menu__link">FAQ</a>
+            <a href="{{ route('about') }}" class="dropdown-menu__link">{{ __('frontend.nav.company_profile') }}</a>
+            <a href="{{ route('history') }}" class="dropdown-menu__link">{{ __('frontend.nav.our_history') }}</a>
+            <a href="{{ route('md-message') }}" class="dropdown-menu__link">{{ __('frontend.nav.md_message') }}</a>
+            <a href="{{ route('management') }}" class="dropdown-menu__link">{{ __('frontend.nav.our_management') }}</a>
+            <a href="{{ route('achievements') }}" class="dropdown-menu__link">{{ __('frontend.nav.our_achievement') }}</a>
+            <a href="{{ route('faq') }}" class="dropdown-menu__link">{{ __('frontend.nav.faq') }}</a>
           </div>
         </div>
 
         <div class="has-dropdown">
           <button type="button" class="main-nav__link {{ request()->routeIs(['services','service-details']) ? 'is-active' : '' }}">
-            Our Service
+            {{ __('frontend.nav.our_service') }}
             <span class="main-nav__caret">+</span>
           </button>
           <div class="dropdown-menu">
-            <a href="{{ route('services') }}" class="dropdown-menu__link">Service List</a>
+            <a href="{{ route('services') }}" class="dropdown-menu__link">{{ __('frontend.nav.service_list') }}</a>
           </div>
         </div>
 
         <div class="has-dropdown">
           <button type="button" class="main-nav__link {{ request()->routeIs(['doctors','doctor-details']) ? 'is-active' : '' }}">
-            Doctor's
+            {{ __('frontend.nav.doctors') }}
             <span class="main-nav__caret">+</span>
           </button>
           <div class="dropdown-menu">
-            <a href="{{ route('doctors') }}" class="dropdown-menu__link">Doctor's List</a>
+            <a href="{{ route('doctors') }}" class="dropdown-menu__link">{{ __('frontend.nav.doctors_list') }}</a>
           </div>
         </div>
 
-        <a href="{{ route('gallery') }}" class="main-nav__link {{ request()->routeIs('gallery') ? 'is-active' : '' }}">Gallery</a>
-        <a href="{{ route('blog-list') }}" class="main-nav__link {{ request()->routeIs(['blog-list','blog-details']) ? 'is-active' : '' }}">Blog</a>
-        <a href="{{ route('contact') }}" class="main-nav__link {{ request()->routeIs('contact') ? 'is-active' : '' }}">Contact Us</a>
+        <a href="{{ route('gallery') }}" class="main-nav__link {{ request()->routeIs('gallery') ? 'is-active' : '' }}">{{ __('frontend.nav.gallery') }}</a>
+        <a href="{{ route('blog-list') }}" class="main-nav__link {{ request()->routeIs(['blog-list','blog-details']) ? 'is-active' : '' }}">{{ __('frontend.nav.blog') }}</a>
+        <a href="{{ route('contact') }}" class="main-nav__link {{ request()->routeIs('contact') ? 'is-active' : '' }}">{{ __('frontend.nav.contact_us') }}</a>
       </nav>
 
       <div class="site-header__actions">
-        <a href="{{ $headerSettings['header_book_btn_url'] ?? route('appointment') }}" class="btn-appointment">{{ $headerSettings['header_book_btn_text'] ?? 'Appointment' }}</a>
+        <a href="{{ $headerSettings['header_book_btn_url'] ?? route('appointment') }}" class="btn-appointment">{{ $headerSettings['header_book_btn_text'] ?? __('frontend.header.appointment') }}</a>
         <button type="button" class="menu-toggle" data-menu-toggle aria-label="Open menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -179,11 +183,11 @@
     </p>
 
     <nav class="side-panel__nav">
-      <a href="{{ route('home') }}" class="side-panel__nav-link">Home</a>
+      <a href="{{ route('home') }}" class="side-panel__nav-link">{{ __('frontend.nav.home') }}</a>
 
       <div>
         <button type="button" class="side-panel__nav-link" data-submenu-toggle>
-          About Us
+          {{ __('frontend.nav.about_us') }}
           <span class="side-panel__nav-caret">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -191,18 +195,18 @@
           </span>
         </button>
         <div class="side-panel__submenu">
-          <a href="{{ route('about') }}" class="side-panel__nav-sublink">Company Profile</a>
-          <a href="{{ route('history') }}" class="side-panel__nav-sublink">Our History</a>
-          <a href="{{ route('md-message') }}" class="side-panel__nav-sublink">Message From MD/CEO</a>
-          <a href="{{ route('management') }}" class="side-panel__nav-sublink">Our Management</a>
-          <a href="{{ route('achievements') }}" class="side-panel__nav-sublink">Our Achievement</a>
-          <a href="{{ route('faq') }}" class="side-panel__nav-sublink">FAQ</a>
+          <a href="{{ route('about') }}" class="side-panel__nav-sublink">{{ __('frontend.nav.company_profile') }}</a>
+          <a href="{{ route('history') }}" class="side-panel__nav-sublink">{{ __('frontend.nav.our_history') }}</a>
+          <a href="{{ route('md-message') }}" class="side-panel__nav-sublink">{{ __('frontend.nav.md_message') }}</a>
+          <a href="{{ route('management') }}" class="side-panel__nav-sublink">{{ __('frontend.nav.our_management') }}</a>
+          <a href="{{ route('achievements') }}" class="side-panel__nav-sublink">{{ __('frontend.nav.our_achievement') }}</a>
+          <a href="{{ route('faq') }}" class="side-panel__nav-sublink">{{ __('frontend.nav.faq') }}</a>
         </div>
       </div>
 
       <div>
         <button type="button" class="side-panel__nav-link" data-submenu-toggle>
-          Our Service
+          {{ __('frontend.nav.our_service') }}
           <span class="side-panel__nav-caret">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -210,13 +214,13 @@
           </span>
         </button>
         <div class="side-panel__submenu">
-          <a href="{{ route('services') }}" class="side-panel__nav-sublink">Service List</a>
+          <a href="{{ route('services') }}" class="side-panel__nav-sublink">{{ __('frontend.nav.service_list') }}</a>
         </div>
       </div>
 
       <div>
         <button type="button" class="side-panel__nav-link" data-submenu-toggle>
-          Doctor's
+          {{ __('frontend.nav.doctors') }}
           <span class="side-panel__nav-caret">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -224,16 +228,16 @@
           </span>
         </button>
         <div class="side-panel__submenu">
-          <a href="{{ route('doctors') }}" class="side-panel__nav-sublink">Doctor's List</a>
+          <a href="{{ route('doctors') }}" class="side-panel__nav-sublink">{{ __('frontend.nav.doctors_list') }}</a>
         </div>
       </div>
 
-      <a href="{{ route('gallery') }}" class="side-panel__nav-link">Gallery</a>
-      <a href="{{ route('blog-list') }}" class="side-panel__nav-link">Blog</a>
-      <a href="{{ route('contact') }}" class="side-panel__nav-link">Contact Us</a>
+      <a href="{{ route('gallery') }}" class="side-panel__nav-link">{{ __('frontend.nav.gallery') }}</a>
+      <a href="{{ route('blog-list') }}" class="side-panel__nav-link">{{ __('frontend.nav.blog') }}</a>
+      <a href="{{ route('contact') }}" class="side-panel__nav-link">{{ __('frontend.nav.contact_us') }}</a>
     </nav>
 
-    <h3 class="side-panel__title">Contact Us</h3>
+    <h3 class="side-panel__title">{{ __('frontend.nav.contact_us') }}</h3>
     <div class="side-panel__contact-list">
       <div class="side-panel__contact-item">
         <span class="side-panel__check">
@@ -259,6 +263,13 @@
         </span>
         {{ $headerSettings['header_phone'] ?? '+1 (234) 5688 9990' }}
       </div>
+    </div>
+
+    <h3 class="side-panel__title">{{ __('frontend.common.language') }}</h3>
+    <div class="side-panel__lang-switch">
+      @foreach ($languages ?? [] as $lang)
+        <a href="{{ route('language.switch', $lang->code) }}" class="side-panel__lang-link {{ app()->getLocale() === $lang->code ? 'is-active' : '' }}">{{ $lang->native_name }}</a>
+      @endforeach
     </div>
 
     <h3 class="side-panel__title">Follow Us</h3>

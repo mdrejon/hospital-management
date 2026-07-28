@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>@yield('title', 'ClinicMaster | Medical & Health Care Services')</title>
-  <meta name="description" content="@yield('meta_description', 'ClinicMaster provides compassionate, modern medical and health care services.')" />
+  <title>@yield('title', __('frontend.meta.default_title'))</title>
+  <meta name="description" content="@yield('meta_description', __('frontend.meta.default_description'))" />
   @hasSection('meta_keywords')
   <meta name="keywords" content="@yield('meta_keywords')" />
   @endif
-  <meta property="og:title" content="@yield('og_title', 'ClinicMaster | Medical & Health Care Services')" />
-  <meta property="og:description" content="@yield('og_description', 'ClinicMaster provides compassionate, modern medical and health care services.')" />
+  <meta property="og:title" content="@yield('og_title', __('frontend.meta.default_title'))" />
+  <meta property="og:description" content="@yield('og_description', __('frontend.meta.default_description'))" />
   @hasSection('og_image')
   <meta property="og:image" content="@yield('og_image')" />
   @endif

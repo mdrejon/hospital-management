@@ -63,23 +63,20 @@
                 <div class="flex flex-wrap gap-3">
                     <select v-model="filterStatus" class="filter-input max-w-xs">
                         <option value="">All Statuses</option>
-                        <option value="pending">Pending</option>
-                        <option value="confirmed">Confirmed</option>
-                        <option value="completed">Completed</option>
-                        <option value="cancelled">Cancelled</option>
+                        <option v-for="s in statuses" :key="s" :value="s">{{ statusLabel(s) }}</option>
                     </select>
                     <input v-model="search" type="text" placeholder="Search name / email..." class="filter-input max-w-xs" />
                 </div>
 
                 <!-- Table -->
                 <div class="bg-white rounded-lg shadow-sm overflow-x-auto">
-                    <table class="w-full text-sm min-w-[900px]">
+                    <table class="w-full text-sm min-w-[960px]">
                         <thead class="bg-gray-50 border-b border-gray-200">
                             <tr>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Patient</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Department</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Doctor</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Preferred Date</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Date / Slot / Serial</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Source</th>
                                 <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600">Status</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Received</th>
@@ -95,10 +92,23 @@
                                     <p class="font-medium">{{ item.name }}</p>
                                     <p class="text-xs text-gray-400">{{ item.email }}</p>
                                     <p v-if="item.phone" class="text-xs text-gray-400">{{ item.phone }}</p>
+                                    <div v-if="documentsFor(item).length" class="mt-0.5 flex flex-col gap-0.5">
+                                        <a v-for="(doc, i) in documentsFor(item)" :key="doc" :href="'/storage/' + doc" target="_blank" rel="noopener"
+                                            class="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+                                            Attached document{{ documentsFor(item).length > 1 ? ' ' + (i + 1) : '' }}
+                                        </a>
+                                    </div>
                                 </td>
                                 <td class="px-4 py-3 text-gray-600 text-xs">{{ item.department || '—' }}</td>
-                                <td class="px-4 py-3 text-gray-600 text-xs">{{ item.preferred_doctor || '—' }}</td>
-                                <td class="px-4 py-3 text-gray-600 text-xs">{{ item.preferred_date || '—' }}</td>
+                                <td class="px-4 py-3 text-gray-600 text-xs">{{ item.doctor?.name || item.preferred_doctor || '—' }}</td>
+                                <td class="px-4 py-3 text-gray-600 text-xs">
+                                    <template v-if="item.appointment_date">
+                                        {{ formatDate(item.appointment_date) }} · {{ item.time_slot }}
+                                        <span v-if="item.serial_number" class="text-gray-400">· #{{ item.serial_number }}</span>
+                                    </template>
+                                    <template v-else>{{ item.preferred_date || '—' }}</template>
+                                </td>
                                 <td class="px-4 py-3">
                                     <span :class="item.is_manual ? 'bg-purple-100 text-purple-700' : 'bg-teal-100 text-teal-700'"
                                         class="px-2 py-0.5 rounded text-xs font-medium">
@@ -109,10 +119,7 @@
                                     <select :value="item.status" @change="updateStatus(item, $event.target.value)"
                                         :class="statusBadge(item.status)"
                                         class="px-2 py-1 rounded-full text-xs font-medium border-0 cursor-pointer">
-                                        <option value="pending">Pending</option>
-                                        <option value="confirmed">Confirmed</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="cancelled">Cancelled</option>
+                                        <option v-for="s in statuses" :key="s" :value="s">{{ statusLabel(s) }}</option>
                                     </select>
                                 </td>
                                 <td class="px-4 py-3 text-xs text-gray-500">{{ formatDate(item.created_at) }}</td>
@@ -135,25 +142,26 @@
                     <!-- Book Appointment section (Home + Appointment page) -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">"Book Appointment" Section <span class="text-xs font-normal text-gray-400">(shown on Home page and the Appointment page)</span></h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Eyebrow / Badge</label>
-                            <input v-model="settingsForm.appt_badge" type="text" class="input" placeholder="Make an Appointment" />
-                            <InputError :message="settingsForm.errors.appt_badge" />
+                            <input v-model="settingsForm.appt_badge[activeLang]" type="text" class="input" placeholder="Make an Appointment" />
+                            <InputError :message="settingsForm.errors[`appt_badge.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="settingsForm.appt_title" type="text" class="input" placeholder="Fast & Easy Scheduling Today!" />
-                            <InputError :message="settingsForm.errors.appt_title" />
+                            <input v-model="settingsForm.appt_title[activeLang]" type="text" class="input" placeholder="Fast & Easy Scheduling Today!" />
+                            <InputError :message="settingsForm.errors[`appt_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Form Title</label>
-                            <input v-model="settingsForm.appt_form_title" type="text" class="input" placeholder="Please enter your info" />
-                            <InputError :message="settingsForm.errors.appt_form_title" />
+                            <input v-model="settingsForm.appt_form_title[activeLang]" type="text" class="input" placeholder="Please enter your info" />
+                            <InputError :message="settingsForm.errors[`appt_form_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Form Subtitle</label>
-                            <textarea v-model="settingsForm.appt_form_subtitle" rows="2" class="input resize-none"></textarea>
-                            <InputError :message="settingsForm.errors.appt_form_subtitle" />
+                            <textarea v-model="settingsForm.appt_form_subtitle[activeLang]" rows="2" class="input resize-none"></textarea>
+                            <InputError :message="settingsForm.errors[`appt_form_subtitle.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Side Image</label>
@@ -166,10 +174,11 @@
                     <!-- Appointment page hero / breadcrumb -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Appointment Page — Hero &amp; Breadcrumb</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Page Title <span class="text-xs text-gray-400">(shown in breadcrumb banner)</span></label>
-                            <input v-model="settingsForm.appt_page_hero_title" type="text" class="input" placeholder="Book Appointment" />
-                            <InputError :message="settingsForm.errors.appt_page_hero_title" />
+                            <input v-model="settingsForm.appt_page_hero_title[activeLang]" type="text" class="input" placeholder="Book Appointment" />
+                            <InputError :message="settingsForm.errors[`appt_page_hero_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Banner Background Image</label>
@@ -182,17 +191,18 @@
                     <!-- SEO -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Appointment Page — SEO Configuration</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
-                            <input v-model="settingsForm.appt_seo_title" @input="onMetaTitleInput" type="text" class="input" maxlength="160" />
-                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.appt_seo_title || '').length }}/160</p>
-                            <InputError :message="settingsForm.errors.appt_seo_title" />
+                            <input v-model="settingsForm.appt_seo_title[activeLang]" @input="onMetaTitleInput" type="text" class="input" maxlength="160" />
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.appt_seo_title[activeLang] || '').length }}/160</p>
+                            <InputError :message="settingsForm.errors[`appt_seo_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
-                            <textarea v-model="settingsForm.appt_seo_description" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
-                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.appt_seo_description || '').length }}/320</p>
-                            <InputError :message="settingsForm.errors.appt_seo_description" />
+                            <textarea v-model="settingsForm.appt_seo_description[activeLang]" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.appt_seo_description[activeLang] || '').length }}/320</p>
+                            <InputError :message="settingsForm.errors[`appt_seo_description.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated, auto-filled if left blank)</span></label>
@@ -241,16 +251,19 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { router, useForm } from '@inertiajs/vue3';
+import { ref, reactive, computed } from 'vue';
+import { router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
+import { seedTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     appointments: { type: Array,  default: () => [] },
     stats:        { type: Object, default: () => ({}) },
+    statuses:     { type: Array,  default: () => ['pending', 'confirmed', 'checked_in', 'in_consultation', 'completed', 'follow_up_required', 'cancelled', 'no_show'] },
     pageSettings: { type: Object, default: () => ({}) },
 });
 
@@ -258,6 +271,11 @@ const tab = ref('list');
 const deleteTarget = ref(null);
 const filterStatus = ref('');
 const search = ref('');
+
+function documentsFor(item) {
+    if (Array.isArray(item.documents) && item.documents.length) return item.documents;
+    return item.document ? [item.document] : [];
+}
 
 const filtered = computed(() => props.appointments.filter(item => {
     if (filterStatus.value && item.status !== filterStatus.value) return false;
@@ -277,12 +295,24 @@ function sourceLabel(s) {
     return { home: 'Home Page', appointment_page: 'Appointment Page', admin: 'Manual' }[s] ?? s;
 }
 
+function statusLabel(s) {
+    return {
+        pending: 'Pending', confirmed: 'Confirmed', checked_in: 'Checked In',
+        in_consultation: 'In Consultation', completed: 'Completed',
+        follow_up_required: 'Follow-up Required', cancelled: 'Cancelled', no_show: 'No Show',
+    }[s] ?? s;
+}
+
 function statusBadge(s) {
     return {
-        pending:   'bg-yellow-100 text-yellow-700',
-        confirmed: 'bg-green-100 text-green-700',
-        completed: 'bg-blue-100 text-blue-700',
-        cancelled: 'bg-red-100 text-red-700',
+        pending:             'bg-yellow-100 text-yellow-700',
+        confirmed:           'bg-green-100 text-green-700',
+        checked_in:          'bg-cyan-100 text-cyan-700',
+        in_consultation:     'bg-indigo-100 text-indigo-700',
+        completed:           'bg-blue-100 text-blue-700',
+        follow_up_required:  'bg-orange-100 text-orange-700',
+        cancelled:           'bg-red-100 text-red-700',
+        no_show:             'bg-gray-200 text-gray-700',
     }[s] ?? 'bg-gray-100 text-gray-600';
 }
 
@@ -301,27 +331,44 @@ function doDelete() {
 }
 
 // ── Page Settings tab ──
+const languages  = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
 const currentApptImage = ref(props.pageSettings.appt_image ?? null);
 const currentHeroImage = ref(props.pageSettings.appt_page_hero_image ?? null);
 const currentOgImage   = ref(props.pageSettings.appt_seo_og_image ?? null);
 
 const settingsForm = useForm({
-    appt_badge:            props.pageSettings.appt_badge ?? '',
-    appt_title:            props.pageSettings.appt_title ?? '',
-    appt_form_title:       props.pageSettings.appt_form_title ?? '',
-    appt_form_subtitle:    props.pageSettings.appt_form_subtitle ?? '',
+    appt_badge:            seedTranslatable(languages.value, props.pageSettings.appt_badge),
+    appt_title:            seedTranslatable(languages.value, props.pageSettings.appt_title),
+    appt_form_title:       seedTranslatable(languages.value, props.pageSettings.appt_form_title),
+    appt_form_subtitle:    seedTranslatable(languages.value, props.pageSettings.appt_form_subtitle),
     appt_image:            null,
-    appt_page_hero_title:  props.pageSettings.appt_page_hero_title ?? '',
+    appt_page_hero_title:  seedTranslatable(languages.value, props.pageSettings.appt_page_hero_title),
     appt_page_hero_image:  null,
-    appt_seo_title:        props.pageSettings.appt_seo_title       ?? '',
-    appt_seo_description:  props.pageSettings.appt_seo_description ?? '',
+    appt_seo_title:        seedTranslatable(languages.value, props.pageSettings.appt_seo_title),
+    appt_seo_description:  seedTranslatable(languages.value, props.pageSettings.appt_seo_description),
     appt_seo_keywords:     props.pageSettings.appt_seo_keywords    ?? '',
     appt_seo_og_image:     null,
 });
 
-const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(settingsForm, {
-    titleSource: () => settingsForm.appt_title,
-    descSource:  () => settingsForm.appt_form_subtitle,
+// Proxy exposing the current-tab locale value of each translatable SEO field
+// as a plain string, so useSeoAutoFill (which reads/writes flat form keys)
+// can drive the per-locale appt_seo_title[activeLang]/appt_seo_description[activeLang].
+const seoProxy = reactive({
+    get appt_title() { return settingsForm.appt_title[activeLang.value]; },
+    get appt_form_subtitle() { return settingsForm.appt_form_subtitle[activeLang.value]; },
+    get appt_seo_title() { return settingsForm.appt_seo_title[activeLang.value]; },
+    set appt_seo_title(v) { settingsForm.appt_seo_title[activeLang.value] = v; },
+    get appt_seo_description() { return settingsForm.appt_seo_description[activeLang.value]; },
+    set appt_seo_description(v) { settingsForm.appt_seo_description[activeLang.value] = v; },
+    get appt_seo_keywords() { return settingsForm.appt_seo_keywords; },
+    set appt_seo_keywords(v) { settingsForm.appt_seo_keywords = v; },
+});
+
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(seoProxy, {
+    titleSource: () => seoProxy.appt_title,
+    descSource:  () => seoProxy.appt_form_subtitle,
     titleKey:    'appt_seo_title',
     descKey:     'appt_seo_description',
     keywordsKey: 'appt_seo_keywords',

@@ -64,7 +64,7 @@
                                 <p class="text-xs text-gray-400 truncate">{{ doc.slug }}</p>
                             </td>
                             <td class="px-4 py-3 text-gray-500 text-xs max-w-[160px]">
-                                <span class="line-clamp-2">{{ doc.role || '—' }}</span>
+                                <span class="line-clamp-2">{{ displayTranslatable(doc.role, languages) || '—' }}</span>
                             </td>
                             <td class="px-4 py-3 text-gray-500">{{ doc.sort_order }}</td>
                             <td class="px-4 py-3">
@@ -114,26 +114,28 @@
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Home Page — "Meet Our Doctor" Section</h2>
                         <p class="text-xs text-gray-400 -mt-2">Shows your <strong>Featured</strong> doctors as cards. Mark a doctor "Featured" in the list tab to include it.</p>
+                        <LanguageTabs v-model="activeLang" />
 
                         <div>
                             <label class="label">Eyebrow / Badge</label>
-                            <input v-model="settingsForm.doc_home_badge" type="text" class="input" placeholder="Our Doctor" />
-                            <InputError :message="settingsForm.errors.doc_home_badge" />
+                            <input v-model="settingsForm.doc_home_badge[activeLang]" type="text" class="input" placeholder="Our Doctor" />
+                            <InputError :message="settingsForm.errors[`doc_home_badge.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="settingsForm.doc_home_title" type="text" class="input" placeholder="Meet Our Doctor" />
-                            <InputError :message="settingsForm.errors.doc_home_title" />
+                            <input v-model="settingsForm.doc_home_title[activeLang]" type="text" class="input" placeholder="Meet Our Doctor" />
+                            <InputError :message="settingsForm.errors[`doc_home_title.${activeLang}`]" />
                         </div>
                     </section>
 
                     <!-- Doctors List page hero / breadcrumb -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Doctors List Page — Hero &amp; Breadcrumb</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Page Title <span class="text-xs text-gray-400">(shown in breadcrumb banner)</span></label>
-                            <input v-model="settingsForm.doc_page_hero_title" type="text" class="input" placeholder="Our Doctors" />
-                            <InputError :message="settingsForm.errors.doc_page_hero_title" />
+                            <input v-model="settingsForm.doc_page_hero_title[activeLang]" type="text" class="input" placeholder="Our Doctors" />
+                            <InputError :message="settingsForm.errors[`doc_page_hero_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Banner Background Image</label>
@@ -146,32 +148,34 @@
                     <!-- Doctors List page section head -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Doctors List Page — Section Head</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Eyebrow / Badge</label>
-                            <input v-model="settingsForm.doc_badge" type="text" class="input" placeholder="Our Team Member" />
-                            <InputError :message="settingsForm.errors.doc_badge" />
+                            <input v-model="settingsForm.doc_badge[activeLang]" type="text" class="input" placeholder="Our Team Member" />
+                            <InputError :message="settingsForm.errors[`doc_badge.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="settingsForm.doc_title" type="text" class="input" placeholder="Meet Our Doctor Meeting" />
-                            <InputError :message="settingsForm.errors.doc_title" />
+                            <input v-model="settingsForm.doc_title[activeLang]" type="text" class="input" placeholder="Meet Our Doctor Meeting" />
+                            <InputError :message="settingsForm.errors[`doc_title.${activeLang}`]" />
                         </div>
                     </section>
 
                     <!-- SEO -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Doctors List Page — SEO Configuration</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
-                            <input v-model="settingsForm.doc_seo_title" @input="onMetaTitleInput" type="text" class="input" placeholder="Our Doctors | ClinicMaster" maxlength="160" />
-                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.doc_seo_title || '').length }}/160</p>
-                            <InputError :message="settingsForm.errors.doc_seo_title" />
+                            <input v-model="settingsForm.doc_seo_title[activeLang]" @input="onMetaTitleInput" type="text" class="input" placeholder="Our Doctors | ClinicMaster" maxlength="160" />
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.doc_seo_title[activeLang] || '').length }}/160</p>
+                            <InputError :message="settingsForm.errors[`doc_seo_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
-                            <textarea v-model="settingsForm.doc_seo_description" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
-                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.doc_seo_description || '').length }}/320</p>
-                            <InputError :message="settingsForm.errors.doc_seo_description" />
+                            <textarea v-model="settingsForm.doc_seo_description[activeLang]" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.doc_seo_description[activeLang] || '').length }}/320</p>
+                            <InputError :message="settingsForm.errors[`doc_seo_description.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated, auto-filled if left blank)</span></label>
@@ -221,17 +225,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { router, useForm } from '@inertiajs/vue3';
+import { ref, reactive, computed } from 'vue';
+import { router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
+import { displayTranslatable, seedTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     doctors:      { type: Array, default: () => [] },
     pageSettings: { type: Object, default: () => ({}) },
 });
+
+const languages  = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
 
 const tab = ref('list');
 const deleteTarget = ref(null);
@@ -255,21 +264,32 @@ const currentHeroImage = ref(props.pageSettings.doc_page_hero_image ?? null);
 const currentOgImage   = ref(props.pageSettings.doc_seo_og_image ?? null);
 
 const settingsForm = useForm({
-    doc_home_badge:       props.pageSettings.doc_home_badge ?? '',
-    doc_home_title:       props.pageSettings.doc_home_title ?? '',
+    doc_home_badge:       seedTranslatable(languages.value, props.pageSettings.doc_home_badge),
+    doc_home_title:       seedTranslatable(languages.value, props.pageSettings.doc_home_title),
     doc_page_hero_image: null,
-    doc_page_hero_title:  props.pageSettings.doc_page_hero_title ?? '',
-    doc_badge:            props.pageSettings.doc_badge ?? '',
-    doc_title:            props.pageSettings.doc_title ?? '',
-    doc_seo_title:        props.pageSettings.doc_seo_title       ?? '',
-    doc_seo_description:  props.pageSettings.doc_seo_description ?? '',
+    doc_page_hero_title:  seedTranslatable(languages.value, props.pageSettings.doc_page_hero_title),
+    doc_badge:            seedTranslatable(languages.value, props.pageSettings.doc_badge),
+    doc_title:            seedTranslatable(languages.value, props.pageSettings.doc_title),
+    doc_seo_title:        seedTranslatable(languages.value, props.pageSettings.doc_seo_title),
+    doc_seo_description:  seedTranslatable(languages.value, props.pageSettings.doc_seo_description),
     doc_seo_keywords:     props.pageSettings.doc_seo_keywords    ?? '',
     doc_seo_og_image:    null,
 });
 
-const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(settingsForm, {
-    titleSource: () => settingsForm.doc_title,
-    descSource:  () => settingsForm.doc_home_title,
+const seoProxy = reactive({
+    get doc_title() { return settingsForm.doc_title[activeLang.value]; },
+    get doc_home_title() { return settingsForm.doc_home_title[activeLang.value]; },
+    get doc_seo_title() { return settingsForm.doc_seo_title[activeLang.value]; },
+    set doc_seo_title(v) { settingsForm.doc_seo_title[activeLang.value] = v; },
+    get doc_seo_description() { return settingsForm.doc_seo_description[activeLang.value]; },
+    set doc_seo_description(v) { settingsForm.doc_seo_description[activeLang.value] = v; },
+    get doc_seo_keywords() { return settingsForm.doc_seo_keywords; },
+    set doc_seo_keywords(v) { settingsForm.doc_seo_keywords = v; },
+});
+
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(seoProxy, {
+    titleSource: () => seoProxy.doc_title,
+    descSource:  () => seoProxy.doc_home_title,
     titleKey:    'doc_seo_title',
     descKey:     'doc_seo_description',
     keywordsKey: 'doc_seo_keywords',

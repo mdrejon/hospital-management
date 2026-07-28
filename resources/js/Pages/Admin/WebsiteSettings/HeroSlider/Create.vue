@@ -15,40 +15,42 @@
                     <InputError :message="form.errors.background_image" />
                 </div>
 
+                <LanguageTabs v-model="activeLang" />
+
                 <!-- Label -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Slide Label <span class="text-gray-400 font-normal">(e.g. "Welcome To Hotel Beach Way")</span></label>
-                    <input v-model="form.label" type="text" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none" />
-                    <InputError :message="form.errors.label" />
+                    <input v-model="form.label[activeLang]" type="text" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none" />
+                    <InputError :message="form.errors[`label.${activeLang}`]" />
                 </div>
 
                 <!-- Title -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Title <span class="text-red-500">*</span></label>
-                    <input v-model="form.title" type="text" required class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none" placeholder="Modern & Luxurious Stay Near..." />
-                    <InputError :message="form.errors.title" />
+                    <input v-model="form.title[activeLang]" type="text" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none" placeholder="Modern & Luxurious Stay Near..." />
+                    <InputError :message="form.errors[`title.${activeLang}`]" />
                 </div>
 
                 <!-- Subtitle / accent words -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Subtitle / Accent Words <span class="text-gray-400 font-normal">(comma-separated highlighted phrases, e.g. "Kolatoli, Beach")</span></label>
-                    <input v-model="form.subtitle" type="text" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none" placeholder="Kolatoli, Beach" />
-                    <InputError :message="form.errors.subtitle" />
+                    <input v-model="form.subtitle[activeLang]" type="text" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none" placeholder="Kolatoli, Beach" />
+                    <InputError :message="form.errors[`subtitle.${activeLang}`]" />
                 </div>
 
                 <!-- Description -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea v-model="form.description" rows="3" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none" placeholder="A boutique hotel with world-class amenities..."></textarea>
-                    <InputError :message="form.errors.description" />
+                    <textarea v-model="form.description[activeLang]" rows="3" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none" placeholder="A boutique hotel with world-class amenities..."></textarea>
+                    <InputError :message="form.errors[`description.${activeLang}`]" />
                 </div>
 
                 <!-- Button -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Button Text <span class="text-red-500">*</span></label>
-                        <input v-model="form.button_text" type="text" required class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none" placeholder="Explore Rooms" />
-                        <InputError :message="form.errors.button_text" />
+                        <input v-model="form.button_text[activeLang]" type="text" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none" placeholder="Explore Rooms" />
+                        <InputError :message="form.errors[`button_text.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Button URL <span class="text-red-500">*</span></label>
@@ -61,7 +63,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Star Label</label>
-                        <input v-model="form.star_label" type="text" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none" placeholder="3-Star Standard Hotel" />
+                        <input v-model="form.star_label[activeLang]" type="text" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-blue-400 focus:outline-none" placeholder="3-Star Standard Hotel" />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Star Rating <span class="text-gray-400 font-normal">(0–5)</span></label>
@@ -92,19 +94,25 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError  from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import { emptyTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
+
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
 
 const form = useForm({
-    label:            '',
-    title:            '',
-    subtitle:         '',
-    description:      '',
-    button_text:      'Explore Rooms',
+    label:            emptyTranslatable(languages.value),
+    title:            emptyTranslatable(languages.value),
+    subtitle:         emptyTranslatable(languages.value),
+    description:      emptyTranslatable(languages.value),
+    button_text:      { ...emptyTranslatable(languages.value), [defaultLangCode(languages.value)]: 'Explore Rooms' },
     button_url:       '#',
-    star_label:       '',
+    star_label:       emptyTranslatable(languages.value),
     star_rating:      5,
     sort_order:       0,
     is_active:        true,

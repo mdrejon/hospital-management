@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
 use App\Models\GlobalSetting;
+use App\Models\Language;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -101,23 +102,31 @@ class FaqController extends Controller
 
     private function validated(Request $request): array
     {
+        $default = Language::defaultLanguage()?->code ?? config('app.locale');
+
         $data = $request->validate([
-            'page'              => 'required|in:home,about,faq',
-            'badge'             => 'nullable|string',
-            'title'             => 'nullable|string',
-            'description'       => 'nullable|string',
-            'image'             => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'image_alt'         => 'nullable|string',
-            'items'             => 'required|array|min:1',
-            'items.*.question'  => 'required|string',
-            'items.*.answer'    => 'required|string',
+            'page'                => 'required|in:home,about,faq',
+            'badge'               => 'nullable|array',
+            'badge.*'             => 'nullable|string',
+            'title'               => 'nullable|array',
+            'title.*'             => 'nullable|string',
+            'description'         => 'nullable|array',
+            'description.*'       => 'nullable|string',
+            'image'               => 'nullable|image|mimes:jpeg,jpg,png,webp',
+            'image_alt'           => 'nullable|array',
+            'image_alt.*'         => 'nullable|string',
+            'items'               => 'required|array|min:1',
+            "items.*.question.$default" => 'required|string',
+            'items.*.question.*' => 'nullable|string',
+            "items.*.answer.$default"   => 'required|string',
+            'items.*.answer.*'   => 'nullable|string',
             'sort_order'        => 'integer|min:0',
             'is_active'         => 'boolean',
         ]);
 
-        // Remove blank items
+        // Remove items blank in every locale
         $data['items'] = array_values(
-            array_filter($data['items'], fn($i) => !empty($i['question']) && !empty($i['answer']))
+            array_filter($data['items'], fn($i) => !empty(array_filter($i['question'] ?? [])) && !empty(array_filter($i['answer'] ?? [])))
         );
 
         return $data;

@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
 
 class GalleryImage extends Model
 {
+    use HasTranslations;
+
+    public array $translatable = ['alt', 'sub_title', 'caption'];
+
     protected $fillable = ['image', 'alt', 'sub_title', 'caption', 'is_active', 'sort_order'];
 
     protected $casts = [

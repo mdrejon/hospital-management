@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Award;
 use App\Models\GlobalSetting;
+use App\Models\Language;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,6 +18,11 @@ class AwardController extends Controller
         'ach_award_title', 'ach_award_desc',
     ];
 
+    /** Human-readable copy shown to visitors — edited per-locale. */
+    private array $translatableKeys = [
+        'award_badge', 'award_title', 'award_desc', 'ach_award_title', 'ach_award_desc',
+    ];
+
     public function index(): Response
     {
         $settings = GlobalSetting::whereIn('key', $this->sectionKeys)
@@ -25,6 +31,10 @@ class AwardController extends Controller
 
         foreach ($this->sectionKeys as $key) {
             $settings[$key] ??= null;
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
         }
 
         return Inertia::render('Admin/Awards/Index', [
@@ -63,13 +73,20 @@ class AwardController extends Controller
 
     public function updateSettings(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'award_badge'      => 'nullable|string',
-            'award_title'      => 'nullable|string',
-            'award_desc'       => 'nullable|string',
-            'ach_award_title'  => 'nullable|string',
-            'ach_award_desc'   => 'nullable|string',
-        ]);
+        $rules = [];
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
+
+        foreach ($this->translatableKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                GlobalSetting::setTranslated($key, $data[$key] ?? []);
+                unset($data[$key]);
+            }
+        }
 
         GlobalSetting::setMany($data);
 
@@ -78,10 +95,16 @@ class AwardController extends Controller
 
     private function validated(Request $request): array
     {
+        $default = Language::defaultLanguage()?->code ?? config('app.locale');
+
         $data = $request->validate([
-            'title'        => 'required|string',
-            'subtitle'     => 'nullable|string',
-            'link_text'    => 'nullable|string',
+            'title'             => 'required|array',
+            "title.$default"    => 'required|string',
+            'title.*'           => 'nullable|string',
+            'subtitle'          => 'nullable|array',
+            'subtitle.*'        => 'nullable|string',
+            'link_text'         => 'nullable|array',
+            'link_text.*'       => 'nullable|string',
             'link_url'     => 'nullable|string',
             'seal_variant' => 'required|integer|min:1|max:3',
             'sort_order'   => 'integer|min:0',

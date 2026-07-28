@@ -120,6 +120,26 @@ const navItems = [
         icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M16 2v4M8 2v4M3 10h18"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 16 2 2 4-4"/></svg>`,
     },
 
+    // ── Doctor Dashboard (Doctor role) ─────────────────────────────────────
+    {
+        name: 'My Schedule',
+        route: 'admin.doctor-dashboard.index',
+        module: 'doctor-dashboard',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9" stroke-width="2"/></svg>`,
+    },
+
+    // ── Operator (Operator role) ────────────────────────────────────────────
+    {
+        name: 'Operator',
+        route: 'admin.operator.dashboard',
+        module: 'operator-dashboard',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        children: [
+            { name: 'Dashboard',        route: 'admin.operator.dashboard' },
+            { name: 'Book Appointment', route: 'admin.operator.book' },
+        ],
+    },
+
     // ── Website Management ──────────────────────────────────────────────────
     {
         name: 'Website Management',
@@ -155,6 +175,7 @@ const navItems = [
             { name: 'Hero Slider',       route: 'admin.website-settings.sliders.index' },
             { name: 'Header Settings',   route: 'admin.website-settings.header.edit' },
             { name: 'Footer Settings',   route: 'admin.website-settings.footer.edit' },
+            { name: 'Languages',         route: 'admin.website-settings.languages.index' },
 
             { name: 'Email Notifications', route: 'admin.website-settings.email-notifications.edit' },
             // { name: 'Room Features',     route: null },

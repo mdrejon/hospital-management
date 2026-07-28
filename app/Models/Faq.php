@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
 
 class Faq extends Model
 {
+    use HasTranslations;
+
+    public array $translatable = ['badge', 'title', 'description', 'image_alt'];
+
     protected $fillable = [
         'page', 'badge', 'title', 'description', 'image', 'image_alt', 'items', 'sort_order', 'is_active',
     ];

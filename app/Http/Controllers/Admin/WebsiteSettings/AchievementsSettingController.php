@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\WebsiteSettings;
 
 use App\Http\Controllers\Controller;
 use App\Models\GlobalSetting;
+use App\Models\Language;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,6 +26,11 @@ class AchievementsSettingController extends Controller
         'ach_seo_og_image',
     ];
 
+    /** Human-readable copy shown to visitors — edited per-locale. Item title/desc stay plain for now. */
+    private array $translatableKeys = [
+        'ach_hero_title', 'ach_title', 'ach_desc', 'ach_seo_title', 'ach_seo_description',
+    ];
+
     public function edit(): Response
     {
         $settings = GlobalSetting::whereIn('key', $this->keys)
@@ -33,6 +39,10 @@ class AchievementsSettingController extends Controller
 
         foreach ($this->keys as $key) {
             $settings[$key] ??= null;
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
         }
 
         $settings['ach_items'] = $settings['ach_items'] ? json_decode($settings['ach_items'], true) : $this->defaultItems();
@@ -44,19 +54,24 @@ class AchievementsSettingController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        $data = $request->validate([
+        $default = Language::defaultLanguage()?->code ?? config('app.locale');
+
+        $rules = [
             'ach_hero_image'       => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'ach_hero_title'       => 'nullable|string',
-            'ach_title'            => 'nullable|string',
-            'ach_desc'             => 'nullable|string',
             'ach_items'            => 'nullable|array|max:3',
-            'ach_items.*.title'    => 'nullable|string',
-            'ach_items.*.desc'     => 'nullable|string',
-            'ach_seo_title'        => 'nullable|string',
-            'ach_seo_description'  => 'nullable|string',
+            'ach_items.*.title'    => 'nullable|array',
+            'ach_items.*.title.*'  => 'nullable|string',
+            'ach_items.*.desc'     => 'nullable|array',
+            'ach_items.*.desc.*'   => 'nullable|string',
             'ach_seo_keywords'     => 'nullable|string',
             'ach_seo_og_image'     => 'nullable|image|mimes:jpeg,jpg,png,webp',
-        ]);
+        ];
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
 
         foreach (['ach_hero_image', 'ach_seo_og_image'] as $imgKey) {
             if ($request->hasFile($imgKey)) {
@@ -68,14 +83,22 @@ class AchievementsSettingController extends Controller
             }
         }
 
-        $items = array_values(array_filter($data['ach_items'] ?? [], fn ($i) => !empty($i['title']) || !empty($i['desc'])));
+        $hasText = fn ($v) => !empty(array_filter(is_array($v) ? $v : [$v]));
+        $items = array_values(array_filter($data['ach_items'] ?? [], fn ($i) => $hasText($i['title'] ?? null) || $hasText($i['desc'] ?? null)));
         $data['ach_items'] = json_encode($items);
 
         if (empty($data['ach_seo_keywords'])) {
             $data['ach_seo_keywords'] = $this->autoKeywords(
-                $data['ach_seo_title'] ?? GlobalSetting::get('ach_seo_title', ''),
-                $data['ach_seo_description'] ?? GlobalSetting::get('ach_seo_description', '')
+                $data['ach_seo_title'][$default] ?? GlobalSetting::getTranslated('ach_seo_title', $default, ''),
+                $data['ach_seo_description'][$default] ?? GlobalSetting::getTranslated('ach_seo_description', $default, '')
             );
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                GlobalSetting::setTranslated($key, $data[$key] ?? []);
+                unset($data[$key]);
+            }
         }
 
         GlobalSetting::setMany($data);

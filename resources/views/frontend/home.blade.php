@@ -851,5 +851,5 @@
     </section>
 
     <!-- ===================== Make an Appointment ===================== -->
-    <x-frontend.book-appointment :settings="$appt" :doctors="$appointmentDoctors" :departments="$appointmentDepartments" source="home" />
+    <x-frontend.book-appointment :settings="$appt" :doctors="$appointmentDoctors" source="home" />
 @endsection

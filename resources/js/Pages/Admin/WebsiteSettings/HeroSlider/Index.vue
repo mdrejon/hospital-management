@@ -54,11 +54,11 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3 text-gray-700 max-w-xs">
-                                <p class="font-medium truncate">{{ slide.title }}</p>
-                                <p v-if="slide.subtitle" class="text-xs text-gray-400 truncate">{{ slide.subtitle }}</p>
+                                <p class="font-medium truncate">{{ displayTranslatable(slide.title, languages) }}</p>
+                                <p v-if="slide.subtitle" class="text-xs text-gray-400 truncate">{{ displayTranslatable(slide.subtitle, languages) }}</p>
                             </td>
-                            <td class="px-4 py-3 text-gray-500 text-xs">{{ slide.label || '—' }}</td>
-                            <td class="px-4 py-3 text-gray-500 text-xs">{{ slide.button_text }}</td>
+                            <td class="px-4 py-3 text-gray-500 text-xs">{{ displayTranslatable(slide.label, languages) || '—' }}</td>
+                            <td class="px-4 py-3 text-gray-500 text-xs">{{ displayTranslatable(slide.button_text, languages) }}</td>
                             <td class="px-4 py-3 text-gray-500">{{ slide.sort_order }}</td>
                             <td class="px-4 py-3">
                                 <button
@@ -97,7 +97,7 @@
             <div v-if="deleteTarget" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
                 <div class="bg-white rounded-lg p-6 w-80 shadow-xl">
                     <h3 class="font-semibold text-gray-800 mb-2">Delete Slide</h3>
-                    <p class="text-sm text-gray-600 mb-4">Are you sure you want to delete "<strong>{{ deleteTarget.title }}</strong>"? This cannot be undone.</p>
+                    <p class="text-sm text-gray-600 mb-4">Are you sure you want to delete "<strong>{{ displayTranslatable(deleteTarget?.title, languages) }}</strong>"? This cannot be undone.</p>
                     <div class="flex justify-end gap-2">
                         <button @click="deleteTarget = null" class="px-4 py-2 text-sm text-gray-600 border rounded hover:bg-gray-50">Cancel</button>
                         <button @click="doDelete" class="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700">Delete</button>
@@ -109,13 +109,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
+import { displayTranslatable } from '@/Composables/useTranslatable';
 
 defineProps({
     sliders: { type: Array, default: () => [] },
 });
+
+const languages = computed(() => usePage().props.languages ?? []);
 
 const deleteTarget = ref(null);
 

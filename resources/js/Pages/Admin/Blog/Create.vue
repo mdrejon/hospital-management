@@ -23,19 +23,23 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { Link }    from '@inertiajs/vue3';
+import { computed } from 'vue';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import BlogForm    from './Form.vue';
+import { emptyTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     categories: Array,
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
+
 const form = useForm({
-    title:             '',
-    excerpt:           '',
-    content:           '',
+    title:             emptyTranslatable(languages.value),
+    excerpt:           emptyTranslatable(languages.value),
+    content:           emptyTranslatable(languages.value),
     category_id:       null,
     tags:              '',
     feature_image:     null,
@@ -47,9 +51,9 @@ const form = useForm({
     published_at:      '',
     is_featured:       false,
     sort_order:        0,
-    meta_title:        '',
-    meta_description:  '',
-    meta_keywords:     '',
+    meta_title:        emptyTranslatable(languages.value),
+    meta_description:  emptyTranslatable(languages.value),
+    meta_keywords:     emptyTranslatable(languages.value),
 });
 
 function submit() {

@@ -47,6 +47,15 @@
                     <p v-if="form.errors.role_id" class="text-red-500 text-xs mt-1">{{ form.errors.role_id }}</p>
                 </div>
 
+                <div v-if="doctors?.length">
+                    <label class="label">Linked Doctor Profile <span class="text-xs text-gray-400 font-normal">(for the "Doctor" role's own dashboard)</span></label>
+                    <select v-model="form.doctor_id" class="input">
+                        <option :value="null">— None —</option>
+                        <option v-for="doc in doctors" :key="doc.id" :value="doc.id">{{ doc.name }}</option>
+                    </select>
+                    <p v-if="form.errors.doctor_id" class="text-red-500 text-xs mt-1">{{ form.errors.doctor_id }}</p>
+                </div>
+
                 <div class="flex items-center gap-3">
                     <input v-model="form.is_active" type="checkbox" id="is_active" class="w-4 h-4 rounded border-gray-300 text-blue-600"
                         :disabled="user.id === $page.props.auth.user.id" />
@@ -72,8 +81,9 @@ import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import { Link, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
-    user:  Object,
-    roles: Array,
+    user:    Object,
+    roles:   Array,
+    doctors: { type: Array, default: () => [] },
 });
 
 const form = useForm({
@@ -82,6 +92,7 @@ const form = useForm({
     password:              '',
     password_confirmation: '',
     role_id:               props.user.role_id,
+    doctor_id:             props.user.doctor_id,
     is_active:             props.user.is_active,
 });
 

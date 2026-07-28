@@ -1,9 +1,14 @@
 <?php
 
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\AppointmentBookingController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\Admin\DoctorDashboardController;
+use App\Http\Controllers\Admin\OperatorController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\WebsiteSettings\AppointmentSettingController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\PageController;
@@ -34,6 +39,7 @@ use App\Http\Controllers\Admin\WebsiteSettings\FaqPageSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\BlogSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\EmailSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\MailSettingController;
+use App\Http\Controllers\Admin\WebsiteSettings\LanguageController;
 
 use App\Http\Controllers\Admin\BackupController;
 use Illuminate\Support\Facades\Route;
@@ -55,7 +61,9 @@ Route::get('/',                    [FrontendController::class, 'home'])->name('h
 Route::get('/about',                [FrontendController::class, 'about'])->name('about');
 Route::get('/achievements',        [FrontendController::class, 'achievements'])->name('achievements');
 Route::get('/appointment',          [FrontendController::class, 'appointment'])->name('appointment');
-Route::post('/appointment',         [FrontendController::class, 'submitAppointment'])->name('appointment.submit');
+Route::post('/appointment',         [AppointmentBookingController::class, 'store'])->name('appointment.submit');
+Route::get('/appointment/availability', [AppointmentBookingController::class, 'availability'])->name('appointment.availability');
+Route::get('/appointment/slots',        [AppointmentBookingController::class, 'slots'])->name('appointment.slots');
 Route::get('/blog',                 [FrontendController::class, 'blogList'])->name('blog-list');
 Route::get('/blog/{slug}',          [FrontendController::class, 'blogDetails'])->name('blog-details');
 Route::post('/blog/{blog}/comments', [FrontendController::class, 'submitBlogComment'])->name('blog-comments.store');
@@ -73,6 +81,7 @@ Route::get('/packages/{slug}',      [FrontendController::class, 'packageDetails'
 Route::get('/services',             [FrontendController::class, 'services'])->name('services');
 Route::get('/services/{slug}',      [FrontendController::class, 'serviceDetails'])->name('service-details');
 Route::get('/search',               [FrontendController::class, 'search'])->name('search');
+Route::get('/language/{code}',      [LocaleController::class, 'update'])->name('language.switch');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -88,6 +97,11 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.permission'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // In-app notification bell
+    Route::get('/notifications',               [NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
+    Route::patch('/notifications/read-all',     [NotificationController::class, 'markAllRead'])->name('notifications.read-all');
+
     // Inquiries
     Route::get('/inquiries',                         [InquiryController::class, 'index'])->name('inquiries.index');
     Route::get('/inquiries/{inquiry}',               [InquiryController::class, 'show'])->name('inquiries.show');
@@ -100,6 +114,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
     Route::post('/appointments',                      [AppointmentController::class, 'store'])->name('appointments.store');
     Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::delete('/appointments/{appointment}',      [AppointmentController::class, 'destroy'])->name('appointments.destroy');
+
+    // Doctor dashboard (Doctor role)
+    Route::get('/doctor-dashboard',                          [DoctorDashboardController::class, 'index'])->name('doctor-dashboard.index');
+    Route::patch('/doctor-dashboard/{appointment}/status',    [DoctorDashboardController::class, 'updateStatus'])->name('doctor-dashboard.update-status');
+
+    // Operator dashboard + manual booking (Operator role)
+    Route::prefix('operator')->name('operator.')->group(function () {
+        Route::get('/',                [OperatorController::class, 'dashboard'])->name('dashboard');
+        Route::get('/book',            [OperatorController::class, 'book'])->name('book');
+        Route::post('/book',           [OperatorController::class, 'store'])->name('book.store');
+        Route::get('/patients/search', [OperatorController::class, 'searchPatients'])->name('patients.search');
+        Route::get('/doctors',         [OperatorController::class, 'doctorsByDepartment'])->name('doctors');
+        Route::get('/slots',           [OperatorController::class, 'slots'])->name('slots');
+    });
 
     // Packages Management
     Route::get('/packages',                [PackageController::class, 'index'])->name('packages.index');
@@ -220,6 +248,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
         Route::post('/sliders/{slider}',        [SliderController::class, 'update'])->name('sliders.update');
         Route::delete('/sliders/{slider}',      [SliderController::class, 'destroy'])->name('sliders.destroy');
         Route::patch('/sliders/{slider}/toggle',[SliderController::class, 'toggleStatus'])->name('sliders.toggle');
+
+        // Languages CRUD
+        Route::get('/languages',                      [LanguageController::class, 'index'])->name('languages.index');
+        Route::post('/languages',                     [LanguageController::class, 'store'])->name('languages.store');
+        Route::put('/languages/{language}',           [LanguageController::class, 'update'])->name('languages.update');
+        Route::delete('/languages/{language}',        [LanguageController::class, 'destroy'])->name('languages.destroy');
+        Route::patch('/languages/{language}/toggle',  [LanguageController::class, 'toggleStatus'])->name('languages.toggle');
+        Route::patch('/languages/{language}/default', [LanguageController::class, 'setDefault'])->name('languages.set-default');
 
         // Header Settings
         Route::get('/header',  [HeaderSettingController::class, 'edit'])->name('header.edit');

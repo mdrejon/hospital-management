@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\WebsiteSettings;
 
 use App\Http\Controllers\Controller;
+use App\Models\Language;
 use App\Models\Slider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,19 +29,7 @@ class SliderController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'label'            => 'nullable|string',
-            'title'            => 'required|string',
-            'subtitle'         => 'nullable|string',
-            'description'      => 'nullable|string',
-            'button_text'      => 'required|string',
-            'button_url'       => 'required|string',
-            'star_label'       => 'nullable|string',
-            'star_rating'      => 'nullable|integer|min:0|max:5',
-            'sort_order'       => 'integer|min:0',
-            'is_active'        => 'boolean',
-            'background_image' => 'nullable|image|mimes:jpeg,jpg,png,webp',
-        ]);
+        $data = $this->validated($request);
 
         if ($request->hasFile('background_image')) {
             $data['background_image'] = $request->file('background_image')
@@ -62,19 +51,7 @@ class SliderController extends Controller
 
     public function update(Request $request, Slider $slider): RedirectResponse
     {
-        $data = $request->validate([
-            'label'            => 'nullable|string',
-            'title'            => 'required|string',
-            'subtitle'         => 'nullable|string',
-            'description'      => 'nullable|string',
-            'button_text'      => 'required|string',
-            'button_url'       => 'required|string',
-            'star_label'       => 'nullable|string',
-            'star_rating'      => 'nullable|integer|min:0|max:5',
-            'sort_order'       => 'integer|min:0',
-            'is_active'        => 'boolean',
-            'background_image' => 'nullable|image|mimes:jpeg,jpg,png,webp',
-        ]);
+        $data = $this->validated($request);
 
         if ($request->hasFile('background_image')) {
             if ($slider->background_image) {
@@ -110,5 +87,37 @@ class SliderController extends Controller
         $slider->update(['is_active' => !$slider->is_active]);
 
         return back()->with('success', 'Slide status updated.');
+    }
+
+    private function defaultLocale(): string
+    {
+        return Language::defaultLanguage()?->code ?? config('app.locale');
+    }
+
+    private function validated(Request $request): array
+    {
+        $default = $this->defaultLocale();
+
+        return $request->validate([
+            'label'              => 'nullable|array',
+            'label.*'            => 'nullable|string',
+            'title'              => 'required|array',
+            "title.$default"     => 'required|string',
+            'title.*'            => 'nullable|string',
+            'subtitle'           => 'nullable|array',
+            'subtitle.*'         => 'nullable|string',
+            'description'        => 'nullable|array',
+            'description.*'      => 'nullable|string',
+            'button_text'        => 'required|array',
+            "button_text.$default" => 'required|string',
+            'button_text.*'      => 'nullable|string',
+            'button_url'         => 'required|string',
+            'star_label'         => 'nullable|array',
+            'star_label.*'       => 'nullable|string',
+            'star_rating'        => 'nullable|integer|min:0|max:5',
+            'sort_order'         => 'integer|min:0',
+            'is_active'          => 'boolean',
+            'background_image'   => 'nullable|image|mimes:jpeg,jpg,png,webp',
+        ]);
     }
 }

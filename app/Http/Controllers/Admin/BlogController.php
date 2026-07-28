@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\WebsiteSettings\BlogSettingController;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\BlogComment;
+use App\Models\Language;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -58,7 +59,8 @@ class BlogController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
-        $data['slug'] = $this->uniqueSlug($data['title']);
+        $default = $this->defaultLocale();
+        $data['slug'] = $this->uniqueSlug($data['title'][$default] ?? '');
 
         foreach (['feature_image', 'og_image', 'author_avatar'] as $field) {
             if ($request->hasFile($field)) {
@@ -70,12 +72,12 @@ class BlogController extends Controller
             $data['tags'] = $this->parseTags($data['tags']);
         }
 
-        // Auto-generate keywords if none provided
-        if (empty($data['meta_keywords'])) {
-            $data['meta_keywords'] = $this->autoKeywords(
-                $data['title'] ?? '',
-                $data['excerpt'] ?? '',
-                is_string($data['content'] ?? null) ? strip_tags($data['content']) : ''
+        // Auto-generate keywords (default locale) if none provided
+        if (empty($data['meta_keywords'][$default] ?? null)) {
+            $data['meta_keywords'][$default] = $this->autoKeywords(
+                $data['title'][$default] ?? '',
+                $data['excerpt'][$default] ?? '',
+                is_string($data['content'][$default] ?? null) ? strip_tags($data['content'][$default]) : ''
             );
         }
 
@@ -95,7 +97,8 @@ class BlogController extends Controller
     public function update(Request $request, Blog $blog): RedirectResponse
     {
         $data = $this->validated($request);
-        $data['slug'] = $this->uniqueSlug($data['title'], $blog->id);
+        $default = $this->defaultLocale();
+        $data['slug'] = $this->uniqueSlug($data['title'][$default] ?? '', $blog->id);
 
         foreach (['feature_image', 'og_image', 'author_avatar'] as $field) {
             if ($request->hasFile($field)) {
@@ -112,12 +115,12 @@ class BlogController extends Controller
             $data['tags'] = $this->parseTags($data['tags']);
         }
 
-        // Auto-generate keywords if none provided
-        if (empty($data['meta_keywords'])) {
-            $data['meta_keywords'] = $this->autoKeywords(
-                $data['title'] ?? '',
-                $data['excerpt'] ?? '',
-                is_string($data['content'] ?? null) ? strip_tags($data['content']) : ''
+        // Auto-generate keywords (default locale) if none provided
+        if (empty($data['meta_keywords'][$default] ?? null)) {
+            $data['meta_keywords'][$default] = $this->autoKeywords(
+                $data['title'][$default] ?? '',
+                $data['excerpt'][$default] ?? '',
+                is_string($data['content'][$default] ?? null) ? strip_tags($data['content'][$default]) : ''
             );
         }
 
@@ -204,26 +207,40 @@ class BlogController extends Controller
         return back()->with('success', 'Comment deleted.');
     }
 
+    private function defaultLocale(): string
+    {
+        return Language::defaultLanguage()?->code ?? config('app.locale');
+    }
+
     private function validated(Request $request): array
     {
+        $default = $this->defaultLocale();
+
         return $request->validate([
-            'title'            => 'required|string',
-            'excerpt'          => 'nullable|string',
-            'content'          => 'nullable|string',
-            'category_id'      => 'nullable|exists:blog_categories,id',
-            'tags'             => 'nullable|string',
-            'feature_image'    => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'og_image'         => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'author_name'      => 'nullable|string',
-            'author_bio'       => 'nullable|string',
-            'author_avatar'    => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'status'           => 'required|in:draft,published',
-            'published_at'     => 'nullable|date',
-            'is_featured'      => 'boolean',
-            'sort_order'       => 'integer|min:0',
-            'meta_title'       => 'nullable|string',
-            'meta_description' => 'nullable|string',
-            'meta_keywords'    => 'nullable|string',
+            'title'              => 'required|array',
+            "title.$default"     => 'required|string',
+            'title.*'            => 'nullable|string',
+            'excerpt'            => 'nullable|array',
+            'excerpt.*'          => 'nullable|string',
+            'content'            => 'nullable|array',
+            'content.*'          => 'nullable|string',
+            'category_id'        => 'nullable|exists:blog_categories,id',
+            'tags'               => 'nullable|string',
+            'feature_image'      => 'nullable|image|mimes:jpeg,jpg,png,webp',
+            'og_image'           => 'nullable|image|mimes:jpeg,jpg,png,webp',
+            'author_name'        => 'nullable|string',
+            'author_bio'         => 'nullable|string',
+            'author_avatar'      => 'nullable|image|mimes:jpeg,jpg,png,webp',
+            'status'             => 'required|in:draft,published',
+            'published_at'       => 'nullable|date',
+            'is_featured'        => 'boolean',
+            'sort_order'         => 'integer|min:0',
+            'meta_title'         => 'nullable|array',
+            'meta_title.*'       => 'nullable|string',
+            'meta_description'   => 'nullable|array',
+            'meta_description.*' => 'nullable|string',
+            'meta_keywords'      => 'nullable|array',
+            'meta_keywords.*'    => 'nullable|string',
         ]);
     }
 

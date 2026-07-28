@@ -19,7 +19,8 @@
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Brand Description</label>
-                        <textarea v-model="form.footer_brand_description" rows="3" class="input" placeholder="ClinicMaster Ipsum Dolor Sit Amet, Consectuer Adipiscing Elit..."></textarea>
+                        <LanguageTabs v-model="activeLang" />
+                        <textarea v-model="form.footer_brand_description[activeLang]" rows="3" class="input" placeholder="ClinicMaster Ipsum Dolor Sit Amet, Consectuer Adipiscing Elit..."></textarea>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -47,8 +48,9 @@
                         <h2 class="text-sm font-semibold text-gray-700">"Our Services" Column</h2>
                         <button type="button" @click="addLink('footer_service_links')" class="text-xs text-blue-600 hover:underline">+ Add Link</button>
                     </div>
+                    <LanguageTabs v-model="activeLang" />
                     <div v-for="(link, i) in form.footer_service_links" :key="i" class="flex items-center gap-3">
-                        <input v-model="link.label" type="text" placeholder="Label" class="input flex-1" />
+                        <input v-model="link.label[activeLang]" type="text" placeholder="Label" class="input flex-1" />
                         <input v-model="link.url"   type="text" placeholder="URL"   class="input flex-1" />
                         <button type="button" @click="removeLink('footer_service_links', i)" class="text-red-400 hover:text-red-600 text-lg leading-none">&times;</button>
                     </div>
@@ -61,8 +63,9 @@
                         <h2 class="text-sm font-semibold text-gray-700">"Our Stores" Column</h2>
                         <button type="button" @click="addLink('footer_store_links')" class="text-xs text-blue-600 hover:underline">+ Add Link</button>
                     </div>
+                    <LanguageTabs v-model="activeLang" />
                     <div v-for="(link, i) in form.footer_store_links" :key="i" class="flex items-center gap-3">
-                        <input v-model="link.label" type="text" placeholder="Label" class="input flex-1" />
+                        <input v-model="link.label[activeLang]" type="text" placeholder="Label" class="input flex-1" />
                         <input v-model="link.url"   type="text" placeholder="URL"   class="input flex-1" />
                         <button type="button" @click="removeLink('footer_store_links', i)" class="text-red-400 hover:text-red-600 text-lg leading-none">&times;</button>
                     </div>
@@ -75,8 +78,9 @@
                         <h2 class="text-sm font-semibold text-gray-700">"Useful Links" Column</h2>
                         <button type="button" @click="addLink('footer_useful_links')" class="text-xs text-blue-600 hover:underline">+ Add Link</button>
                     </div>
+                    <LanguageTabs v-model="activeLang" />
                     <div v-for="(link, i) in form.footer_useful_links" :key="i" class="flex items-center gap-3">
-                        <input v-model="link.label" type="text" placeholder="Label" class="input flex-1" />
+                        <input v-model="link.label[activeLang]" type="text" placeholder="Label" class="input flex-1" />
                         <input v-model="link.url"   type="text" placeholder="URL"   class="input flex-1" />
                         <button type="button" @click="removeLink('footer_useful_links', i)" class="text-red-400 hover:text-red-600 text-lg leading-none">&times;</button>
                     </div>
@@ -89,8 +93,9 @@
                         <h2 class="text-sm font-semibold text-gray-700">"Quick Links" Column</h2>
                         <button type="button" @click="addLink('footer_quick_links')" class="text-xs text-blue-600 hover:underline">+ Add Link</button>
                     </div>
+                    <LanguageTabs v-model="activeLang" />
                     <div v-for="(link, i) in form.footer_quick_links" :key="i" class="flex items-center gap-3">
-                        <input v-model="link.label" type="text" placeholder="Label" class="input flex-1" />
+                        <input v-model="link.label[activeLang]" type="text" placeholder="Label" class="input flex-1" />
                         <input v-model="link.url"   type="text" placeholder="URL"   class="input flex-1" />
                         <button type="button" @click="removeLink('footer_quick_links', i)" class="text-red-400 hover:text-red-600 text-lg leading-none">&times;</button>
                     </div>
@@ -100,18 +105,19 @@
                 <!-- Official Contact Info -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Official Contact Info</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Phone Line 1</label>
-                            <input v-model="form.footer_phone_1" type="text" class="input" />
+                            <input v-model="form.footer_phone_1[activeLang]" type="text" class="input" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Phone Line 2</label>
-                            <input v-model="form.footer_phone_2" type="text" class="input" />
+                            <input v-model="form.footer_phone_2[activeLang]" type="text" class="input" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Phone Line 3</label>
-                            <input v-model="form.footer_phone_3" type="text" class="input" />
+                            <input v-model="form.footer_phone_3[activeLang]" type="text" class="input" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Email 1</label>
@@ -123,17 +129,17 @@
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Opening Time</label>
-                            <input v-model="form.footer_opening_time" type="text" class="input" placeholder="Mon-Thu: 8:00am-5:00pm Fri: 8:00am-1:00pm" />
+                            <input v-model="form.footer_opening_time[activeLang]" type="text" class="input" placeholder="Mon-Thu: 8:00am-5:00pm Fri: 8:00am-1:00pm" />
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Address Line 1</label>
-                            <input v-model="form.footer_address_line1" type="text" class="input" />
+                            <input v-model="form.footer_address_line1[activeLang]" type="text" class="input" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Address Line 2</label>
-                            <input v-model="form.footer_address_line2" type="text" class="input" />
+                            <input v-model="form.footer_address_line2[activeLang]" type="text" class="input" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Website URL</label>
@@ -145,13 +151,14 @@
                 <!-- Newsletter & Copyright -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Newsletter & Copyright</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Newsletter Title</label>
-                        <input v-model="form.footer_newsletter_title" type="text" class="input" placeholder="Stay Updated With ClinicMaster..." />
+                        <input v-model="form.footer_newsletter_title[activeLang]" type="text" class="input" placeholder="Stay Updated With ClinicMaster..." />
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Copyright Text</label>
-                        <input v-model="form.footer_copyright_text" type="text" class="input" placeholder="Smart Freamework Theme. All Rights Reserved." />
+                        <input v-model="form.footer_copyright_text[activeLang]" type="text" class="input" placeholder="Smart Freamework Theme. All Rights Reserved." />
                         <p class="text-xs text-gray-400 mt-1">Shown after the auto-updating year, e.g. "&copy; {{ currentYear }} [this text]".</p>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -177,42 +184,53 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import { emptyTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     settings: { type: Object, required: true },
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
 const currentYear = new Date().getFullYear();
 const currentLogo = ref(props.settings.footer_logo);
 
+const seed = (key) => ({ ...emptyTranslatable(languages.value), ...(props.settings[key] || {}) });
+const seedLinks = (key) => (props.settings[key] ?? []).map(link => ({
+    ...link,
+    label: { ...emptyTranslatable(languages.value), ...(link.label || {}) },
+}));
+
 const form = useForm({
     footer_logo:              null,
-    footer_brand_description: props.settings.footer_brand_description ?? '',
+    footer_brand_description: seed('footer_brand_description'),
     footer_facebook_url:      props.settings.footer_facebook_url ?? '',
     footer_twitter_url:       props.settings.footer_twitter_url ?? '',
     footer_instagram_url:     props.settings.footer_instagram_url ?? '',
     footer_youtube_url:       props.settings.footer_youtube_url ?? '',
-    footer_quick_links:       props.settings.footer_quick_links ?? [],
-    footer_service_links:     props.settings.footer_service_links ?? [],
-    footer_store_links:       props.settings.footer_store_links ?? [],
-    footer_useful_links:      props.settings.footer_useful_links ?? [],
-    footer_phone_1:           props.settings.footer_phone_1 ?? '',
-    footer_phone_2:           props.settings.footer_phone_2 ?? '',
-    footer_phone_3:           props.settings.footer_phone_3 ?? '',
+    footer_quick_links:       seedLinks('footer_quick_links'),
+    footer_service_links:     seedLinks('footer_service_links'),
+    footer_store_links:       seedLinks('footer_store_links'),
+    footer_useful_links:      seedLinks('footer_useful_links'),
+    footer_phone_1:           seed('footer_phone_1'),
+    footer_phone_2:           seed('footer_phone_2'),
+    footer_phone_3:           seed('footer_phone_3'),
     footer_email_1:           props.settings.footer_email_1 ?? '',
     footer_email_2:           props.settings.footer_email_2 ?? '',
-    footer_address_line1:     props.settings.footer_address_line1 ?? '',
-    footer_address_line2:     props.settings.footer_address_line2 ?? '',
+    footer_address_line1:     seed('footer_address_line1'),
+    footer_address_line2:     seed('footer_address_line2'),
     footer_website_url:       props.settings.footer_website_url ?? '',
-    footer_opening_time:      props.settings.footer_opening_time ?? '',
-    footer_newsletter_title:  props.settings.footer_newsletter_title ?? '',
+    footer_opening_time:      seed('footer_opening_time'),
+    footer_newsletter_title:  seed('footer_newsletter_title'),
     footer_privacy_url:       props.settings.footer_privacy_url ?? '',
     footer_terms_url:         props.settings.footer_terms_url ?? '',
-    footer_copyright_text:    props.settings.footer_copyright_text ?? '',
+    footer_copyright_text:    seed('footer_copyright_text'),
 });
 
 function onLogoChange(file) {
@@ -220,7 +238,7 @@ function onLogoChange(file) {
     form.footer_logo = file;
 }
 
-function addLink(field)        { form[field].push({ label: '', url: '' }); }
+function addLink(field)        { form[field].push({ label: emptyTranslatable(languages.value), url: '' }); }
 function removeLink(field, i)  { form[field].splice(i, 1); }
 
 function submit() {

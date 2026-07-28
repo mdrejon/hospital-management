@@ -47,13 +47,13 @@
       <div class="page-header__inner">
         <h1 class="page-header__title">{{ $heroTitle }}</h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
-          <a href="{{ route('home') }}">Home</a>
+          <a href="{{ route('home') }}">{{ __('frontend.nav.home') }}</a>
           <span class="page-header__breadcrumb-sep">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m7 6 5 6-5 6M13 6l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
-          <span>Contact Us</span>
+          <span>{{ __('frontend.nav.contact_us') }}</span>
         </nav>
       </div>
 
@@ -114,7 +114,7 @@
                   </svg>
                 </span>
                 <div>
-                  <h3 class="contact-info-card__title">Address</h3>
+                  <h3 class="contact-info-card__title">{{ __('frontend.footer.address') }}</h3>
                   <p class="contact-info-card__text">{{ trim(($footerSettings['footer_address_line1'] ?? '234 Oak Drive') . ', ' . ($footerSettings['footer_address_line2'] ?? 'Villagetown, USA'), ', ') }}</p>
                 </div>
               </div>
@@ -126,7 +126,7 @@
                   </svg>
                 </span>
                 <div>
-                  <h3 class="contact-info-card__title">Contact Us</h3>
+                  <h3 class="contact-info-card__title">{{ __('frontend.footer.contact_us') }}</h3>
                   <p class="contact-info-card__text">{{ $footerSettings['footer_phone_1'] ?? '1 123 456 7890' }}</p>
                 </div>
               </div>
@@ -139,7 +139,7 @@
                   </svg>
                 </span>
                 <div>
-                  <h3 class="contact-info-card__title">Send us a Mail</h3>
+                  <h3 class="contact-info-card__title">{{ __('frontend.footer.send_mail') }}</h3>
                   <p class="contact-info-card__text">{{ $footerSettings['footer_email_1'] ?? 'sales@smartfreamework.com' }}</p>
                 </div>
               </div>
@@ -152,7 +152,7 @@
                   </svg>
                 </span>
                 <div>
-                  <h3 class="contact-info-card__title">Opening Time</h3>
+                  <h3 class="contact-info-card__title">{{ __('frontend.footer.opening_time') }}</h3>
                   <p class="contact-info-card__text">{{ $footerSettings['footer_opening_time'] ?? 'Mon-Thu: 8:00am-5:00pm Fri: 8:00am-1:00pm' }}</p>
                 </div>
               </div>
@@ -171,11 +171,11 @@
 
             <form class="contact__form" action="{{ route('contact.submit') }}" method="POST">
               @csrf
-              <input type="text" name="first_name" value="{{ old('first_name') }}" class="contact__field" placeholder="First Name" required />
-              <input type="text" name="last_name" value="{{ old('last_name') }}" class="contact__field" placeholder="Last Name" />
-              <input type="email" name="email" value="{{ old('email') }}" class="contact__field" placeholder="Your Email" required />
-              <input type="tel" name="phone" value="{{ old('phone') }}" class="contact__field" placeholder="Phone Number" />
-              <textarea name="message" class="contact__field contact__field--full" rows="6" placeholder="Message">{{ old('message') }}</textarea>
+              <input type="text" name="first_name" value="{{ old('first_name') }}" class="contact__field" placeholder="{{ __('frontend.contact_page.first_name') }}" required />
+              <input type="text" name="last_name" value="{{ old('last_name') }}" class="contact__field" placeholder="{{ __('frontend.contact_page.last_name') }}" />
+              <input type="email" name="email" value="{{ old('email') }}" class="contact__field" placeholder="{{ __('frontend.contact_page.email') }}" required />
+              <input type="tel" name="phone" value="{{ old('phone') }}" class="contact__field" placeholder="{{ __('frontend.contact_page.phone') }}" />
+              <textarea name="message" class="contact__field contact__field--full" rows="6" placeholder="{{ __('frontend.contact_page.message') }}">{{ old('message') }}</textarea>
               <button type="submit" class="contact__submit">
                 {{ $contact['contact_form_btn_text'] ?? 'Appointment' }}
                 <span class="contact__submit-icon">

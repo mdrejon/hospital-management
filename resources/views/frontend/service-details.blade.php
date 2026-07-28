@@ -50,13 +50,13 @@
       <div class="page-header__inner">
         <h1 class="page-header__title">Service Details</h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
-          <a href="{{ route('home') }}">Home</a>
+          <a href="{{ route('home') }}">{{ __('frontend.nav.home') }}</a>
           <span class="page-header__breadcrumb-sep">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m7 6 5 6-5 6M13 6l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
-          <a href="{{ route('services') }}">Services</a>
+          <a href="{{ route('services') }}">{{ __('frontend.breadcrumb.services') }}</a>
           <span class="page-header__breadcrumb-sep">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m7 6 5 6-5 6M13 6l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -124,7 +124,8 @@
 
           <!-- Content -->
           @php
-            $serviceFeatures = !empty($service->features) ? $service->features : [
+            $tr = fn($v) => is_array($v) ? ($v[app()->getLocale()] ?: $v[config('app.fallback_locale')] ?? '') : $v;
+            $serviceFeatures = !empty($service->features) ? array_map($tr, $service->features) : [
               'Comprehensive Specialties', 'Emergency Services', 'Intensive Care Units (ICUs)', 'Telemedicine Facilities', 'Multidisciplinary Team',
               'Research and Development', 'Advanced Imaging Services', 'Rehabilitation Services', 'Patient-Centric Approach', 'Health Information Technology',
             ];
@@ -219,7 +220,7 @@
 
             <h2 class="service-detail__subtitle">Frequently asked questions</h2>
             @php
-              $serviceFaqs = !empty($service->faqs) ? $service->faqs : [
+              $serviceFaqs = !empty($service->faqs) ? array_map(fn($f) => ['question' => $tr($f['question'] ?? ''), 'answer' => $tr($f['answer'] ?? '')], $service->faqs) : [
                 ['question' => 'Can I cancel my appointment', 'answer' => 'Yes, appointments can be cancelled or rescheduled up to 24 hours in advance by contacting our front desk or through your patient portal.'],
                 ['question' => 'What types of treatments do you offer?', 'answer' => 'Our specialists offer a full range of diagnostic, preventive, and treatment options tailored to each patient\'s needs.'],
                 ['question' => 'How do I book my appointment?', 'answer' => 'You can book an appointment online through our Appointment page, or call our front desk directly.'],

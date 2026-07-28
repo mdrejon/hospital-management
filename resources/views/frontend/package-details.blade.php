@@ -50,13 +50,13 @@
       <div class="page-header__inner">
         <h1 class="page-header__title">Package Details</h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
-          <a href="{{ route('home') }}">Home</a>
+          <a href="{{ route('home') }}">{{ __('frontend.nav.home') }}</a>
           <span class="page-header__breadcrumb-sep">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m7 6 5 6-5 6M13 6l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
-          <a href="{{ route('packages') }}">Packages</a>
+          <a href="{{ route('packages') }}">{{ __('frontend.breadcrumb.packages') }}</a>
           <span class="page-header__breadcrumb-sep">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m7 6 5 6-5 6M13 6l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -140,10 +140,11 @@
 
         <!-- Secondary image + experience badge + features checklist -->
         @php
+          $tr = fn($v) => is_array($v) ? ($v[app()->getLocale()] ?: $v[config('app.fallback_locale')] ?? '') : $v;
           $pkgSecondaryImage = $package->secondary_image ? asset('storage/' . $package->secondary_image) : asset('assets/img/about-image.webp');
           $pkgBadgeValue = $package->badge_value ?: '28+';
           $pkgBadgeLabel = $package->badge_label ?: 'Years';
-          $pkgFeatures = !empty($package->features) ? $package->features : [
+          $pkgFeatures = !empty($package->features) ? array_map($tr, $package->features) : [
             'Monthly Checkups Medical Service', 'Proactive and Fast Results Best', 'Medical Service Caring Medical',
             'Dedicated Specialist Consultation', 'Advanced Diagnostic Screening', 'Personalised Follow-Up Care',
           ];

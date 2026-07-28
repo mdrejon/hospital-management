@@ -3,7 +3,7 @@
         <div class="max-w-4xl space-y-4">
             <div class="flex items-center gap-3">
                 <a :href="route('admin.packages.index')" class="text-gray-400 hover:text-gray-600 text-sm">← Back</a>
-                <h1 class="text-lg font-semibold text-gray-800">Edit Package — {{ pkg.title }}</h1>
+                <h1 class="text-lg font-semibold text-gray-800">Edit Package — {{ displayTranslatable(pkg.title, languages) }}</h1>
             </div>
 
             <div v-if="$page.props.flash?.success"
@@ -26,30 +26,33 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import PackageForm from './PackageForm.vue';
+import { seedTranslatable, displayTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     package: { type: Object, required: true },
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
 const pkg = props.package;
 
 const form = useForm({
-    title:            pkg.title           ?? '',
+    title:            seedTranslatable(languages.value, pkg.title),
     image:            null,
-    short_desc:       pkg.short_desc      ?? '',
-    description:      pkg.description     ?? '',
-    features:         Array.isArray(pkg.features) ? [...pkg.features] : [],
+    short_desc:       seedTranslatable(languages.value, pkg.short_desc),
+    description:      seedTranslatable(languages.value, pkg.description),
+    features:         Array.isArray(pkg.features) ? pkg.features.map(f => ({ ...f })) : [],
     secondary_image:  null,
     badge_value:      pkg.badge_value     ?? '',
-    badge_label:      pkg.badge_label     ?? '',
+    badge_label:      seedTranslatable(languages.value, pkg.badge_label),
     is_featured:      pkg.is_featured     ?? false,
     sort_order:       pkg.sort_order      ?? 0,
     is_active:        pkg.is_active       ?? true,
-    seo_title:        pkg.seo_title       ?? '',
-    seo_description:  pkg.seo_description ?? '',
+    seo_title:        seedTranslatable(languages.value, pkg.seo_title),
+    seo_description:  seedTranslatable(languages.value, pkg.seo_description),
     seo_keywords:     pkg.seo_keywords    ?? '',
     seo_og_image:     null,
 });

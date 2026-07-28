@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\GlobalSetting;
+use App\Models\Language;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -48,24 +49,54 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('headerSettings', $this->headerSettings());
             $view->with('footerSettings', $this->footerSettings());
+            $view->with('languages', $this->activeLanguages());
+            $view->with('currentLanguage', app()->getLocale());
         });
     }
+
+    /** All active languages for the language switcher. Empty collection if the DB isn't ready. */
+    private function activeLanguages()
+    {
+        try {
+            return Language::active();
+        } catch (\Throwable) {
+            return collect();
+        }
+    }
+
+    /** Header keys whose visitor-facing copy is edited per-locale (session/cookie locale, English fallback). */
+    private array $headerTranslatableKeys = [
+        'header_tagline', 'header_hours', 'header_support_text',
+        'header_sidebar_description', 'header_book_btn_text', 'header_address', 'header_phone',
+    ];
 
     /** Pulled from Admin > Global Settings > Header Settings. Empty array if the DB isn't ready. */
     private function headerSettings(): array
     {
         try {
-            return GlobalSetting::whereIn('key', [
+            $settings = GlobalSetting::whereIn('key', [
                 'header_logo', 'header_site_name', 'header_tagline',
                 'header_phone', 'header_email', 'header_address', 'header_hours',
                 'header_support_text', 'header_sidebar_description',
                 'header_facebook_url', 'header_twitter_url', 'header_instagram_url', 'header_linkedin_url',
                 'header_book_btn_text', 'header_book_btn_url',
             ])->pluck('value', 'key')->toArray();
+
+            foreach ($this->headerTranslatableKeys as $key) {
+                $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key] ?? null);
+            }
+
+            return $settings;
         } catch (\Throwable) {
             return [];
         }
     }
+
+    /** Footer keys whose visitor-facing copy is edited per-locale. */
+    private array $footerTranslatableKeys = [
+        'footer_brand_description', 'footer_opening_time', 'footer_newsletter_title', 'footer_copyright_text',
+        'footer_phone_1', 'footer_phone_2', 'footer_phone_3', 'footer_address_line1', 'footer_address_line2',
+    ];
 
     /** Pulled from Admin > Global Settings > Footer Settings. Empty array if the DB isn't ready. */
     private function footerSettings(): array
@@ -84,8 +115,20 @@ class AppServiceProvider extends ServiceProvider
             return [];
         }
 
+        foreach ($this->footerTranslatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key] ?? null);
+        }
+
+        $locale = app()->getLocale();
+        $fallback = config('app.fallback_locale');
+
         foreach (['footer_quick_links', 'footer_service_links', 'footer_store_links', 'footer_useful_links'] as $jsonKey) {
-            $settings[$jsonKey] = !empty($settings[$jsonKey]) ? json_decode($settings[$jsonKey], true) : [];
+            $items = !empty($settings[$jsonKey]) ? json_decode($settings[$jsonKey], true) : [];
+            $settings[$jsonKey] = collect($items)->map(function ($item) use ($locale, $fallback) {
+                $label = $item['label'] ?? '';
+                $item['label'] = is_array($label) ? ($label[$locale] ?: $label[$fallback] ?? '') : $label;
+                return $item;
+            })->values()->all();
         }
 
         return $settings;

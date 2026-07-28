@@ -19,6 +19,12 @@ class GalleryController extends Controller
         'gallery_seo_title', 'gallery_seo_description', 'gallery_seo_keywords', 'gallery_seo_og_image',
     ];
 
+    /** Human-readable copy shown to visitors — edited per-locale. */
+    private array $translatableKeys = [
+        'gallery_badge', 'gallery_title', 'gallery_subtitle', 'gallery_hero_title',
+        'gallery_seo_title', 'gallery_seo_description',
+    ];
+
     public function index(): Response
     {
         $images = GalleryImage::orderBy('sort_order')->orderBy('id')->get();
@@ -29,6 +35,10 @@ class GalleryController extends Controller
 
         foreach ($this->sectionKeys as $key) {
             $settings[$key] ??= null;
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
         }
 
         return Inertia::render('Admin/WebsiteSettings/Gallery/Index', [
@@ -63,9 +73,12 @@ class GalleryController extends Controller
     public function update(Request $request, GalleryImage $gallery): RedirectResponse
     {
         $data = $request->validate([
-            'alt'        => 'nullable|string',
-            'sub_title'  => 'nullable|string',
-            'caption'    => 'nullable|string',
+            'alt'          => 'nullable|array',
+            'alt.*'        => 'nullable|string',
+            'sub_title'    => 'nullable|array',
+            'sub_title.*'  => 'nullable|string',
+            'caption'      => 'nullable|array',
+            'caption.*'    => 'nullable|string',
             'sort_order' => 'integer|min:0',
         ]);
 
@@ -92,17 +105,17 @@ class GalleryController extends Controller
     /** Save section header + hero + SEO settings */
     public function updateSettings(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'gallery_badge'           => 'nullable|string',
-            'gallery_title'           => 'nullable|string',
-            'gallery_subtitle'        => 'nullable|string',
-            'gallery_hero_title'      => 'nullable|string',
-            'gallery_seo_title'       => 'nullable|string',
-            'gallery_seo_description' => 'nullable|string',
+        $rules = [
             'gallery_seo_keywords'    => 'nullable|string',
             'gallery_hero_image'      => 'nullable|image|mimes:jpeg,jpg,png,webp',
             'gallery_seo_og_image'    => 'nullable|image|mimes:jpeg,jpg,png,webp',
-        ]);
+        ];
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
 
         foreach (['gallery_hero_image', 'gallery_seo_og_image'] as $imgKey) {
             if ($request->hasFile($imgKey)) {
@@ -113,6 +126,13 @@ class GalleryController extends Controller
                 $data[$imgKey] = $request->file($imgKey)->store('settings', 'public');
             } else {
                 unset($data[$imgKey]);
+            }
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                GlobalSetting::setTranslated($key, $data[$key] ?? []);
+                unset($data[$key]);
             }
         }
 

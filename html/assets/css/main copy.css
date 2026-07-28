@@ -933,6 +933,7 @@ ul {
   line-height: 1.25rem;
   --tw-text-opacity: 1;
   color: rgb(var(--color-navy) / var(--tw-text-opacity, 1));
+  border: none;
 }
 
 .header-search__input::-moz-placeholder {

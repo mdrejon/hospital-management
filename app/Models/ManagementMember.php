@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
 
 class ManagementMember extends Model
 {
+    use HasTranslations;
+
+    public array $translatable = ['role'];
+
     protected $fillable = [
         'name', 'slug', 'role', 'photo',
         'facebook_url', 'twitter_url', 'instagram_url', 'linkedin_url', 'youtube_url',

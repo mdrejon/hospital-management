@@ -22,9 +22,10 @@
                         </div>
                         <div>
                             <label class="label">Page Title (Breadcrumb)</label>
-                            <input v-model="form.contact_hero_title" type="text" class="input"
+                            <LanguageTabs v-model="activeLang" />
+                            <input v-model="form.contact_hero_title[activeLang]" type="text" class="input"
                                 placeholder="Contact Us" />
-                            <InputError :message="form.errors.contact_hero_title" />
+                            <InputError :message="form.errors[`contact_hero_title.${activeLang}`]" />
                         </div>
                     </div>
                 </section>
@@ -32,22 +33,23 @@
                 <!-- ─── Main Content (left column) ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Main Content (left column)</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="label">Section Title</label>
-                        <input v-model="form.contact_title" type="text" class="input"
+                        <input v-model="form.contact_title[activeLang]" type="text" class="input"
                             placeholder="Connect With Us For Your Healthcare Needs" />
-                        <InputError :message="form.errors.contact_title" />
+                        <InputError :message="form.errors[`contact_title.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Description</label>
-                        <textarea v-model="form.contact_desc" rows="3" class="input resize-none"
+                        <textarea v-model="form.contact_desc[activeLang]" rows="3" class="input resize-none"
                             placeholder="Reach out for support, feedback, or to schedule an appointment. Fill out the form, and we'll promptly assist you and confirm your visit with our healthcare professionals."></textarea>
-                        <InputError :message="form.errors.contact_desc" />
+                        <InputError :message="form.errors[`contact_desc.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">"Talk to a Doctor" Text <span class="text-xs text-gray-400">(next to the doctor avatars)</span></label>
-                        <input v-model="form.contact_talk_text" type="text" class="input" placeholder="Talk to over 215 doctor" />
-                        <InputError :message="form.errors.contact_talk_text" />
+                        <input v-model="form.contact_talk_text[activeLang]" type="text" class="input" placeholder="Talk to over 215 doctor" />
+                        <InputError :message="form.errors[`contact_talk_text.${activeLang}`]" />
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -57,8 +59,8 @@
                         </div>
                         <div>
                             <label class="label">Rating Text</label>
-                            <input v-model="form.contact_rating_text" type="text" class="input" placeholder="12k ratings on google" />
-                            <InputError :message="form.errors.contact_rating_text" />
+                            <input v-model="form.contact_rating_text[activeLang]" type="text" class="input" placeholder="12k ratings on google" />
+                            <InputError :message="form.errors[`contact_rating_text.${activeLang}`]" />
                         </div>
                     </div>
                 </section>
@@ -66,19 +68,20 @@
                 <!-- ─── SEO Configuration ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">SEO Configuration</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-2">
-                            <label class="label">Meta Title <span class="text-gray-400 font-normal">({{ form.contact_seo_title.length }}/160)</span></label>
-                            <input v-model="form.contact_seo_title" type="text" maxlength="160" class="input"
+                            <label class="label">Meta Title <span class="text-gray-400 font-normal">({{ form.contact_seo_title[activeLang].length }}/160)</span></label>
+                            <input v-model="form.contact_seo_title[activeLang]" type="text" maxlength="160" class="input"
                                 placeholder="Contact Us | ClinicMaster Medical & Health Care Services" />
-                            <InputError :message="form.errors.contact_seo_title" />
+                            <InputError :message="form.errors[`contact_seo_title.${activeLang}`]" />
                         </div>
                         <div class="col-span-2">
-                            <label class="label">Meta Description <span class="text-gray-400 font-normal">({{ form.contact_seo_description.length }}/320)</span></label>
-                            <textarea v-model="form.contact_seo_description" rows="2" maxlength="320"
+                            <label class="label">Meta Description <span class="text-gray-400 font-normal">({{ form.contact_seo_description[activeLang].length }}/320)</span></label>
+                            <textarea v-model="form.contact_seo_description[activeLang]" rows="2" maxlength="320"
                                 class="input resize-none"
                                 placeholder="Get in touch with ClinicMaster. We're happy to help you schedule an appointment or answer your questions."></textarea>
-                            <InputError :message="form.errors.contact_seo_description" />
+                            <InputError :message="form.errors[`contact_seo_description.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Keywords</label>
@@ -101,6 +104,7 @@
                         Phone Numbers
                         <span class="text-xs text-gray-400 font-normal ml-2">also used in Header &amp; Footer</span>
                     </h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div class="grid grid-cols-1 gap-3">
                         <div v-for="n in 3" :key="n">
                             <label class="label">Phone {{ n }}</label>
@@ -108,11 +112,11 @@
                                 <span class="flex-shrink-0 w-8 h-9 flex items-center justify-center bg-gray-50 border border-r-0 border-gray-300 rounded-l text-gray-400">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
                                 </span>
-                                <input v-model="form[`footer_phone_${n}`]" type="text"
+                                <input v-model="form[`footer_phone_${n}`][activeLang]" type="text"
                                     class="input rounded-l-none flex-1"
                                     placeholder="1 123 456 7890" />
                             </div>
-                            <InputError :message="form.errors[`footer_phone_${n}`]" />
+                            <InputError :message="form.errors[`footer_phone_${n}.${activeLang}`]" />
                         </div>
                     </div>
                 </section>
@@ -145,18 +149,19 @@
                         Address
                         <span class="text-xs text-gray-400 font-normal ml-2">also used in Header &amp; Footer</span>
                     </h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="label">Address Line 1</label>
-                            <input v-model="form.footer_address_line1" type="text" class="input"
+                            <input v-model="form.footer_address_line1[activeLang]" type="text" class="input"
                                 placeholder="234 Oak Drive" />
-                            <InputError :message="form.errors.footer_address_line1" />
+                            <InputError :message="form.errors[`footer_address_line1.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Address Line 2</label>
-                            <input v-model="form.footer_address_line2" type="text" class="input"
+                            <input v-model="form.footer_address_line2[activeLang]" type="text" class="input"
                                 placeholder="Villagetown, USA" />
-                            <InputError :message="form.errors.footer_address_line2" />
+                            <InputError :message="form.errors[`footer_address_line2.${activeLang}`]" />
                         </div>
                     </div>
                 </section>
@@ -183,18 +188,19 @@
                 <!-- ─── Contact Form Settings ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Contact Form (right panel)</h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="label">Form Title</label>
-                            <input v-model="form.contact_form_title" type="text" class="input"
+                            <input v-model="form.contact_form_title[activeLang]" type="text" class="input"
                                 placeholder="Make An Appointment Apply For Treatments" />
-                            <InputError :message="form.errors.contact_form_title" />
+                            <InputError :message="form.errors[`contact_form_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Submit Button Text</label>
-                            <input v-model="form.contact_form_btn_text" type="text" class="input"
+                            <input v-model="form.contact_form_btn_text[activeLang]" type="text" class="input"
                                 placeholder="Appointment" />
-                            <InputError :message="form.errors.contact_form_btn_text" />
+                            <InputError :message="form.errors[`contact_form_btn_text.${activeLang}`]" />
                         </div>
                     </div>
                 </section>
@@ -240,10 +246,13 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError   from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import { emptyTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     settings: { type: Object, required: true },
@@ -251,39 +260,44 @@ const props = defineProps({
 
 const s = props.settings;
 
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
+const seed = (key) => ({ ...emptyTranslatable(languages.value), ...(s[key] || {}) });
+
 const form = useForm({
     // Hero
-    contact_hero_title:       s.contact_hero_title       ?? '',
+    contact_hero_title:       seed('contact_hero_title'),
     contact_hero_image:       null,
     // Main content
-    contact_title:            s.contact_title            ?? '',
-    contact_desc:             s.contact_desc             ?? '',
-    contact_talk_text:        s.contact_talk_text        ?? '',
+    contact_title:            seed('contact_title'),
+    contact_desc:             seed('contact_desc'),
+    contact_talk_text:        seed('contact_talk_text'),
     contact_rating_score:     s.contact_rating_score     ?? '',
-    contact_rating_text:      s.contact_rating_text      ?? '',
+    contact_rating_text:      seed('contact_rating_text'),
     // SEO
-    contact_seo_title:        s.contact_seo_title        ?? '',
-    contact_seo_description:  s.contact_seo_description  ?? '',
+    contact_seo_title:        seed('contact_seo_title'),
+    contact_seo_description:  seed('contact_seo_description'),
     contact_seo_keywords:     s.contact_seo_keywords     ?? '',
     contact_seo_og_image:     null,
     // Phone
-    footer_phone_1:         s.footer_phone_1         ?? '',
-    footer_phone_2:         s.footer_phone_2         ?? '',
-    footer_phone_3:         s.footer_phone_3         ?? '',
+    footer_phone_1:         seed('footer_phone_1'),
+    footer_phone_2:         seed('footer_phone_2'),
+    footer_phone_3:         seed('footer_phone_3'),
     // Email
     footer_email_1:         s.footer_email_1         ?? '',
     footer_email_2:         s.footer_email_2         ?? '',
     // Address
-    footer_address_line1:   s.footer_address_line1   ?? '',
-    footer_address_line2:   s.footer_address_line2   ?? '',
+    footer_address_line1:   seed('footer_address_line1'),
+    footer_address_line2:   seed('footer_address_line2'),
     // Social
     footer_facebook_url:    s.footer_facebook_url    ?? '',
     footer_twitter_url:     s.footer_twitter_url     ?? '',
     footer_instagram_url:   s.footer_instagram_url   ?? '',
     footer_youtube_url:     s.footer_youtube_url     ?? '',
     // Form
-    contact_form_title:     s.contact_form_title     ?? '',
-    contact_form_btn_text:  s.contact_form_btn_text  ?? '',
+    contact_form_title:     seed('contact_form_title'),
+    contact_form_btn_text:  seed('contact_form_btn_text'),
     // Map
     contact_map_embed:      s.contact_map_embed      ?? '',
     contact_map_open_url:   s.contact_map_open_url   ?? '',

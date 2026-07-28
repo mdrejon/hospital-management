@@ -13,10 +13,11 @@
                 <!-- ─── Page Hero / Breadcrumb ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Page Hero &amp; Breadcrumb <span class="text-xs font-normal text-gray-400">(About page banner)</span></h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="label">Page Title <span class="text-xs text-gray-400">(shown in breadcrumb banner)</span></label>
-                        <input v-model="form.about_hero_title" type="text" class="input" placeholder="About Us" />
-                        <InputError :message="form.errors.about_hero_title" />
+                        <input v-model="form.about_hero_title[activeLang]" type="text" class="input" placeholder="About Us" />
+                        <InputError :message="form.errors[`about_hero_title.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Banner Background Image</label>
@@ -29,19 +30,20 @@
                 <!-- ─── SEO Configuration ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">SEO Configuration <span class="text-xs font-normal text-gray-400">(About page)</span></h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars)</span></label>
-                        <input v-model="form.about_seo_title" @input="onMetaTitleInput" type="text" class="input"
+                        <input v-model="form.about_seo_title[activeLang]" @input="onMetaTitleInput" type="text" class="input"
                             placeholder="About Us | ClinicMaster Medical & Health Care Services" maxlength="160" />
-                        <p class="text-xs text-gray-400 mt-1">{{ (form.about_seo_title || '').length }}/160</p>
-                        <InputError :message="form.errors.about_seo_title" />
+                        <p class="text-xs text-gray-400 mt-1">{{ (form.about_seo_title[activeLang] || '').length }}/160</p>
+                        <InputError :message="form.errors[`about_seo_title.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
-                        <textarea v-model="form.about_seo_description" @input="onMetaDescInput" rows="3" class="input resize-none"
+                        <textarea v-model="form.about_seo_description[activeLang]" @input="onMetaDescInput" rows="3" class="input resize-none"
                             placeholder="Learn about ClinicMaster's mission, values, and leadership." maxlength="320"></textarea>
-                        <p class="text-xs text-gray-400 mt-1">{{ (form.about_seo_description || '').length }}/320</p>
-                        <InputError :message="form.errors.about_seo_description" />
+                        <p class="text-xs text-gray-400 mt-1">{{ (form.about_seo_description[activeLang] || '').length }}/320</p>
+                        <InputError :message="form.errors[`about_seo_description.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated, auto-filled if left blank)</span></label>
@@ -60,6 +62,7 @@
                 <!-- ─── About Section (Home + About page) ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">About Section <span class="text-xs font-normal text-gray-400">(shown on Home page and About page)</span></h2>
+                    <LanguageTabs v-model="activeLang" />
 
                     <div>
                         <label class="label">Photo</label>
@@ -69,41 +72,41 @@
                     </div>
                     <div>
                         <label class="label">Title</label>
-                        <input v-model="form.about_title" type="text" class="input" placeholder="World Class Patient Facilities Designed For You" />
-                        <InputError :message="form.errors.about_title" />
+                        <input v-model="form.about_title[activeLang]" type="text" class="input" placeholder="World Class Patient Facilities Designed For You" />
+                        <InputError :message="form.errors[`about_title.${activeLang}`]" />
                     </div>
                     <div>
                         <label class="label">Description</label>
-                        <textarea v-model="form.about_desc" rows="3" class="input" placeholder="Experience the future of healthcare..."></textarea>
-                        <InputError :message="form.errors.about_desc" />
+                        <textarea v-model="form.about_desc[activeLang]" rows="3" class="input" placeholder="Experience the future of healthcare..."></textarea>
+                        <InputError :message="form.errors[`about_desc.${activeLang}`]" />
                     </div>
 
                     <div class="border-t pt-4 space-y-3">
                         <div class="flex items-center justify-between">
                             <label class="label mb-0">Opening Hours Card</label>
                         </div>
-                        <input v-model="form.about_hours_title" type="text" class="input" placeholder="Open Hours" />
+                        <input v-model="form.about_hours_title[activeLang]" type="text" class="input" placeholder="Open Hours" />
                         <div v-for="(row, i) in form.about_hours" :key="i" class="flex items-center gap-3">
-                            <input v-model="row.day" type="text" placeholder="Day (e.g. Monday)" class="input flex-1" />
-                            <input v-model="row.time" type="text" placeholder="Time (e.g. 09:30 - 07:30)" class="input flex-1" />
+                            <input v-model="row.day[activeLang]" type="text" placeholder="Day (e.g. Monday)" class="input flex-1" />
+                            <input v-model="row.time[activeLang]" type="text" placeholder="Time (e.g. 09:30 - 07:30)" class="input flex-1" />
                             <button type="button" @click="form.about_hours.splice(i, 1)" class="text-red-400 hover:text-red-600 text-lg leading-none">&times;</button>
                         </div>
-                        <button type="button" @click="form.about_hours.push({ day: '', time: '' })" class="text-xs text-blue-600 hover:underline">+ Add Row</button>
+                        <button type="button" @click="form.about_hours.push({ day: emptyTranslatable(languages), time: emptyTranslatable(languages) })" class="text-xs text-blue-600 hover:underline">+ Add Row</button>
                     </div>
 
                     <div class="border-t pt-4 space-y-3">
                         <label class="label mb-0">Feature Checklist <span class="text-xs text-gray-400">(shown in two columns)</span></label>
                         <div v-for="(item, i) in form.about_features" :key="i" class="flex items-center gap-3">
-                            <input v-model="form.about_features[i]" type="text" placeholder="e.g. Comprehensive Specialties" class="input flex-1" />
+                            <input v-model="form.about_features[i][activeLang]" type="text" placeholder="e.g. Comprehensive Specialties" class="input flex-1" />
                             <button type="button" @click="form.about_features.splice(i, 1)" class="text-red-400 hover:text-red-600 text-lg leading-none">&times;</button>
                         </div>
-                        <button type="button" @click="form.about_features.push('')" class="text-xs text-blue-600 hover:underline">+ Add Feature</button>
+                        <button type="button" @click="form.about_features.push(emptyTranslatable(languages))" class="text-xs text-blue-600 hover:underline">+ Add Feature</button>
                     </div>
 
                     <div class="border-t pt-4 grid grid-cols-2 gap-4">
                         <div>
                             <label class="label">CTA Button Text</label>
-                            <input v-model="form.about_more_btn_text" type="text" class="input" placeholder="Appointment" />
+                            <input v-model="form.about_more_btn_text[activeLang]" type="text" class="input" placeholder="Appointment" />
                         </div>
                         <div>
                             <label class="label">CTA Button URL</label>
@@ -115,13 +118,14 @@
                 <!-- ─── Mission & Vision (About page) ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Mission & Vision Section <span class="text-xs font-normal text-gray-400">(About page only)</span></h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="label">Title</label>
-                        <input v-model="form.about_mv_title" type="text" class="input" placeholder="Inspirational Health Our Vision And Mission" />
+                        <input v-model="form.about_mv_title[activeLang]" type="text" class="input" placeholder="Inspirational Health Our Vision And Mission" />
                     </div>
                     <div>
                         <label class="label">Description</label>
-                        <textarea v-model="form.about_mv_desc" rows="2" class="input"></textarea>
+                        <textarea v-model="form.about_mv_desc[activeLang]" rows="2" class="input"></textarea>
                     </div>
                     <div>
                         <label class="label">Image</label>
@@ -133,9 +137,9 @@
                         <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Cards — Mission / Vision / Values (in order)</p>
                         <div v-for="(card, i) in form.about_mv_cards" :key="i" class="border border-gray-200 rounded-lg p-4 space-y-2">
                             <label class="label text-xs">Title</label>
-                            <input v-model="card.title" type="text" class="input" placeholder="Mission" />
+                            <input v-model="card.title[activeLang]" type="text" class="input" placeholder="Mission" />
                             <label class="label text-xs">Description</label>
-                            <textarea v-model="card.description" rows="2" class="input"></textarea>
+                            <textarea v-model="card.description[activeLang]" rows="2" class="input"></textarea>
                         </div>
                     </div>
                 </section>
@@ -143,6 +147,7 @@
                 <!-- ─── CEO Message (About page) ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">CEO Message Section <span class="text-xs font-normal text-gray-400">(About page only)</span></h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div>
                         <label class="label">Photo</label>
                         <DropZone @change="file => form.ceo_image = file" hint="JPEG / PNG / WebP — max 5 MB" preview-class="w-full h-44 object-cover"
@@ -155,35 +160,35 @@
                         </div>
                         <div>
                             <label class="label">Experience Badge Label</label>
-                            <input v-model="form.ceo_badge_label" type="text" class="input" placeholder="Years Experienced" />
+                            <input v-model="form.ceo_badge_label[activeLang]" type="text" class="input" placeholder="Years Experienced" />
                         </div>
                     </div>
                     <div>
                         <label class="label">Eyebrow Text</label>
-                        <input v-model="form.ceo_eyebrow" type="text" class="input" placeholder="Our CEO Message" />
+                        <input v-model="form.ceo_eyebrow[activeLang]" type="text" class="input" placeholder="Our CEO Message" />
                     </div>
                     <div>
                         <label class="label">Title</label>
-                        <input v-model="form.ceo_title" type="text" class="input" placeholder="Meet Dr. Natali Jackson" />
+                        <input v-model="form.ceo_title[activeLang]" type="text" class="input" placeholder="Meet Dr. Natali Jackson" />
                     </div>
                     <div>
                         <label class="label">Message</label>
-                        <textarea v-model="form.ceo_message" rows="3" class="input"></textarea>
+                        <textarea v-model="form.ceo_message[activeLang]" rows="3" class="input"></textarea>
                     </div>
 
                     <div class="border-t pt-4 space-y-3">
-                        <input v-model="form.ceo_focus_label" type="text" class="input" placeholder="Leadership Focus" />
+                        <input v-model="form.ceo_focus_label[activeLang]" type="text" class="input" placeholder="Leadership Focus" />
                         <div v-for="(item, i) in form.ceo_focus_items" :key="i" class="flex items-center gap-3">
-                            <input v-model="form.ceo_focus_items[i]" type="text" placeholder="e.g. Patient-Centered Care" class="input flex-1" />
+                            <input v-model="form.ceo_focus_items[i][activeLang]" type="text" placeholder="e.g. Patient-Centered Care" class="input flex-1" />
                             <button type="button" @click="form.ceo_focus_items.splice(i, 1)" class="text-red-400 hover:text-red-600 text-lg leading-none">&times;</button>
                         </div>
-                        <button type="button" @click="form.ceo_focus_items.push('')" class="text-xs text-blue-600 hover:underline">+ Add Focus Item</button>
+                        <button type="button" @click="form.ceo_focus_items.push(emptyTranslatable(languages))" class="text-xs text-blue-600 hover:underline">+ Add Focus Item</button>
                     </div>
 
                     <div class="border-t pt-4 space-y-4">
                         <div class="flex items-center justify-between">
                             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Awards</p>
-                            <button type="button" @click="form.ceo_awards.push({ year: '', org: '', label: '' })" class="text-xs text-blue-600 hover:underline">+ Add Award</button>
+                            <button type="button" @click="form.ceo_awards.push({ year: '', org: '', label: emptyTranslatable(languages) })" class="text-xs text-blue-600 hover:underline">+ Add Award</button>
                         </div>
                         <div v-for="(award, i) in form.ceo_awards" :key="i" class="border border-gray-200 rounded-lg p-4 space-y-2">
                             <div class="flex justify-end">
@@ -191,7 +196,7 @@
                             </div>
                             <input v-model="award.year" type="text" class="input" placeholder="ClinicMaster 2024" />
                             <input v-model="award.org" type="text" class="input" placeholder="Quality and Accreditation Institute" />
-                            <input v-model="award.label" type="text" class="input" placeholder="Healthcare Leadership Award" />
+                            <input v-model="award.label[activeLang]" type="text" class="input" placeholder="Healthcare Leadership Award" />
                         </div>
                     </div>
                 </section>
@@ -199,25 +204,26 @@
                 <!-- ─── Why Choose Us (Home page) ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Why Choose Us Section <span class="text-xs font-normal text-gray-400">(Home page only)</span></h2>
+                    <LanguageTabs v-model="activeLang" />
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="label">Badge Text</label>
-                            <input v-model="form.why_badge" type="text" class="input" placeholder="WHY CHOOSE US" />
+                            <input v-model="form.why_badge[activeLang]" type="text" class="input" placeholder="WHY CHOOSE US" />
                         </div>
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="form.why_title" type="text" class="input" placeholder="Why Choose Us For Your Health Care Needs" />
+                            <input v-model="form.why_title[activeLang]" type="text" class="input" placeholder="Why Choose Us For Your Health Care Needs" />
                         </div>
                         <div class="col-span-2">
                             <label class="label">Section Description</label>
-                            <textarea v-model="form.why_desc" rows="2" class="input"></textarea>
+                            <textarea v-model="form.why_desc[activeLang]" rows="2" class="input"></textarea>
                         </div>
                     </div>
 
                     <div class="border-t pt-4 space-y-4">
                         <div class="flex items-center justify-between">
                             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Feature Cards</p>
-                            <button type="button" @click="form.why_features.push({ icon_svg: '', title: '', description: '' })" class="text-xs text-blue-600 hover:underline">+ Add Feature Card</button>
+                            <button type="button" @click="form.why_features.push({ icon_svg: '', title: emptyTranslatable(languages), description: emptyTranslatable(languages) })" class="text-xs text-blue-600 hover:underline">+ Add Feature Card</button>
                         </div>
                         <div v-for="(feat, i) in form.why_features" :key="i" class="border border-gray-200 rounded-lg overflow-hidden">
                             <div class="flex items-center justify-between bg-gray-50 px-4 py-2 border-b border-gray-200">
@@ -226,7 +232,7 @@
                             </div>
                             <div class="p-4 space-y-3">
                                 <label class="label text-xs">Title</label>
-                                <input v-model="feat.title" type="text" class="input" placeholder="More Experience" />
+                                <input v-model="feat.title[activeLang]" type="text" class="input" placeholder="More Experience" />
                                 <label class="label text-xs">Icon SVG</label>
                                 <div v-if="feat.icon_svg" class="mb-1 flex items-center gap-2">
                                     <div class="w-8 h-8 flex items-center justify-center text-gray-600" v-html="feat.icon_svg"></div>
@@ -234,7 +240,7 @@
                                 </div>
                                 <textarea v-model="feat.icon_svg" rows="3" class="input font-mono text-xs" placeholder="<svg xmlns=...>...</svg>"></textarea>
                                 <label class="label text-xs">Description</label>
-                                <textarea v-model="feat.description" rows="2" class="input"></textarea>
+                                <textarea v-model="feat.description[activeLang]" rows="2" class="input"></textarea>
                             </div>
                         </div>
                     </div>
@@ -252,18 +258,24 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { ref, reactive, computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError   from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
+import { emptyTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     settings: { type: Object, required: true },
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
 const s = props.settings;
+const seed = (key, fallback = {}) => ({ ...emptyTranslatable(languages.value), ...fallback, ...(s[key] || {}) });
 
 const currentHeroImage  = ref(s.about_hero_image);
 const currentOgImage    = ref(s.about_seo_og_image);
@@ -273,47 +285,54 @@ const currentCeoImage   = ref(s.ceo_image);
 
 const form = useForm({
     about_hero_image:      null,
-    about_hero_title:      s.about_hero_title ?? '',
-    about_seo_title:       s.about_seo_title ?? '',
-    about_seo_description: s.about_seo_description ?? '',
+    about_hero_title:      seed('about_hero_title'),
+    about_seo_title:       seed('about_seo_title'),
+    about_seo_description: seed('about_seo_description'),
     about_seo_keywords:    s.about_seo_keywords ?? '',
     about_seo_og_image:    null,
 
     about_photo:        null,
-    about_title:         s.about_title ?? '',
-    about_desc:           s.about_desc ?? '',
-    about_hours_title:    s.about_hours_title ?? '',
-    about_hours:          Array.isArray(s.about_hours) ? s.about_hours.map(r => ({ ...r })) : [],
-    about_features:       Array.isArray(s.about_features) ? [...s.about_features] : [],
-    about_more_btn_text:  s.about_more_btn_text ?? '',
+    about_title:         seed('about_title'),
+    about_desc:           seed('about_desc'),
+    about_hours_title:    seed('about_hours_title'),
+    about_hours:          Array.isArray(s.about_hours) ? s.about_hours.map(r => ({ day: { ...emptyTranslatable(languages.value), ...r.day }, time: { ...emptyTranslatable(languages.value), ...r.time } })) : [],
+    about_features:       Array.isArray(s.about_features) ? s.about_features.map(f => ({ ...emptyTranslatable(languages.value), ...f })) : [],
+    about_more_btn_text:  seed('about_more_btn_text'),
     about_more_btn_url:   s.about_more_btn_url ?? '',
 
-    about_mv_title:  s.about_mv_title ?? '',
-    about_mv_desc:    s.about_mv_desc ?? '',
+    about_mv_title:  seed('about_mv_title'),
+    about_mv_desc:    seed('about_mv_desc'),
     about_mv_image:   null,
     about_mv_cards:   Array.isArray(s.about_mv_cards) && s.about_mv_cards.length
-        ? s.about_mv_cards.map(c => ({ ...c }))
-        : [{ title: '', description: '' }, { title: '', description: '' }, { title: '', description: '' }],
+        ? s.about_mv_cards.map(c => ({ title: { ...emptyTranslatable(languages.value), ...c.title }, description: { ...emptyTranslatable(languages.value), ...c.description } }))
+        : [1, 2, 3].map(() => ({ title: emptyTranslatable(languages.value), description: emptyTranslatable(languages.value) })),
 
     ceo_image:        null,
     ceo_badge_value:  s.ceo_badge_value ?? '',
-    ceo_badge_label:  s.ceo_badge_label ?? '',
-    ceo_eyebrow:      s.ceo_eyebrow ?? '',
-    ceo_title:        s.ceo_title ?? '',
-    ceo_message:      s.ceo_message ?? '',
-    ceo_focus_label:  s.ceo_focus_label ?? '',
-    ceo_focus_items:  Array.isArray(s.ceo_focus_items) ? [...s.ceo_focus_items] : [],
-    ceo_awards:       Array.isArray(s.ceo_awards) ? s.ceo_awards.map(a => ({ ...a })) : [],
+    ceo_badge_label:  seed('ceo_badge_label'),
+    ceo_eyebrow:      seed('ceo_eyebrow'),
+    ceo_title:        seed('ceo_title'),
+    ceo_message:      seed('ceo_message'),
+    ceo_focus_label:  seed('ceo_focus_label'),
+    ceo_focus_items:  Array.isArray(s.ceo_focus_items) ? s.ceo_focus_items.map(f => ({ ...emptyTranslatable(languages.value), ...f })) : [],
+    ceo_awards:       Array.isArray(s.ceo_awards) ? s.ceo_awards.map(a => ({ ...a, label: { ...emptyTranslatable(languages.value), ...a.label } })) : [],
 
-    why_badge:    s.why_badge ?? '',
-    why_title:    s.why_title ?? '',
-    why_desc:     s.why_desc ?? '',
-    why_features: Array.isArray(s.why_features) ? s.why_features.map(f => ({ ...f })) : [],
+    why_badge:    seed('why_badge'),
+    why_title:    seed('why_title'),
+    why_desc:     seed('why_desc'),
+    why_features: Array.isArray(s.why_features) ? s.why_features.map(f => ({ ...f, title: { ...emptyTranslatable(languages.value), ...f.title }, description: { ...emptyTranslatable(languages.value), ...f.description } })) : [],
 });
 
-const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(form, {
-    titleSource: () => form.about_title,
-    descSource:  () => form.about_desc,
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(reactive({
+    get about_seo_title() { return form.about_seo_title[activeLang.value]; },
+    set about_seo_title(v) { form.about_seo_title[activeLang.value] = v; },
+    get about_seo_description() { return form.about_seo_description[activeLang.value]; },
+    set about_seo_description(v) { form.about_seo_description[activeLang.value] = v; },
+    get about_seo_keywords() { return form.about_seo_keywords; },
+    set about_seo_keywords(v) { form.about_seo_keywords = v; },
+}), {
+    titleSource: () => form.about_title[activeLang.value],
+    descSource:  () => form.about_desc[activeLang.value],
     titleKey:    'about_seo_title',
     descKey:     'about_seo_description',
     keywordsKey: 'about_seo_keywords',

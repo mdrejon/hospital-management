@@ -1,7 +1,6 @@
 @props([
     'settings'    => [],
     'doctors'     => collect(),
-    'departments' => collect(),
     'source'      => 'appointment_page',
 ])
 
@@ -12,8 +11,7 @@
   $apptFormSubtitle = $settings['appt_form_subtitle'] ?? 'Strong communication and teamwork skills enable effective collaboration';
   $apptImage        = !empty($settings['appt_image']) ? asset('storage/' . $settings['appt_image']) : asset('assets/img/appoinment-img.jpg');
 
-  $apptDepartments = $departments->isNotEmpty() ? $departments : collect(['Cardiology', 'Pediatrics', 'Neurology', 'Orthopedics', 'Dermatology']);
-  $apptDoctors     = $doctors->isNotEmpty() ? $doctors : collect(['Dr. Laron Metar', 'Dr. Smith Karo', 'Dr. Merata Baron', 'Dr. Elena Cross', 'Dr. Michael Reyes', 'Dr. Sara Owens']);
+  $apptDoctors = $doctors instanceof \Illuminate\Support\Collection ? $doctors : collect();
 @endphp
 
 <section class="book-appointment">
@@ -31,15 +29,18 @@
         <p class="book-appointment__subtitle">{{ $apptFormSubtitle }}</p>
 
         @if(session('success'))
-        <p class="book-appointment__subtitle" style="color: #16a34a;">{{ session('success') }}</p>
+        <p class="book-appointment__alert book-appointment__alert--success">{{ session('success') }}</p>
         @endif
         @if($errors->any())
-        <p class="book-appointment__subtitle" style="color: #dc2626;">{{ $errors->first() }}</p>
+        <p class="book-appointment__alert book-appointment__alert--error">{{ $errors->first() }}</p>
         @endif
 
-        <form class="book-appointment__form" action="{{ route('appointment.submit') }}" method="POST">
+        <form class="book-appointment__form" action="{{ route('appointment.submit') }}" method="POST" enctype="multipart/form-data" data-booking-form>
           @csrf
           <input type="hidden" name="source" value="{{ $source }}" />
+          <input type="hidden" name="time_slot" data-field="time_slot" required />
+
+          <p class="book-appointment__section-label">Patient Information</p>
 
           <label class="book-appointment__field">
             <span class="book-appointment__field-icon">
@@ -48,7 +49,47 @@
                 <path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <input type="text" name="name" value="{{ old('name') }}" class="book-appointment__input" placeholder="Name" required />
+            <input type="text" name="patient_name" value="{{ old('patient_name') }}" class="book-appointment__input" placeholder="Patient Full Name" required />
+          </label>
+
+          <div class="book-appointment__radio-group">
+            <label class="book-appointment__radio">
+              <input type="radio" name="gender" value="male" {{ old('gender') !== 'female' && old('gender') !== 'other' ? 'checked' : '' }} required /> Male
+            </label>
+            <label class="book-appointment__radio">
+              <input type="radio" name="gender" value="female" {{ old('gender') === 'female' ? 'checked' : '' }} /> Female
+            </label>
+            <label class="book-appointment__radio">
+              <input type="radio" name="gender" value="other" {{ old('gender') === 'other' ? 'checked' : '' }} /> Other
+            </label>
+          </div>
+
+          <label class="book-appointment__field">
+            <span class="book-appointment__field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3.5" y="5" width="17" height="16" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" class="book-appointment__input" placeholder="Date of Birth (optional)" data-field="dob" max="{{ now()->toDateString() }}" />
+          </label>
+
+          <label class="book-appointment__field">
+            <span class="book-appointment__field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 20h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <input type="number" min="0" max="130" class="book-appointment__input" placeholder="Age" data-field="age" />
+          </label>
+
+          <label class="book-appointment__field">
+            <span class="book-appointment__field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6"/>
+              </svg>
+            </span>
+            <input type="tel" name="phone" value="{{ old('phone') }}" class="book-appointment__input" placeholder="Mobile Number" required />
           </label>
 
           <label class="book-appointment__field">
@@ -58,52 +99,28 @@
                 <path d="m4 6 8 7 8-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
-            <input type="email" name="email" value="{{ old('email') }}" class="book-appointment__input" placeholder="Email Address" required />
+            <input type="email" name="email" value="{{ old('email') }}" class="book-appointment__input" placeholder="Email Address (optional)" />
           </label>
 
-          <label class="book-appointment__field">
+          <label class="book-appointment__field book-appointment__message">
             <span class="book-appointment__field-icon">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M6 3v6a4 4 0 0 0 8 0V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <input type="tel" name="phone" value="{{ old('phone') }}" class="book-appointment__input" placeholder="Phone no" />
-            <span class="book-appointment__field-spinner" aria-hidden="true">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="m8 10 4-4 4 4M8 14l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
+            <textarea class="book-appointment__textarea" placeholder="Present Address (optional)" rows="2" data-field="address" name="address">{{ old('address') }}</textarea>
           </label>
 
-          <label class="book-appointment__field">
-            <span class="book-appointment__field-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="3.5" y="5" width="17" height="16" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
-                <path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-              </svg>
-            </span>
-            <input type="text" name="preferred_date" value="{{ old('preferred_date') }}" class="book-appointment__input" placeholder="Date &amp; Time" />
-          </label>
+          <p class="book-appointment__section-label">Appointment Details</p>
 
-          <label class="book-appointment__field">
-            <span class="book-appointment__field-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 21V9l8-5 8 5v12" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                <path d="M9 21v-6h6v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-              </svg>
-            </span>
-            <select name="department" class="book-appointment__select">
-              <option value="" {{ old('department') ? '' : 'selected' }} hidden>Choose Department</option>
-              @foreach($apptDepartments as $dept)
-              <option value="{{ $dept }}" {{ old('department') === $dept ? 'selected' : '' }}>{{ $dept }}</option>
-              @endforeach
-            </select>
-            <span class="book-appointment__field-caret">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </label>
+          <div class="book-appointment__radio-group">
+            <label class="book-appointment__radio">
+              <input type="radio" name="appointment_type" value="opd" {{ old('appointment_type') !== 'follow_up' ? 'checked' : '' }} required /> Outpatient Consultation (OPD)
+            </label>
+            <label class="book-appointment__radio">
+              <input type="radio" name="appointment_type" value="follow_up" {{ old('appointment_type') === 'follow_up' ? 'checked' : '' }} /> Follow-up Consultation
+            </label>
+          </div>
 
           <label class="book-appointment__field">
             <span class="book-appointment__field-icon">
@@ -114,11 +131,15 @@
                 <path d="M14 9v3a4 4 0 0 0 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <select name="preferred_doctor" class="book-appointment__select">
-              <option value="" {{ old('preferred_doctor') ? '' : 'selected' }} hidden>Doctors</option>
-              @foreach($apptDoctors as $doctorName)
-              <option value="{{ $doctorName }}" {{ old('preferred_doctor') === $doctorName ? 'selected' : '' }}>{{ $doctorName }}</option>
-              @endforeach
+            <select name="doctor_id" class="book-appointment__select" data-field="doctor" required>
+              <option value="" selected hidden>Choose a Doctor</option>
+              @forelse($apptDoctors as $doc)
+              <option value="{{ $doc->id }}" data-fee="{{ $doc->consultation_fee }}" {{ (string) old('doctor_id') === (string) $doc->id ? 'selected' : '' }}>
+                {{ $doc->name }}{{ $doc->role ? ' — ' . $doc->role : '' }}
+              </option>
+              @empty
+              <option value="" disabled>No doctors available right now</option>
+              @endforelse
             </select>
             <span class="book-appointment__field-caret">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -126,6 +147,21 @@
               </svg>
             </span>
           </label>
+          <p class="book-appointment__hint" data-field="doctor-hint"></p>
+
+          <label class="book-appointment__field">
+            <span class="book-appointment__field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3.5" y="5" width="17" height="16" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <input type="date" name="appointment_date" value="{{ old('appointment_date') }}" class="book-appointment__input" placeholder="Appointment Date" data-field="date" disabled required />
+          </label>
+          <p class="book-appointment__hint" data-field="date-hint"></p>
+
+          <p class="book-appointment__section-label" data-field="slots-label" style="display:none;">Available Time Slot</p>
+          <div class="book-appointment__slots" data-field="slots"></div>
 
           <label class="book-appointment__field book-appointment__message">
             <span class="book-appointment__field-icon">
@@ -134,11 +170,32 @@
                 <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
               </svg>
             </span>
-            <textarea name="message" class="book-appointment__textarea" placeholder="Write message..." rows="3">{{ old('message') }}</textarea>
+            <textarea name="symptoms" class="book-appointment__textarea" placeholder="Reason for visit / symptoms (optional)" rows="3">{{ old('symptoms') }}</textarea>
           </label>
 
+          <div class="book-appointment__dropzone sm:col-span-2" data-field="dropzone" tabindex="0" role="button" aria-label="Upload medical documents">
+            <input type="file" name="medical_documents[]" class="book-appointment__dropzone-input" data-field="file-input"
+              accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" multiple hidden />
+
+            <div class="book-appointment__dropzone-prompt" data-field="dropzone-empty">
+              <span class="book-appointment__dropzone-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 16V4M12 4 7 9M12 4l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <p class="book-appointment__dropzone-text" data-field="dropzone-label">
+                <span class="book-appointment__dropzone-browse">Upload medical documents</span> or drag &amp; drop
+              </p>
+              <p class="book-appointment__dropzone-hint">Previous reports, prescriptions or test results — JPG, PNG, PDF or DOC, up to 5 files, 5&nbsp;MB each (optional)</p>
+            </div>
+
+            <div class="book-appointment__dropzone-list" data-field="dropzone-list"></div>
+          </div>
+          <p class="book-appointment__hint is-error" data-field="file-hint"></p>
+
           <div class="book-appointment__submit-wrap">
-            <button type="submit" class="book-appointment__submit">
+            <button type="submit" class="book-appointment__submit" data-field="submit" disabled>
               Submit now
               <span class="book-appointment__submit-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -156,3 +213,238 @@
     </div>
   </div>
 </section>
+
+<script>
+(function () {
+  document.querySelectorAll('[data-booking-form]').forEach(function (form) {
+    var doctorSelect = form.querySelector('[data-field="doctor"]');
+    var doctorHint   = form.querySelector('[data-field="doctor-hint"]');
+    var dateInput    = form.querySelector('[data-field="date"]');
+    var dateHint     = form.querySelector('[data-field="date-hint"]');
+    var slotsLabel   = form.querySelector('[data-field="slots-label"]');
+    var slotsWrap    = form.querySelector('[data-field="slots"]');
+    var slotInput    = form.querySelector('[data-field="time_slot"]');
+    var submitBtn    = form.querySelector('[data-field="submit"]');
+    var dobInput     = form.querySelector('[data-field="dob"]');
+    var ageInput     = form.querySelector('[data-field="age"]');
+
+    var today = new Date();
+    var maxDate = new Date();
+    maxDate.setDate(today.getDate() + 30);
+    if (dateInput) {
+      dateInput.min = today.toISOString().slice(0, 10);
+      dateInput.max = maxDate.toISOString().slice(0, 10);
+    }
+
+    if (dobInput && ageInput) {
+      dobInput.addEventListener('change', function () {
+        if (!dobInput.value) return;
+        var dob = new Date(dobInput.value);
+        var age = today.getFullYear() - dob.getFullYear();
+        var m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+        if (age >= 0) ageInput.value = age;
+      });
+    }
+
+    var unavailableDates = [];
+
+    function resetDate() {
+      dateInput.value = '';
+      dateInput.disabled = !doctorSelect.value;
+      dateHint.textContent = '';
+      resetSlots();
+    }
+
+    function resetSlots() {
+      slotsWrap.innerHTML = '';
+      slotsLabel.style.display = 'none';
+      slotInput.value = '';
+      updateSubmitState();
+    }
+
+    function updateSubmitState() {
+      submitBtn.disabled = !(doctorSelect.value && dateInput.value && slotInput.value);
+    }
+
+    doctorSelect.addEventListener('change', function () {
+      resetDate();
+      unavailableDates = [];
+      if (!doctorSelect.value) return;
+
+      dateInput.disabled = false;
+      var opt = doctorSelect.options[doctorSelect.selectedIndex];
+      dateHint.textContent = (opt && opt.dataset.fee) ? 'Consultation fee: ' + opt.dataset.fee : '';
+
+      fetch('{{ route('appointment.availability') }}?doctor_id=' + encodeURIComponent(doctorSelect.value))
+        .then(function (r) { return r.json(); })
+        .then(function (data) { unavailableDates = data.unavailable_dates || []; })
+        .catch(function () {});
+    });
+
+    dateInput.addEventListener('change', function () {
+      resetSlots();
+      if (!dateInput.value || !doctorSelect.value) return;
+
+      if (unavailableDates.indexOf(dateInput.value) !== -1) {
+        slotsLabel.style.display = '';
+        slotsWrap.innerHTML = '<span class="book-appointment__hint is-error">The doctor is unavailable or fully booked on this date — please choose another date.</span>';
+        return;
+      }
+
+      slotsLabel.style.display = '';
+      slotsWrap.innerHTML = '<span class="book-appointment__hint">Loading available time slots…</span>';
+
+      fetch('{{ route('appointment.slots') }}?doctor_id=' + encodeURIComponent(doctorSelect.value) + '&date=' + encodeURIComponent(dateInput.value))
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          slotsWrap.innerHTML = '';
+          var slots = data.slots || [];
+          if (!slots.length) {
+            slotsWrap.innerHTML = '<span class="book-appointment__hint is-error">No slots available on this date — please choose another date.</span>';
+            return;
+          }
+          slots.forEach(function (time) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'book-appointment__slot';
+            btn.textContent = time;
+            btn.addEventListener('click', function () {
+              slotsWrap.querySelectorAll('.book-appointment__slot').forEach(function (b) { b.classList.remove('is-selected'); });
+              btn.classList.add('is-selected');
+              slotInput.value = time;
+              updateSubmitState();
+            });
+            slotsWrap.appendChild(btn);
+          });
+        })
+        .catch(function () {
+          slotsWrap.innerHTML = '<span class="book-appointment__hint is-error">Could not load time slots. Please try again.</span>';
+        });
+    });
+
+    // ── Drag & drop medical document upload (multiple files) ──
+    var dropzone     = form.querySelector('[data-field="dropzone"]');
+    var fileInput    = form.querySelector('[data-field="file-input"]');
+    var promptView   = form.querySelector('[data-field="dropzone-empty"]');
+    var promptLabel  = form.querySelector('[data-field="dropzone-label"]');
+    var listView     = form.querySelector('[data-field="dropzone-list"]');
+    var fileHint     = form.querySelector('[data-field="file-hint"]');
+    var maxFileBytes = 5 * 1024 * 1024;
+    var maxFiles     = 5;
+    var selectedFiles = [];
+
+    function formatSize(bytes) {
+      return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+    }
+
+    function syncFileInput() {
+      var dt = new DataTransfer();
+      selectedFiles.forEach(function (file) { dt.items.add(file); });
+      fileInput.files = dt.files;
+    }
+
+    function renderList() {
+      listView.innerHTML = '';
+      selectedFiles.forEach(function (file, index) {
+        var row = document.createElement('div');
+        row.className = 'book-appointment__dropzone-file';
+        row.innerHTML =
+          '<span class="book-appointment__dropzone-file-icon">' +
+            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+              '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>' +
+              '<path d="M14 2v6h6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>' +
+            '</svg>' +
+          '</span>' +
+          '<span class="book-appointment__dropzone-file-name"></span>' +
+          '<button type="button" class="book-appointment__dropzone-remove">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+              '<path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+            '</svg>' +
+          '</button>';
+        row.querySelector('.book-appointment__dropzone-file-name').textContent = file.name + ' (' + formatSize(file.size) + ')';
+        var removeBtn = row.querySelector('.book-appointment__dropzone-remove');
+        removeBtn.setAttribute('aria-label', 'Remove ' + file.name);
+        removeBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          selectedFiles.splice(index, 1);
+          syncFileInput();
+          renderList();
+        });
+        listView.appendChild(row);
+      });
+
+      dropzone.classList.toggle('has-file', selectedFiles.length > 0);
+      var browseText = selectedFiles.length === 0 ? 'Upload medical documents' : 'Add another file';
+      promptLabel.innerHTML = '<span class="book-appointment__dropzone-browse">' + browseText + '</span> or drag &amp; drop';
+      promptView.style.display = selectedFiles.length < maxFiles ? '' : 'none';
+    }
+
+    function acceptFile(file) {
+      var allowed = ['image/jpeg', 'image/png', 'application/pdf', 'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      if (allowed.indexOf(file.type) === -1) {
+        fileHint.textContent = 'Unsupported file type — "' + file.name + '" was skipped. Please upload JPG, PNG, PDF or DOC files.';
+        return false;
+      }
+      if (file.size > maxFileBytes) {
+        fileHint.textContent = '"' + file.name + '" is too large — the maximum size is 5 MB.';
+        return false;
+      }
+      var isDuplicate = selectedFiles.some(function (f) {
+        return f.name === file.name && f.size === file.size && f.lastModified === file.lastModified;
+      });
+      if (isDuplicate) return false;
+      return true;
+    }
+
+    function addFiles(fileList) {
+      fileHint.textContent = '';
+      Array.prototype.forEach.call(fileList, function (file) {
+        if (selectedFiles.length >= maxFiles) {
+          fileHint.textContent = 'You can attach up to ' + maxFiles + ' files.';
+          return;
+        }
+        if (acceptFile(file)) selectedFiles.push(file);
+      });
+      syncFileInput();
+      renderList();
+    }
+
+    dropzone.addEventListener('click', function (e) {
+      if (e.target.closest('.book-appointment__dropzone-remove')) return;
+      if (selectedFiles.length >= maxFiles) return;
+      fileInput.click();
+    });
+    dropzone.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (selectedFiles.length < maxFiles) fileInput.click(); }
+    });
+
+    fileInput.addEventListener('change', function () {
+      if (fileInput.files && fileInput.files.length) addFiles(fileInput.files);
+    });
+
+    ['dragenter', 'dragover'].forEach(function (evt) {
+      dropzone.addEventListener(evt, function (e) {
+        e.preventDefault(); e.stopPropagation();
+        dropzone.classList.add('is-dragover');
+      });
+    });
+    ['dragleave', 'drop'].forEach(function (evt) {
+      dropzone.addEventListener(evt, function (e) {
+        e.preventDefault(); e.stopPropagation();
+        dropzone.classList.remove('is-dragover');
+      });
+    });
+    dropzone.addEventListener('drop', function (e) {
+      if (e.dataTransfer.files && e.dataTransfer.files.length) addFiles(e.dataTransfer.files);
+    });
+
+    form.addEventListener('submit', function (e) {
+      if (!doctorSelect.value || !dateInput.value || !slotInput.value) {
+        e.preventDefault();
+      }
+    });
+  });
+})();
+</script>

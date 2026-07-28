@@ -115,16 +115,18 @@
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Home Page — Blog Preview Section</h2>
                         <p class="text-xs text-gray-400 -mt-2">Shows your 4 most recent published posts.</p>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="settingsForm.blog_home_title" type="text" class="input" placeholder="Stay Informed With Our Latest Health Blogs" />
-                            <InputError :message="settingsForm.errors.blog_home_title" />
+                            <input v-model="settingsForm.blog_home_title[activeLang]" type="text" class="input" placeholder="Stay Informed With Our Latest Health Blogs" />
+                            <InputError :message="settingsForm.errors[`blog_home_title.${activeLang}`]" />
                         </div>
                     </section>
 
                     <!-- Page Hero & Breadcrumb -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Blog List Page — Hero &amp; Breadcrumb</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div class="grid grid-cols-2 gap-4">
                             <div class="col-span-2 md:col-span-1">
                                 <label class="label">Hero Background Image</label>
@@ -134,8 +136,8 @@
                             </div>
                             <div class="col-span-2 md:col-span-1">
                                 <label class="label">Page Title (Breadcrumb)</label>
-                                <input v-model="settingsForm.blog_hero_title" type="text" class="input" placeholder="Our Blog" />
-                                <InputError :message="settingsForm.errors.blog_hero_title" />
+                                <input v-model="settingsForm.blog_hero_title[activeLang]" type="text" class="input" placeholder="Our Blog" />
+                                <InputError :message="settingsForm.errors[`blog_hero_title.${activeLang}`]" />
                             </div>
                         </div>
                     </section>
@@ -143,19 +145,20 @@
                     <!-- SEO Configuration -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Blog List Page — SEO Configuration</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
-                            <input v-model="settingsForm.blog_seo_title" @input="onMetaTitleInput" type="text" maxlength="160" class="input"
+                            <input v-model="settingsForm.blog_seo_title[activeLang]" @input="onMetaTitleInput" type="text" maxlength="160" class="input"
                                 placeholder="Blog | ClinicMaster Medical & Health Care Services" />
-                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.blog_seo_title || '').length }}/160</p>
-                            <InputError :message="settingsForm.errors.blog_seo_title" />
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.blog_seo_title[activeLang] || '').length }}/160</p>
+                            <InputError :message="settingsForm.errors[`blog_seo_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
-                            <textarea v-model="settingsForm.blog_seo_description" @input="onMetaDescInput" rows="3" maxlength="320" class="input resize-none"
+                            <textarea v-model="settingsForm.blog_seo_description[activeLang]" @input="onMetaDescInput" rows="3" maxlength="320" class="input resize-none"
                                 placeholder="Read the latest health tips, medical insights, and hospital news from ClinicMaster..."></textarea>
-                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.blog_seo_description || '').length }}/320</p>
-                            <InputError :message="settingsForm.errors.blog_seo_description" />
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.blog_seo_description[activeLang] || '').length }}/320</p>
+                            <InputError :message="settingsForm.errors[`blog_seo_description.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated, auto-filled if left blank)</span></label>

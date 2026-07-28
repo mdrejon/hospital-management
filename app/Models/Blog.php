@@ -5,9 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Translatable\HasTranslations;
 
 class Blog extends Model
 {
+    use HasTranslations;
+
+    public array $translatable = ['title', 'excerpt', 'content', 'meta_title', 'meta_description', 'meta_keywords'];
+
     protected $fillable = [
         'category_id', 'title', 'slug', 'excerpt', 'content',
         'feature_image', 'og_image', 'tags',

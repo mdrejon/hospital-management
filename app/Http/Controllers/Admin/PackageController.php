@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\WebsiteSettings\PackageSettingController;
+use App\Models\Language;
 use App\Models\Package;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -39,10 +40,14 @@ class PackageController extends Controller
             }
         }
 
-        $data['slug'] = $this->uniqueSlug($data['title']);
+        $data['slug'] = $this->uniqueSlug($data['title'][$this->defaultLocale()] ?? '');
 
         if (empty($data['seo_keywords'])) {
-            $data['seo_keywords'] = $this->autoKeywords($data['seo_title'] ?? '', $data['seo_description'] ?? '', $data['title']);
+            $data['seo_keywords'] = $this->autoKeywords(
+                $data['seo_title'][$this->defaultLocale()] ?? '',
+                $data['seo_description'][$this->defaultLocale()] ?? '',
+                $data['title'][$this->defaultLocale()] ?? ''
+            );
         }
 
         Package::create($data);
@@ -73,10 +78,14 @@ class PackageController extends Controller
             }
         }
 
-        $data['slug'] = $this->uniqueSlug($data['title'], $package->id);
+        $data['slug'] = $this->uniqueSlug($data['title'][$this->defaultLocale()] ?? '', $package->id);
 
         if (empty($data['seo_keywords'])) {
-            $data['seo_keywords'] = $this->autoKeywords($data['seo_title'] ?? '', $data['seo_description'] ?? '', $data['title']);
+            $data['seo_keywords'] = $this->autoKeywords(
+                $data['seo_title'][$this->defaultLocale()] ?? '',
+                $data['seo_description'][$this->defaultLocale()] ?? '',
+                $data['title'][$this->defaultLocale()] ?? ''
+            );
         }
 
         $package->update($data);
@@ -106,29 +115,47 @@ class PackageController extends Controller
         return back()->with('success', 'Package status updated.');
     }
 
+    private function defaultLocale(): string
+    {
+        return Language::defaultLanguage()?->code ?? config('app.locale');
+    }
+
     private function validated(Request $request): array
     {
+        $default = $this->defaultLocale();
+
         $data = $request->validate([
-            'title'            => 'required|string',
-            'image'            => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'short_desc'       => 'nullable|string',
-            'description'      => 'nullable|string',
-            'features'         => 'nullable|array',
-            'features.*'       => 'nullable|string',
-            'secondary_image'  => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'badge_value'      => 'nullable|string',
-            'badge_label'      => 'nullable|string',
-            'is_featured'      => 'boolean',
-            'sort_order'       => 'integer|min:0',
-            'is_active'        => 'boolean',
-            'seo_title'        => 'nullable|string',
-            'seo_description'  => 'nullable|string',
-            'seo_keywords'     => 'nullable|string',
-            'seo_og_image'     => 'nullable|image|mimes:jpeg,jpg,png,webp',
+            'title'             => 'required|array',
+            "title.$default"    => 'required|string',
+            'title.*'           => 'nullable|string',
+            'image'             => 'nullable|image|mimes:jpeg,jpg,png,webp',
+            'short_desc'        => 'nullable|array',
+            'short_desc.*'      => 'nullable|string',
+            'description'       => 'nullable|array',
+            'description.*'     => 'nullable|string',
+            'features'          => 'nullable|array',
+            'features.*.*'      => 'nullable|string',
+            'secondary_image'   => 'nullable|image|mimes:jpeg,jpg,png,webp',
+            'badge_value'       => 'nullable|string',
+            'badge_label'       => 'nullable|array',
+            'badge_label.*'     => 'nullable|string',
+            'is_featured'       => 'boolean',
+            'sort_order'        => 'integer|min:0',
+            'is_active'         => 'boolean',
+            'seo_title'         => 'nullable|array',
+            'seo_title.*'       => 'nullable|string',
+            'seo_description'   => 'nullable|array',
+            'seo_description.*' => 'nullable|string',
+            'seo_keywords'      => 'nullable|string',
+            'seo_og_image'      => 'nullable|image|mimes:jpeg,jpg,png,webp',
         ]);
 
+        // Sanitise arrays — remove entries blank in every locale
         if (isset($data['features'])) {
-            $data['features'] = array_values(array_filter($data['features']));
+            $data['features'] = array_values(array_filter(
+                $data['features'],
+                fn ($f) => is_array($f) && count(array_filter($f)) > 0
+            ));
         }
 
         return $data;

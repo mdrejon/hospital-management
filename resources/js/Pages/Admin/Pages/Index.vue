@@ -38,9 +38,9 @@
                         <tr v-for="(p, i) in pages" :key="p.id"
                             class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                             <td class="px-4 py-3 text-gray-500">{{ i + 1 }}</td>
-                            <td class="px-4 py-3 text-gray-700 font-medium">{{ p.title }}</td>
+                            <td class="px-4 py-3 text-gray-700 font-medium">{{ displayTranslatable(p.title, languages) }}</td>
                             <td class="px-4 py-3 text-gray-500 text-xs">/{{ p.full_path }}</td>
-                            <td class="px-4 py-3 text-gray-500">{{ p.parent || '—' }}</td>
+                            <td class="px-4 py-3 text-gray-500">{{ p.parent ? displayTranslatable(p.parent, languages) : '—' }}</td>
                             <td class="px-4 py-3 text-gray-500">{{ p.sort_order }}</td>
                             <td class="px-4 py-3">
                                 <button @click="toggleStatus(p)"
@@ -80,7 +80,7 @@
                 <h3 class="font-semibold text-gray-800 mb-2">Delete Page</h3>
                 <p class="text-sm text-gray-600 mb-4">
                     Are you sure you want to delete
-                    "<strong>{{ deleteTarget.title }}</strong>"?
+                    "<strong>{{ displayTranslatable(deleteTarget.title, languages) }}</strong>"?
                     This cannot be undone.
                 </p>
                 <div class="flex justify-end gap-2">
@@ -99,13 +99,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
+import { displayTranslatable } from '@/Composables/useTranslatable';
 
 defineProps({
     pages: { type: Array, default: () => [] },
 });
+
+const languages = computed(() => usePage().props.languages ?? []);
 
 const deleteTarget = ref(null);
 

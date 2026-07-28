@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\WebsiteSettings;
 
 use App\Http\Controllers\Controller;
 use App\Models\GlobalSetting;
+use App\Models\Language;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,6 +27,12 @@ class FaqPageSettingController extends Controller
         'faq_page_image',
     ];
 
+    /** Human-copy keys edited per-locale. */
+    private array $translatableKeys = [
+        'faq_hero_title', 'faq_seo_title', 'faq_seo_description',
+        'faq_page_badge', 'faq_page_title', 'faq_page_desc',
+    ];
+
     public function edit(): Response
     {
         $settings = GlobalSetting::whereIn('key', $this->keys)
@@ -36,6 +43,10 @@ class FaqPageSettingController extends Controller
             $settings[$key] ??= null;
         }
 
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
+        }
+
         return Inertia::render('Admin/WebsiteSettings/Faq/Edit', [
             'settings' => $settings,
         ]);
@@ -43,18 +54,20 @@ class FaqPageSettingController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'faq_hero_title'      => 'nullable|string',
-            'faq_seo_title'       => 'nullable|string',
-            'faq_seo_description' => 'nullable|string',
+        $default = Language::defaultLanguage()?->code ?? config('app.locale');
+
+        $rules = [
             'faq_seo_keywords'    => 'nullable|string',
-            'faq_page_badge'      => 'nullable|string',
-            'faq_page_title'      => 'nullable|string',
-            'faq_page_desc'       => 'nullable|string',
             'faq_hero_image'      => 'nullable|image|mimes:jpeg,jpg,png,webp',
             'faq_seo_og_image'    => 'nullable|image|mimes:jpeg,jpg,png,webp',
             'faq_page_image'      => 'nullable|image|mimes:jpeg,jpg,png,webp',
-        ]);
+        ];
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
 
         foreach (['faq_hero_image', 'faq_seo_og_image', 'faq_page_image'] as $imgKey) {
             if ($request->hasFile($imgKey)) {
@@ -71,9 +84,16 @@ class FaqPageSettingController extends Controller
         // Auto-generate keywords if none provided
         if (empty($data['faq_seo_keywords'])) {
             $data['faq_seo_keywords'] = $this->autoKeywords(
-                $data['faq_seo_title'] ?? GlobalSetting::get('faq_seo_title', ''),
-                $data['faq_seo_description'] ?? GlobalSetting::get('faq_seo_description', '')
+                $data['faq_seo_title'][$default] ?? GlobalSetting::getTranslated('faq_seo_title', $default, ''),
+                $data['faq_seo_description'][$default] ?? GlobalSetting::getTranslated('faq_seo_description', $default, '')
             );
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                GlobalSetting::setTranslated($key, $data[$key] ?? []);
+                unset($data[$key]);
+            }
         }
 
         GlobalSetting::setMany($data);

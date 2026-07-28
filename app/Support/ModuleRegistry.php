@@ -17,6 +17,8 @@ class ModuleRegistry
             ['key' => 'dashboard',           'name' => 'Dashboard',           'actions' => ['view']],
             ['key' => 'inquiries',           'name' => 'Inquiries',           'actions' => ['view', 'edit', 'delete']],
             ['key' => 'appointments',        'name' => 'Appointments',        'actions' => ['view', 'create', 'edit', 'delete']],
+            ['key' => 'doctor-dashboard',    'name' => 'Doctor Dashboard',    'actions' => ['view', 'edit']],
+            ['key' => 'operator-dashboard',  'name' => 'Operator Dashboard',  'actions' => ['view', 'create', 'edit']],
             ['key' => 'website-management',  'name' => 'Website Management',  'actions' => ['view', 'create', 'edit', 'delete']],
             ['key' => 'global-settings',     'name' => 'Global Settings',     'actions' => ['view', 'create', 'edit', 'delete']],
             ['key' => 'email-smtp-setting',  'name' => 'Email SMTP Setting',  'actions' => ['view', 'edit']],
@@ -35,6 +37,9 @@ class ModuleRegistry
 
             'admin.appointments'                    => 'appointments',
             'admin.website-settings.appointment'    => 'appointments',
+
+            'admin.doctor-dashboard'  => 'doctor-dashboard',
+            'admin.operator'          => 'operator-dashboard',
 
             // Website Management menu (About, Contact, History, Achievements, Management, Services, Gallery, FAQs, Testimonials, Blog)
             'admin.website-settings.about'        => 'website-management',

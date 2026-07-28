@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
 
 class Award extends Model
 {
+    use HasTranslations;
+
+    public array $translatable = ['title', 'subtitle', 'link_text'];
+
     protected $fillable = [
         'title', 'subtitle', 'link_text', 'link_url', 'seal_variant', 'sort_order', 'is_active',
     ];

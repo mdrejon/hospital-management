@@ -13,22 +13,23 @@
             <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                 <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Section Header</h2>
                 <form @submit.prevent="saveSettings" class="space-y-3">
+                    <LanguageTabs v-model="activeLang" />
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="label">Badge Text</label>
-                            <input v-model="settingsForm.gallery_badge" type="text" class="input" placeholder="OUR GALLERY" />
-                            <InputError :message="settingsForm.errors.gallery_badge" />
+                            <input v-model="settingsForm.gallery_badge[activeLang]" type="text" class="input" placeholder="OUR GALLERY" />
+                            <InputError :message="settingsForm.errors[`gallery_badge.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="settingsForm.gallery_title" type="text" class="input" placeholder="Inside Our Hospital" />
-                            <InputError :message="settingsForm.errors.gallery_title" />
+                            <input v-model="settingsForm.gallery_title[activeLang]" type="text" class="input" placeholder="Inside Our Hospital" />
+                            <InputError :message="settingsForm.errors[`gallery_title.${activeLang}`]" />
                         </div>
                         <div class="col-span-2">
                             <label class="label">Subtitle <span class="text-xs text-gray-400">(shown on gallery page)</span></label>
-                            <textarea v-model="settingsForm.gallery_subtitle" rows="2" class="input resize-none"
+                            <textarea v-model="settingsForm.gallery_subtitle[activeLang]" rows="2" class="input resize-none"
                                 placeholder="From modern treatment rooms to advanced diagnostic facilities — take a look at the spaces and people behind ClinicMaster's award-winning care."></textarea>
-                            <InputError :message="settingsForm.errors.gallery_subtitle" />
+                            <InputError :message="settingsForm.errors[`gallery_subtitle.${activeLang}`]" />
                         </div>
                     </div>
                     <div class="flex justify-end">
@@ -53,22 +54,24 @@
                         </div>
                         <div class="col-span-2 md:col-span-1">
                             <label class="label">Page Title (Breadcrumb)</label>
-                            <input v-model="seoForm.gallery_hero_title" type="text" class="input" placeholder="Our Gallery" />
+                            <LanguageTabs v-model="activeLang" />
+                            <input v-model="seoForm.gallery_hero_title[activeLang]" type="text" class="input" placeholder="Our Gallery" />
                         </div>
                     </div>
 
                     <!-- SEO -->
                     <div class="border-t pt-4 space-y-4">
                         <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide">SEO Configuration</h3>
+                        <LanguageTabs v-model="activeLang" />
                         <div class="grid grid-cols-2 gap-4">
                             <div class="col-span-2">
-                                <label class="label">Meta Title <span class="text-gray-400 font-normal">({{ seoForm.gallery_seo_title.length }}/160)</span></label>
-                                <input v-model="seoForm.gallery_seo_title" type="text" maxlength="160" class="input"
+                                <label class="label">Meta Title <span class="text-gray-400 font-normal">({{ (seoForm.gallery_seo_title[activeLang] || '').length }}/160)</span></label>
+                                <input v-model="seoForm.gallery_seo_title[activeLang]" type="text" maxlength="160" class="input"
                                     placeholder="Gallery | ClinicMaster Medical & Health Care Services" />
                             </div>
                             <div class="col-span-2">
-                                <label class="label">Meta Description <span class="text-gray-400 font-normal">({{ seoForm.gallery_seo_description.length }}/320)</span></label>
-                                <textarea v-model="seoForm.gallery_seo_description" rows="3" maxlength="320"
+                                <label class="label">Meta Description <span class="text-gray-400 font-normal">({{ (seoForm.gallery_seo_description[activeLang] || '').length }}/320)</span></label>
+                                <textarea v-model="seoForm.gallery_seo_description[activeLang]" rows="3" maxlength="320"
                                     class="input resize-none"
                                     placeholder="Browse photos of ClinicMaster's treatment rooms, diagnostic facilities, and medical team..."></textarea>
                             </div>
@@ -154,7 +157,7 @@
                             <img :src="`/storage/${img.image}`"
                                 class="w-full h-32 object-cover transition-opacity pointer-events-none select-none"
                                 :class="img.is_active ? 'opacity-100' : 'opacity-40'"
-                                :alt="img.alt || ''" />
+                                :alt="displayTranslatable(img.alt, languages) || ''" />
 
                             <!-- Drag handle -->
                             <span class="absolute top-1 right-1 w-6 h-6 rounded bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -187,7 +190,7 @@
 
                         <!-- Info -->
                         <div class="bg-gray-50 px-2 py-1.5">
-                            <span class="text-xs text-gray-500 truncate block">{{ img.caption || img.alt || '(untitled)' }}</span>
+                            <span class="text-xs text-gray-500 truncate block">{{ displayTranslatable(img.caption, languages) || displayTranslatable(img.alt, languages) || '(untitled)' }}</span>
                         </div>
                     </div>
                 </div>
@@ -207,17 +210,18 @@
             <div class="bg-white rounded-lg p-6 w-96 shadow-xl space-y-4">
                 <h3 class="font-semibold text-gray-800">Edit Image Details</h3>
                 <img :src="`/storage/${editTarget.image}`" class="w-full h-40 object-cover rounded" />
+                <LanguageTabs v-model="activeLang" />
                 <div>
                     <label class="label">Alt Text</label>
-                    <input v-model="editForm.alt" type="text" class="input" placeholder="Descriptive alt text..." />
+                    <input v-model="editForm.alt[activeLang]" type="text" class="input" placeholder="Descriptive alt text..." />
                 </div>
                 <div>
                     <label class="label">Sub Title / Category <span class="text-xs text-gray-400">(small tag shown above the title, e.g. "Child Care")</span></label>
-                    <input v-model="editForm.sub_title" type="text" class="input" placeholder="e.g. Child Care" />
+                    <input v-model="editForm.sub_title[activeLang]" type="text" class="input" placeholder="e.g. Child Care" />
                 </div>
                 <div>
                     <label class="label">Title <span class="text-xs text-gray-400">(bold heading shown on hover, e.g. "Gentle Pediatric Checkups")</span></label>
-                    <input v-model="editForm.caption" type="text" class="input" placeholder="e.g. Gentle Pediatric Checkups" />
+                    <input v-model="editForm.caption[activeLang]" type="text" class="input" placeholder="e.g. Gentle Pediatric Checkups" />
                 </div>
                 <div>
                     <label class="label">Sort Order</label>
@@ -250,21 +254,26 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue';
-import { useForm, router } from '@inertiajs/vue3';
+import { useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError  from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import { emptyTranslatable, seedTranslatable, displayTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     images:   { type: Array,  default: () => [] },
     settings: { type: Object, default: () => ({}) },
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
 // ── Section header form ──
 const settingsForm = useForm({
-    gallery_badge:    props.settings.gallery_badge    ?? '',
-    gallery_title:    props.settings.gallery_title    ?? '',
-    gallery_subtitle: props.settings.gallery_subtitle ?? '',
+    gallery_badge:    seedTranslatable(languages.value, props.settings.gallery_badge),
+    gallery_title:    seedTranslatable(languages.value, props.settings.gallery_title),
+    gallery_subtitle: seedTranslatable(languages.value, props.settings.gallery_subtitle),
 });
 
 function saveSettings() {
@@ -276,9 +285,9 @@ const currentHeroImg = ref(props.settings.gallery_hero_image  ?? null);
 const currentOgImg   = ref(props.settings.gallery_seo_og_image ?? null);
 
 const seoForm = useForm({
-    gallery_hero_title:      props.settings.gallery_hero_title      ?? '',
-    gallery_seo_title:       props.settings.gallery_seo_title       ?? '',
-    gallery_seo_description: props.settings.gallery_seo_description ?? '',
+    gallery_hero_title:      seedTranslatable(languages.value, props.settings.gallery_hero_title),
+    gallery_seo_title:       seedTranslatable(languages.value, props.settings.gallery_seo_title),
+    gallery_seo_description: seedTranslatable(languages.value, props.settings.gallery_seo_description),
     gallery_seo_keywords:    props.settings.gallery_seo_keywords    ?? '',
     gallery_hero_image:      null,
     gallery_seo_og_image:    null,
@@ -386,13 +395,13 @@ function toggleStatus(img) {
 
 // ── Edit modal ──
 const editTarget = ref(null);
-const editForm   = reactive({ alt: '', sub_title: '', caption: '', sort_order: 0 });
+const editForm   = reactive({ alt: {}, sub_title: {}, caption: {}, sort_order: 0 });
 
 function openEdit(img) {
     editTarget.value = img;
-    editForm.alt        = img.alt        ?? '';
-    editForm.sub_title  = img.sub_title  ?? '';
-    editForm.caption    = img.caption    ?? '';
+    editForm.alt        = seedTranslatable(languages.value, img.alt);
+    editForm.sub_title  = seedTranslatable(languages.value, img.sub_title);
+    editForm.caption    = seedTranslatable(languages.value, img.caption);
     editForm.sort_order = img.sort_order ?? 0;
 }
 

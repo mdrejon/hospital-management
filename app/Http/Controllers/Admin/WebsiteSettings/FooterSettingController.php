@@ -45,6 +45,12 @@ class FooterSettingController extends Controller
         'footer_useful_links',
     ];
 
+    /** Plain human-copy keys edited per-locale. Link-group item `label`s are handled separately below (nested). */
+    private array $translatableKeys = [
+        'footer_brand_description', 'footer_opening_time', 'footer_newsletter_title', 'footer_copyright_text',
+        'footer_phone_1', 'footer_phone_2', 'footer_phone_3', 'footer_address_line1', 'footer_address_line2',
+    ];
+
     public function edit(): Response
     {
         $settings = GlobalSetting::whereIn('key', $this->footerKeys)
@@ -55,11 +61,17 @@ class FooterSettingController extends Controller
             $settings[$key] ??= null;
         }
 
-        // Decode JSON fields
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
+        }
+
+        // Decode JSON link-group fields — each item's `label` becomes {en,bn}
         foreach ($this->jsonKeys as $jsonKey) {
-            $settings[$jsonKey] = !empty($settings[$jsonKey])
-                ? json_decode($settings[$jsonKey], true)
-                : [];
+            $items = !empty($settings[$jsonKey]) ? json_decode($settings[$jsonKey], true) : [];
+            $settings[$jsonKey] = collect($items)->map(function ($item) {
+                $item['label'] = is_array($item['label'] ?? null) ? $item['label'] : ['en' => $item['label'] ?? '', 'bn' => ''];
+                return $item;
+            })->values()->all();
         }
 
         return Inertia::render('Admin/WebsiteSettings/Footer/Edit', [
@@ -71,32 +83,30 @@ class FooterSettingController extends Controller
     {
         $linkRules = [];
         foreach ($this->jsonKeys as $jsonKey) {
-            $linkRules[$jsonKey]                = 'nullable|array';
-            $linkRules["$jsonKey.*.label"] = 'required|string';
-            $linkRules["$jsonKey.*.url"]   = 'required|string';
+            $linkRules[$jsonKey]                  = 'nullable|array';
+            $linkRules["$jsonKey.*.label"]         = 'required|array';
+            $linkRules["$jsonKey.*.label.*"]       = 'nullable|string';
+            $linkRules["$jsonKey.*.url"]           = 'required|string';
         }
 
-        $data = $request->validate(array_merge([
+        $rules = [
             'footer_logo'              => 'nullable|image|mimes:jpeg,jpg,png,webp,svg',
-            'footer_brand_description' => 'nullable|string',
             'footer_facebook_url'      => 'nullable|string',
             'footer_twitter_url'       => 'nullable|string',
             'footer_instagram_url'     => 'nullable|string',
             'footer_youtube_url'       => 'nullable|string',
-            'footer_phone_1'           => 'nullable|string',
-            'footer_phone_2'           => 'nullable|string',
-            'footer_phone_3'           => 'nullable|string',
             'footer_email_1'           => 'nullable|email',
             'footer_email_2'           => 'nullable|email',
-            'footer_address_line1'     => 'nullable|string',
-            'footer_address_line2'     => 'nullable|string',
             'footer_website_url'       => 'nullable|string',
-            'footer_opening_time'      => 'nullable|string',
-            'footer_newsletter_title'  => 'nullable|string',
             'footer_privacy_url'       => 'nullable|string',
             'footer_terms_url'         => 'nullable|string',
-            'footer_copyright_text'    => 'nullable|string',
-        ], $linkRules));
+        ];
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate(array_merge($rules, $linkRules));
 
         if ($request->hasFile('footer_logo')) {
             $existing = GlobalSetting::get('footer_logo');
@@ -109,10 +119,17 @@ class FooterSettingController extends Controller
             unset($data['footer_logo']);
         }
 
+        foreach ($this->translatableKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                GlobalSetting::setTranslated($key, $data[$key] ?? []);
+                unset($data[$key]);
+            }
+        }
+
         // Encode JSON fields before saving
         foreach ($this->jsonKeys as $jsonKey) {
             if (isset($data[$jsonKey])) {
-                $data[$jsonKey] = json_encode($data[$jsonKey]);
+                $data[$jsonKey] = json_encode($data[$jsonKey], JSON_UNESCAPED_UNICODE);
             }
         }
 

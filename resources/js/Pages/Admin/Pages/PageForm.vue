@@ -4,18 +4,19 @@
         <!-- ── Basic Info ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Basic Information</h2>
+            <LanguageTabs v-model="activeLang" />
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="label">Page Title <span class="text-red-500">*</span></label>
-                    <input v-model="form.title" type="text" class="input" placeholder="e.g. Privacy Policy" />
-                    <InputError :message="form.errors.title" />
+                    <input v-model="form.title[activeLang]" type="text" class="input" placeholder="e.g. Privacy Policy" />
+                    <InputError :message="form.errors[`title.${activeLang}`]" />
                 </div>
                 <div>
                     <label class="label">Parent Page <span class="text-gray-400 font-normal text-xs">(optional)</span></label>
                     <select v-model="form.parent_id" class="input">
                         <option :value="null">— No Parent (top level) —</option>
-                        <option v-for="p in parentOptions" :key="p.id" :value="p.id">{{ p.title }}</option>
+                        <option v-for="p in parentOptions" :key="p.id" :value="p.id">{{ displayTranslatable(p.title, languages) }}</option>
                     </select>
                     <InputError :message="form.errors.parent_id" />
                 </div>
@@ -25,8 +26,8 @@
                 </div>
                 <div>
                     <label class="label">Breadcrumb Title <span class="text-gray-400 font-normal text-xs">(optional override, shown in the page header)</span></label>
-                    <input v-model="form.breadcrumb_title" type="text" class="input" placeholder="Defaults to page title" />
-                    <InputError :message="form.errors.breadcrumb_title" />
+                    <input v-model="form.breadcrumb_title[activeLang]" type="text" class="input" placeholder="Defaults to page title" />
+                    <InputError :message="form.errors[`breadcrumb_title.${activeLang}`]" />
                 </div>
                 <div>
                     <label class="label">Sort Order</label>
@@ -53,24 +54,26 @@
         <!-- ── Content ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Page Content</h2>
-            <RichEditor v-model="form.content" />
-            <InputError :message="form.errors.content" />
+            <LanguageTabs v-model="activeLang" />
+            <RichEditor v-model="form.content[activeLang]" />
+            <InputError :message="form.errors[`content.${activeLang}`]" />
         </section>
 
         <!-- ── SEO ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">SEO Configuration</h2>
+            <LanguageTabs v-model="activeLang" />
             <div>
                 <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
-                <input v-model="form.seo_title" @input="onMetaTitleInput" type="text" class="input" maxlength="160" />
-                <p class="text-xs text-gray-400 mt-1">{{ (form.seo_title || '').length }}/160</p>
-                <InputError :message="form.errors.seo_title" />
+                <input v-model="form.seo_title[activeLang]" @input="onMetaTitleInput" type="text" class="input" maxlength="160" />
+                <p class="text-xs text-gray-400 mt-1">{{ (form.seo_title[activeLang] || '').length }}/160</p>
+                <InputError :message="form.errors[`seo_title.${activeLang}`]" />
             </div>
             <div>
                 <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
-                <textarea v-model="form.seo_description" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
-                <p class="text-xs text-gray-400 mt-1">{{ (form.seo_description || '').length }}/320</p>
-                <InputError :message="form.errors.seo_description" />
+                <textarea v-model="form.seo_description[activeLang]" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
+                <p class="text-xs text-gray-400 mt-1">{{ (form.seo_description[activeLang] || '').length }}/320</p>
+                <InputError :message="form.errors[`seo_description.${activeLang}`]" />
             </div>
             <div>
                 <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated, auto-filled if left blank)</span></label>
@@ -89,11 +92,14 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, reactive } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
 import RichEditor from '@/Components/Admin/Shared/RichEditor.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
+import { defaultLangCode, displayTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     form:          { type: Object, required: true },
@@ -103,9 +109,24 @@ const props = defineProps({
 
 const emit = defineEmits(['image-change']);
 
-const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(props.form, {
-    titleSource: () => props.form.title,
-    descSource:  () => props.form.breadcrumb_title,
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
+// Proxy exposing the current-tab locale value of each translatable field as a
+// plain string, so useSeoAutoFill (which reads/writes flat form keys) can
+// drive the per-locale seo_title[activeLang]/seo_description[activeLang].
+const seoProxy = reactive({
+    get seo_title() { return props.form.seo_title[activeLang.value]; },
+    set seo_title(v) { props.form.seo_title[activeLang.value] = v; },
+    get seo_description() { return props.form.seo_description[activeLang.value]; },
+    set seo_description(v) { props.form.seo_description[activeLang.value] = v; },
+    get seo_keywords() { return props.form.seo_keywords; },
+    set seo_keywords(v) { props.form.seo_keywords = v; },
+});
+
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(seoProxy, {
+    titleSource: () => props.form.title[activeLang.value],
+    descSource:  () => props.form.breadcrumb_title[activeLang.value],
     titleSuffix: ' | ClinicMaster',
     titleKey:    'seo_title',
     descKey:     'seo_description',
@@ -113,7 +134,7 @@ const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFil
 });
 
 const slugPreview = computed(() => {
-    return (props.form.title || '')
+    return (props.form.title[defaultLangCode(languages.value)] || '')
         .toLowerCase()
         .trim()
         .replace(/[^\w\s-]/g, '')

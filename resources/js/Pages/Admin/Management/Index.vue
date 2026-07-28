@@ -63,7 +63,7 @@
                                 <p class="text-xs text-gray-400 truncate">{{ m.slug }}</p>
                             </td>
                             <td class="px-4 py-3 text-gray-500 text-xs max-w-[160px]">
-                                <span class="line-clamp-2">{{ m.role || '—' }}</span>
+                                <span class="line-clamp-2">{{ displayTranslatable(m.role, languages) || '—' }}</span>
                             </td>
                             <td class="px-4 py-3 text-gray-500">{{ m.sort_order }}</td>
                             <td class="px-4 py-3">
@@ -104,10 +104,11 @@
                     <!-- List page hero / breadcrumb -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Page — Hero &amp; Breadcrumb</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Page Title <span class="text-xs text-gray-400">(shown in breadcrumb banner)</span></label>
-                            <input v-model="settingsForm.mgmt_hero_title" type="text" class="input" placeholder="Our Management" />
-                            <InputError :message="settingsForm.errors.mgmt_hero_title" />
+                            <input v-model="settingsForm.mgmt_hero_title[activeLang]" type="text" class="input" placeholder="Our Management" />
+                            <InputError :message="settingsForm.errors[`mgmt_hero_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Banner Background Image</label>
@@ -120,32 +121,34 @@
                     <!-- Section head -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Section Head</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Eyebrow / Badge</label>
-                            <input v-model="settingsForm.mgmt_badge" type="text" class="input" placeholder="Our Leadership" />
-                            <InputError :message="settingsForm.errors.mgmt_badge" />
+                            <input v-model="settingsForm.mgmt_badge[activeLang]" type="text" class="input" placeholder="Our Leadership" />
+                            <InputError :message="settingsForm.errors[`mgmt_badge.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="settingsForm.mgmt_title" type="text" class="input" placeholder="Meet Our Management Team" />
-                            <InputError :message="settingsForm.errors.mgmt_title" />
+                            <input v-model="settingsForm.mgmt_title[activeLang]" type="text" class="input" placeholder="Meet Our Management Team" />
+                            <InputError :message="settingsForm.errors[`mgmt_title.${activeLang}`]" />
                         </div>
                     </section>
 
                     <!-- SEO -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">SEO Configuration</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
-                            <input v-model="settingsForm.mgmt_seo_title" @input="onMetaTitleInput" type="text" class="input" placeholder="Our Management | ClinicMaster" maxlength="160" />
-                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.mgmt_seo_title || '').length }}/160</p>
-                            <InputError :message="settingsForm.errors.mgmt_seo_title" />
+                            <input v-model="settingsForm.mgmt_seo_title[activeLang]" @input="onMetaTitleInput" type="text" class="input" placeholder="Our Management | ClinicMaster" maxlength="160" />
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.mgmt_seo_title[activeLang] || '').length }}/160</p>
+                            <InputError :message="settingsForm.errors[`mgmt_seo_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
-                            <textarea v-model="settingsForm.mgmt_seo_description" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
-                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.mgmt_seo_description || '').length }}/320</p>
-                            <InputError :message="settingsForm.errors.mgmt_seo_description" />
+                            <textarea v-model="settingsForm.mgmt_seo_description[activeLang]" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.mgmt_seo_description[activeLang] || '').length }}/320</p>
+                            <InputError :message="settingsForm.errors[`mgmt_seo_description.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated, auto-filled if left blank)</span></label>
@@ -195,17 +198,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { router, useForm } from '@inertiajs/vue3';
+import { ref, reactive, computed } from 'vue';
+import { router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
+import { displayTranslatable, seedTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     members:      { type: Array, default: () => [] },
     pageSettings: { type: Object, default: () => ({}) },
 });
+
+const languages  = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
 
 const tab = ref('list');
 const deleteTarget = ref(null);
@@ -230,18 +238,29 @@ const currentOgImage   = ref(props.pageSettings.mgmt_seo_og_image ?? null);
 
 const settingsForm = useForm({
     mgmt_hero_image:      null,
-    mgmt_hero_title:       props.pageSettings.mgmt_hero_title ?? '',
-    mgmt_badge:            props.pageSettings.mgmt_badge ?? '',
-    mgmt_title:            props.pageSettings.mgmt_title ?? '',
-    mgmt_seo_title:        props.pageSettings.mgmt_seo_title       ?? '',
-    mgmt_seo_description:  props.pageSettings.mgmt_seo_description ?? '',
+    mgmt_hero_title:       seedTranslatable(languages.value, props.pageSettings.mgmt_hero_title),
+    mgmt_badge:            seedTranslatable(languages.value, props.pageSettings.mgmt_badge),
+    mgmt_title:            seedTranslatable(languages.value, props.pageSettings.mgmt_title),
+    mgmt_seo_title:        seedTranslatable(languages.value, props.pageSettings.mgmt_seo_title),
+    mgmt_seo_description:  seedTranslatable(languages.value, props.pageSettings.mgmt_seo_description),
     mgmt_seo_keywords:     props.pageSettings.mgmt_seo_keywords    ?? '',
     mgmt_seo_og_image:    null,
 });
 
-const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(settingsForm, {
-    titleSource: () => settingsForm.mgmt_title,
-    descSource:  () => settingsForm.mgmt_badge,
+const seoProxy = reactive({
+    get mgmt_title() { return settingsForm.mgmt_title[activeLang.value]; },
+    get mgmt_badge() { return settingsForm.mgmt_badge[activeLang.value]; },
+    get mgmt_seo_title() { return settingsForm.mgmt_seo_title[activeLang.value]; },
+    set mgmt_seo_title(v) { settingsForm.mgmt_seo_title[activeLang.value] = v; },
+    get mgmt_seo_description() { return settingsForm.mgmt_seo_description[activeLang.value]; },
+    set mgmt_seo_description(v) { settingsForm.mgmt_seo_description[activeLang.value] = v; },
+    get mgmt_seo_keywords() { return settingsForm.mgmt_seo_keywords; },
+    set mgmt_seo_keywords(v) { settingsForm.mgmt_seo_keywords = v; },
+});
+
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(seoProxy, {
+    titleSource: () => seoProxy.mgmt_title,
+    descSource:  () => seoProxy.mgmt_badge,
     titleKey:    'mgmt_seo_title',
     descKey:     'mgmt_seo_description',
     keywordsKey: 'mgmt_seo_keywords',

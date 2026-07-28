@@ -14,6 +14,8 @@
 
         <!-- Right actions -->
         <div class="flex items-center gap-3">
+            <NotificationBell />
+
             <!-- Settings icon -->
             <button class="p-1.5 rounded-full text-gray-500 hover:bg-gray-100">
                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -79,6 +81,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
+import NotificationBell from './NotificationBell.vue';
 
 defineEmits(['toggle-sidebar']);
 

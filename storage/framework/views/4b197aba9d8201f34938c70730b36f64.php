@@ -1,8 +1,8 @@
   <footer class="site-footer">
     <div class="footer-contact">
       <div>
-        <h3 class="footer-contact__title">Get in Touch with us</h3>
-        <p class="footer-contact__subtitle">Reach out to us for expert support.</p>
+        <h3 class="footer-contact__title"><?php echo e(__('frontend.footer.get_in_touch')); ?></h3>
+        <p class="footer-contact__subtitle"><?php echo e(__('frontend.footer.get_in_touch_subtitle')); ?></p>
       </div>
 
       <div class="footer-contact__items">
@@ -13,7 +13,7 @@
             </svg>
           </span>
           <div>
-            <p class="footer-contact__label">Contact Us</p>
+            <p class="footer-contact__label"><?php echo e(__('frontend.footer.contact_us')); ?></p>
             <p class="footer-contact__value"><?php echo e($footerSettings['footer_phone_1'] ?? '1 123 456 7890'); ?></p>
           </div>
         </div>
@@ -26,7 +26,7 @@
             </svg>
           </span>
           <div>
-            <p class="footer-contact__label">Send us a Mail</p>
+            <p class="footer-contact__label"><?php echo e(__('frontend.footer.send_mail')); ?></p>
             <p class="footer-contact__value"><?php echo e($footerSettings['footer_email_1'] ?? 'sales@smartfreamework.com'); ?></p>
           </div>
         </div>
@@ -39,7 +39,7 @@
             </svg>
           </span>
           <div>
-            <p class="footer-contact__label">Opening Time</p>
+            <p class="footer-contact__label"><?php echo e(__('frontend.footer.opening_time')); ?></p>
             <p class="footer-contact__value"><?php echo e($footerSettings['footer_opening_time'] ?? 'Mon-Thu: 8:00am-5:00pm Fri: 8:00am-1:00pm'); ?></p>
           </div>
         </div>
@@ -58,7 +58,7 @@
       </div>
 
       <div>
-        <h4 class="footer-col__title">Our Services</h4>
+        <h4 class="footer-col__title"><?php echo e(__('frontend.footer.our_services')); ?></h4>
         <div class="footer-col__list">
           <?php $__empty_1 = true; $__currentLoopData = ($footerSettings['footer_service_links'] ?? []); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
           <a href="<?php echo e($link['url']); ?>" class="footer-col__link"><?php echo e($link['label']); ?></a>
@@ -73,7 +73,7 @@
       </div>
 
       <div>
-        <h4 class="footer-col__title">Our Stores</h4>
+        <h4 class="footer-col__title"><?php echo e(__('frontend.footer.our_stores')); ?></h4>
         <div class="footer-col__list">
           <?php $__empty_1 = true; $__currentLoopData = ($footerSettings['footer_store_links'] ?? []); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
           <a href="<?php echo e($link['url']); ?>" class="footer-col__link"><?php echo e($link['label']); ?></a>
@@ -88,30 +88,30 @@
       </div>
 
       <div>
-        <h4 class="footer-col__title">Useful Links</h4>
+        <h4 class="footer-col__title"><?php echo e(__('frontend.footer.useful_links')); ?></h4>
         <div class="footer-col__list">
           <?php $__empty_1 = true; $__currentLoopData = ($footerSettings['footer_useful_links'] ?? []); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
           <a href="<?php echo e($link['url']); ?>" class="footer-col__link"><?php echo e($link['label']); ?></a>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-          <a href="<?php echo e(url('/privacy-policy')); ?>" class="footer-col__link">Privacy Policy</a>
-          <a href="<?php echo e(url('/terms-conditions')); ?>" class="footer-col__link">Terms &amp; Conditions</a>
-          <a href="<?php echo e(route('contact')); ?>" class="footer-col__link">Contact Us</a>
-          <a href="<?php echo e(route('blog-list')); ?>" class="footer-col__link">Latest News</a>
+          <a href="<?php echo e(url('/privacy-policy')); ?>" class="footer-col__link"><?php echo e(__('frontend.footer.privacy_policy')); ?></a>
+          <a href="<?php echo e(url('/terms-conditions')); ?>" class="footer-col__link"><?php echo e(__('frontend.footer.terms_conditions')); ?></a>
+          <a href="<?php echo e(route('contact')); ?>" class="footer-col__link"><?php echo e(__('frontend.footer.contact_us')); ?></a>
+          <a href="<?php echo e(route('blog-list')); ?>" class="footer-col__link"><?php echo e(__('frontend.footer.latest_news')); ?></a>
           <?php endif; ?>
         </div>
       </div>
 
       <div>
-        <h4 class="footer-col__title">Quick Links</h4>
+        <h4 class="footer-col__title"><?php echo e(__('frontend.footer.quick_links')); ?></h4>
         <div class="footer-col__list">
           <?php $__empty_1 = true; $__currentLoopData = ($footerSettings['footer_quick_links'] ?? []); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
           <a href="<?php echo e($link['url']); ?>" class="footer-col__link"><?php echo e($link['label']); ?></a>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-          <a href="<?php echo e(route('about')); ?>" class="footer-col__link">About Us</a>
-          <a href="<?php echo e(route('doctors')); ?>" class="footer-col__link">Team</a>
-          <a href="<?php echo e(route('services')); ?>" class="footer-col__link">Services</a>
-          <a href="<?php echo e(route('contact')); ?>" class="footer-col__link">Contact Us</a>
-          <a href="<?php echo e(route('appointment')); ?>" class="footer-col__link">Appointment</a>
+          <a href="<?php echo e(route('about')); ?>" class="footer-col__link"><?php echo e(__('frontend.footer.about_us')); ?></a>
+          <a href="<?php echo e(route('doctors')); ?>" class="footer-col__link"><?php echo e(__('frontend.footer.team')); ?></a>
+          <a href="<?php echo e(route('services')); ?>" class="footer-col__link"><?php echo e(__('frontend.footer.services')); ?></a>
+          <a href="<?php echo e(route('contact')); ?>" class="footer-col__link"><?php echo e(__('frontend.footer.contact_us')); ?></a>
+          <a href="<?php echo e(route('appointment')); ?>" class="footer-col__link"><?php echo e(__('frontend.footer.appointment')); ?></a>
           <?php endif; ?>
         </div>
       </div>

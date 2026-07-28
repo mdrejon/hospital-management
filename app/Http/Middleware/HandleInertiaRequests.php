@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\GlobalSetting;
+use App\Models\Language;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -34,11 +35,13 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success'),
                 'error'   => fn () => $request->session()->get('error'),
             ],
+            'languages' => fn () => Language::active(),
+            'currentLanguage' => fn () => app()->getLocale(),
             'site' => fn () => [
                 'name'      => GlobalSetting::get('site_name', config('app.name')),
                 'logo'      => GlobalSetting::get('header_logo'),
                 'tagline'   => GlobalSetting::get('site_tagline', 'Compassionate Care, Trusted Doctors'),
-                'phone'     => GlobalSetting::get('contact_phone', GlobalSetting::get('header_phone', '')),
+                'phone'     => GlobalSetting::get('contact_phone', GlobalSetting::getTranslated('header_phone', null, '')),
                 'email'     => GlobalSetting::get('contact_email', GlobalSetting::get('header_email', '')),
                 'address'   => GlobalSetting::get('contact_address', ''),
                 'facebook'  => GlobalSetting::get('footer_facebook', ''),

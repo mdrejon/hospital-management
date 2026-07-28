@@ -20,6 +20,11 @@ class BlogSettingController extends Controller
         'blog_seo_og_image',
     ];
 
+    /** Human-readable copy shown to visitors — edited per-locale. Everything else in $keys stays a plain value. */
+    private array $translatableKeys = [
+        'blog_home_title', 'blog_hero_title', 'blog_seo_title', 'blog_seo_description',
+    ];
+
     /** Used by Admin\BlogController::index() to feed the "Page Settings" tab. */
     public function currentSettings(): array
     {
@@ -31,20 +36,26 @@ class BlogSettingController extends Controller
             $settings[$key] ??= null;
         }
 
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
+        }
+
         return $settings;
     }
 
     public function update(Request $request): RedirectResponse
     {
-        $data = $request->validate([
-            'blog_home_title'      => 'nullable|string',
-            'blog_hero_title'      => 'nullable|string',
-            'blog_seo_title'       => 'nullable|string',
-            'blog_seo_description' => 'nullable|string',
+        $rules = [
             'blog_seo_keywords'    => 'nullable|string',
             'blog_hero_image'      => 'nullable|image|mimes:jpeg,jpg,png,webp',
             'blog_seo_og_image'    => 'nullable|image|mimes:jpeg,jpg,png,webp',
-        ]);
+        ];
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
 
         foreach (['blog_hero_image', 'blog_seo_og_image'] as $imgKey) {
             if ($request->hasFile($imgKey)) {
@@ -60,9 +71,16 @@ class BlogSettingController extends Controller
 
         if (empty($data['blog_seo_keywords'])) {
             $data['blog_seo_keywords'] = $this->autoKeywords(
-                $data['blog_seo_title'] ?? GlobalSetting::get('blog_seo_title', ''),
-                $data['blog_seo_description'] ?? GlobalSetting::get('blog_seo_description', '')
+                $data['blog_seo_title']['en'] ?? GlobalSetting::getTranslated('blog_seo_title', 'en', ''),
+                $data['blog_seo_description']['en'] ?? GlobalSetting::getTranslated('blog_seo_description', 'en', '')
             );
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                GlobalSetting::setTranslated($key, $data[$key] ?? []);
+                unset($data[$key]);
+            }
         }
 
         GlobalSetting::setMany($data);

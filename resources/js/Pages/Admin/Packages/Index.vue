@@ -60,11 +60,11 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3 text-gray-700 max-w-[180px]">
-                                <p class="font-medium truncate">{{ pkg.title }}</p>
+                                <p class="font-medium truncate">{{ displayTranslatable(pkg.title, languages) }}</p>
                                 <p class="text-xs text-gray-400 truncate">{{ pkg.slug }}</p>
                             </td>
                             <td class="px-4 py-3 text-gray-500 text-xs max-w-[200px]">
-                                <span class="line-clamp-2">{{ pkg.short_desc || '—' }}</span>
+                                <span class="line-clamp-2">{{ displayTranslatable(pkg.short_desc, languages) || '—' }}</span>
                             </td>
                             <td class="px-4 py-3 text-gray-500">{{ pkg.sort_order }}</td>
                             <td class="px-4 py-3">
@@ -114,31 +114,33 @@
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Home Page — "Health Packages" Section</h2>
                         <p class="text-xs text-gray-400 -mt-2">Shows your <strong>Featured</strong> packages as cards. Mark a package "Featured" in the list tab to include it.</p>
+                        <LanguageTabs v-model="activeLang" />
 
                         <div>
                             <label class="label">Eyebrow / Badge</label>
-                            <input v-model="settingsForm.pkg_badge" type="text" class="input" placeholder="Our Health Packages" />
-                            <InputError :message="settingsForm.errors.pkg_badge" />
+                            <input v-model="settingsForm.pkg_badge[activeLang]" type="text" class="input" placeholder="Our Health Packages" />
+                            <InputError :message="settingsForm.errors[`pkg_badge.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Section Title</label>
-                            <input v-model="settingsForm.pkg_title" type="text" class="input" placeholder="Best Medical Assistance Packages" />
-                            <InputError :message="settingsForm.errors.pkg_title" />
+                            <input v-model="settingsForm.pkg_title[activeLang]" type="text" class="input" placeholder="Best Medical Assistance Packages" />
+                            <InputError :message="settingsForm.errors[`pkg_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Section Description</label>
-                            <textarea v-model="settingsForm.pkg_desc" rows="2" class="input"></textarea>
-                            <InputError :message="settingsForm.errors.pkg_desc" />
+                            <textarea v-model="settingsForm.pkg_desc[activeLang]" rows="2" class="input"></textarea>
+                            <InputError :message="settingsForm.errors[`pkg_desc.${activeLang}`]" />
                         </div>
                     </section>
 
                     <!-- Package List page hero / breadcrumb -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Package List Page — Hero &amp; Breadcrumb</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Page Title <span class="text-xs text-gray-400">(shown in breadcrumb banner)</span></label>
-                            <input v-model="settingsForm.pkg_page_hero_title" type="text" class="input" placeholder="Our Health Packages" />
-                            <InputError :message="settingsForm.errors.pkg_page_hero_title" />
+                            <input v-model="settingsForm.pkg_page_hero_title[activeLang]" type="text" class="input" placeholder="Our Health Packages" />
+                            <InputError :message="settingsForm.errors[`pkg_page_hero_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Banner Background Image</label>
@@ -151,17 +153,18 @@
                     <!-- SEO -->
                     <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                         <h2 class="text-sm font-semibold text-gray-700 border-b border-gray-100 pb-2">Package List Page — SEO Configuration</h2>
+                        <LanguageTabs v-model="activeLang" />
                         <div>
                             <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
-                            <input v-model="settingsForm.pkg_seo_title" @input="onMetaTitleInput" type="text" class="input" placeholder="Our Health Packages | ClinicMaster" maxlength="160" />
-                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.pkg_seo_title || '').length }}/160</p>
-                            <InputError :message="settingsForm.errors.pkg_seo_title" />
+                            <input v-model="settingsForm.pkg_seo_title[activeLang]" @input="onMetaTitleInput" type="text" class="input" placeholder="Our Health Packages | ClinicMaster" maxlength="160" />
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.pkg_seo_title[activeLang] || '').length }}/160</p>
+                            <InputError :message="settingsForm.errors[`pkg_seo_title.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Meta Description <span class="text-xs text-gray-400">(max 320 chars)</span></label>
-                            <textarea v-model="settingsForm.pkg_seo_description" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
-                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.pkg_seo_description || '').length }}/320</p>
-                            <InputError :message="settingsForm.errors.pkg_seo_description" />
+                            <textarea v-model="settingsForm.pkg_seo_description[activeLang]" @input="onMetaDescInput" rows="3" class="input resize-none" maxlength="320"></textarea>
+                            <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.pkg_seo_description[activeLang] || '').length }}/320</p>
+                            <InputError :message="settingsForm.errors[`pkg_seo_description.${activeLang}`]" />
                         </div>
                         <div>
                             <label class="label">Meta Keywords <span class="text-xs text-gray-400">(comma-separated, auto-filled if left blank)</span></label>
@@ -191,7 +194,7 @@
                     <h3 class="font-semibold text-gray-800 mb-2">Delete Package</h3>
                     <p class="text-sm text-gray-600 mb-4">
                         Are you sure you want to delete
-                        "<strong>{{ deleteTarget.title }}</strong>"?
+                        "<strong>{{ displayTranslatable(deleteTarget?.title, languages) }}</strong>"?
                         This cannot be undone.
                     </p>
                     <div class="flex justify-end gap-2">
@@ -211,17 +214,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { router, useForm } from '@inertiajs/vue3';
+import { ref, reactive, computed } from 'vue';
+import { router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
+import { displayTranslatable, seedTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     packages:     { type: Array, default: () => [] },
     pageSettings: { type: Object, default: () => ({}) },
 });
+
+const languages  = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
 
 const tab = ref('list');
 const deleteTarget = ref(null);
@@ -246,19 +254,30 @@ const currentOgImage   = ref(props.pageSettings.pkg_seo_og_image ?? null);
 
 const settingsForm = useForm({
     pkg_page_hero_image: null,
-    pkg_page_hero_title: props.pageSettings.pkg_page_hero_title ?? '',
-    pkg_seo_title:        props.pageSettings.pkg_seo_title       ?? '',
-    pkg_seo_description:  props.pageSettings.pkg_seo_description ?? '',
+    pkg_page_hero_title: seedTranslatable(languages.value, props.pageSettings.pkg_page_hero_title),
+    pkg_seo_title:        seedTranslatable(languages.value, props.pageSettings.pkg_seo_title),
+    pkg_seo_description:  seedTranslatable(languages.value, props.pageSettings.pkg_seo_description),
     pkg_seo_keywords:     props.pageSettings.pkg_seo_keywords    ?? '',
     pkg_seo_og_image:    null,
-    pkg_badge:            props.pageSettings.pkg_badge ?? '',
-    pkg_title:            props.pageSettings.pkg_title ?? '',
-    pkg_desc:             props.pageSettings.pkg_desc  ?? '',
+    pkg_badge:            seedTranslatable(languages.value, props.pageSettings.pkg_badge),
+    pkg_title:            seedTranslatable(languages.value, props.pageSettings.pkg_title),
+    pkg_desc:             seedTranslatable(languages.value, props.pageSettings.pkg_desc),
 });
 
-const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(settingsForm, {
-    titleSource: () => settingsForm.pkg_title,
-    descSource:  () => settingsForm.pkg_desc,
+const seoProxy = reactive({
+    get pkg_title() { return settingsForm.pkg_title[activeLang.value]; },
+    get pkg_desc() { return settingsForm.pkg_desc[activeLang.value]; },
+    get pkg_seo_title() { return settingsForm.pkg_seo_title[activeLang.value]; },
+    set pkg_seo_title(v) { settingsForm.pkg_seo_title[activeLang.value] = v; },
+    get pkg_seo_description() { return settingsForm.pkg_seo_description[activeLang.value]; },
+    set pkg_seo_description(v) { settingsForm.pkg_seo_description[activeLang.value] = v; },
+    get pkg_seo_keywords() { return settingsForm.pkg_seo_keywords; },
+    set pkg_seo_keywords(v) { settingsForm.pkg_seo_keywords = v; },
+});
+
+const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(seoProxy, {
+    titleSource: () => seoProxy.pkg_title,
+    descSource:  () => seoProxy.pkg_desc,
     titleKey:    'pkg_seo_title',
     descKey:     'pkg_seo_description',
     keywordsKey: 'pkg_seo_keywords',

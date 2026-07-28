@@ -3,7 +3,7 @@
         <div class="max-w-4xl space-y-4">
             <div class="flex items-center gap-3">
                 <a :href="route('admin.pages.index')" class="text-gray-400 hover:text-gray-600 text-sm">← Back</a>
-                <h1 class="text-lg font-semibold text-gray-800">Edit Page — {{ pageRecord.title }}</h1>
+                <h1 class="text-lg font-semibold text-gray-800">Edit Page — {{ displayTranslatable(pageRecord.title, languages) }}</h1>
             </div>
 
             <div v-if="$page.props.flash?.success"
@@ -26,9 +26,11 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import PageForm from './PageForm.vue';
+import { displayTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     page:          { type: Object, required: true },
@@ -36,6 +38,7 @@ const props = defineProps({
 });
 
 const pageRecord = props.page;
+const languages = computed(() => usePage().props.languages ?? []);
 
 const form = useForm({
     parent_id:         pageRecord.parent_id       ?? null,

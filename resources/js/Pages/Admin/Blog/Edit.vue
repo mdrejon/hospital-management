@@ -26,20 +26,24 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { Link }    from '@inertiajs/vue3';
+import { computed } from 'vue';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import BlogForm    from './Form.vue';
+import { seedTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     blog:       Object,
     categories: Array,
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
+
 const form = useForm({
-    title:             props.blog.title            ?? '',
-    excerpt:           props.blog.excerpt          ?? '',
-    content:           props.blog.content          ?? '',
+    title:             seedTranslatable(languages.value, props.blog.title),
+    excerpt:           seedTranslatable(languages.value, props.blog.excerpt),
+    content:           seedTranslatable(languages.value, props.blog.content),
     category_id:       props.blog.category_id      ?? null,
     tags:              Array.isArray(props.blog.tags) ? props.blog.tags.join(', ') : (props.blog.tags ?? ''),
     feature_image:     null,
@@ -51,9 +55,9 @@ const form = useForm({
     published_at:      props.blog.published_at     ? props.blog.published_at.slice(0, 16) : '',
     is_featured:       props.blog.is_featured      ?? false,
     sort_order:        props.blog.sort_order       ?? 0,
-    meta_title:        props.blog.meta_title       ?? '',
-    meta_description:  props.blog.meta_description ?? '',
-    meta_keywords:     props.blog.meta_keywords    ?? '',
+    meta_title:        seedTranslatable(languages.value, props.blog.meta_title),
+    meta_description:  seedTranslatable(languages.value, props.blog.meta_description),
+    meta_keywords:     seedTranslatable(languages.value, props.blog.meta_keywords),
 });
 
 function submit() {

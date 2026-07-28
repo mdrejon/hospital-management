@@ -78,6 +78,19 @@
   @apply flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-cyan text-navy;
 }
 
+// Language switcher ---------------------------------------------------------
+.side-panel__lang-switch {
+  @apply mt-4 flex items-center gap-3;
+}
+
+.side-panel__lang-link {
+  @apply rounded-full border border-navy/10 bg-footer-bg px-4 py-1.5 text-sm font-semibold text-navy/90 transition-colors duration-150 hover:border-brand-cyan hover:text-brand-cyan;
+
+  &.is-active {
+    @apply border-brand-cyan bg-brand-cyan text-white;
+  }
+}
+
 // Social links ------------------------------------------------------------
 .side-panel__social-list {
   @apply mt-4 flex items-center gap-3;

@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\WebsiteSettings\DoctorSettingController;
 use App\Models\Doctor;
+use App\Models\DoctorAvailability;
+use App\Models\DoctorChamber;
+use App\Models\DoctorLeave;
+use App\Models\Language;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -42,10 +46,17 @@ class DoctorController extends Controller
         $data['slug'] = $this->uniqueSlug($data['name']);
 
         if (empty($data['seo_keywords'])) {
-            $data['seo_keywords'] = $this->autoKeywords($data['seo_title'] ?? '', $data['seo_description'] ?? '', $data['name']);
+            $data['seo_keywords'] = $this->autoKeywords(
+                $data['seo_title'][$this->defaultLocale()] ?? '',
+                $data['seo_description'][$this->defaultLocale()] ?? '',
+                $data['name']
+            );
         }
 
-        Doctor::create($data);
+        [$chambers, $availabilities, $leaves] = $this->extractRelated($data);
+
+        $doctor = Doctor::create($data);
+        $this->syncRelated($doctor, $chambers, $availabilities, $leaves);
 
         return redirect()->route('admin.doctors.index')
             ->with('success', 'Doctor created successfully.');
@@ -54,7 +65,11 @@ class DoctorController extends Controller
     public function edit(Doctor $doctor): Response
     {
         return Inertia::render('Admin/Doctors/Edit', [
-            'doctor' => $doctor,
+            'doctor' => array_merge($doctor->toArray(), [
+                'chambers'       => $doctor->chambers,
+                'availabilities' => $doctor->availabilities,
+                'leaves'         => $doctor->leaves()->orderBy('date')->get(),
+            ]),
         ]);
     }
 
@@ -76,10 +91,17 @@ class DoctorController extends Controller
         $data['slug'] = $this->uniqueSlug($data['name'], $doctor->id);
 
         if (empty($data['seo_keywords'])) {
-            $data['seo_keywords'] = $this->autoKeywords($data['seo_title'] ?? '', $data['seo_description'] ?? '', $data['name']);
+            $data['seo_keywords'] = $this->autoKeywords(
+                $data['seo_title'][$this->defaultLocale()] ?? '',
+                $data['seo_description'][$this->defaultLocale()] ?? '',
+                $data['name']
+            );
         }
 
+        [$chambers, $availabilities, $leaves] = $this->extractRelated($data);
+
         $doctor->update($data);
+        $this->syncRelated($doctor, $chambers, $availabilities, $leaves);
 
         return redirect()->route('admin.doctors.index')
             ->with('success', 'Doctor updated successfully.');
@@ -106,22 +128,54 @@ class DoctorController extends Controller
         return back()->with('success', 'Doctor status updated.');
     }
 
+    private function defaultLocale(): string
+    {
+        return Language::defaultLanguage()?->code ?? config('app.locale');
+    }
+
     private function validated(Request $request): array
     {
+        $default = $this->defaultLocale();
+
         $data = $request->validate([
             'name'          => 'required|string',
-            'role'          => 'nullable|string',
+            'role'          => 'nullable|array',
+            'role.*'        => 'nullable|string',
             'photo'         => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'specialty'     => 'nullable|string',
-            'degrees'       => 'nullable|string',
-            'experience'    => 'nullable|string',
-            'awards'        => 'nullable|string',
-            'bio'           => 'nullable|string',
+            'specialty'     => 'nullable|array',
+            'specialty.*'   => 'nullable|string',
+            'degrees'       => 'nullable|array',
+            'degrees.*'     => 'nullable|string',
+            'experience'    => 'nullable|array',
+            'experience.*'  => 'nullable|string',
+            'awards'        => 'nullable|array',
+            'awards.*'      => 'nullable|string',
+            'bio'           => 'nullable|array',
+            'bio.*'         => 'nullable|string',
             'skills'        => 'nullable|array',
-            'skills.*'      => 'nullable|string',
+            'skills.*.*'    => 'nullable|string',
             'schedule'      => 'nullable|array',
             'schedule.*.day'  => 'nullable|string',
             'schedule.*.time' => 'nullable|string',
+            'consultation_fee' => 'nullable|numeric|min:0',
+            'chambers'                    => 'nullable|array',
+            'chambers.*.name'             => 'required_with:chambers|string',
+            'chambers.*.hospital_branch'  => 'nullable|string',
+            'chambers.*.floor'            => 'nullable|string',
+            'chambers.*.room_no'          => 'nullable|string',
+            'chambers.*.address'          => 'nullable|string',
+            'chambers.*.contact_number'   => 'nullable|string',
+            'chambers.*.google_map_url'   => 'nullable|string',
+            'chambers.*.is_own_hospital'  => 'boolean',
+            'availabilities'                        => 'nullable|array',
+            'availabilities.*.weekday'              => 'required_with:availabilities|integer|min:0|max:6',
+            'availabilities.*.start_time'           => 'required_with:availabilities|date_format:H:i',
+            'availabilities.*.end_time'             => 'required_with:availabilities|date_format:H:i|after:availabilities.*.start_time',
+            'availabilities.*.slot_duration_minutes' => 'nullable|integer|min:5|max:180',
+            'availabilities.*.is_active'            => 'boolean',
+            'leaves'             => 'nullable|array',
+            'leaves.*.date'      => 'required_with:leaves|date',
+            'leaves.*.reason'    => 'nullable|string',
             'address'       => 'nullable|string',
             'phone'         => 'nullable|string',
             'email'         => 'nullable|email',
@@ -133,14 +187,20 @@ class DoctorController extends Controller
             'is_featured'   => 'boolean',
             'sort_order'    => 'integer|min:0',
             'is_active'     => 'boolean',
-            'seo_title'       => 'nullable|string',
-            'seo_description' => 'nullable|string',
+            'seo_title'         => 'nullable|array',
+            'seo_title.*'       => 'nullable|string',
+            'seo_description'   => 'nullable|array',
+            'seo_description.*' => 'nullable|string',
             'seo_keywords'    => 'nullable|string',
             'seo_og_image'    => 'nullable|image|mimes:jpeg,jpg,png,webp',
         ]);
 
+        // Sanitise arrays — remove entries blank in every locale
         if (isset($data['skills'])) {
-            $data['skills'] = array_values(array_filter($data['skills']));
+            $data['skills'] = array_values(array_filter(
+                $data['skills'],
+                fn ($f) => is_array($f) && count(array_filter($f)) > 0
+            ));
         }
         if (isset($data['schedule'])) {
             $data['schedule'] = array_values(
@@ -178,5 +238,60 @@ class DoctorController extends Controller
         $words = preg_split('/\W+/u', mb_strtolower(strip_tags($text)), -1, PREG_SPLIT_NO_EMPTY);
         $words = array_filter($words, fn($w) => mb_strlen($w) > 3 && !in_array($w, $stop, true));
         return implode(', ', array_slice(array_unique(array_values($words)), 0, 12));
+    }
+
+    /** Pulls the chamber/availability/leave arrays out of the validated payload — they live on their own tables, not the doctors row. */
+    private function extractRelated(array &$data): array
+    {
+        $chambers       = $data['chambers'] ?? [];
+        $availabilities = $data['availabilities'] ?? [];
+        $leaves         = $data['leaves'] ?? [];
+
+        unset($data['chambers'], $data['availabilities'], $data['leaves']);
+
+        return [$chambers, $availabilities, $leaves];
+    }
+
+    /** Full replace-sync — simplest correct approach for these small, admin-edited row sets. */
+    private function syncRelated(Doctor $doctor, array $chambers, array $availabilities, array $leaves): void
+    {
+        $doctor->chambers()->delete();
+        foreach ($chambers as $i => $chamber) {
+            if (empty($chamber['name'])) {
+                continue;
+            }
+            DoctorChamber::create(array_merge($chamber, [
+                'doctor_id'   => $doctor->id,
+                'sort_order'  => $i,
+                'is_active'   => true,
+            ]));
+        }
+
+        $doctor->availabilities()->delete();
+        foreach ($availabilities as $availability) {
+            if (empty($availability['start_time']) || empty($availability['end_time'])) {
+                continue;
+            }
+            DoctorAvailability::create([
+                'doctor_id'              => $doctor->id,
+                'weekday'                => $availability['weekday'],
+                'start_time'             => $availability['start_time'],
+                'end_time'               => $availability['end_time'],
+                'slot_duration_minutes'  => $availability['slot_duration_minutes'] ?? 15,
+                'is_active'              => $availability['is_active'] ?? true,
+            ]);
+        }
+
+        $doctor->leaves()->delete();
+        foreach ($leaves as $leave) {
+            if (empty($leave['date'])) {
+                continue;
+            }
+            DoctorLeave::create([
+                'doctor_id' => $doctor->id,
+                'date'      => $leave['date'],
+                'reason'    => $leave['reason'] ?? null,
+            ]);
+        }
     }
 }

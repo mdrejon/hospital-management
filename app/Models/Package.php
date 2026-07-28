@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
 
 class Package extends Model
 {
+    use HasTranslations;
+
+    public array $translatable = ['title', 'short_desc', 'description', 'badge_label', 'seo_title', 'seo_description'];
+
     protected $fillable = [
         'title', 'slug', 'image', 'short_desc', 'description',
         'features', 'secondary_image', 'badge_value', 'badge_label',

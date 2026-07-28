@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\WebsiteSettings;
 
 use App\Http\Controllers\Controller;
 use App\Models\GlobalSetting;
+use App\Models\Language;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,6 +27,12 @@ class PackageSettingController extends Controller
         'pkg_desc',
     ];
 
+    /** Human-readable copy shown to visitors — edited per-locale. */
+    private array $translatableKeys = [
+        'pkg_page_hero_title', 'pkg_seo_title', 'pkg_seo_description',
+        'pkg_badge', 'pkg_title', 'pkg_desc',
+    ];
+
     /** Used by Admin\PackageController::index() to feed the "Page Settings" tab. */
     public function currentSettings(): array
     {
@@ -37,22 +44,28 @@ class PackageSettingController extends Controller
             $settings[$key] ??= null;
         }
 
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
+        }
+
         return $settings;
     }
 
     public function update(Request $request): RedirectResponse
     {
-        $data = $request->validate([
+        $default = Language::defaultLanguage()?->code ?? config('app.locale');
+
+        $rules = [
             'pkg_page_hero_image'   => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'pkg_page_hero_title'   => 'nullable|string',
-            'pkg_seo_title'         => 'nullable|string',
-            'pkg_seo_description'   => 'nullable|string',
             'pkg_seo_keywords'      => 'nullable|string',
             'pkg_seo_og_image'      => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'pkg_badge'             => 'nullable|string',
-            'pkg_title'             => 'nullable|string',
-            'pkg_desc'              => 'nullable|string',
-        ]);
+        ];
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
 
         foreach (['pkg_page_hero_image', 'pkg_seo_og_image'] as $field) {
             if ($request->hasFile($field)) {
@@ -68,9 +81,16 @@ class PackageSettingController extends Controller
 
         if (empty($data['pkg_seo_keywords'])) {
             $data['pkg_seo_keywords'] = $this->autoKeywords(
-                $data['pkg_seo_title'] ?? GlobalSetting::get('pkg_seo_title', ''),
-                $data['pkg_seo_description'] ?? GlobalSetting::get('pkg_seo_description', '')
+                $data['pkg_seo_title'][$default] ?? GlobalSetting::getTranslated('pkg_seo_title', $default, ''),
+                $data['pkg_seo_description'][$default] ?? GlobalSetting::getTranslated('pkg_seo_description', $default, '')
             );
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                GlobalSetting::setTranslated($key, $data[$key] ?? []);
+                unset($data[$key]);
+            }
         }
 
         GlobalSetting::setMany($data);

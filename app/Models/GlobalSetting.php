@@ -35,4 +35,39 @@ class GlobalSetting extends Model
     {
         return static::all()->pluck('value', 'key')->toArray();
     }
+
+    /** Get a translatable key's value for a locale (default: current), falling back to the default locale, then a plain default. */
+    public static function getTranslated(string $key, ?string $locale = null, mixed $default = null): mixed
+    {
+        $locale ??= app()->getLocale();
+        $fallback = Language::defaultLanguage()?->code ?? config('app.fallback_locale');
+        $decoded = json_decode((string) static::get($key), true);
+
+        if (! is_array($decoded)) {
+            return static::get($key, $default);
+        }
+
+        return $decoded[$locale] ?: ($decoded[$fallback] ?? $default);
+    }
+
+    /** Store a translatable key from an ['en' => ..., 'bn' => ...] array as JSON. */
+    public static function setTranslated(string $key, array $localized): void
+    {
+        static::set($key, json_encode($localized, JSON_UNESCAPED_UNICODE));
+    }
+
+    /** Decode a translatable key's raw stored value into an {en,bn} array for admin edit forms (empty shape if unset/legacy plain string). */
+    public static function getTranslatedArray(string $key): array
+    {
+        $raw = static::get($key);
+        $decoded = $raw ? json_decode($raw, true) : null;
+
+        if (is_array($decoded)) {
+            return $decoded;
+        }
+
+        $default = Language::defaultLanguage()?->code ?? config('app.locale');
+
+        return $raw !== null && $raw !== '' ? [$default => $raw] : [];
+    }
 }

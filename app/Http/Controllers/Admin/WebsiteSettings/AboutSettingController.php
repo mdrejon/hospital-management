@@ -63,6 +63,15 @@ class AboutSettingController extends Controller
         'why_features',
     ];
 
+    /** Human-readable copy shown to visitors — edited per-locale. Everything else in $aboutKeys stays a plain value. */
+    private array $translatableKeys = [
+        'about_hero_title', 'about_seo_title', 'about_seo_description',
+        'about_title', 'about_desc', 'about_hours_title', 'about_more_btn_text',
+        'about_mv_title', 'about_mv_desc',
+        'ceo_badge_label', 'ceo_eyebrow', 'ceo_title', 'ceo_message', 'ceo_focus_label',
+        'why_badge', 'why_title', 'why_desc',
+    ];
+
     public function edit(): Response
     {
         $settings = GlobalSetting::whereIn('key', $this->aboutKeys)
@@ -73,11 +82,52 @@ class AboutSettingController extends Controller
             $settings[$key] ??= null;
         }
 
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
+        }
+
         foreach ($this->jsonKeys as $key) {
             $settings[$key] = $settings[$key]
                 ? json_decode($settings[$key], true)
                 : [];
         }
+
+        // Reshape JSON-array items — genuinely textual sub-fields become {en,bn}.
+        // (day/time-of-week values here are free-text display copy, not structural keys.)
+        $toTranslatable = fn ($value) => is_array($value) ? $value : ['en' => $value ?? '', 'bn' => ''];
+
+        $settings['about_hours'] = collect($settings['about_hours'])->map(function ($item) use ($toTranslatable) {
+            $item['day']  = $toTranslatable($item['day'] ?? null);
+            $item['time'] = $toTranslatable($item['time'] ?? null);
+            return $item;
+        })->values()->all();
+
+        $settings['about_features'] = collect($settings['about_features'])
+            ->map(fn ($item) => $toTranslatable($item))
+            ->values()->all();
+
+        $settings['about_mv_cards'] = collect($settings['about_mv_cards'])->map(function ($item) use ($toTranslatable) {
+            $item['title']       = $toTranslatable($item['title'] ?? null);
+            $item['description'] = $toTranslatable($item['description'] ?? null);
+            return $item;
+        })->values()->all();
+
+        $settings['ceo_focus_items'] = collect($settings['ceo_focus_items'])
+            ->map(fn ($item) => $toTranslatable($item))
+            ->values()->all();
+
+        // year/org are structural identifiers (award year, issuing org name) — left plain; label is the descriptive copy.
+        $settings['ceo_awards'] = collect($settings['ceo_awards'])->map(function ($item) use ($toTranslatable) {
+            $item['label'] = $toTranslatable($item['label'] ?? null);
+            return $item;
+        })->values()->all();
+
+        // icon_svg is a markup/asset string — left plain; title/description are the descriptive copy.
+        $settings['why_features'] = collect($settings['why_features'])->map(function ($item) use ($toTranslatable) {
+            $item['title']       = $toTranslatable($item['title'] ?? null);
+            $item['description'] = $toTranslatable($item['description'] ?? null);
+            return $item;
+        })->values()->all();
 
         return Inertia::render('Admin/WebsiteSettings/About/Edit', [
             'settings' => $settings,
@@ -86,54 +136,53 @@ class AboutSettingController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        $data = $request->validate([
+        $rules = [
             'about_hero_image'          => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'about_hero_title'          => 'nullable|string',
-            'about_seo_title'           => 'nullable|string',
-            'about_seo_description'     => 'nullable|string',
             'about_seo_keywords'        => 'nullable|string',
             'about_seo_og_image'        => 'nullable|image|mimes:jpeg,jpg,png,webp',
             'about_photo'               => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'about_title'                => 'nullable|string',
-            'about_desc'                 => 'nullable|string',
-            'about_hours_title'          => 'nullable|string',
             'about_hours'                => 'nullable|array',
-            'about_hours.*.day'          => 'nullable|string',
-            'about_hours.*.time'         => 'nullable|string',
+            'about_hours.*.day'          => 'nullable|array',
+            'about_hours.*.day.*'        => 'nullable|string',
+            'about_hours.*.time'         => 'nullable|array',
+            'about_hours.*.time.*'       => 'nullable|string',
             'about_features'             => 'nullable|array',
-            'about_features.*'           => 'nullable|string',
-            'about_more_btn_text'        => 'nullable|string',
+            'about_features.*'           => 'nullable|array',
+            'about_features.*.*'         => 'nullable|string',
             'about_more_btn_url'         => 'nullable|string',
 
-            'about_mv_title'             => 'nullable|string',
-            'about_mv_desc'              => 'nullable|string',
             'about_mv_image'             => 'nullable|image|mimes:jpeg,jpg,png,webp',
             'about_mv_cards'             => 'nullable|array',
-            'about_mv_cards.*.title'       => 'nullable|string',
-            'about_mv_cards.*.description' => 'nullable|string',
+            'about_mv_cards.*.title'       => 'nullable|array',
+            'about_mv_cards.*.title.*'     => 'nullable|string',
+            'about_mv_cards.*.description' => 'nullable|array',
+            'about_mv_cards.*.description.*' => 'nullable|string',
 
             'ceo_image'                  => 'nullable|image|mimes:jpeg,jpg,png,webp',
             'ceo_badge_value'            => 'nullable|string',
-            'ceo_badge_label'            => 'nullable|string',
-            'ceo_eyebrow'                => 'nullable|string',
-            'ceo_title'                  => 'nullable|string',
-            'ceo_message'                => 'nullable|string',
-            'ceo_focus_label'            => 'nullable|string',
             'ceo_focus_items'            => 'nullable|array',
-            'ceo_focus_items.*'          => 'nullable|string',
+            'ceo_focus_items.*'          => 'nullable|array',
+            'ceo_focus_items.*.*'        => 'nullable|string',
             'ceo_awards'                 => 'nullable|array',
             'ceo_awards.*.year'          => 'nullable|string',
             'ceo_awards.*.org'           => 'nullable|string',
-            'ceo_awards.*.label'         => 'nullable|string',
+            'ceo_awards.*.label'         => 'nullable|array',
+            'ceo_awards.*.label.*'       => 'nullable|string',
 
-            'why_badge'                  => 'nullable|string',
-            'why_title'                  => 'nullable|string',
-            'why_desc'                   => 'nullable|string',
             'why_features'               => 'nullable|array',
             'why_features.*.icon_svg'    => 'nullable|string',
-            'why_features.*.title'       => 'nullable|string',
-            'why_features.*.description' => 'nullable|string',
-        ]);
+            'why_features.*.title'       => 'nullable|array',
+            'why_features.*.title.*'     => 'nullable|string',
+            'why_features.*.description' => 'nullable|array',
+            'why_features.*.description.*' => 'nullable|string',
+        ];
+
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
 
         // Handle image uploads
         foreach (['about_hero_image', 'about_seo_og_image', 'about_photo', 'about_mv_image', 'ceo_image'] as $field) {
@@ -148,12 +197,15 @@ class AboutSettingController extends Controller
             }
         }
 
-        // Auto-generate keywords if none provided
+        // Auto-generate keywords if none provided (title/description/about_title are {en,bn} arrays)
         if (empty($data['about_seo_keywords'])) {
+            $titleText = $data['about_seo_title'] ?? GlobalSetting::getTranslatedArray('about_seo_title');
+            $descText  = $data['about_seo_description'] ?? GlobalSetting::getTranslatedArray('about_seo_description');
+            $aboutText = $data['about_title'] ?? GlobalSetting::getTranslatedArray('about_title');
             $data['about_seo_keywords'] = $this->autoKeywords(
-                $data['about_seo_title'] ?? GlobalSetting::get('about_seo_title', ''),
-                $data['about_seo_description'] ?? GlobalSetting::get('about_seo_description', ''),
-                $data['about_title'] ?? GlobalSetting::get('about_title', '')
+                is_array($titleText) ? implode(' ', $titleText) : $titleText,
+                is_array($descText) ? implode(' ', $descText) : $descText,
+                is_array($aboutText) ? implode(' ', $aboutText) : $aboutText
             );
         }
 

@@ -123,7 +123,8 @@
 
           <!-- Content -->
           <?php
-            $serviceFeatures = !empty($service->features) ? $service->features : [
+            $tr = fn($v) => is_array($v) ? ($v[app()->getLocale()] ?: $v[config('app.fallback_locale')] ?? '') : $v;
+            $serviceFeatures = !empty($service->features) ? array_map($tr, $service->features) : [
               'Comprehensive Specialties', 'Emergency Services', 'Intensive Care Units (ICUs)', 'Telemedicine Facilities', 'Multidisciplinary Team',
               'Research and Development', 'Advanced Imaging Services', 'Rehabilitation Services', 'Patient-Centric Approach', 'Health Information Technology',
             ];
@@ -221,7 +222,7 @@
 
             <h2 class="service-detail__subtitle">Frequently asked questions</h2>
             <?php
-              $serviceFaqs = !empty($service->faqs) ? $service->faqs : [
+              $serviceFaqs = !empty($service->faqs) ? array_map(fn($f) => ['question' => $tr($f['question'] ?? ''), 'answer' => $tr($f['answer'] ?? '')], $service->faqs) : [
                 ['question' => 'Can I cancel my appointment', 'answer' => 'Yes, appointments can be cancelled or rescheduled up to 24 hours in advance by contacting our front desk or through your patient portal.'],
                 ['question' => 'What types of treatments do you offer?', 'answer' => 'Our specialists offer a full range of diagnostic, preventive, and treatment options tailored to each patient\'s needs.'],
                 ['question' => 'How do I book my appointment?', 'answer' => 'You can book an appointment online through our Appointment page, or call our front desk directly.'],

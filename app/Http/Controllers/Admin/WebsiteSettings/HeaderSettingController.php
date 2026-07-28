@@ -30,6 +30,12 @@ class HeaderSettingController extends Controller
         'header_book_btn_url',
     ];
 
+    /** Human-readable copy shown to visitors — edited per-locale. Everything else in $headerKeys stays a plain value. */
+    private array $translatableKeys = [
+        'header_tagline', 'header_hours', 'header_support_text',
+        'header_sidebar_description', 'header_book_btn_text', 'header_address', 'header_phone',
+    ];
+
     public function edit(): Response
     {
         $settings = GlobalSetting::whereIn('key', $this->headerKeys)
@@ -41,6 +47,10 @@ class HeaderSettingController extends Controller
             $settings[$key] ??= null;
         }
 
+        foreach ($this->translatableKeys as $key) {
+            $settings[$key] = GlobalSetting::getTranslatedArray($key);
+        }
+
         return Inertia::render('Admin/WebsiteSettings/Header/Edit', [
             'settings' => $settings,
         ]);
@@ -48,23 +58,22 @@ class HeaderSettingController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        $data = $request->validate([
+        $rules = [
             'header_site_name'            => 'nullable|string',
-            'header_tagline'              => 'nullable|string',
-            'header_phone'                => 'nullable|string',
             'header_email'                => 'nullable|email',
-            'header_address'              => 'nullable|string',
-            'header_hours'                => 'nullable|string',
-            'header_support_text'         => 'nullable|string',
-            'header_sidebar_description'  => 'nullable|string',
             'header_facebook_url'         => 'nullable|string',
             'header_twitter_url'          => 'nullable|string',
             'header_instagram_url'        => 'nullable|string',
             'header_linkedin_url'         => 'nullable|string',
-            'header_book_btn_text'        => 'nullable|string',
             'header_book_btn_url'         => 'nullable|string',
             'header_logo'                 => 'nullable|image|mimes:jpeg,jpg,png,webp,svg',
-        ]);
+        ];
+        foreach ($this->translatableKeys as $key) {
+            $rules[$key] = 'nullable|array';
+            $rules["$key.*"] = 'nullable|string';
+        }
+
+        $data = $request->validate($rules);
 
         if ($request->hasFile('header_logo')) {
             $existing = GlobalSetting::get('header_logo');
@@ -75,6 +84,13 @@ class HeaderSettingController extends Controller
                 ->store('settings', 'public');
         } else {
             unset($data['header_logo']);
+        }
+
+        foreach ($this->translatableKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                GlobalSetting::setTranslated($key, $data[$key] ?? []);
+                unset($data[$key]);
+            }
         }
 
         GlobalSetting::setMany($data);

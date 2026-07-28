@@ -26,19 +26,22 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import MemberForm   from './MemberForm.vue';
+import { seedTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     member: { type: Object, required: true },
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
 const m = props.member;
 
 const form = useForm({
     name:            m.name          ?? '',
-    role:            m.role          ?? '',
+    role:            seedTranslatable(languages.value, m.role),
     photo:           null,
     facebook_url:    m.facebook_url  ?? '',
     twitter_url:     m.twitter_url   ?? '',

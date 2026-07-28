@@ -47,7 +47,8 @@
                                 </div>
                                 <div class="col-span-2 md:col-span-1">
                                     <label class="label">Page Title (Breadcrumb)</label>
-                                    <input v-model="pageForm.faq_hero_title" type="text" class="input"
+                                    <LanguageTabs v-model="activeLang" />
+                                    <input v-model="pageForm.faq_hero_title[activeLang]" type="text" class="input"
                                         placeholder="Frequently Asked Questions" />
                                 </div>
                             </div>
@@ -56,15 +57,16 @@
                         <!-- SEO -->
                         <div class="border-t pt-4">
                             <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">SEO Configuration</h3>
+                            <LanguageTabs v-model="activeLang" />
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="col-span-2">
-                                    <label class="label">Meta Title <span class="text-gray-400 font-normal">({{ pageForm.faq_seo_title.length }}/160)</span></label>
-                                    <input v-model="pageForm.faq_seo_title" type="text" maxlength="160" class="input"
+                                    <label class="label">Meta Title <span class="text-gray-400 font-normal">({{ (pageForm.faq_seo_title[activeLang] || '').length }}/160)</span></label>
+                                    <input v-model="pageForm.faq_seo_title[activeLang]" type="text" maxlength="160" class="input"
                                         placeholder="FAQs – Hotel Beach Way" />
                                 </div>
                                 <div class="col-span-2">
-                                    <label class="label">Meta Description <span class="text-gray-400 font-normal">({{ pageForm.faq_seo_description.length }}/320)</span></label>
-                                    <textarea v-model="pageForm.faq_seo_description" rows="2" maxlength="320"
+                                    <label class="label">Meta Description <span class="text-gray-400 font-normal">({{ (pageForm.faq_seo_description[activeLang] || '').length }}/320)</span></label>
+                                    <textarea v-model="pageForm.faq_seo_description[activeLang]" rows="2" maxlength="320"
                                         class="input resize-none"
                                         placeholder="Find answers to frequently asked questions about Hotel Beach Way..."></textarea>
                                 </div>
@@ -130,10 +132,10 @@
                                 <td class="px-4 py-3 text-gray-400">{{ i + 1 }}</td>
                                 <td class="px-4 py-3">
                                     <p class="font-medium text-gray-800 truncate max-w-[220px]">
-                                        {{ faq.title || '(no title)' }}
+                                        {{ displayTranslatable(faq.title, languages) || '(no title)' }}
                                     </p>
                                     <span class="inline-block mt-0.5 px-1.5 py-0.5 bg-gray-100 text-gray-500 text-xs rounded">
-                                        {{ faq.badge }}
+                                        {{ displayTranslatable(faq.badge, languages) }}
                                     </span>
                                 </td>
                                 <td class="px-4 py-3">
@@ -142,7 +144,7 @@
                                         <div v-for="(item, j) in faq.items.slice(0, 3)" :key="j"
                                             class="text-xs text-gray-600 bg-gray-50 rounded px-2 py-1 truncate max-w-[320px]">
                                             <span class="font-medium text-gray-700">Q{{ j + 1 }}:</span>
-                                            {{ item.question }}
+                                            {{ displayTranslatable(item.question, languages) }}
                                         </div>
                                         <div v-if="faq.items.length > 3" class="text-xs text-gray-400 px-2">
                                             + {{ faq.items.length - 3 }} more
@@ -189,7 +191,7 @@
             <div class="bg-white rounded-lg p-6 w-80 shadow-xl">
                 <h3 class="font-semibold text-gray-800 mb-2">Delete FAQ Group</h3>
                 <p class="text-sm text-gray-600 mb-1">
-                    Delete "<strong>{{ deleteTarget.title || 'this FAQ group' }}</strong>"?
+                    Delete "<strong>{{ displayTranslatable(deleteTarget?.title, languages) || 'this FAQ group' }}</strong>"?
                 </p>
                 <p class="text-xs text-gray-400 mb-4">
                     This will remove all {{ deleteTarget.items?.length }} FAQ items inside it.
@@ -207,9 +209,11 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useForm, router } from '@inertiajs/vue3';
+import { useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
+import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import { emptyTranslatable, displayTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     homeFaqs:    { type: Array,  default: () => [] },
@@ -218,13 +222,18 @@ const props = defineProps({
     faqSettings: { type: Object, default: () => ({}) },
 });
 
+const languages = computed(() => usePage().props.languages ?? []);
+const activeLang = ref(defaultLangCode(languages.value));
+
 // ── Page settings panel ──
 const pageSettingsOpen = ref(false);
 
+const seed = (key) => ({ ...emptyTranslatable(languages.value), ...(props.faqSettings[key] || {}) });
+
 const pageForm = useForm({
-    faq_hero_title:      props.faqSettings.faq_hero_title      ?? '',
-    faq_seo_title:       props.faqSettings.faq_seo_title       ?? '',
-    faq_seo_description: props.faqSettings.faq_seo_description ?? '',
+    faq_hero_title:      seed('faq_hero_title'),
+    faq_seo_title:       seed('faq_seo_title'),
+    faq_seo_description: seed('faq_seo_description'),
     faq_seo_keywords:    props.faqSettings.faq_seo_keywords    ?? '',
     faq_hero_image:      null,
     faq_seo_og_image:    null,
