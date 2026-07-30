@@ -95,7 +95,7 @@
 }
 
 .faq__contact-btn {
-  @apply flex shrink-0 items-center gap-2 rounded-full bg-brand-cyan py-2 pl-4 pr-2 text-sm font-semibold text-navy transition-transform duration-200 hover:scale-105;
+  @apply flex shrink-0 items-center gap-2 rounded-full bg-brand-cyan py-2 pl-4 pr-2 text-sm font-semibold text-navy transition-all duration-200 hover:scale-105 hover:bg-white hover:ring-2 hover:ring-brand-cyan;
 }
 
 .faq__contact-btn-icon {

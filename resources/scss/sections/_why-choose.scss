@@ -17,6 +17,12 @@
   }
 }
 
+// An admin-uploaded background replaces the built-in art, so the navy veil is
+// thinned out — otherwise the upload would be invisible behind it.
+.why-choose--custom-bg::before {
+  @apply bg-gradient-to-br from-navy/90 via-navy/80 to-navy/90;
+}
+
 .why-choose__grid {
   @apply relative grid items-center gap-4 lg:grid-cols-2;
 }
@@ -51,8 +57,16 @@
   @apply p-0 sm:pl-6;
 }
 
+.why-choose__eyebrow {
+  @apply mb-3 inline-block text-sm font-semibold uppercase tracking-[0.2em] text-brand-cyan;
+}
+
 .why-choose__title {
   @apply text-3xl font-extrabold leading-tight text-white sm:text-4xl;
+}
+
+.why-choose__desc {
+  @apply mt-4 text-sm leading-relaxed text-white/70 sm:text-base;
 }
 
 .why-choose__features {
@@ -64,7 +78,7 @@
 }
 
 .why-choose__feature-icon {
-  @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-cyan text-white;
+  @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-green text-white;
 }
 
 .why-choose__feature-text {

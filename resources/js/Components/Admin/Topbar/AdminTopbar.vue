@@ -14,6 +14,20 @@
 
         <!-- Right actions -->
         <div class="flex items-center gap-3">
+            <!-- View Site -->
+            <a
+                :href="route('home')"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-gray-500 hover:bg-gray-100"
+                title="Go to Home (opens in a new tab)"
+            >
+                <svg class="w-5 h-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                <span class="hidden sm:block text-sm font-medium">Go to Home</span>
+            </a>
+
             <NotificationBell />
 
             <!-- Settings icon -->

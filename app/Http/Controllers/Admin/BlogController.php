@@ -60,7 +60,7 @@ class BlogController extends Controller
     {
         $data = $this->validated($request);
         $default = $this->defaultLocale();
-        $data['slug'] = $this->uniqueSlug($data['title'][$default] ?? '');
+        $data['slug'] = $this->uniqueSlug($this->slugSource($data['title']));
 
         foreach (['feature_image', 'og_image', 'author_avatar'] as $field) {
             if ($request->hasFile($field)) {
@@ -98,7 +98,7 @@ class BlogController extends Controller
     {
         $data = $this->validated($request);
         $default = $this->defaultLocale();
-        $data['slug'] = $this->uniqueSlug($data['title'][$default] ?? '', $blog->id);
+        $data['slug'] = $this->uniqueSlug($this->slugSource($data['title']), $blog->id);
 
         foreach (['feature_image', 'og_image', 'author_avatar'] as $field) {
             if ($request->hasFile($field)) {
@@ -210,6 +210,18 @@ class BlogController extends Controller
     private function defaultLocale(): string
     {
         return Language::defaultLanguage()?->code ?? config('app.locale');
+    }
+
+    /** Slugs are always built from the English text — regardless of which language is set as the site default — so URLs stay Latin/readable even on a Bangla-first site. Falls back to the default locale, then any filled locale, if English is blank. */
+    private function slugSource(array $translatable): string
+    {
+        if (filled($translatable['en'] ?? null)) {
+            return $translatable['en'];
+        }
+        if (filled($translatable[$this->defaultLocale()] ?? null)) {
+            return $translatable[$this->defaultLocale()];
+        }
+        return collect($translatable)->first(fn ($v) => filled($v)) ?? '';
     }
 
     private function validated(Request $request): array

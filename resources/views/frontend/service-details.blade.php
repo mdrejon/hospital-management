@@ -2,7 +2,7 @@
 
 @php
   $heroImage = !empty($svc['svc_page_hero_image']) ? asset('storage/' . $svc['svc_page_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $service->seo_title ?: ($svc['svc_seo_title'] ?? null) ?: ($service->title . ' | ClinicMaster Medical & Health Care Services');
+  $seoTitle  = $service->seo_title ?: ($svc['svc_seo_title'] ?? null) ?: ($service->title . ' | ' . config('app.name'));
   $seoDesc   = $service->seo_description ?: ($svc['svc_seo_description'] ?? null) ?: $service->short_desc ?: 'Learn more about this service at ClinicMaster.';
 @endphp
 

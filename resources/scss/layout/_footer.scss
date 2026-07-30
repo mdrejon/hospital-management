@@ -98,7 +98,7 @@
 }
 
 .footer-newsletter__submit {
-  @apply shrink-0 rounded-full bg-brand-cyan px-6 py-3 text-sm font-semibold text-navy transition-transform duration-200 hover:scale-105;
+  @apply shrink-0 rounded-full bg-brand-cyan px-6 py-3 text-sm font-semibold text-navy transition-all duration-200 hover:scale-105 hover:bg-white hover:ring-2 hover:ring-brand-cyan;
 }
 
 // Bottom bar ------------------------------------------------------------

@@ -3,7 +3,7 @@
 @php
   $heroTitle = $pkg['pkg_page_hero_title'] ?? 'Our Health Packages';
   $heroImage = !empty($pkg['pkg_page_hero_image']) ? asset('storage/' . $pkg['pkg_page_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $pkg['pkg_seo_title'] ?? 'Our Health Packages | ClinicMaster Medical & Health Care Services';
+  $seoTitle  = $pkg['pkg_seo_title'] ?? ('Our Health Packages | ' . config('app.name'));
   $seoDesc   = $pkg['pkg_seo_description'] ?? 'Explore ClinicMaster\'s health packages designed for every stage of life.';
 @endphp
 

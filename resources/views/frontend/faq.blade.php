@@ -3,7 +3,7 @@
 @php
   $heroTitle = $faqPage['faq_hero_title'] ?? 'FAQ';
   $heroImage = !empty($faqPage['faq_hero_image']) ? asset('storage/' . $faqPage['faq_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $faqPage['faq_seo_title'] ?? 'FAQ | ClinicMaster Medical & Health Care Services';
+  $seoTitle  = $faqPage['faq_seo_title'] ?? ('FAQ | ' . config('app.name'));
   $seoDesc   = $faqPage['faq_seo_description'] ?? "Answers to the questions patients ask us most often. Can't find what you're looking for? Reach out and our team will be glad to help.";
 @endphp
 

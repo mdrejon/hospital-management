@@ -3,7 +3,7 @@
 @php
   $heroTitle   = $about['about_hero_title'] ?? 'About Us';
   $heroImage   = !empty($about['about_hero_image']) ? asset('storage/' . $about['about_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle    = $about['about_seo_title'] ?? 'About Us | ClinicMaster Medical & Health Care Services';
+  $seoTitle    = $about['about_seo_title'] ?? ('About Us | ' . config('app.name'));
   $seoDesc     = $about['about_seo_description'] ?? "Learn about ClinicMaster's mission, values, and leadership.";
 @endphp
 
@@ -81,13 +81,14 @@
       ];
       $aboutTitle    = $about['about_title'] ?? 'World Class Patient Facilities Designed For You';
       $aboutDesc     = $about['about_desc'] ?? "Experience the future of healthcare. Our state-of-the-art facilities are equipped with the latest technology, ensuring you receive the world's best quality treatment. Here, cutting-edge tools meet unparalleled expertise, providing a comfortable and effective path to optimal health.";
+      // About-page-only rich description: replaces the shared plain desc here (never on Home)
+      // when the admin actually typed something — an empty TipTap doc still saves "<p></p>".
+      $aboutRichDesc = trim(strip_tags($about['about_page_desc'] ?? '')) !== '' ? $about['about_page_desc'] : null;
       $aboutFeatures = !empty($about['about_features']) ? $about['about_features'] : [
         'Comprehensive Specialties', 'Emergency Services', 'Intensive Care Units (ICUs)', 'Telemedicine Facilities', 'Multidisciplinary Team',
         'Research and Development', 'Advanced Imaging Services', 'Rehabilitation Services', 'Patient-Centric Approach', 'Health Information Technology',
       ];
       $aboutFeatureCols = collect($aboutFeatures)->chunk((int) ceil(count($aboutFeatures) / 2));
-      $aboutBtnText  = $about['about_more_btn_text'] ?? 'Appointment';
-      $aboutBtnUrl   = ($about['about_more_btn_url'] ?? null) ?: route('appointment');
       $aboutPhone    = $headerSettings['header_phone'] ?? '1 123 456 7890';
     @endphp
     <section class="about">
@@ -127,9 +128,13 @@
 
           <div class="about__content">
             <h2 class="about__title">{{ $aboutTitle }}</h2>
-            <p class="about__desc">
-              {{ $aboutDesc }}
-            </p>
+            @if($aboutRichDesc)
+              <div class="about__desc about__desc--rich">{!! $aboutRichDesc !!}</div>
+            @else
+              <p class="about__desc">
+                {{ $aboutDesc }}
+              </p>
+            @endif
 
             <div class="about__features">
               @foreach($aboutFeatureCols as $col)
@@ -148,16 +153,8 @@
               @endforeach
             </div>
 
+            {{-- CTA button intentionally omitted here — it only shows on the Home page's About section. --}}
             <div class="about__cta-row">
-              <a href="{{ $aboutBtnUrl }}" class="about__btn">
-                {{ $aboutBtnText }}
-                <span class="about__btn-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-
               <a href="tel:{{ $aboutPhone }}" class="about__contact">
                 <span class="about__contact-icon">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', ($query !== '' ? 'Search results for "' . $query . '"' : 'Search') . ' | ClinicMaster Medical & Health Care Services')
+@section('title', ($query !== '' ? 'Search results for "' . $query . '"' : 'Search') . ' | ' . config('app.name'))
 
 @section('content')
 

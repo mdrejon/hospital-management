@@ -60,7 +60,7 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3 text-gray-700 max-w-[180px]">
-                                <p class="font-medium truncate">{{ doc.name }}</p>
+                                <p class="font-medium truncate">{{ displayTranslatable(doc.name, languages) }}</p>
                                 <p class="text-xs text-gray-400 truncate">{{ doc.slug }}</p>
                             </td>
                             <td class="px-4 py-3 text-gray-500 text-xs max-w-[160px]">

@@ -29,7 +29,7 @@ class ServiceController extends Controller
     public function create(): Response
     {
         return Inertia::render('Admin/Services/Create', [
-            'doctors' => Doctor::active()->get(['id', 'name', 'specialty']),
+            'doctors' => $this->doctorOptions(),
         ]);
     }
 
@@ -45,7 +45,7 @@ class ServiceController extends Controller
             }
         }
 
-        $data['slug'] = $this->uniqueSlug($data['title'][$this->defaultLocale()] ?? '');
+        $data['slug'] = $this->uniqueSlug($this->slugSource($data['title']));
 
         if (empty($data['seo_keywords'])) {
             $data['seo_keywords'] = $this->autoKeywords(
@@ -68,7 +68,7 @@ class ServiceController extends Controller
             'service' => array_merge($service->toArray(), [
                 'doctor_ids' => $service->doctors()->pluck('doctors.id'),
             ]),
-            'doctors' => Doctor::active()->get(['id', 'name', 'specialty']),
+            'doctors' => $this->doctorOptions(),
         ]);
     }
 
@@ -89,7 +89,7 @@ class ServiceController extends Controller
             }
         }
 
-        $data['slug'] = $this->uniqueSlug($data['title'][$this->defaultLocale()] ?? '', $service->id);
+        $data['slug'] = $this->uniqueSlug($this->slugSource($data['title']), $service->id);
 
         if (empty($data['seo_keywords'])) {
             $data['seo_keywords'] = $this->autoKeywords(
@@ -130,6 +130,18 @@ class ServiceController extends Controller
     private function defaultLocale(): string
     {
         return Language::defaultLanguage()?->code ?? config('app.locale');
+    }
+
+    /** Slugs are always built from the English text — regardless of which language is set as the site default — so URLs stay Latin/readable even on a Bangla-first site. Falls back to the default locale, then any filled locale, if English is blank. */
+    private function slugSource(array $translatable): string
+    {
+        if (filled($translatable['en'] ?? null)) {
+            return $translatable['en'];
+        }
+        if (filled($translatable[$this->defaultLocale()] ?? null)) {
+            return $translatable[$this->defaultLocale()];
+        }
+        return collect($translatable)->first(fn ($v) => filled($v)) ?? '';
     }
 
     private function validated(Request $request): array
@@ -179,6 +191,21 @@ class ServiceController extends Controller
         }
 
         return $data;
+    }
+
+    /**
+     * Doctor options for the "Available Doctors" picker. `name` is translatable and
+     * `specialty` is a list of translatable values — both are resolved to plain
+     * current-locale strings here, since toArray() would emit the raw {en,bn} shapes.
+     */
+    private function doctorOptions()
+    {
+        return Doctor::active()->get(['id', 'name', 'specialty'])
+            ->map(fn (Doctor $d) => [
+                'id'        => $d->id,
+                'name'      => $d->name,
+                'specialty' => $d->listText('specialty'),
+            ]);
     }
 
     private function uniqueSlug(string $title, int $excludeId = 0): string

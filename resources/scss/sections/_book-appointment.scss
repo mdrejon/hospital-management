@@ -128,7 +128,7 @@
 }
 
 .book-appointment__dropzone-icon {
-  @apply mx-auto mb-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-cyan/10 text-brand-cyan transition-transform duration-200;
+  @apply mx-auto mb-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-green/10 text-brand-green transition-transform duration-200;
 
   .book-appointment__dropzone.is-dragover & {
     @apply scale-110;
@@ -164,7 +164,7 @@
 }
 
 .book-appointment__dropzone-file-icon {
-  @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-cyan/10 text-brand-cyan;
+  @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-green/10 text-brand-green;
 }
 
 .book-appointment__dropzone-file-name {
@@ -180,9 +180,13 @@
 }
 
 .book-appointment__submit {
-  @apply inline-flex items-center gap-3 rounded-full bg-brand-cyan px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-cyan/30 transition-transform duration-200 hover:scale-105;
+  @apply inline-flex items-center gap-3 rounded-full bg-brand-cyan px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-cyan/30 transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
+
+  &:hover .book-appointment__submit-icon {
+    @apply text-brand-cyan;
+  }
 }
 
 .book-appointment__submit-icon {
-  @apply flex items-center justify-center text-white;
+  @apply flex items-center justify-center text-white transition-colors duration-200;
 }

@@ -14,6 +14,7 @@ class HeaderSettingController extends Controller
 {
     private array $headerKeys = [
         'header_logo',
+        'header_favicon',
         'header_site_name',
         'header_tagline',
         'header_phone',
@@ -67,6 +68,8 @@ class HeaderSettingController extends Controller
             'header_linkedin_url'         => 'nullable|string',
             'header_book_btn_url'         => 'nullable|string',
             'header_logo'                 => 'nullable|image|mimes:jpeg,jpg,png,webp,svg',
+            // Not `image` — Laravel's image rule doesn't recognize .ico, which is a common favicon format.
+            'header_favicon'              => 'nullable|file|mimes:ico,png,jpg,jpeg,webp,svg|max:512',
         ];
         foreach ($this->translatableKeys as $key) {
             $rules[$key] = 'nullable|array';
@@ -84,6 +87,17 @@ class HeaderSettingController extends Controller
                 ->store('settings', 'public');
         } else {
             unset($data['header_logo']);
+        }
+
+        if ($request->hasFile('header_favicon')) {
+            $existing = GlobalSetting::get('header_favicon');
+            if ($existing) {
+                Storage::disk('public')->delete($existing);
+            }
+            $data['header_favicon'] = $request->file('header_favicon')
+                ->store('settings', 'public');
+        } else {
+            unset($data['header_favicon']);
         }
 
         foreach ($this->translatableKeys as $key) {

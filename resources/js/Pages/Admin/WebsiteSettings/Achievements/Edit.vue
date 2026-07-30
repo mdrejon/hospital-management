@@ -71,7 +71,7 @@
                     <div>
                         <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
                         <input v-model="form.ach_seo_title[activeLang]" @input="onMetaTitleInput" type="text" class="input" maxlength="160"
-                            placeholder="Our Achievements | ClinicMaster Medical & Health Care Services" />
+                            :placeholder="`Our Achievements | ${appName}`" />
                         <p class="text-xs text-gray-400 mt-1">{{ (form.ach_seo_title[activeLang] || '').length }}/160</p>
                         <InputError :message="form.errors[`ach_seo_title.${activeLang}`]" />
                     </div>
@@ -124,6 +124,7 @@ const props = defineProps({
 const s = props.settings;
 const languages  = computed(() => usePage().props.languages ?? []);
 const activeLang = ref(defaultLangCode(languages.value));
+const appName    = computed(() => usePage().props.appName);
 
 const currentHeroImg = ref(s.ach_hero_image    ?? null);
 const currentOgImg   = ref(s.ach_seo_og_image  ?? null);

@@ -1,7 +1,7 @@
 <?php
   $heroTitle = $svc['svc_page_hero_title'] ?? 'Our Services';
   $heroImage = !empty($svc['svc_page_hero_image']) ? asset('storage/' . $svc['svc_page_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $svc['svc_seo_title'] ?? 'Our Services | ClinicMaster Medical & Health Care Services';
+  $seoTitle  = $svc['svc_seo_title'] ?? ('Our Services | ' . config('app.name'));
   $seoDesc   = $svc['svc_seo_description'] ?? 'Explore the full range of medical and health care services offered by ClinicMaster.';
 ?>
 
@@ -45,13 +45,13 @@
       <div class="page-header__inner">
         <h1 class="page-header__title"><?php echo e($heroTitle); ?></h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
-          <a href="<?php echo e(route('home')); ?>">Home</a>
+          <a href="<?php echo e(route('home')); ?>"><?php echo e(__('frontend.nav.home')); ?></a>
           <span class="page-header__breadcrumb-sep">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m7 6 5 6-5 6M13 6l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
-          <span>Services</span>
+          <span><?php echo e(__('frontend.breadcrumb.services')); ?></span>
         </nav>
       </div>
 

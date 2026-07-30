@@ -32,6 +32,8 @@ export default {
                 },
                 brand: {
                     cyan: 'rgb(var(--color-primary) / <alpha-value>)',
+                    green: 'rgb(var(--color-accent-green) / <alpha-value>)',
+                    red: 'rgb(var(--color-accent-red) / <alpha-value>)',
                 },
                 footer: {
                     bg: 'rgb(var(--color-secondary) / <alpha-value>)',

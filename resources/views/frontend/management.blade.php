@@ -3,7 +3,7 @@
 @php
   $heroTitle = $mgmt['mgmt_hero_title'] ?? 'Our Management';
   $heroImage = !empty($mgmt['mgmt_hero_image']) ? asset('storage/' . $mgmt['mgmt_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $mgmt['mgmt_seo_title'] ?? 'Our Management | ClinicMaster Medical & Health Care Services';
+  $seoTitle  = $mgmt['mgmt_seo_title'] ?? ('Our Management | ' . config('app.name'));
   $seoDesc   = $mgmt['mgmt_seo_description'] ?? "Meet the leadership team guiding ClinicMaster's mission of compassionate, expert healthcare.";
 @endphp
 

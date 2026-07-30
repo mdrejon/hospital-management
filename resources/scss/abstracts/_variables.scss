@@ -6,11 +6,21 @@
 // @apply utility (bg-navy, text-brand-cyan, text-muted, ...) and every
 // plain SCSS usage (v.$color-navy) at once.
 // ==========================================================================
-$color-navy: #0B1E42;
-$color-navy-dark: #081530;
-$color-primary: #1FC8E3;
-$color-primary-hover: #00A1BE;
+// Derived from the hospital logo (public/assets/img/logo.png): the arc's
+// blue (#0072BB) is the brand accent; navy/navy-dark are darker shades of
+// that same blue (not the logo's literal fill) so header/footer surfaces
+// and body headings keep strong contrast instead of using a bright hue.
+$color-navy: #003354;
+$color-navy-dark: #002238;
+$color-primary: #0072BB;
+$color-primary-hover: #00568C;
 $color-secondary: #EEF3F8;
 $color-text-muted: #5b6b8c;
+
+// The logo's other two colors — used sparingly as accents (not swapped in
+// for the primary blue): green for positive/available checklist icons,
+// red for emergency/urgent callouts. Sampled directly from the logo file.
+$color-accent-green: #87C540;
+$color-accent-red: #ED1B24;
 
 $header-height: 90px;

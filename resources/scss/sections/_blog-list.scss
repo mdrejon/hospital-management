@@ -15,7 +15,7 @@
 }
 
 .blog-list__load-more {
-  @apply inline-flex w-fit items-center self-start rounded-full bg-brand-cyan px-8 py-3 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105;
+  @apply inline-flex w-fit items-center self-start rounded-full bg-brand-cyan px-8 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
 }
 
 // Post card ---------------------------------------------------------------
@@ -52,7 +52,7 @@
 }
 
 .blog-post-card__btn {
-  @apply mt-6 inline-flex items-center gap-2 rounded-lg bg-brand-cyan px-6 py-3 text-[15px] font-semibold text-white transition-transform duration-200 hover:scale-105;
+  @apply mt-6 inline-flex items-center gap-2 rounded-lg bg-brand-cyan px-6 py-3 text-[15px] font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
 }
 
 // Sidebar -------------------------------------------------------------------

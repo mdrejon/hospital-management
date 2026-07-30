@@ -3,7 +3,7 @@
 @php
   $heroTitle = $contact['contact_hero_title'] ?? 'Contact Us';
   $heroImage = !empty($contact['contact_hero_image']) ? asset('storage/' . $contact['contact_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $contact['contact_seo_title'] ?? 'Contact Us | ClinicMaster Medical & Health Care Services';
+  $seoTitle  = $contact['contact_seo_title'] ?? ('Contact Us | ' . config('app.name'));
   $seoDesc   = $contact['contact_seo_description'] ?? "Get in touch with ClinicMaster. We're happy to help you schedule an appointment or answer your questions.";
 @endphp
 

@@ -4,9 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Translatable\HasTranslations;
 
 class DoctorChamber extends Model
 {
+    use HasTranslations;
+
+    public array $translatable = ['name', 'hospital_branch', 'floor', 'room_no', 'address', 'contact_number'];
+
     protected $fillable = [
         'doctor_id', 'name', 'hospital_branch', 'floor', 'room_no',
         'address', 'contact_number', 'google_map_url',

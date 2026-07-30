@@ -3,16 +3,25 @@
 @php
   $docName    = $doctor->name;
   $docPhoto   = $doctor->photo ? asset('storage/' . $doctor->photo) : asset('assets/img/team-3.png');
-  $docDegrees = $doctor->degrees ?: 'MD, Aesthetic & Reconstructive Medical';
+  // Specialty / Degrees / Experience / Awards each hold a list of translatable
+  // entries, so the info table renders one line per entry.
+  $docDegreesList = $doctor->listValues('degrees') ?: ['MD, Aesthetic & Reconstructive Medical'];
+  $docDegrees     = implode(', ', $docDegreesList);
   $docBio     = $doctor->bio ?: 'Dr. '.$docName.' is a dedicated physician committed to providing compassionate and comprehensive care, ensuring the well-being of every patient. Their practice emphasizes preventive health, early diagnosis, and family-centered treatment approaches.';
   $tr = fn($v) => is_array($v) ? ($v[app()->getLocale()] ?: $v[config('app.fallback_locale')] ?? '') : $v;
-  $docSkills  = !empty($doctor->skills) ? array_map($tr, $doctor->skills) : [
+  $docSkills  = $doctor->listValues('skills') ?: [
     'Primary Care & Diagnosis',
     'Chronic Disease Management',
     'Patient Education & Preventive Health',
     'Multidisciplinary Collaboration',
     'Clinical Decision Making',
     'Basic Emergency Care',
+  ];
+  $docInfoRows = [
+    ['label' => 'Specialty',  'values' => $doctor->listValues('specialty')  ?: ['General Medicine']],
+    ['label' => 'Degrees',    'values' => $docDegreesList],
+    ['label' => 'Experience', 'values' => $doctor->listValues('experience') ?: ['30 years, New York Urgent Medical Care Serving California']],
+    ['label' => 'Awards',     'values' => $doctor->listValues('awards')     ?: ['World Medical Congress – 2023']],
   ];
   $docSchedule = !empty($doctor->schedule) ? $doctor->schedule : [
     ['day' => 'Monday',    'time' => '11:00 AM – 6:00 PM'],
@@ -22,11 +31,12 @@
     ['day' => 'Friday',    'time' => '11:00 AM – 6:00 PM'],
     ['day' => 'Saturday',  'time' => '11:00 AM – 6:00 PM'],
   ];
+  $docSchedule = array_map(fn ($row) => ['day' => $tr($row['day'] ?? ''), 'time' => $tr($row['time'] ?? '')], $docSchedule);
   $docAddress = $doctor->address ?: '234 Oak Drive, Villagetown, USA';
   $docPhone   = $doctor->phone   ?: '0 123-456-7890';
   $docEmail   = $doctor->email   ?: 'info@example.com';
 
-  $seoTitle = $doctor->seo_title ?: ($docName.' | ClinicMaster Medical & Health Care Services');
+  $seoTitle = $doctor->seo_title ?: ($docName . ' | ' . config('app.name'));
   $seoDesc  = $doctor->seo_description ?: \Illuminate\Support\Str::limit(strip_tags($docBio), 160);
 @endphp
 
@@ -69,7 +79,7 @@
       </div>
 
       <div class="page-header__inner">
-        <h1 class="page-header__title">Doctor Details</h1>
+        <h1 class="page-header__title">{{ $docName }}</h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
           <a href="{{ route('home') }}">{{ __('frontend.nav.home') }}</a>
           <span class="page-header__breadcrumb-sep">
@@ -177,29 +187,23 @@
 
           <!-- Content -->
           <div>
-            <h1 class="doctor-detail__name">{{ $docName }}</h1>
+            <h2 class="doctor-detail__name">{{ $docName }}</h2>
             <p class="doctor-detail__specialty">{{ $docDegrees }}</p>
             <div class="doctor-detail__desc">
               {!! $docBio !!}
             </div>
 
             <div class="doctor-info-table">
+              @foreach($docInfoRows as $info)
               <div class="doctor-info-table__row">
-                <span class="doctor-info-table__label">Specialty</span>
-                <span class="doctor-info-table__value">{{ $doctor->specialty ?: 'General Medicine' }}</span>
+                <span class="doctor-info-table__label">{{ $info['label'] }}</span>
+                <div class="doctor-info-table__values">
+                  @foreach($info['values'] as $value)
+                  <span class="doctor-info-table__value">{{ $value }}</span>
+                  @endforeach
+                </div>
               </div>
-              <div class="doctor-info-table__row">
-                <span class="doctor-info-table__label">Degrees</span>
-                <span class="doctor-info-table__value">{{ $docDegrees }}</span>
-              </div>
-              <div class="doctor-info-table__row">
-                <span class="doctor-info-table__label">Experience</span>
-                <span class="doctor-info-table__value">{{ $doctor->experience ?: '30 years, New York Urgent Medical Care Serving California' }}</span>
-              </div>
-              <div class="doctor-info-table__row">
-                <span class="doctor-info-table__label">Awards</span>
-                <span class="doctor-info-table__value">{{ $doctor->awards ?: 'World Medical Congress – 2023' }}</span>
-              </div>
+              @endforeach
             </div>
 
             <h2 class="service-detail__subtitle">Professional Skills</h2>
@@ -226,50 +230,10 @@
               @endforeach
             </div>
 
-            <div class="appointment__card mt-8">
-              @if(session('success'))
-              <p class="appointment__field-group" style="color: #16a34a;">{{ session('success') }}</p>
-              @endif
-              @if($errors->any())
-              <p class="appointment__field-group" style="color: #dc2626;">{{ $errors->first() }}</p>
-              @endif
-
-              <form class="appointment__form" action="{{ route('appointment.submit') }}" method="POST">
-                @csrf
-                <input type="hidden" name="source" value="doctor_details_page" />
-                <input type="hidden" name="preferred_doctor" value="{{ $docName }}" />
-                <input type="hidden" name="department" value="{{ $doctor->specialty }}" />
-
-                <div class="appointment__field-group is-half">
-                  <input type="text" name="first_name" value="{{ old('first_name') }}" class="appointment__field" placeholder="First Name" required />
-                </div>
-                <div class="appointment__field-group is-half">
-                  <input type="text" name="last_name" value="{{ old('last_name') }}" class="appointment__field" placeholder="Last Name" />
-                </div>
-                <div class="appointment__field-group is-half">
-                  <input type="email" name="email" value="{{ old('email') }}" class="appointment__field" placeholder="Your Email" required />
-                </div>
-                <div class="appointment__field-group is-half">
-                  <input type="tel" name="phone" value="{{ old('phone') }}" class="appointment__field" placeholder="Phone Number" />
-                </div>
-                <div class="appointment__field-group">
-                  <textarea name="message" class="appointment__field" placeholder="Message" rows="1">{{ old('message') }}</textarea>
-                </div>
-
-                <div class="appointment__field-group">
-                  <button type="submit" class="appointment__submit">
-                    Appointment
-                    <span class="appointment__submit-icon">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                  </button>
-                </div>
-              </form>
-            </div>
           </div>
         </div>
       </div>
     </section>
+
+    <x-frontend.book-appointment :settings="$appt" :doctors="$appointmentDoctors" :preselected-doctor="$doctor" source="doctor_details_page" />
 @endsection

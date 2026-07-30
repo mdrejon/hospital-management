@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\DoctorSpecialization;
 use App\Models\GlobalSetting;
 use App\Models\Language;
 use Illuminate\Support\Facades\URL;
@@ -51,7 +52,18 @@ class AppServiceProvider extends ServiceProvider
             $view->with('footerSettings', $this->footerSettings());
             $view->with('languages', $this->activeLanguages());
             $view->with('currentLanguage', app()->getLocale());
+            $view->with('navDoctorSpecializations', $this->navDoctorSpecializations());
         });
+    }
+
+    /** Active specializations for the "Doctor's" nav dropdown. Empty collection if the DB isn't ready. */
+    private function navDoctorSpecializations()
+    {
+        try {
+            return DoctorSpecialization::active()->get(['id', 'name', 'slug']);
+        } catch (\Throwable) {
+            return collect();
+        }
     }
 
     /** All active languages for the language switcher. Empty collection if the DB isn't ready. */
@@ -75,7 +87,7 @@ class AppServiceProvider extends ServiceProvider
     {
         try {
             $settings = GlobalSetting::whereIn('key', [
-                'header_logo', 'header_site_name', 'header_tagline',
+                'header_logo', 'header_favicon', 'header_site_name', 'header_tagline',
                 'header_phone', 'header_email', 'header_address', 'header_hours',
                 'header_support_text', 'header_sidebar_description',
                 'header_facebook_url', 'header_twitter_url', 'header_instagram_url', 'header_linkedin_url',

@@ -37,6 +37,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'languages' => fn () => Language::active(),
             'currentLanguage' => fn () => app()->getLocale(),
+            'appName' => config('app.name'),
             'site' => fn () => [
                 'name'      => GlobalSetting::get('site_name', config('app.name')),
                 'logo'      => GlobalSetting::get('header_logo'),

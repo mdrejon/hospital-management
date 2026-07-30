@@ -79,8 +79,8 @@
                             <InputError :message="form.errors.link_url" />
                         </div>
                         <div>
-                            <label class="label">Seal Style</label>
-                            <select v-model.number="form.seal_variant" class="input">
+                            <label class="label">Seal Style <span class="text-gray-400">(used when no seal image is uploaded)</span></label>
+                            <select v-model.number="form.seal_variant" class="input" :disabled="hasSealImage">
                                 <option :value="1">Style 1 — Hexagon with stars</option>
                                 <option :value="2">Style 2 — Dashed circle with ribbon</option>
                                 <option :value="3">Style 3 — Laurel wreath circle</option>
@@ -96,6 +96,23 @@
                                 <input v-model="form.is_active" type="checkbox" class="w-4 h-4 rounded text-blue-600" />
                                 <span class="text-sm text-gray-600">Active</span>
                             </label>
+                        </div>
+
+                        <div class="col-span-2">
+                            <label class="label">Seal Image</label>
+                            <p class="text-xs text-gray-400 mb-2">
+                                Upload a logo/seal to show on the card instead of the built-in seal style.
+                                A square, transparent PNG or WebP works best.
+                            </p>
+                            <DropZone
+                                :key="dropZoneKey"
+                                hint="JPEG / PNG / WebP — max 5 MB"
+                                preview-class="w-32 h-32 object-contain mx-auto my-4"
+                                :existing-preview="existingSealPreview"
+                                @change="onSealChange"
+                                @remove="onSealRemove"
+                            />
+                            <InputError :message="form.errors.seal_image" />
                         </div>
                     </div>
                     <div class="flex items-center gap-3 justify-end">
@@ -122,10 +139,14 @@
                 <div v-else class="divide-y divide-gray-50">
                     <div v-for="a in awards" :key="a.id"
                         class="px-6 py-4 flex items-center gap-4 hover:bg-gray-50 transition-colors">
+                        <div class="w-12 h-12 flex-shrink-0 rounded border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden">
+                            <img v-if="a.seal_image" :src="'/storage/' + a.seal_image" alt="" class="w-full h-full object-contain" />
+                            <span v-else class="text-[10px] text-gray-400 text-center leading-tight">Style<br />{{ a.seal_variant }}</span>
+                        </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2">
                                 <span class="font-semibold text-gray-800 text-sm">{{ displayTranslatable(a.title, languages) }}</span>
-                                <span class="text-xs text-gray-400">Style {{ a.seal_variant }}</span>
+                                <span class="text-xs text-gray-400">{{ a.seal_image ? 'Custom seal image' : 'Seal style ' + a.seal_variant }}</span>
                             </div>
                             <p class="text-xs text-gray-500">{{ displayTranslatable(a.subtitle, languages) }}</p>
                         </div>
@@ -173,6 +194,7 @@ import { useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import DropZone from '@/Components/Admin/Shared/DropZone.vue';
 import { emptyTranslatable, seedTranslatable, displayTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
@@ -198,26 +220,54 @@ function saveSettings() {
 
 // ── Add / Edit form ──
 const editingId = ref(null);
+const editingSealImage = ref(null); // path of the seal already stored on the award being edited
+const dropZoneKey = ref(0);         // bumped to reset DropZone's own preview/cleared state
 
 const form = useForm({
-    title:        emptyTranslatable(languages.value),
-    subtitle:     emptyTranslatable(languages.value),
-    link_text:    emptyTranslatable(languages.value),
-    link_url:     '',
-    seal_variant: 1,
-    sort_order:   0,
-    is_active:    true,
+    title:             emptyTranslatable(languages.value),
+    subtitle:          emptyTranslatable(languages.value),
+    link_text:         emptyTranslatable(languages.value),
+    link_url:          '',
+    seal_image:        null,
+    remove_seal_image: false,
+    seal_variant:      1,
+    sort_order:        0,
+    is_active:         true,
 });
 
+const existingSealPreview = computed(() =>
+    editingSealImage.value ? '/storage/' + editingSealImage.value : null
+);
+
+// A seal image (freshly picked or already saved and not being removed) wins
+// over the built-in seal styles, so the style picker is moot while one is set.
+const hasSealImage = computed(() =>
+    !!form.seal_image || (!!editingSealImage.value && !form.remove_seal_image)
+);
+
+function onSealChange(file) {
+    form.seal_image = file;
+    form.remove_seal_image = false;
+}
+
+function onSealRemove() {
+    form.seal_image = null;
+    form.remove_seal_image = true;
+}
+
 function startEdit(a) {
-    editingId.value    = a.id;
-    form.title         = seedTranslatable(languages.value, a.title);
-    form.subtitle      = seedTranslatable(languages.value, a.subtitle);
-    form.link_text     = seedTranslatable(languages.value, a.link_text);
-    form.link_url      = a.link_url ?? '';
-    form.seal_variant  = a.seal_variant;
-    form.sort_order    = a.sort_order;
-    form.is_active     = a.is_active;
+    editingId.value        = a.id;
+    form.title             = seedTranslatable(languages.value, a.title);
+    form.subtitle          = seedTranslatable(languages.value, a.subtitle);
+    form.link_text         = seedTranslatable(languages.value, a.link_text);
+    form.link_url          = a.link_url ?? '';
+    form.seal_image        = null;
+    form.remove_seal_image = false;
+    form.seal_variant      = a.seal_variant;
+    form.sort_order        = a.sort_order;
+    form.is_active         = a.is_active;
+    editingSealImage.value = a.seal_image ?? null;
+    dropZoneKey.value++;
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -227,20 +277,29 @@ function resetForm() {
     form.title = emptyTranslatable(languages.value);
     form.subtitle = emptyTranslatable(languages.value);
     form.link_text = emptyTranslatable(languages.value);
+    form.seal_image = null;
+    form.remove_seal_image = false;
     form.seal_variant = 1;
     form.is_active = true;
+    editingSealImage.value = null;
+    dropZoneKey.value++;
 }
 
 function submitAward() {
     if (editingId.value) {
+        // POST + _method spoofing: PUT can't carry a multipart file upload.
         form.transform(data => ({ ...data, _method: 'PUT' }))
             .post(route('admin.awards.update', editingId.value), {
+                forceFormData: true,
                 onSuccess: () => resetForm(),
             });
     } else {
-        form.post(route('admin.awards.store'), {
-            onSuccess: () => resetForm(),
-        });
+        // transform() sticks to the form, so it has to be cleared here —
+        // otherwise a create right after an edit would still send _method: PUT.
+        form.transform(data => data)
+            .post(route('admin.awards.store'), {
+                onSuccess: () => resetForm(),
+            });
     }
 }
 

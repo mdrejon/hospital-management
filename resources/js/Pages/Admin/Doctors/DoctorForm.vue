@@ -9,11 +9,11 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="label">Doctor Name <span class="text-red-500">*</span></label>
-                    <input v-model="form.name" type="text" class="input" placeholder="e.g. Dr. Rihana Roy" />
-                    <InputError :message="form.errors.name" />
+                    <input v-model="form.name[activeLang]" type="text" class="input" placeholder="e.g. Dr. Rihana Roy" />
+                    <InputError :message="form.errors[`name.${activeLang}`]" />
                 </div>
                 <div>
-                    <label class="label">URL Slug <span class="text-gray-400 font-normal text-xs">(auto-generated)</span></label>
+                    <label class="label">URL Slug <span class="text-gray-400 font-normal text-xs">(auto-generated from the English name)</span></label>
                     <div class="flex items-center gap-2">
                         <input :value="slugPreview" type="text" class="input bg-gray-50 text-gray-500 cursor-not-allowed" readonly />
                         <span class="text-xs text-gray-400 whitespace-nowrap">/doctors/{{ slugPreview || '…' }}</span>
@@ -23,6 +23,14 @@
                     <label class="label">Role / Title <span class="text-xs text-gray-400">(shown on list card, e.g. "Cardiologist")</span></label>
                     <input v-model="form.role[activeLang]" type="text" class="input" placeholder="e.g. Cardiologist" />
                     <InputError :message="form.errors[`role.${activeLang}`]" />
+                </div>
+                <div>
+                    <label class="label">Specialization <span class="text-xs text-gray-400">(category, shown in the site's "Doctor's" menu)</span></label>
+                    <select v-model="form.doctor_specialization_id" class="input">
+                        <option :value="null">— None —</option>
+                        <option v-for="s in specializations" :key="s.id" :value="s.id">{{ s.name }}</option>
+                    </select>
+                    <InputError :message="form.errors.doctor_specialization_id" />
                 </div>
                 <div>
                     <label class="label">Sort Order</label>
@@ -54,29 +62,24 @@
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Detail Page — Info Table</h2>
             <LanguageTabs v-model="activeLang" />
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="label">Specialty</label>
-                    <input v-model="form.specialty[activeLang]" type="text" class="input" placeholder="e.g. Gynecology" />
-                    <InputError :message="form.errors[`specialty.${activeLang}`]" />
-                </div>
-                <div>
-                    <label class="label">Degrees</label>
-                    <input v-model="form.degrees[activeLang]" type="text" class="input" placeholder="e.g. MD, Aesthetic & Reconstructive Medical" />
-                    <InputError :message="form.errors[`degrees.${activeLang}`]" />
-                </div>
-                <div>
-                    <label class="label">Experience</label>
-                    <input v-model="form.experience[activeLang]" type="text" class="input" placeholder="e.g. 30 years, New York Urgent Medical Care" />
-                    <InputError :message="form.errors[`experience.${activeLang}`]" />
-                </div>
-                <div>
-                    <label class="label">Awards</label>
-                    <input v-model="form.awards[activeLang]" type="text" class="input" placeholder="e.g. World Medical Congress – 2023" />
-                    <InputError :message="form.errors[`awards.${activeLang}`]" />
+            <div class="grid grid-cols-2 gap-x-4 gap-y-5">
+                <div v-for="field in infoTableFields" :key="field.key" class="space-y-2">
+                    <label class="label">{{ field.label }}</label>
+                    <div v-for="(entry, i) in form[field.key]" :key="i" class="flex gap-2">
+                        <input v-model="entry[activeLang]" type="text" class="input" :placeholder="field.placeholder" />
+                        <button type="button" @click="form[field.key].splice(i, 1)"
+                            class="px-3 py-2 text-red-500 hover:bg-red-50 rounded text-sm flex-shrink-0">✕</button>
+                    </div>
+                    <p v-if="!form[field.key].length" class="text-xs text-gray-400">No entries yet.</p>
+                    <button type="button" @click="form[field.key].push(emptyTranslatable(languages))"
+                        class="text-sm text-blue-600 hover:underline">+ Add {{ field.label }}</button>
+                    <InputError :message="form.errors[field.key]" />
                 </div>
             </div>
-            <p class="text-xs text-gray-400">"Degrees" is also shown as the specialty tagline directly under the doctor's name on the detail page.</p>
+            <p class="text-xs text-gray-400">
+                Each field can hold several entries — they are listed on their own line in the detail page's info table.
+                "Degrees" is also shown as the specialty tagline directly under the doctor's name.
+            </p>
         </section>
 
         <!-- ── Bio ── -->
@@ -107,13 +110,14 @@
         <!-- ── Time Schedule ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-3">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">My Time Schedule</h2>
+            <LanguageTabs v-model="activeLang" />
             <div v-for="(row, i) in form.schedule" :key="i" class="flex gap-2">
-                <input v-model="row.day" type="text" class="input" placeholder="e.g. Monday" />
-                <input v-model="row.time" type="text" class="input" placeholder="e.g. 11:00 AM – 6:00 PM" />
+                <input v-model="row.day[activeLang]" type="text" class="input" placeholder="e.g. Monday" />
+                <input v-model="row.time[activeLang]" type="text" class="input" placeholder="e.g. 11:00 AM – 6:00 PM" />
                 <button type="button" @click="form.schedule.splice(i, 1)"
                     class="px-3 py-2 text-red-500 hover:bg-red-50 rounded text-sm flex-shrink-0">✕</button>
             </div>
-            <button type="button" @click="form.schedule.push({ day: '', time: '' })"
+            <button type="button" @click="form.schedule.push({ day: emptyTranslatable(languages), time: emptyTranslatable(languages) })"
                 class="text-sm text-blue-600 hover:underline">+ Add Day</button>
         </section>
 
@@ -166,34 +170,35 @@
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">
                 Chambers <span class="text-xs font-normal text-gray-400">(information only — can include chambers outside our hospital)</span>
             </h2>
+            <LanguageTabs v-model="activeLang" />
             <div v-for="(chamber, i) in form.chambers" :key="i" class="border border-gray-100 rounded p-4 space-y-3">
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="label">Chamber Name <span class="text-red-500">*</span></label>
-                        <input v-model="chamber.name" type="text" class="input" placeholder="e.g. City Diagnostic Center" />
+                        <input v-model="chamber.name[activeLang]" type="text" class="input" placeholder="e.g. City Diagnostic Center" />
                     </div>
                     <div>
                         <label class="label">Hospital / Branch</label>
-                        <input v-model="chamber.hospital_branch" type="text" class="input" />
+                        <input v-model="chamber.hospital_branch[activeLang]" type="text" class="input" />
                     </div>
                     <div>
                         <label class="label">Floor</label>
-                        <input v-model="chamber.floor" type="text" class="input" />
+                        <input v-model="chamber.floor[activeLang]" type="text" class="input" />
                     </div>
                     <div>
                         <label class="label">Room No.</label>
-                        <input v-model="chamber.room_no" type="text" class="input" />
+                        <input v-model="chamber.room_no[activeLang]" type="text" class="input" />
                     </div>
                     <div class="col-span-2">
                         <label class="label">Address</label>
-                        <input v-model="chamber.address" type="text" class="input" />
+                        <input v-model="chamber.address[activeLang]" type="text" class="input" />
                     </div>
                     <div>
                         <label class="label">Contact Number</label>
-                        <input v-model="chamber.contact_number" type="text" class="input" />
+                        <input v-model="chamber.contact_number[activeLang]" type="text" class="input" />
                     </div>
                     <div>
-                        <label class="label">Google Map URL</label>
+                        <label class="label">Google Map URL <span class="text-xs font-normal text-gray-400">(same for every language)</span></label>
                         <input v-model="chamber.google_map_url" type="text" class="input" placeholder="https://maps.google.com/…" />
                     </div>
                 </div>
@@ -206,23 +211,24 @@
                         class="text-sm text-red-500 hover:underline">Remove Chamber</button>
                 </div>
             </div>
-            <button type="button" @click="form.chambers.push({ name: '', hospital_branch: '', floor: '', room_no: '', address: '', contact_number: '', google_map_url: '', is_own_hospital: false })"
+            <button type="button" @click="addChamber"
                 class="text-sm text-blue-600 hover:underline">+ Add Chamber</button>
         </section>
 
         <!-- ── Contact & Social ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Contact &amp; Social Links</h2>
+            <LanguageTabs v-model="activeLang" />
             <div class="grid grid-cols-2 gap-4">
                 <div class="col-span-2">
                     <label class="label">Address</label>
-                    <input v-model="form.address" type="text" class="input" placeholder="e.g. 234 Oak Drive, Villagetown, USA" />
-                    <InputError :message="form.errors.address" />
+                    <input v-model="form.address[activeLang]" type="text" class="input" placeholder="e.g. 234 Oak Drive, Villagetown, USA" />
+                    <InputError :message="form.errors[`address.${activeLang}`]" />
                 </div>
                 <div>
                     <label class="label">Phone</label>
-                    <input v-model="form.phone" type="text" class="input" placeholder="e.g. 0 123-456-7890" />
-                    <InputError :message="form.errors.phone" />
+                    <input v-model="form.phone[activeLang]" type="text" class="input" placeholder="e.g. 0 123-456-7890" />
+                    <InputError :message="form.errors[`phone.${activeLang}`]" />
                 </div>
                 <div>
                     <label class="label">Email</label>
@@ -295,14 +301,24 @@ import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
 import { emptyTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
-    form:     { type: Object, required: true },
-    existing: { type: Object, default: null },
+    form:             { type: Object, required: true },
+    existing:         { type: Object, default: null },
+    specializations:  { type: Array,  default: () => [] },
 });
 
 const emit = defineEmits(['image-change']);
 
 const languages = computed(() => usePage().props.languages ?? []);
 const activeLang = ref(defaultLangCode(languages.value));
+
+// The detail page's info table — each of these holds a list of translatable
+// entries, so an admin can add as many lines as a doctor needs.
+const infoTableFields = [
+    { key: 'specialty',  label: 'Specialty',  placeholder: 'e.g. Gynecology' },
+    { key: 'degrees',    label: 'Degrees',    placeholder: 'e.g. MBBS, PGT (Obs & Gynae)' },
+    { key: 'experience', label: 'Experience', placeholder: 'e.g. Ex-Medical Officer, Sarat Abida General Hospital' },
+    { key: 'awards',     label: 'Awards',     placeholder: 'e.g. World Medical Congress – 2023' },
+];
 
 // Proxy exposing the current-tab locale value of each translatable field as a
 // plain string, so useSeoAutoFill (which reads/writes flat form keys) can
@@ -317,16 +333,21 @@ const seoProxy = reactive({
 });
 
 const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(seoProxy, {
-    titleSource: () => props.form.name,
-    descSource:  () => props.form.specialty[activeLang.value],
+    titleSource: () => props.form.name[activeLang.value],
+    descSource:  () => (props.form.specialty ?? [])
+        .map(entry => entry[activeLang.value])
+        .filter(Boolean)
+        .join(', '),
     titleSuffix: ' | ClinicMaster',
     titleKey:    'seo_title',
     descKey:     'seo_description',
     keywordsKey: 'seo_keywords',
 });
 
+// The slug is always generated from the English name (matching the backend),
+// regardless of which language tab is active, so the preview stays accurate.
 const slugPreview = computed(() => {
-    return (props.form.name || '')
+    return (props.form.name?.en || '')
         .toLowerCase()
         .trim()
         .replace(/[^\w\s-]/g, '')
@@ -337,6 +358,19 @@ const slugPreview = computed(() => {
 function onFile(file, field) {
     if (!file) return;
     emit('image-change', { field, file });
+}
+
+function addChamber() {
+    props.form.chambers.push({
+        name: emptyTranslatable(languages.value),
+        hospital_branch: emptyTranslatable(languages.value),
+        floor: emptyTranslatable(languages.value),
+        room_no: emptyTranslatable(languages.value),
+        address: emptyTranslatable(languages.value),
+        contact_number: emptyTranslatable(languages.value),
+        google_map_url: '',
+        is_own_hospital: false,
+    });
 }
 </script>
 

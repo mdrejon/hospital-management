@@ -90,6 +90,8 @@ class GlobalSettingSeeder extends Seeder
                 'en' => 'Digital 4-D color ultrasonography, ECHO, pathology, 24-hour digital X-ray & ECG, biochemistry, microbiology, serology and a diabetic center — all under one roof.',
                 'bn' => 'ডিজিটাল ৪-ডি কালার আল্ট্রাসোনোগ্রাফী, ইকো, প্যাথলজি, ২৪ ঘন্টা ডিজিটাল এক্স-রে ও ই.সি.জি, বায়োকেমিস্ট্রি, মাইক্রোবায়োলজী, সেরোলজী ও ডায়াবেটিক সেন্টার — সবকিছু এক ছাদের নিচে।',
             ],
+            'why_badge_number' => ['en' => '20+', 'bn' => '২০+'],
+            'why_badge_label'  => ['en' => 'Years Experienced', 'bn' => 'বছরের অভিজ্ঞতা'],
         ]);
 
         // ── Contact page ──

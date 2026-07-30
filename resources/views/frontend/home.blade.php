@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', 'ClinicMaster | Medical & Health Care Services')
+@section('title', 'Sitakund Modern Hospital Ltd.')
 
 @section('content')
 
@@ -403,41 +403,59 @@
 
     <!-- ===================== Why Choose Us ===================== -->
     @php
+      $whyBadge = $about['why_badge'] ?? null;
       $whyTitle = $about['why_title'] ?? 'Why Choose Us For Your Health Care Needs';
+      $whyDesc  = $about['why_desc'] ?? null;
+      $whyPhoto = !empty($about['why_photo']) ? asset('storage/' . $about['why_photo']) : asset('assets/img/choose-us-image.webp');
+      $whyBgPhoto = !empty($about['why_bg_photo']) ? asset('storage/' . $about['why_bg_photo']) : null;
+      $whyBadgeNumber = $about['why_badge_number'] ?? '20+';
+      $whyBadgeLabel  = $about['why_badge_label'] ?? 'Years Experienced';
       $whyFeatures = !empty($about['why_features']) ? $about['why_features'] : [
-        ['icon_svg' => null, 'title' => 'More Experience',       'description' => 'Our team of highly qualified specialists delivers exceptional care with years of experience.'],
-        ['icon_svg' => null, 'title' => 'Seamless Care',         'description' => 'State-of-the-art medical equipment and cutting-edge technology for accurate diagnosis.'],
-        ['icon_svg' => null, 'title' => 'The Right Answers',     'description' => 'Round-the-clock emergency services with rapid response teams always on standby.'],
-        ['icon_svg' => null, 'title' => 'Unparalleled Expertise','description' => 'Quality healthcare at competitive prices with transparent billing and insurance support.'],
+        ['title' => 'More Experience',       'description' => 'Our team of highly qualified specialists delivers exceptional care with years of experience.'],
+        ['title' => 'Seamless Care',         'description' => 'State-of-the-art medical equipment and cutting-edge technology for accurate diagnosis.'],
+        ['title' => 'The Right Answers',     'description' => 'Round-the-clock emergency services with rapid response teams always on standby.'],
+        ['title' => 'Unparalleled Expertise','description' => 'Quality healthcare at competitive prices with transparent billing and insurance support.'],
       ];
+      // Fixed by the design — feature cards are title + description only.
       $whyCheckIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
     @endphp
-    <section class="why-choose">
+    <section class="why-choose {{ $whyBgPhoto ? 'why-choose--custom-bg' : '' }}"
+      @if($whyBgPhoto) style="background-image: url('{{ $whyBgPhoto }}');" @endif>
       <div class="container mx-auto">
         <div class="why-choose__grid">
 
           <!-- Media -->
           <div class="why-choose__media">
             <div class="why-choose__photo">
-              <img src="{{ asset('assets/img/choose-us-image.webp') }}" alt="Why choose us" class="why-choose__photo-img" />
+              <img src="{{ $whyPhoto }}" alt="{{ $whyTitle }}" class="why-choose__photo-img" />
             </div>
+            @if($whyBadgeNumber || $whyBadgeLabel)
             <div class="why-choose__badge">
-              <span class="why-choose__badge-number">20+</span>
-              <span class="why-choose__badge-label">Years Experienced</span>
+              <span class="why-choose__badge-number">{{ $whyBadgeNumber }}</span>
+              <span class="why-choose__badge-label">{{ $whyBadgeLabel }}</span>
             </div>
+            @endif
           </div>
 
           <!-- Content -->
           <div class="why-choose__content">
+            @if($whyBadge)
+            <span class="why-choose__eyebrow">{{ $whyBadge }}</span>
+            @endif
+
             <h2 class="why-choose__title">
               {{ $whyTitle }}
             </h2>
+
+            @if($whyDesc)
+            <p class="why-choose__desc">{{ $whyDesc }}</p>
+            @endif
 
             <div class="why-choose__features">
               @foreach($whyFeatures as $feature)
               <div class="why-choose__feature">
                 <span class="why-choose__feature-icon">
-                  {!! $feature['icon_svg'] ?: $whyCheckIcon !!}
+                  {!! $whyCheckIcon !!}
                 </span>
                 <div class="why-choose__feature-text">
                   <h3 class="why-choose__feature-title">{{ $feature['title'] }}</h3>
@@ -699,59 +717,13 @@
             </p>
           </div>
 
+          @php
+            $homeAwardCards = \App\Support\AwardCards::from($featuredAwards ?? null);
+          @endphp
           <div class="awards__slider" data-awards-slider>
             <div class="awards__track" data-awards-track>
-              @php
-                $homeAwardDefaults = [
-                  ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 1],
-                  ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 2],
-                  ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 3],
-                  ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 1],
-                  ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 2],
-                  ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 3],
-                ];
-                $homeAwardCards = (isset($featuredAwards) && $featuredAwards->isNotEmpty())
-                  ? $featuredAwards->map(fn($a) => ['title' => $a->title, 'subtitle' => $a->subtitle, 'link_text' => $a->link_text, 'link_url' => $a->link_url ?: '#', 'seal_variant' => $a->seal_variant])
-                  : collect($homeAwardDefaults);
-              @endphp
               @foreach($homeAwardCards as $awardCard)
-              <div class="award-card">
-                @if(($awardCard['seal_variant'] ?? 1) === 1)
-                <svg class="award-card__seal" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M48 4 86 26v44L48 92 10 70V26z" stroke="currentColor" stroke-width="1.6"/>
-                  <text x="48" y="46" text-anchor="middle" font-size="14" font-weight="800" fill="currentColor">WHO</text>
-                  <text x="48" y="56" text-anchor="middle" font-size="6" fill="currentColor" opacity="0.7">Medizone</text>
-                  <text x="48" y="64" text-anchor="middle" font-size="6" fill="currentColor" opacity="0.7">2024</text>
-                  <text x="17" y="22" font-size="9" fill="currentColor">★</text>
-                  <text x="72" y="22" font-size="9" fill="currentColor">★</text>
-                  <text x="17" y="82" font-size="9" fill="currentColor">★</text>
-                  <text x="72" y="82" font-size="9" fill="currentColor">★</text>
-                </svg>
-                @elseif(($awardCard['seal_variant'] ?? 1) === 2)
-                <svg class="award-card__seal" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="48" cy="48" r="40" stroke="currentColor" stroke-width="1.6" stroke-dasharray="3 4"/>
-                  <circle cx="48" cy="48" r="32" stroke="currentColor" stroke-width="1.2"/>
-                  <path d="M38 36 42 42 48 34 54 42 58 36 56 46H40z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-                  <text x="48" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="currentColor">WHO</text>
-                  <text x="48" y="64" text-anchor="middle" font-size="5.5" fill="currentColor" opacity="0.7">Medizone</text>
-                  <text x="48" y="71" text-anchor="middle" font-size="5.5" fill="currentColor" opacity="0.7">2024</text>
-                </svg>
-                @else
-                <svg class="award-card__seal" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="48" cy="48" r="36" stroke="currentColor" stroke-width="1.6"/>
-                  <path d="M18 40c6 20 10 30 20 36M78 40c-6 20-10 30-20 36" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-                  <path d="M20 44c4 2 8 2 12-1M76 44c-4 2-8 2-12-1M22 56c4 1 8 0 11-3M74 56c-4 1-8 0-11-3M26 66c3 1 6 0 8-2M70 66c-3 1-6 0-8-2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
-                  <text x="48" y="44" text-anchor="middle" font-size="12" font-weight="800" fill="currentColor">WHO</text>
-                  <text x="48" y="53" text-anchor="middle" font-size="5.5" fill="currentColor" opacity="0.7">Medizone</text>
-                  <text x="48" y="60" text-anchor="middle" font-size="5.5" fill="currentColor" opacity="0.7">2024</text>
-                </svg>
-                @endif
-                <h3 class="award-card__title">{{ $awardCard['title'] }}</h3>
-                <p class="award-card__subtitle">{{ $awardCard['subtitle'] }}</p>
-                @if($awardCard['link_text'])
-                  <a href="{{ $awardCard['link_url'] ?: '#' }}" class="award-card__link">{{ $awardCard['link_text'] }}</a>
-                @endif
-              </div>
+                <x-frontend.award-card :award="$awardCard" />
               @endforeach
             </div>
           </div>

@@ -16,9 +16,25 @@ class DoctorSeeder extends Seeder
         foreach ($this->doctors() as $doctor) {
             Doctor::updateOrCreate(
                 ['slug' => Str::slug($doctor['name'])],
-                array_merge($doctor, ['slug' => Str::slug($doctor['name'])])
+                array_merge($this->normaliseLists($doctor), ['slug' => Str::slug($doctor['name'])])
             );
         }
+    }
+
+    /**
+     * Specialty/degrees/experience/awards each store a *list* of translatable values,
+     * so a doctor can have several. The blocks below spell them out as a single
+     * {locale => text} map for readability — wrap those into one-entry lists.
+     */
+    private function normaliseLists(array $doctor): array
+    {
+        foreach (Doctor::TRANSLATABLE_LISTS as $field) {
+            if (isset($doctor[$field]) && is_array($doctor[$field]) && !array_is_list($doctor[$field])) {
+                $doctor[$field] = [$doctor[$field]];
+            }
+        }
+
+        return $doctor;
     }
 
     private function doctors(): array

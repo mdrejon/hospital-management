@@ -3,7 +3,7 @@
 @php
   $heroTitle = $page->breadcrumb_title ?: $page->title;
   $heroImage = !empty($page->hero_image) ? asset('storage/' . $page->hero_image) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $page->seo_title ?? ($page->title . ' | ClinicMaster Medical & Health Care Services');
+  $seoTitle  = $page->seo_title ?? ($page->title . ' | ' . config('app.name'));
   $seoDesc   = $page->seo_description ?? '';
 @endphp
 

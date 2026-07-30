@@ -2,7 +2,7 @@
 
 @php
   $heroImage = !empty($pkg['pkg_page_hero_image']) ? asset('storage/' . $pkg['pkg_page_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $package->seo_title ?: ($pkg['pkg_seo_title'] ?? null) ?: ($package->title . ' | ClinicMaster Medical & Health Care Services');
+  $seoTitle  = $package->seo_title ?: ($pkg['pkg_seo_title'] ?? null) ?: ($package->title . ' | ' . config('app.name'));
   $seoDesc   = $package->seo_description ?: ($pkg['pkg_seo_description'] ?? null) ?: $package->short_desc ?: 'Learn more about this health package at ClinicMaster.';
 @endphp
 

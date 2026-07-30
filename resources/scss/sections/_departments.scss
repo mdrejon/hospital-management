@@ -68,7 +68,7 @@
 
 // Prev/next arrows, floating just outside the viewport ---------------------
 .departments__nav {
-  @apply absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-brand-cyan text-white shadow-lg transition-all duration-200 hover:bg-navy;
+  @apply absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-brand-green text-white shadow-lg transition-all duration-200 hover:bg-white hover:text-brand-green hover:ring-2 hover:ring-brand-green;
 
   &.is-prev {
     @apply left-0 lg:-left-5;
@@ -135,7 +135,7 @@
 }
 
 .department-card__icon {
-  @apply flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-brand-cyan text-white shadow-lg transition-all duration-300;
+  @apply flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-brand-green text-white shadow-lg transition-all duration-300;
 
   .department-card:hover & {
     @apply scale-110 bg-navy;
@@ -143,7 +143,7 @@
 }
 
 .department-card__arrow {
-  @apply absolute right-[29%] top-[-18px] flex h-9 w-9 items-center justify-center rounded-full bg-navy text-white shadow-md ring-4 ring-white transition-all duration-200 hover:scale-110 hover:bg-brand-cyan;
+  @apply absolute right-[29%] top-[-18px] flex h-9 w-9 items-center justify-center rounded-full bg-navy text-white shadow-md ring-4 ring-white transition-all duration-200 hover:scale-110 hover:bg-brand-green;
 }
 
 .department-card.is-alt {
@@ -152,11 +152,11 @@
   }
 
   &:hover .department-card__icon {
-    @apply bg-brand-cyan;
+    @apply bg-brand-green;
   }
 
   .department-card__arrow {
-    @apply bg-brand-cyan;
+    @apply bg-brand-green;
 
     &:hover {
       @apply bg-navy;
@@ -182,7 +182,7 @@
 }
 
 .departments__cta {
-  @apply inline-flex items-center gap-3 rounded-full bg-brand-cyan py-2 pl-2 pr-7 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105;
+  @apply inline-flex items-center gap-3 rounded-full bg-brand-cyan py-2 pl-2 pr-7 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
 }
 
 .departments__cta-icon {

@@ -17,6 +17,8 @@
   --color-primary-hover: #{channels(v.$color-primary-hover)};
   --color-secondary: #{channels(v.$color-secondary)};
   --color-text-muted: #{channels(v.$color-text-muted)};
+  --color-accent-green: #{channels(v.$color-accent-green)};
+  --color-accent-red: #{channels(v.$color-accent-red)};
   --header-height: #{v.$header-height};
 }
 

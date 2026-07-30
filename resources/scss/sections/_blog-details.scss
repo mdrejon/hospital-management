@@ -150,5 +150,5 @@
 }
 
 .comments__submit {
-  @apply w-fit rounded-lg bg-brand-cyan px-8 py-3.5 text-[15px] font-semibold text-white transition-transform duration-200 hover:scale-105;
+  @apply w-fit rounded-lg bg-brand-cyan px-8 py-3.5 text-[15px] font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
 }

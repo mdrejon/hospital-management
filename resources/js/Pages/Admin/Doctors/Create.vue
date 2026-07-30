@@ -7,7 +7,7 @@
             </div>
 
             <form @submit.prevent="submit" class="space-y-6">
-                <DoctorForm :form="form" @image-change="onImageChange" />
+                <DoctorForm :form="form" :specializations="specializations" @image-change="onImageChange" />
 
                 <div class="flex justify-end">
                     <button type="submit" :disabled="form.processing"
@@ -27,6 +27,10 @@ import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import DoctorForm   from './DoctorForm.vue';
 import { emptyTranslatable } from '@/Composables/useTranslatable';
 
+const props = defineProps({
+    specializations: { type: Array, default: () => [] },
+});
+
 const languages = computed(() => usePage().props.languages ?? []);
 
 function defaultAvailabilities() {
@@ -37,13 +41,14 @@ function defaultAvailabilities() {
 }
 
 const form = useForm({
-    name:            '',
+    name:            emptyTranslatable(languages.value),
     role:            emptyTranslatable(languages.value),
     photo:           null,
-    specialty:       emptyTranslatable(languages.value),
-    degrees:         emptyTranslatable(languages.value),
-    experience:      emptyTranslatable(languages.value),
-    awards:          emptyTranslatable(languages.value),
+    specialty:       [],
+    doctor_specialization_id: null,
+    degrees:         [],
+    experience:      [],
+    awards:          [],
     bio:             emptyTranslatable(languages.value),
     skills:          [],
     schedule:        [],
@@ -51,8 +56,8 @@ const form = useForm({
     chambers:        [],
     availabilities:  defaultAvailabilities(),
     leaves:          [],
-    address:         '',
-    phone:           '',
+    address:         emptyTranslatable(languages.value),
+    phone:           emptyTranslatable(languages.value),
     email:           '',
     facebook_url:    '',
     twitter_url:     '',

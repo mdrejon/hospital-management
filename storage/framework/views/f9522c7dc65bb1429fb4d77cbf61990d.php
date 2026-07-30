@@ -13,6 +13,12 @@
   <?php if (! empty(trim($__env->yieldContent('og_image')))): ?>
   <meta property="og:image" content="<?php echo $__env->yieldContent('og_image'); ?>" />
   <?php endif; ?>
+  <?php
+    $faviconPath = !empty($headerSettings['header_favicon']) ? asset('storage/' . $headerSettings['header_favicon']) : asset('favicon.ico');
+    $faviconExt  = strtolower(pathinfo($headerSettings['header_favicon'] ?? 'favicon.ico', PATHINFO_EXTENSION));
+    $faviconType = ['png' => 'image/png', 'svg' => 'image/svg+xml', 'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'webp' => 'image/webp'][$faviconExt] ?? 'image/x-icon';
+  ?>
+  <link rel="icon" href="<?php echo e($faviconPath); ?>" type="<?php echo e($faviconType); ?>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />

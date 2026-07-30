@@ -34,7 +34,7 @@
                     <div>
                         <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars)</span></label>
                         <input v-model="form.about_seo_title[activeLang]" @input="onMetaTitleInput" type="text" class="input"
-                            placeholder="About Us | ClinicMaster Medical & Health Care Services" maxlength="160" />
+                            :placeholder="`About Us | ${appName}`" maxlength="160" />
                         <p class="text-xs text-gray-400 mt-1">{{ (form.about_seo_title[activeLang] || '').length }}/160</p>
                         <InputError :message="form.errors[`about_seo_title.${activeLang}`]" />
                     </div>
@@ -56,62 +56,6 @@
                         <DropZone @change="file => form.about_seo_og_image = file" hint="JPEG / PNG / WebP — max 5 MB" preview-class="w-full h-36 object-cover"
                             :existing-preview="currentOgImage ? '/storage/' + currentOgImage : null" />
                         <InputError :message="form.errors.about_seo_og_image" />
-                    </div>
-                </section>
-
-                <!-- ─── About Section (Home + About page) ─── -->
-                <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
-                    <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">About Section <span class="text-xs font-normal text-gray-400">(shown on Home page and About page)</span></h2>
-                    <LanguageTabs v-model="activeLang" />
-
-                    <div>
-                        <label class="label">Photo</label>
-                        <DropZone @change="file => form.about_photo = file" hint="JPEG / PNG / WebP — max 5 MB" preview-class="w-full h-44 object-cover"
-                            :existing-preview="currentAboutPhoto ? '/storage/' + currentAboutPhoto : null" />
-                        <InputError :message="form.errors.about_photo" />
-                    </div>
-                    <div>
-                        <label class="label">Title</label>
-                        <input v-model="form.about_title[activeLang]" type="text" class="input" placeholder="World Class Patient Facilities Designed For You" />
-                        <InputError :message="form.errors[`about_title.${activeLang}`]" />
-                    </div>
-                    <div>
-                        <label class="label">Description</label>
-                        <textarea v-model="form.about_desc[activeLang]" rows="3" class="input" placeholder="Experience the future of healthcare..."></textarea>
-                        <InputError :message="form.errors[`about_desc.${activeLang}`]" />
-                    </div>
-
-                    <div class="border-t pt-4 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <label class="label mb-0">Opening Hours Card</label>
-                        </div>
-                        <input v-model="form.about_hours_title[activeLang]" type="text" class="input" placeholder="Open Hours" />
-                        <div v-for="(row, i) in form.about_hours" :key="i" class="flex items-center gap-3">
-                            <input v-model="row.day[activeLang]" type="text" placeholder="Day (e.g. Monday)" class="input flex-1" />
-                            <input v-model="row.time[activeLang]" type="text" placeholder="Time (e.g. 09:30 - 07:30)" class="input flex-1" />
-                            <button type="button" @click="form.about_hours.splice(i, 1)" class="text-red-400 hover:text-red-600 text-lg leading-none">&times;</button>
-                        </div>
-                        <button type="button" @click="form.about_hours.push({ day: emptyTranslatable(languages), time: emptyTranslatable(languages) })" class="text-xs text-blue-600 hover:underline">+ Add Row</button>
-                    </div>
-
-                    <div class="border-t pt-4 space-y-3">
-                        <label class="label mb-0">Feature Checklist <span class="text-xs text-gray-400">(shown in two columns)</span></label>
-                        <div v-for="(item, i) in form.about_features" :key="i" class="flex items-center gap-3">
-                            <input v-model="form.about_features[i][activeLang]" type="text" placeholder="e.g. Comprehensive Specialties" class="input flex-1" />
-                            <button type="button" @click="form.about_features.splice(i, 1)" class="text-red-400 hover:text-red-600 text-lg leading-none">&times;</button>
-                        </div>
-                        <button type="button" @click="form.about_features.push(emptyTranslatable(languages))" class="text-xs text-blue-600 hover:underline">+ Add Feature</button>
-                    </div>
-
-                    <div class="border-t pt-4 grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="label">CTA Button Text</label>
-                            <input v-model="form.about_more_btn_text[activeLang]" type="text" class="input" placeholder="Appointment" />
-                        </div>
-                        <div>
-                            <label class="label">CTA Button URL</label>
-                            <input v-model="form.about_more_btn_url" type="text" class="input" placeholder="/appointment" />
-                        </div>
                     </div>
                 </section>
 
@@ -201,51 +145,6 @@
                     </div>
                 </section>
 
-                <!-- ─── Why Choose Us (Home page) ─── -->
-                <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
-                    <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Why Choose Us Section <span class="text-xs font-normal text-gray-400">(Home page only)</span></h2>
-                    <LanguageTabs v-model="activeLang" />
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="label">Badge Text</label>
-                            <input v-model="form.why_badge[activeLang]" type="text" class="input" placeholder="WHY CHOOSE US" />
-                        </div>
-                        <div>
-                            <label class="label">Section Title</label>
-                            <input v-model="form.why_title[activeLang]" type="text" class="input" placeholder="Why Choose Us For Your Health Care Needs" />
-                        </div>
-                        <div class="col-span-2">
-                            <label class="label">Section Description</label>
-                            <textarea v-model="form.why_desc[activeLang]" rows="2" class="input"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="border-t pt-4 space-y-4">
-                        <div class="flex items-center justify-between">
-                            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Feature Cards</p>
-                            <button type="button" @click="form.why_features.push({ icon_svg: '', title: emptyTranslatable(languages), description: emptyTranslatable(languages) })" class="text-xs text-blue-600 hover:underline">+ Add Feature Card</button>
-                        </div>
-                        <div v-for="(feat, i) in form.why_features" :key="i" class="border border-gray-200 rounded-lg overflow-hidden">
-                            <div class="flex items-center justify-between bg-gray-50 px-4 py-2 border-b border-gray-200">
-                                <span class="text-xs font-semibold text-gray-600">Card {{ i + 1 }}</span>
-                                <button type="button" @click="form.why_features.splice(i, 1)" class="w-6 h-6 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded text-xs">&times;</button>
-                            </div>
-                            <div class="p-4 space-y-3">
-                                <label class="label text-xs">Title</label>
-                                <input v-model="feat.title[activeLang]" type="text" class="input" placeholder="More Experience" />
-                                <label class="label text-xs">Icon SVG</label>
-                                <div v-if="feat.icon_svg" class="mb-1 flex items-center gap-2">
-                                    <div class="w-8 h-8 flex items-center justify-center text-gray-600" v-html="feat.icon_svg"></div>
-                                    <span class="text-xs text-gray-400">Preview</span>
-                                </div>
-                                <textarea v-model="feat.icon_svg" rows="3" class="input font-mono text-xs" placeholder="<svg xmlns=...>...</svg>"></textarea>
-                                <label class="label text-xs">Description</label>
-                                <textarea v-model="feat.description[activeLang]" rows="2" class="input"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
                 <div class="flex justify-end">
                     <button type="submit" :disabled="form.processing"
                         class="px-6 py-2.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-60">
@@ -273,13 +172,13 @@ const props = defineProps({
 
 const languages = computed(() => usePage().props.languages ?? []);
 const activeLang = ref(defaultLangCode(languages.value));
+const appName = computed(() => usePage().props.appName);
 
 const s = props.settings;
 const seed = (key, fallback = {}) => ({ ...emptyTranslatable(languages.value), ...fallback, ...(s[key] || {}) });
 
 const currentHeroImage  = ref(s.about_hero_image);
 const currentOgImage    = ref(s.about_seo_og_image);
-const currentAboutPhoto = ref(s.about_photo);
 const currentMvImage    = ref(s.about_mv_image);
 const currentCeoImage   = ref(s.ceo_image);
 
@@ -290,15 +189,6 @@ const form = useForm({
     about_seo_description: seed('about_seo_description'),
     about_seo_keywords:    s.about_seo_keywords ?? '',
     about_seo_og_image:    null,
-
-    about_photo:        null,
-    about_title:         seed('about_title'),
-    about_desc:           seed('about_desc'),
-    about_hours_title:    seed('about_hours_title'),
-    about_hours:          Array.isArray(s.about_hours) ? s.about_hours.map(r => ({ day: { ...emptyTranslatable(languages.value), ...r.day }, time: { ...emptyTranslatable(languages.value), ...r.time } })) : [],
-    about_features:       Array.isArray(s.about_features) ? s.about_features.map(f => ({ ...emptyTranslatable(languages.value), ...f })) : [],
-    about_more_btn_text:  seed('about_more_btn_text'),
-    about_more_btn_url:   s.about_more_btn_url ?? '',
 
     about_mv_title:  seed('about_mv_title'),
     about_mv_desc:    seed('about_mv_desc'),
@@ -316,11 +206,6 @@ const form = useForm({
     ceo_focus_label:  seed('ceo_focus_label'),
     ceo_focus_items:  Array.isArray(s.ceo_focus_items) ? s.ceo_focus_items.map(f => ({ ...emptyTranslatable(languages.value), ...f })) : [],
     ceo_awards:       Array.isArray(s.ceo_awards) ? s.ceo_awards.map(a => ({ ...a, label: { ...emptyTranslatable(languages.value), ...a.label } })) : [],
-
-    why_badge:    seed('why_badge'),
-    why_title:    seed('why_title'),
-    why_desc:     seed('why_desc'),
-    why_features: Array.isArray(s.why_features) ? s.why_features.map(f => ({ ...f, title: { ...emptyTranslatable(languages.value), ...f.title }, description: { ...emptyTranslatable(languages.value), ...f.description } })) : [],
 });
 
 const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFill(reactive({
@@ -331,8 +216,8 @@ const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } = useSeoAutoFil
     get about_seo_keywords() { return form.about_seo_keywords; },
     set about_seo_keywords(v) { form.about_seo_keywords = v; },
 }), {
-    titleSource: () => form.about_title[activeLang.value],
-    descSource:  () => form.about_desc[activeLang.value],
+    titleSource: () => form.about_hero_title[activeLang.value],
+    descSource:  () => form.about_mv_desc[activeLang.value],
     titleKey:    'about_seo_title',
     descKey:     'about_seo_description',
     keywordsKey: 'about_seo_keywords',

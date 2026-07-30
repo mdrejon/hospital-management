@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', 'Page Not Found | ClinicMaster Medical & Health Care Services')
+@section('title', 'Page Not Found | ' . config('app.name'))
 
 @section('content')
     <section class="ready-help" style="min-height: 60vh; display: flex; align-items: center;">

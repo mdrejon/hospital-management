@@ -14,7 +14,7 @@
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Logo</h2>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Logo Image</label>
-                        <DropZone @change="onLogoChange" hint="JPEG / PNG / WebP — max 5 MB" preview-class="w-full h-28 object-contain p-2 bg-gray-50"
+                        <DropZone @change="onLogoChange" hint="JPEG / PNG / WebP — max 5 MB. Recommended size: 100×100px" preview-class="w-full h-28 object-contain p-2 bg-gray-50"
                             :existing-preview="currentLogo ? '/storage/' + currentLogo : null" />
                         <InputError :message="form.errors.header_logo" />
                     </div>
@@ -22,6 +22,12 @@
                         <label class="block text-sm text-gray-600 mb-1">Site / Hospital Name (logo alt text)</label>
                         <input v-model="form.header_site_name" type="text" class="input" placeholder="Sitakund Modern Hospital Ltd." />
                         <InputError :message="form.errors.header_site_name" />
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">Favicon</label>
+                        <DropZone @change="onFaviconChange" hint="ICO / PNG / SVG — max 512 KB. Recommended size: 32×32px or 64×64px" preview-class="w-16 h-16 object-contain p-2 bg-gray-50"
+                            :existing-preview="currentFavicon ? '/storage/' + currentFavicon : null" />
+                        <InputError :message="form.errors.header_favicon" />
                     </div>
                 </section>
 
@@ -149,6 +155,7 @@ const languages = computed(() => usePage().props.languages ?? []);
 const activeLang = ref(defaultLangCode(languages.value));
 
 const currentLogo = ref(props.settings.header_logo);
+const currentFavicon = ref(props.settings.header_favicon);
 
 const seed = (key) => ({ ...emptyTranslatable(languages.value), ...(props.settings[key] || {}) });
 
@@ -168,11 +175,17 @@ const form = useForm({
     header_book_btn_text:         seed('header_book_btn_text'),
     header_book_btn_url:          props.settings.header_book_btn_url ?? '',
     header_logo:                  null,
+    header_favicon:                null,
 });
 
 function onLogoChange(file) {
     if (!file) return;
     form.header_logo = file;
+}
+
+function onFaviconChange(file) {
+    if (!file) return;
+    form.header_favicon = file;
 }
 
 function submit() {

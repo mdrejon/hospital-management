@@ -8,6 +8,7 @@ use App\Models\Doctor;
 use App\Models\DoctorAvailability;
 use App\Models\DoctorChamber;
 use App\Models\DoctorLeave;
+use App\Models\DoctorSpecialization;
 use App\Models\Language;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,7 +31,9 @@ class DoctorController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('Admin/Doctors/Create');
+        return Inertia::render('Admin/Doctors/Create', [
+            'specializations' => $this->specializationOptions(),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -43,13 +46,13 @@ class DoctorController extends Controller
             }
         }
 
-        $data['slug'] = $this->uniqueSlug($data['name']);
+        $data['slug'] = $this->uniqueSlug($this->slugSource($data['name']));
 
         if (empty($data['seo_keywords'])) {
             $data['seo_keywords'] = $this->autoKeywords(
                 $data['seo_title'][$this->defaultLocale()] ?? '',
                 $data['seo_description'][$this->defaultLocale()] ?? '',
-                $data['name']
+                $data['name'][$this->defaultLocale()] ?? ''
             );
         }
 
@@ -70,6 +73,7 @@ class DoctorController extends Controller
                 'availabilities' => $doctor->availabilities,
                 'leaves'         => $doctor->leaves()->orderBy('date')->get(),
             ]),
+            'specializations' => $this->specializationOptions(),
         ]);
     }
 
@@ -88,13 +92,13 @@ class DoctorController extends Controller
             }
         }
 
-        $data['slug'] = $this->uniqueSlug($data['name'], $doctor->id);
+        $data['slug'] = $this->uniqueSlug($this->slugSource($data['name']), $doctor->id);
 
         if (empty($data['seo_keywords'])) {
             $data['seo_keywords'] = $this->autoKeywords(
                 $data['seo_title'][$this->defaultLocale()] ?? '',
                 $data['seo_description'][$this->defaultLocale()] ?? '',
-                $data['name']
+                $data['name'][$this->defaultLocale()] ?? ''
             );
         }
 
@@ -133,40 +137,65 @@ class DoctorController extends Controller
         return Language::defaultLanguage()?->code ?? config('app.locale');
     }
 
+    /**
+     * Specialization options for the doctor form's dropdown. `name` is translatable —
+     * accessing it via the magic getter (not toArray()) resolves it to the current
+     * locale's plain string instead of the raw {en,bn} array.
+     */
+    private function specializationOptions()
+    {
+        return DoctorSpecialization::active()->get(['id', 'name'])
+            ->map(fn (DoctorSpecialization $s) => [
+                'id'   => $s->id,
+                'name' => $s->name,
+            ]);
+    }
+
     private function validated(Request $request): array
     {
         $default = $this->defaultLocale();
 
         $data = $request->validate([
-            'name'          => 'required|string',
+            'name'          => 'required|array',
+            "name.$default" => 'required|string',
+            'name.*'        => 'nullable|string',
             'role'          => 'nullable|array',
             'role.*'        => 'nullable|string',
             'photo'         => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'specialty'     => 'nullable|array',
-            'specialty.*'   => 'nullable|string',
-            'degrees'       => 'nullable|array',
-            'degrees.*'     => 'nullable|string',
-            'experience'    => 'nullable|array',
-            'experience.*'  => 'nullable|string',
-            'awards'        => 'nullable|array',
-            'awards.*'      => 'nullable|string',
+            'specialty'      => 'nullable|array',
+            'specialty.*.*'  => 'nullable|string',
+            'doctor_specialization_id' => 'nullable|exists:doctor_specializations,id',
+            'degrees'        => 'nullable|array',
+            'degrees.*.*'    => 'nullable|string',
+            'experience'     => 'nullable|array',
+            'experience.*.*' => 'nullable|string',
+            'awards'         => 'nullable|array',
+            'awards.*.*'     => 'nullable|string',
             'bio'           => 'nullable|array',
             'bio.*'         => 'nullable|string',
             'skills'        => 'nullable|array',
             'skills.*.*'    => 'nullable|string',
-            'schedule'      => 'nullable|array',
-            'schedule.*.day'  => 'nullable|string',
-            'schedule.*.time' => 'nullable|string',
+            'schedule'          => 'nullable|array',
+            'schedule.*.day'    => 'nullable|array',
+            'schedule.*.day.*'  => 'nullable|string',
+            'schedule.*.time'   => 'nullable|array',
+            'schedule.*.time.*' => 'nullable|string',
             'consultation_fee' => 'nullable|numeric|min:0',
-            'chambers'                    => 'nullable|array',
-            'chambers.*.name'             => 'required_with:chambers|string',
-            'chambers.*.hospital_branch'  => 'nullable|string',
-            'chambers.*.floor'            => 'nullable|string',
-            'chambers.*.room_no'          => 'nullable|string',
-            'chambers.*.address'          => 'nullable|string',
-            'chambers.*.contact_number'   => 'nullable|string',
-            'chambers.*.google_map_url'   => 'nullable|string',
-            'chambers.*.is_own_hospital'  => 'boolean',
+            'chambers'                      => 'nullable|array',
+            'chambers.*.name'               => 'nullable|array',
+            'chambers.*.name.*'             => 'nullable|string',
+            'chambers.*.hospital_branch'    => 'nullable|array',
+            'chambers.*.hospital_branch.*'  => 'nullable|string',
+            'chambers.*.floor'              => 'nullable|array',
+            'chambers.*.floor.*'            => 'nullable|string',
+            'chambers.*.room_no'            => 'nullable|array',
+            'chambers.*.room_no.*'          => 'nullable|string',
+            'chambers.*.address'            => 'nullable|array',
+            'chambers.*.address.*'          => 'nullable|string',
+            'chambers.*.contact_number'     => 'nullable|array',
+            'chambers.*.contact_number.*'   => 'nullable|string',
+            'chambers.*.google_map_url'     => 'nullable|string',
+            'chambers.*.is_own_hospital'    => 'boolean',
             'availabilities'                        => 'nullable|array',
             'availabilities.*.weekday'              => 'required_with:availabilities|integer|min:0|max:6',
             'availabilities.*.start_time'           => 'required_with:availabilities|date_format:H:i',
@@ -176,8 +205,10 @@ class DoctorController extends Controller
             'leaves'             => 'nullable|array',
             'leaves.*.date'      => 'required_with:leaves|date',
             'leaves.*.reason'    => 'nullable|string',
-            'address'       => 'nullable|string',
-            'phone'         => 'nullable|string',
+            'address'       => 'nullable|array',
+            'address.*'     => 'nullable|string',
+            'phone'         => 'nullable|array',
+            'phone.*'       => 'nullable|string',
             'email'         => 'nullable|email',
             'facebook_url'  => 'nullable|string',
             'twitter_url'   => 'nullable|string',
@@ -196,19 +227,39 @@ class DoctorController extends Controller
         ]);
 
         // Sanitise arrays — remove entries blank in every locale
-        if (isset($data['skills'])) {
-            $data['skills'] = array_values(array_filter(
-                $data['skills'],
-                fn ($f) => is_array($f) && count(array_filter($f)) > 0
-            ));
+        foreach (Doctor::TRANSLATABLE_LISTS as $field) {
+            if (isset($data[$field])) {
+                $data[$field] = array_values(array_filter(
+                    $data[$field],
+                    fn ($entry) => is_array($entry) && count(array_filter($entry)) > 0
+                ));
+            }
         }
         if (isset($data['schedule'])) {
             $data['schedule'] = array_values(
-                array_filter($data['schedule'], fn($s) => !empty($s['day']) || !empty($s['time']))
+                array_filter($data['schedule'], fn ($s) => $this->hasText($s['day'] ?? null) || $this->hasText($s['time'] ?? null))
             );
         }
 
         return $data;
+    }
+
+    /** True if a translatable value (a {locale => text} array, or a bare legacy string) has text in at least one locale. */
+    private function hasText($value): bool
+    {
+        return !empty(array_filter(is_array($value) ? $value : [$value]));
+    }
+
+    /** Slugs are always built from the English text — regardless of which language is set as the site default — so URLs stay Latin/readable even on a Bangla-first site. Falls back to the default locale, then any filled locale, if English is blank. */
+    private function slugSource(array $translatable): string
+    {
+        if (filled($translatable['en'] ?? null)) {
+            return $translatable['en'];
+        }
+        if (filled($translatable[$this->defaultLocale()] ?? null)) {
+            return $translatable[$this->defaultLocale()];
+        }
+        return collect($translatable)->first(fn ($v) => filled($v)) ?? '';
     }
 
     private function uniqueSlug(string $name, int $excludeId = 0): string
@@ -257,7 +308,7 @@ class DoctorController extends Controller
     {
         $doctor->chambers()->delete();
         foreach ($chambers as $i => $chamber) {
-            if (empty($chamber['name'])) {
+            if (!$this->hasText($chamber['name'] ?? null)) {
                 continue;
             }
             DoctorChamber::create(array_merge($chamber, [

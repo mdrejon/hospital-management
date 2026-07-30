@@ -22,15 +22,6 @@ class AboutSettingController extends Controller
         'about_seo_description',
         'about_seo_keywords',
         'about_seo_og_image',
-        // About section (shared: home page + about page)
-        'about_photo',
-        'about_title',
-        'about_desc',
-        'about_hours_title',
-        'about_hours',            // JSON array [{day, time}]
-        'about_features',         // JSON array of strings
-        'about_more_btn_text',
-        'about_more_btn_url',
         // Mission & Vision section (about page)
         'about_mv_title',
         'about_mv_desc',
@@ -46,30 +37,20 @@ class AboutSettingController extends Controller
         'ceo_focus_label',
         'ceo_focus_items',        // JSON array of strings
         'ceo_awards',             // JSON array [{year, org, label}]
-        // Why Choose Us section (home page)
-        'why_badge',
-        'why_title',
-        'why_desc',
-        'why_features',           // JSON array [{icon_svg, title, description}]
     ];
 
     /** JSON-encoded keys that hold arrays */
     private array $jsonKeys = [
-        'about_hours',
-        'about_features',
         'about_mv_cards',
         'ceo_focus_items',
         'ceo_awards',
-        'why_features',
     ];
 
     /** Human-readable copy shown to visitors — edited per-locale. Everything else in $aboutKeys stays a plain value. */
     private array $translatableKeys = [
         'about_hero_title', 'about_seo_title', 'about_seo_description',
-        'about_title', 'about_desc', 'about_hours_title', 'about_more_btn_text',
         'about_mv_title', 'about_mv_desc',
         'ceo_badge_label', 'ceo_eyebrow', 'ceo_title', 'ceo_message', 'ceo_focus_label',
-        'why_badge', 'why_title', 'why_desc',
     ];
 
     public function edit(): Response
@@ -96,16 +77,6 @@ class AboutSettingController extends Controller
         // (day/time-of-week values here are free-text display copy, not structural keys.)
         $toTranslatable = fn ($value) => is_array($value) ? $value : ['en' => $value ?? '', 'bn' => ''];
 
-        $settings['about_hours'] = collect($settings['about_hours'])->map(function ($item) use ($toTranslatable) {
-            $item['day']  = $toTranslatable($item['day'] ?? null);
-            $item['time'] = $toTranslatable($item['time'] ?? null);
-            return $item;
-        })->values()->all();
-
-        $settings['about_features'] = collect($settings['about_features'])
-            ->map(fn ($item) => $toTranslatable($item))
-            ->values()->all();
-
         $settings['about_mv_cards'] = collect($settings['about_mv_cards'])->map(function ($item) use ($toTranslatable) {
             $item['title']       = $toTranslatable($item['title'] ?? null);
             $item['description'] = $toTranslatable($item['description'] ?? null);
@@ -122,13 +93,6 @@ class AboutSettingController extends Controller
             return $item;
         })->values()->all();
 
-        // icon_svg is a markup/asset string — left plain; title/description are the descriptive copy.
-        $settings['why_features'] = collect($settings['why_features'])->map(function ($item) use ($toTranslatable) {
-            $item['title']       = $toTranslatable($item['title'] ?? null);
-            $item['description'] = $toTranslatable($item['description'] ?? null);
-            return $item;
-        })->values()->all();
-
         return Inertia::render('Admin/WebsiteSettings/About/Edit', [
             'settings' => $settings,
         ]);
@@ -140,16 +104,6 @@ class AboutSettingController extends Controller
             'about_hero_image'          => 'nullable|image|mimes:jpeg,jpg,png,webp',
             'about_seo_keywords'        => 'nullable|string',
             'about_seo_og_image'        => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'about_photo'               => 'nullable|image|mimes:jpeg,jpg,png,webp',
-            'about_hours'                => 'nullable|array',
-            'about_hours.*.day'          => 'nullable|array',
-            'about_hours.*.day.*'        => 'nullable|string',
-            'about_hours.*.time'         => 'nullable|array',
-            'about_hours.*.time.*'       => 'nullable|string',
-            'about_features'             => 'nullable|array',
-            'about_features.*'           => 'nullable|array',
-            'about_features.*.*'         => 'nullable|string',
-            'about_more_btn_url'         => 'nullable|string',
 
             'about_mv_image'             => 'nullable|image|mimes:jpeg,jpg,png,webp',
             'about_mv_cards'             => 'nullable|array',
@@ -168,13 +122,6 @@ class AboutSettingController extends Controller
             'ceo_awards.*.org'           => 'nullable|string',
             'ceo_awards.*.label'         => 'nullable|array',
             'ceo_awards.*.label.*'       => 'nullable|string',
-
-            'why_features'               => 'nullable|array',
-            'why_features.*.icon_svg'    => 'nullable|string',
-            'why_features.*.title'       => 'nullable|array',
-            'why_features.*.title.*'     => 'nullable|string',
-            'why_features.*.description' => 'nullable|array',
-            'why_features.*.description.*' => 'nullable|string',
         ];
 
         foreach ($this->translatableKeys as $key) {
@@ -185,7 +132,7 @@ class AboutSettingController extends Controller
         $data = $request->validate($rules);
 
         // Handle image uploads
-        foreach (['about_hero_image', 'about_seo_og_image', 'about_photo', 'about_mv_image', 'ceo_image'] as $field) {
+        foreach (['about_hero_image', 'about_seo_og_image', 'about_mv_image', 'ceo_image'] as $field) {
             if ($request->hasFile($field)) {
                 $existing = GlobalSetting::get($field);
                 if ($existing) {
@@ -197,15 +144,13 @@ class AboutSettingController extends Controller
             }
         }
 
-        // Auto-generate keywords if none provided (title/description/about_title are {en,bn} arrays)
+        // Auto-generate keywords if none provided (title/description are {en,bn} arrays)
         if (empty($data['about_seo_keywords'])) {
             $titleText = $data['about_seo_title'] ?? GlobalSetting::getTranslatedArray('about_seo_title');
             $descText  = $data['about_seo_description'] ?? GlobalSetting::getTranslatedArray('about_seo_description');
-            $aboutText = $data['about_title'] ?? GlobalSetting::getTranslatedArray('about_title');
             $data['about_seo_keywords'] = $this->autoKeywords(
                 is_array($titleText) ? implode(' ', $titleText) : $titleText,
-                is_array($descText) ? implode(' ', $descText) : $descText,
-                is_array($aboutText) ? implode(' ', $aboutText) : $aboutText
+                is_array($descText) ? implode(' ', $descText) : $descText
             );
         }
 

@@ -5,7 +5,7 @@
   $heroImage = $post->feature_image ? asset('storage/' . $post->feature_image) : asset('assets/img/slider-1.3.jpg');
   $ogImage   = $post->og_image ?: $post->feature_image;
 
-  $seoTitle = $post->meta_title ?: ($blog['blog_seo_title'] ?? null) ?: ($post->title . ' | ClinicMaster Medical & Health Care Services');
+  $seoTitle = $post->meta_title ?: ($blog['blog_seo_title'] ?? null) ?: ($post->title . ' | ' . config('app.name'));
   $seoDesc  = $post->meta_description ?: $post->excerpt ?: ($blog['blog_seo_description'] ?? null) ?: \Illuminate\Support\Str::limit(strip_tags($post->content ?? ''), 160);
 @endphp
 

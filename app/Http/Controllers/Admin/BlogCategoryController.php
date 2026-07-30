@@ -34,7 +34,7 @@ class BlogCategoryController extends Controller
             'sort_order'  => 'integer|min:0',
         ]);
 
-        $data['slug'] = $this->uniqueSlug($data['name'][$default] ?? '');
+        $data['slug'] = $this->uniqueSlug($this->slugSource($data['name'], $default));
 
         BlogCategory::create($data);
 
@@ -55,8 +55,8 @@ class BlogCategoryController extends Controller
             'sort_order'  => 'integer|min:0',
         ]);
 
-        if ($blogCategory->getTranslation('name', $default) !== ($data['name'][$default] ?? '')) {
-            $data['slug'] = $this->uniqueSlug($data['name'][$default] ?? '', $blogCategory->id);
+        if ($blogCategory->getTranslation('name', 'en') !== $this->slugSource($data['name'], $default)) {
+            $data['slug'] = $this->uniqueSlug($this->slugSource($data['name'], $default), $blogCategory->id);
         }
 
         $blogCategory->update($data);
@@ -76,6 +76,18 @@ class BlogCategoryController extends Controller
         $blogCategory->update(['is_active' => !$blogCategory->is_active]);
 
         return back()->with('success', 'Status updated.');
+    }
+
+    /** Slugs are always built from the English text — regardless of which language is set as the site default — so URLs stay Latin/readable even on a Bangla-first site. Falls back to the default locale, then any filled locale, if English is blank. */
+    private function slugSource(array $translatable, string $default): string
+    {
+        if (filled($translatable['en'] ?? null)) {
+            return $translatable['en'];
+        }
+        if (filled($translatable[$default] ?? null)) {
+            return $translatable[$default];
+        }
+        return collect($translatable)->first(fn ($v) => filled($v)) ?? '';
     }
 
     private function uniqueSlug(string $name, int $excludeId = 0): string

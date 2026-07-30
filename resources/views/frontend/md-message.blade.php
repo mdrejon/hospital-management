@@ -15,7 +15,7 @@
     ['year' => 'ClinicMaster 2024', 'org' => 'Quality and Accreditation Institute', 'label' => 'Healthcare Leadership Award'],
     ['year' => 'ClinicMaster 2023', 'org' => 'National Hospital Federation',        'label' => 'Excellence in Patient Care'],
   ];
-  $seoTitle = $about['about_seo_title'] ?? ($ceoTitle . ' | Message From MD/CEO | ClinicMaster Medical & Health Care Services');
+  $seoTitle = $about['about_seo_title'] ?? ($ceoTitle . ' | Message From MD/CEO | ' . config('app.name'));
   $seoDesc  = \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMessage), 160);
 @endphp
 

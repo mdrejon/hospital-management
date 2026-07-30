@@ -3,7 +3,7 @@
 @php
   $heroTitle = $ach['ach_hero_title'] ?? 'Our Achievements';
   $heroImage = !empty($ach['ach_hero_image']) ? asset('storage/' . $ach['ach_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $ach['ach_seo_title'] ?? 'Our Achievements | ClinicMaster Medical & Health Care Services';
+  $seoTitle  = $ach['ach_seo_title'] ?? ('Our Achievements | ' . config('app.name'));
   $seoDesc   = $ach['ach_seo_description'] ?? "Explore ClinicMaster's awards, accreditations, and commitment to patient care.";
 @endphp
 
@@ -235,61 +235,28 @@
       </div>
     </section>
 
-    <!-- ===================== Awards (list) ===================== -->
+    <!-- ===================== Awards ===================== -->
+    {{-- Same data and same slider design as the Home page "Awards" section. --}}
     @php
-      $achAwardDefaults = [
-        ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 1],
-        ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 2],
-        ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 3],
-        ['title' => 'ClinicMaster 2024', 'subtitle' => 'Quality and Accreditation Institute', 'link_text' => 'Save the Children', 'link_url' => '#', 'seal_variant' => 1],
-      ];
-      $achAwardCards = (isset($awards) && $awards->isNotEmpty())
-        ? $awards->map(fn($a) => ['title' => $a->title, 'subtitle' => $a->subtitle, 'link_text' => $a->link_text, 'link_url' => $a->link_url ?: '#', 'seal_variant' => $a->seal_variant])
-        : collect($achAwardDefaults);
+      $achAwardCards = \App\Support\AwardCards::from($awards ?? null);
     @endphp
     <section class="awards">
       <div class="container mx-auto">
-        <div class="ready-help__head">
-          <h2 class="ready-help__title">{{ ($award['ach_award_title'] ?? null) ?: 'Our Awards & Accreditations' }}</h2>
-          <p class="ready-help__desc">
-            {{ ($award['ach_award_desc'] ?? null) ?: 'Recognitions that reflect our continued commitment to quality care and clinical excellence.' }}
-          </p>
-        </div>
-
-        <div class="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          @foreach($achAwardCards as $awardCard)
-          <div class="ready-help__item">
-            <span class="ready-help__icon">
-              @if(($awardCard['seal_variant'] ?? 1) === 1)
-              <svg width="40" height="40" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M48 4 86 26v44L48 92 10 70V26z" stroke="currentColor" stroke-width="1.6"/>
-                <text x="48" y="46" text-anchor="middle" font-size="14" font-weight="800" fill="currentColor">WHO</text>
-                <text x="48" y="56" text-anchor="middle" font-size="6" fill="currentColor" opacity="0.7">Medizone</text>
-                <text x="48" y="64" text-anchor="middle" font-size="6" fill="currentColor" opacity="0.7">2024</text>
-              </svg>
-              @elseif(($awardCard['seal_variant'] ?? 1) === 2)
-              <svg width="40" height="40" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="48" cy="48" r="40" stroke="currentColor" stroke-width="1.6" stroke-dasharray="3 4"/>
-                <circle cx="48" cy="48" r="32" stroke="currentColor" stroke-width="1.2"/>
-                <text x="48" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="currentColor">WHO</text>
-                <text x="48" y="64" text-anchor="middle" font-size="5.5" fill="currentColor" opacity="0.7">Medizone</text>
-              </svg>
-              @else
-              <svg width="40" height="40" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="48" cy="48" r="36" stroke="currentColor" stroke-width="1.6"/>
-                <path d="M18 40c6 20 10 30 20 36M78 40c-6 20-10 30-20 36" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-                <text x="48" y="44" text-anchor="middle" font-size="12" font-weight="800" fill="currentColor">WHO</text>
-                <text x="48" y="53" text-anchor="middle" font-size="5.5" fill="currentColor" opacity="0.7">Medizone</text>
-              </svg>
-              @endif
-            </span>
-            <h3 class="ready-help__item-title">{{ $awardCard['title'] }}</h3>
-            <p class="ready-help__item-desc">{{ $awardCard['subtitle'] }}</p>
-            @if($awardCard['link_text'])
-              <a href="{{ $awardCard['link_url'] ?: '#' }}" class="award-card__link">{{ $awardCard['link_text'] }}</a>
-            @endif
+        <div class="awards__grid">
+          <div class="awards__intro">
+            <h2 class="awards__title">{{ ($award['ach_award_title'] ?? null) ?: 'Our Awards & Accreditations' }}</h2>
+            <p class="awards__desc">
+              {{ ($award['ach_award_desc'] ?? null) ?: 'Recognitions that reflect our continued commitment to quality care and clinical excellence.' }}
+            </p>
           </div>
-          @endforeach
+
+          <div class="awards__slider" data-awards-slider>
+            <div class="awards__track" data-awards-track>
+              @foreach($achAwardCards as $awardCard)
+                <x-frontend.award-card :award="$awardCard" />
+              @endforeach
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -12,7 +12,7 @@ class Award extends Model
     public array $translatable = ['title', 'subtitle', 'link_text'];
 
     protected $fillable = [
-        'title', 'subtitle', 'link_text', 'link_url', 'seal_variant', 'sort_order', 'is_active',
+        'title', 'subtitle', 'link_text', 'link_url', 'seal_image', 'seal_variant', 'sort_order', 'is_active',
     ];
 
     protected $casts = [
@@ -24,5 +24,11 @@ class Award extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true)->orderBy('sort_order')->orderBy('id');
+    }
+
+    /** Public URL of the uploaded seal, or null when the award falls back to a built-in SVG seal. */
+    public function getSealImageUrlAttribute(): ?string
+    {
+        return $this->seal_image ? asset('storage/' . $this->seal_image) : null;
     }
 }

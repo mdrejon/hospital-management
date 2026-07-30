@@ -1,7 +1,8 @@
 @props([
-    'settings'    => [],
-    'doctors'     => collect(),
-    'source'      => 'appointment_page',
+    'settings'          => [],
+    'doctors'           => collect(),
+    'source'            => 'appointment_page',
+    'preselectedDoctor' => null,
 ])
 
 @php
@@ -131,10 +132,13 @@
                 <path d="M14 9v3a4 4 0 0 0 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
+            @php
+              $selectedDoctorId = old('doctor_id') ?: ($preselectedDoctor?->id ?? null);
+            @endphp
             <select name="doctor_id" class="book-appointment__select" data-field="doctor" required>
-              <option value="" selected hidden>Choose a Doctor</option>
+              <option value="" {{ $selectedDoctorId ? '' : 'selected' }} hidden>Choose a Doctor</option>
               @forelse($apptDoctors as $doc)
-              <option value="{{ $doc->id }}" data-fee="{{ $doc->consultation_fee }}" {{ (string) old('doctor_id') === (string) $doc->id ? 'selected' : '' }}>
+              <option value="{{ $doc->id }}" data-fee="{{ $doc->consultation_fee }}" {{ (string) $selectedDoctorId === (string) $doc->id ? 'selected' : '' }}>
                 {{ $doc->name }}{{ $doc->role ? ' — ' . $doc->role : '' }}
               </option>
               @empty
@@ -281,6 +285,12 @@
         .then(function (data) { unavailableDates = data.unavailable_dates || []; })
         .catch(function () {});
     });
+
+    // A doctor may already be selected on load (e.g. arriving from that doctor's
+    // profile page) — kick off the same availability/fee lookup the change handler does.
+    if (doctorSelect.value) {
+      doctorSelect.dispatchEvent(new Event('change'));
+    }
 
     dateInput.addEventListener('change', function () {
       resetSlots();

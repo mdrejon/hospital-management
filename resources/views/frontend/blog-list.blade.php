@@ -3,7 +3,7 @@
 @php
   $heroTitle = $blog['blog_hero_title'] ?? 'Our Blog';
   $heroImage = !empty($blog['blog_hero_image']) ? asset('storage/' . $blog['blog_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $blog['blog_seo_title'] ?? 'Blog | ClinicMaster Medical & Health Care Services';
+  $seoTitle  = $blog['blog_seo_title'] ?? ('Blog | ' . config('app.name'));
   $seoDesc   = $blog['blog_seo_description'] ?? 'Read the latest health tips, medical insights, and hospital news from ClinicMaster.';
   $fallbackImages = [
     asset('assets/img/sr-1-3.jpg'), asset('assets/img/projects-3.jpg'), asset('assets/img/sr-1-2.jpg'),

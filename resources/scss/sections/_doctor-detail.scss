@@ -60,7 +60,7 @@
 }
 
 .doctor-contact__icon {
-  @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-cyan text-white;
+  @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-green text-white;
 }
 
 .doctor-contact__label {
@@ -99,6 +99,11 @@
 
 .doctor-info-table__label {
   @apply text-sm font-extrabold text-navy;
+}
+
+// Stacks the entries when a field carries more than one (e.g. several degrees).
+.doctor-info-table__values {
+  @apply flex flex-col gap-1;
 }
 
 .doctor-info-table__value {

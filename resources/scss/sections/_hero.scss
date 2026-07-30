@@ -97,7 +97,7 @@
 }
 
 .hero-slide__cta {
-  @apply mt-9 inline-flex items-center gap-4 rounded-full bg-brand-cyan py-2 pl-8 pr-2 text-base font-semibold text-white transition-transform duration-200 hover:scale-105;
+  @apply mt-9 inline-flex items-center gap-4 rounded-full bg-brand-cyan py-2 pl-8 pr-2 text-base font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
 }
 
 .hero-slide__cta-icon {

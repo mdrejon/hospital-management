@@ -14,7 +14,7 @@
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Brand Section</h2>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Footer Logo</label>
-                        <DropZone @change="onLogoChange" hint="JPEG / PNG / WebP — max 5 MB" preview-class="w-full h-28 object-contain p-2 bg-gray-50"
+                        <DropZone @change="onLogoChange" hint="JPEG / PNG / WebP — max 5 MB. Recommended size: 100×100px" preview-class="w-full h-28 object-contain p-2 bg-gray-50"
                             :existing-preview="currentLogo ? '/storage/' + currentLogo : null" />
                     </div>
                     <div>

@@ -73,7 +73,7 @@
                         <div class="col-span-2">
                             <label class="label">Meta Title <span class="text-gray-400 font-normal">({{ form.contact_seo_title[activeLang].length }}/160)</span></label>
                             <input v-model="form.contact_seo_title[activeLang]" type="text" maxlength="160" class="input"
-                                placeholder="Contact Us | ClinicMaster Medical & Health Care Services" />
+                                :placeholder="`Contact Us | ${appName}`" />
                             <InputError :message="form.errors[`contact_seo_title.${activeLang}`]" />
                         </div>
                         <div class="col-span-2">
@@ -262,6 +262,7 @@ const s = props.settings;
 
 const languages = computed(() => usePage().props.languages ?? []);
 const activeLang = ref(defaultLangCode(languages.value));
+const appName = computed(() => usePage().props.appName);
 
 const seed = (key) => ({ ...emptyTranslatable(languages.value), ...(s[key] || {}) });
 

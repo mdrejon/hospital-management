@@ -3,7 +3,7 @@
 @php
   $heroTitle = $doc['doc_page_hero_title'] ?? 'Our Doctors';
   $heroImage = !empty($doc['doc_page_hero_image']) ? asset('storage/' . $doc['doc_page_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $doc['doc_seo_title'] ?? 'Our Doctors | ClinicMaster Medical & Health Care Services';
+  $seoTitle  = $doc['doc_seo_title'] ?? ('Our Doctors | ' . config('app.name'));
   $seoDesc   = $doc['doc_seo_description'] ?? 'Meet the team of ClinicMaster doctors dedicated to compassionate, expert medical care.';
 @endphp
 
@@ -69,6 +69,9 @@
 
     <!-- ===================== Doctors ===================== -->
     @php
+      // Demo placeholder doctors only make sense when nothing is filtered — a
+      // specialization filter legitimately returning zero doctors should show
+      // an honest empty state, not unrelated fake names.
       $doctorCards = $doctors->isNotEmpty()
         ? $doctors->map(fn ($d) => [
             'name'     => $d->name,
@@ -79,14 +82,14 @@
             'youtube'  => $d->youtube_url,
             'linkedin' => $d->linkedin_url,
           ])
-        : collect([
+        : (isset($specialization) && $specialization ? collect() : collect([
             ['name' => 'Dr. Laron Metar',   'role' => 'Practice Service',   'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
             ['name' => 'Dr. Smith Karo',    'role' => 'Founder',            'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
             ['name' => 'Dr. Merata Baron',  'role' => 'Emergency Services', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
             ['name' => 'Dr. Elena Cross',   'role' => 'Cardiologist',       'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
             ['name' => 'Dr. Michael Reyes', 'role' => 'Pediatrician',       'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
             ['name' => 'Dr. Sara Owens',    'role' => 'Neurologist',        'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
-          ]);
+          ]));
     @endphp
     <section class="doctors-page">
       <div class="container mx-auto">
@@ -97,8 +100,17 @@
             <span class="team__eyebrow-dot"></span>
           </p>
           <h2 class="team__title">{{ $doc['doc_title'] ?? 'Meet Our Doctor Meeting' }}</h2>
+          @if(isset($specialization) && $specialization)
+          <p class="mt-3 text-sm text-muted">
+            Showing: <strong class="text-navy">{{ $specialization->name }}</strong>
+            <a href="{{ route('doctors') }}" class="text-brand-cyan hover:underline ml-2">Clear filter</a>
+          </p>
+          @endif
         </div>
 
+        @if(isset($specialization) && $specialization && $doctorCards->isEmpty())
+        <p class="text-center text-muted py-12">No doctors found under "{{ $specialization->name }}" yet. Please check back soon.</p>
+        @else
         <div class="doctors-page__grid">
           @foreach($doctorCards as $card)
           <article class="team-card">
@@ -137,6 +149,7 @@
           </article>
           @endforeach
         </div>
+        @endif
       </div>
     </section>
 @endsection

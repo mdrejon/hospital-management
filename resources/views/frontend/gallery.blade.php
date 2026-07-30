@@ -3,7 +3,7 @@
 @php
   $heroTitle = $gallery['gallery_hero_title'] ?? 'Our Gallery';
   $heroImage = !empty($gallery['gallery_hero_image']) ? asset('storage/' . $gallery['gallery_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $gallery['gallery_seo_title'] ?? 'Gallery | ClinicMaster Medical & Health Care Services';
+  $seoTitle  = $gallery['gallery_seo_title'] ?? ('Gallery | ' . config('app.name'));
   $seoDesc   = $gallery['gallery_seo_description'] ?? "Browse photos of ClinicMaster's treatment rooms, diagnostic facilities, and medical team.";
 @endphp
 

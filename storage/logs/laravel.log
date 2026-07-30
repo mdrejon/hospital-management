@@ -1162,3 +1162,34 @@
 #68 D:/laragon-new/laragon/www/hospital-management/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('...')
 #69 {main}
 "} 
+[2026-07-29 18:18:52] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at D:/laragon-new/laragon/www/hospital-management/vendor/symfony/console/Input/ArgvInput.php:222)
+[stacktrace]
+#0 D:/laragon-new/laragon/www/hospital-management/vendor/symfony/console/Input/ArgvInput.php(149): Symfony/Component/Console/Input/ArgvInput->addLongOption()
+#1 D:/laragon-new/laragon/www/hospital-management/vendor/symfony/console/Input/ArgvInput.php(85): Symfony/Component/Console/Input/ArgvInput->parseLongOption()
+#2 D:/laragon-new/laragon/www/hospital-management/vendor/symfony/console/Input/ArgvInput.php(74): Symfony/Component/Console/Input/ArgvInput->parseToken()
+#3 D:/laragon-new/laragon/www/hospital-management/vendor/symfony/console/Input/Input.php(56): Symfony/Component/Console/Input/ArgvInput->parse()
+#4 D:/laragon-new/laragon/www/hospital-management/vendor/symfony/console/Command/Command.php(285): Symfony/Component/Console/Input/Input->bind()
+#5 D:/laragon-new/laragon/www/hospital-management/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony/Component/Console/Command/Command->run()
+#6 D:/laragon-new/laragon/www/hospital-management/vendor/symfony/console/Application.php(1121): Illuminate/Console/Command->run()
+#7 D:/laragon-new/laragon/www/hospital-management/vendor/symfony/console/Application.php(324): Symfony/Component/Console/Application->doRunCommand()
+#8 D:/laragon-new/laragon/www/hospital-management/vendor/symfony/console/Application.php(175): Symfony/Component/Console/Application->doRun()
+#9 D:/laragon-new/laragon/www/hospital-management/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony/Component/Console/Application->run()
+#10 D:/laragon-new/laragon/www/hospital-management/artisan(35): Illuminate/Foundation/Console/Kernel->handle()
+#11 {main}
+"} 
+[2026-07-30 03:50:37] local.ERROR: Command "server" is not defined.
+
+Did you mean one of these?
+    make:observer
+    serve {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"server\" is not defined.
+
+Did you mean one of these?
+    make:observer
+    serve at D:/laragon-new/laragon/www/hospital-management/vendor/symfony/console/Application.php:745)
+[stacktrace]
+#0 D:/laragon-new/laragon/www/hospital-management/vendor/symfony/console/Application.php(266): Symfony/Component/Console/Application->find()
+#1 D:/laragon-new/laragon/www/hospital-management/vendor/symfony/console/Application.php(175): Symfony/Component/Console/Application->doRun()
+#2 D:/laragon-new/laragon/www/hospital-management/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony/Component/Console/Application->run()
+#3 D:/laragon-new/laragon/www/hospital-management/artisan(35): Illuminate/Foundation/Console/Kernel->handle()
+#4 {main}
+"} 

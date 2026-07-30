@@ -3,7 +3,7 @@
 @php
   $heroTitle = $hist['hist_hero_title'] ?? 'Our History';
   $heroImage = !empty($hist['hist_hero_image']) ? asset('storage/' . $hist['hist_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $hist['hist_seo_title'] ?? 'Our History | ClinicMaster Medical & Health Care Services';
+  $seoTitle  = $hist['hist_seo_title'] ?? ('Our History | ' . config('app.name'));
   $seoDesc   = $hist['hist_seo_description'] ?? "From a humble clinic to the region's most trusted hospital — explore the milestones that shaped ClinicMaster.";
 @endphp
 

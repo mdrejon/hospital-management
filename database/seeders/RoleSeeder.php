@@ -50,6 +50,7 @@ class RoleSeeder extends Seeder
             'dashboard'          => ['view' => true],
             'operator-dashboard' => ['view' => true, 'create' => true, 'edit' => true],
             'appointments'       => ['view' => true, 'create' => true, 'edit' => true],
+            'patients'           => ['view' => true],
         ]);
 
         $this->command->info('Super Admin, Doctor and Operator roles are ready.');

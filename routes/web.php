@@ -6,6 +6,7 @@ use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\Admin\PatientController;
 use App\Http\Controllers\Admin\DoctorDashboardController;
 use App\Http\Controllers\Admin\OperatorController;
 use App\Http\Controllers\Admin\NotificationController;
@@ -16,11 +17,14 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\DoctorController;
+use App\Http\Controllers\Admin\DoctorSpecializationController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\WebsiteSettings\SliderController;
 use App\Http\Controllers\Admin\WebsiteSettings\HeaderSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\FooterSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\AboutSettingController;
+use App\Http\Controllers\Admin\WebsiteSettings\GlobalAboutSettingController;
+use App\Http\Controllers\Admin\WebsiteSettings\WhyChooseUsSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\GalleryController;
 use App\Http\Controllers\Admin\WebsiteSettings\ContactSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\ServiceSettingController;
@@ -115,6 +119,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
     Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::delete('/appointments/{appointment}',      [AppointmentController::class, 'destroy'])->name('appointments.destroy');
 
+    // Patients — directory + full per-patient appointment history
+    Route::get('/patients',              [PatientController::class, 'index'])->name('patients.index');
+    Route::get('/patients/{patient}',    [PatientController::class, 'show'])->name('patients.show');
+
     // Doctor dashboard (Doctor role)
     Route::get('/doctor-dashboard',                          [DoctorDashboardController::class, 'index'])->name('doctor-dashboard.index');
     Route::patch('/doctor-dashboard/{appointment}/status',    [DoctorDashboardController::class, 'updateStatus'])->name('doctor-dashboard.update-status');
@@ -191,6 +199,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
     Route::delete('/doctors/{doctor}',    [DoctorController::class, 'destroy'])->name('doctors.destroy');
     Route::patch('/doctors/{doctor}/toggle', [DoctorController::class, 'toggleStatus'])->name('doctors.toggle');
 
+    // Doctor Specializations CRUD
+    Route::get('/doctor-specializations',                          [DoctorSpecializationController::class, 'index'])->name('doctor-specializations.index');
+    Route::post('/doctor-specializations',                         [DoctorSpecializationController::class, 'store'])->name('doctor-specializations.store');
+    Route::put('/doctor-specializations/{doctorSpecialization}',    [DoctorSpecializationController::class, 'update'])->name('doctor-specializations.update');
+    Route::delete('/doctor-specializations/{doctorSpecialization}', [DoctorSpecializationController::class, 'destroy'])->name('doctor-specializations.destroy');
+    Route::patch('/doctor-specializations/{doctorSpecialization}/toggle', [DoctorSpecializationController::class, 'toggleStatus'])->name('doctor-specializations.toggle');
+
     // Management Team CRUD
     Route::get('/management-members',                       [ManagementMemberController::class, 'index'])->name('management-members.index');
     Route::get('/management-members/create',                [ManagementMemberController::class, 'create'])->name('management-members.create');
@@ -264,6 +279,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
         // Footer Settings
         Route::get('/footer',  [FooterSettingController::class, 'edit'])->name('footer.edit');
         Route::post('/footer', [FooterSettingController::class, 'update'])->name('footer.update');
+
+        // About Section (Global — shown on Home page and About page)
+        Route::get('/global-about',  [GlobalAboutSettingController::class, 'edit'])->name('global-about.edit');
+        Route::post('/global-about', [GlobalAboutSettingController::class, 'update'])->name('global-about.update');
+
+        // Why Choose Us Section (Global — shown on Home page)
+        Route::get('/why-choose-us',  [WhyChooseUsSettingController::class, 'edit'])->name('why-choose-us.edit');
+        Route::post('/why-choose-us', [WhyChooseUsSettingController::class, 'update'])->name('why-choose-us.update');
 
         // About Section Settings
         Route::get('/about',  [AboutSettingController::class, 'edit'])->name('about.edit');

@@ -416,92 +416,180 @@ function initDepartmentsSlider() {
   });
 }
 
-// Awards row: auto-advances one card at a time, right to left, forever.
-// The card in the front slot gets `.is-active` (scaled up via CSS); the
-// track's translateX is stepped by exactly one card+gap on each tick so
-// the active card is always whichever one just slid into place. The card
-// set is cloned once so that wrapping from the last card back to the
-// first is seamless (jump happens instantly, with transitions off, right
-// after the clone's slide-in finishes).
+// Awards row: a continuous right-to-left marquee that never stops — not on
+// hover either — and that the visitor can also drag left/right by hand. The
+// card set is cloned until the track is at least twice the viewport wide, so
+// the scroll offset can simply wrap modulo one set's width and the seam is
+// never visible. Whichever card currently sits in the front slot gets
+// `.is-active` (scaled up via CSS).
+// Runs for every [data-awards-slider] on the page (Home + Achievements).
 function initAwardsSlider() {
-  const slider = document.querySelector("[data-awards-slider]");
-  const track = document.querySelector("[data-awards-track]");
+  document.querySelectorAll("[data-awards-slider]").forEach(setupAwardsSlider);
+}
+
+function setupAwardsSlider(slider) {
+  const track = slider.querySelector("[data-awards-track]");
   const original = track ? Array.from(track.children) : [];
-  if (!slider || !track || original.length < 2) return;
+  if (!track || original.length === 0) return;
 
-  const INTERVAL_MS = 3000;
-  const TRANSITION = "transform 0.45s cubic-bezier(0.65, 0, 0.35, 1)";
-  const total = original.length;
+  const SPEED = 45; // px per second
+  const DRAG_THRESHOLD = 4; // px of travel before a pointer press counts as a drag, not a click
 
-  original.forEach((card) => {
-    const clone = card.cloneNode(true);
-    clone.setAttribute("aria-hidden", "true");
-    clone.querySelectorAll("a").forEach((a) => a.setAttribute("tabindex", "-1"));
-    track.appendChild(clone);
-  });
-  const cards = Array.from(track.children);
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  let index = 0;
-  let timer = null;
+  const addSet = () => {
+    original.forEach((card) => {
+      const clone = card.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      clone.querySelectorAll("a").forEach((a) => a.setAttribute("tabindex", "-1"));
+      track.appendChild(clone);
+    });
+  };
 
   // offsetWidth is the untransformed layout size — unlike
   // getBoundingClientRect(), it ignores the .is-active scale(1.1), so the
-  // step stays exact no matter which card currently happens to be active.
-  // Cached and only re-measured on resize, since it's identical for every
-  // card (all cards share the same base width).
-  let step = 0;
-  const measureStep = () => {
+  // measurements stay exact no matter which card is currently active.
+  let step = 0; // one card + gap
+  let setWidth = 0; // width of one full copy of the original cards
+  const measure = () => {
     const style = getComputedStyle(track);
     const gap = parseFloat(style.columnGap || style.gap || "0");
-    step = cards[0].offsetWidth + gap;
+    step = original[0].offsetWidth + gap;
+    setWidth = step * original.length;
+
+    // Enough copies that the track always covers the visible area twice over.
+    let guard = 12;
+    while (setWidth > 0 && guard-- > 0 && track.scrollWidth < slider.offsetWidth * 2 + setWidth) {
+      addSet();
+    }
   };
 
-  const setActive = (i) => {
-    cards.forEach((card, ci) => card.classList.toggle("is-active", ci === i));
+  let offset = 0; // px the track is shifted left by
+  let activeIndex = -1;
+
+  const wrap = (value) => (setWidth > 0 ? ((value % setWidth) + setWidth) % setWidth : 0);
+
+  const render = () => {
+    track.style.transform = `translate3d(${-offset}px, 0, 0)`;
+
+    // The card nearest the front slot is the one the offset has just brought
+    // into place; rounding keeps a card active for the whole time it is there.
+    const cards = track.children;
+    const i = step > 0 ? Math.round(offset / step) % cards.length : 0;
+    if (i !== activeIndex) {
+      if (cards[activeIndex]) cards[activeIndex].classList.remove("is-active");
+      if (cards[i]) cards[i].classList.add("is-active");
+      activeIndex = i;
+    }
   };
 
-  const goTo = (i, instant) => {
-    track.style.transition = instant ? "none" : TRANSITION;
-    track.style.transform = `translateX(-${i * step}px)`;
-  };
+  // ── Auto-scroll ──
+  let rafId = null;
+  let lastTs = 0;
 
-  track.addEventListener("transitionend", (e) => {
-    if (e.propertyName !== "transform" || index < total) return;
-    index = 0;
-    setActive(index);
-    goTo(index, true);
-    void track.offsetWidth; // flush the instant reset before the next tick re-enables the transition
-  });
-
-  const tick = () => {
-    index += 1;
-    setActive(index);
-    goTo(index, false);
+  const frame = (ts) => {
+    const delta = lastTs ? Math.min(ts - lastTs, 100) : 0; // clamp: a backgrounded tab shouldn't jump the row
+    lastTs = ts;
+    if (!dragging) offset = wrap(offset + (SPEED * delta) / 1000);
+    render();
+    rafId = requestAnimationFrame(frame);
   };
 
   const start = () => {
-    stop();
-    timer = setInterval(tick, INTERVAL_MS);
+    if (rafId !== null || reduceMotion.matches) return;
+    lastTs = 0;
+    rafId = requestAnimationFrame(frame);
   };
 
   const stop = () => {
-    if (timer) clearInterval(timer);
+    if (rafId !== null) cancelAnimationFrame(rafId);
+    rafId = null;
   };
 
-  measureStep();
-  setActive(index);
-  goTo(index, true);
+  // ── Drag ──
+  let dragging = false;
+  let pointerId = null;
+  let startX = 0;
+  let startOffset = 0;
+  let moved = 0;
+
+  const onPointerDown = (e) => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    dragging = true;
+    pointerId = e.pointerId;
+    startX = e.clientX;
+    startOffset = offset;
+    moved = 0;
+    slider.classList.add("is-dragging");
+    slider.setPointerCapture?.(pointerId);
+  };
+
+  const onPointerMove = (e) => {
+    if (!dragging || e.pointerId !== pointerId) return;
+    const dx = e.clientX - startX;
+    moved = Math.max(moved, Math.abs(dx));
+    // Dragging right pulls the row right, i.e. reduces the left shift.
+    offset = wrap(startOffset - dx);
+    // On touch, `touch-action: pan-y` already yields the horizontal axis to
+    // us, which also makes these events non-cancelable — hence the guard.
+    if (moved > DRAG_THRESHOLD && e.cancelable) e.preventDefault();
+    render();
+  };
+
+  const endDrag = (e) => {
+    if (!dragging || (e && e.pointerId !== pointerId)) return;
+    dragging = false;
+    slider.classList.remove("is-dragging");
+    // releasePointerCapture throws if the capture never took, so check first.
+    if (pointerId !== null && slider.hasPointerCapture?.(pointerId)) {
+      slider.releasePointerCapture(pointerId);
+    }
+    pointerId = null;
+    lastTs = 0; // don't let the paused time count as elapsed motion
+  };
+
+  slider.addEventListener("pointerdown", onPointerDown);
+  slider.addEventListener("pointermove", onPointerMove);
+  slider.addEventListener("pointerup", endDrag);
+  slider.addEventListener("pointercancel", endDrag);
+  slider.addEventListener("dragstart", (e) => e.preventDefault());
+
+  // Swallow the click that ends a drag so it doesn't follow the card's link.
+  slider.addEventListener(
+    "click",
+    (e) => {
+      if (moved > DRAG_THRESHOLD) {
+        e.preventDefault();
+        e.stopPropagation();
+        moved = 0;
+      }
+    },
+    true
+  );
+
+  measure();
+  render();
   start();
 
-  slider.addEventListener("mouseenter", stop);
-  slider.addEventListener("mouseleave", start);
+  // Pause off-screen / in a hidden tab; nothing to animate and it frees the CPU.
+  document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
+
+  if (typeof IntersectionObserver !== "undefined") {
+    new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? start() : stop()),
+      { threshold: 0 }
+    ).observe(slider);
+  }
+
+  reduceMotion.addEventListener?.("change", () => (reduceMotion.matches ? stop() : start()));
 
   let resizeTimer = null;
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      measureStep();
-      goTo(index, true);
+      measure();
+      offset = wrap(offset);
+      render();
     }, 150);
   });
 }

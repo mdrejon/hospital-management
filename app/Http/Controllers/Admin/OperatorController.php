@@ -47,8 +47,9 @@ class OperatorController extends Controller
     public function book(): Response
     {
         return Inertia::render('Admin/Operator/Book', [
-            'departments' => Service::active()->get(['id', 'title']),
-            'doctors'     => Doctor::active()->get(['id', 'name', 'role', 'consultation_fee']),
+            'departments' => Service::active()->get(['id', 'title'])
+                ->map(fn (Service $s) => ['id' => $s->id, 'title' => $s->title]),
+            'doctors'     => $this->doctorOptions(Doctor::active()),
         ]);
     }
 
@@ -78,7 +79,7 @@ class OperatorController extends Controller
         }
 
         return response()->json([
-            'doctors' => $query->get(['id', 'name', 'role', 'consultation_fee']),
+            'doctors' => $this->doctorOptions($query),
         ]);
     }
 
@@ -181,5 +182,21 @@ class OperatorController extends Controller
 
         return redirect()->route('admin.operator.dashboard')
             ->with('success', "Appointment confirmed — Serial #{$appointment->serial_number} for {$doctor->name} on {$date->format('d M Y')} at {$appointment->time_slot}.");
+    }
+
+    /**
+     * Doctor options for the booking form's picker. `name` is translatable —
+     * accessing it via the magic getter (not toArray()) resolves it to the current
+     * locale's plain string instead of the raw {en,bn} array.
+     */
+    private function doctorOptions($query)
+    {
+        return $query->get(['id', 'name', 'role', 'consultation_fee'])
+            ->map(fn (Doctor $d) => [
+                'id'               => $d->id,
+                'name'             => $d->name,
+                'role'             => $d->role,
+                'consultation_fee' => $d->consultation_fee,
+            ]);
     }
 }

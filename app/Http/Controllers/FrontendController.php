@@ -7,6 +7,7 @@ use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\BlogComment;
 use App\Models\Doctor;
+use App\Models\DoctorSpecialization;
 use App\Models\Faq;
 use App\Models\GalleryImage;
 use App\Models\GlobalSetting;
@@ -177,10 +178,10 @@ class FrontendController extends Controller
 
         foreach ([
             'about_hero_title', 'about_seo_title', 'about_seo_description',
-            'about_title', 'about_desc', 'about_hours_title', 'about_more_btn_text',
+            'about_title', 'about_desc', 'about_page_desc', 'about_hours_title', 'about_more_btn_text',
             'about_mv_title', 'about_mv_desc',
             'ceo_badge_label', 'ceo_eyebrow', 'ceo_title', 'ceo_message', 'ceo_focus_label',
-            'why_badge', 'why_title', 'why_desc',
+            'why_badge', 'why_title', 'why_desc', 'why_badge_number', 'why_badge_label',
         ] as $key) {
             if (array_key_exists($key, $settings)) {
                 $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
@@ -447,11 +448,22 @@ class FrontendController extends Controller
         }
     }
 
-    public function doctors(): View
+    public function doctors(Request $request): View
     {
+        $specialization = null;
+        $query = Doctor::active();
+
+        if ($request->filled('specialization')) {
+            $specialization = DoctorSpecialization::where('slug', $request->string('specialization'))->first();
+            if ($specialization) {
+                $query->where('doctor_specialization_id', $specialization->id);
+            }
+        }
+
         return view('frontend.doctors', [
-            'doctors' => Doctor::active()->get(),
-            'doc'     => $this->doctorSettings(),
+            'doctors'        => $query->get(),
+            'doc'            => $this->doctorSettings(),
+            'specialization' => $specialization,
         ]);
     }
 
@@ -460,8 +472,10 @@ class FrontendController extends Controller
         $doctor = Doctor::where('slug', $slug)->where('is_active', true)->firstOrFail();
 
         return view('frontend.doctor-details', [
-            'doctor' => $doctor,
-            'doc'    => $this->doctorSettings(),
+            'doctor'             => $doctor,
+            'doc'                => $this->doctorSettings(),
+            'appointmentDoctors' => $this->appointmentBookingDoctors(),
+            'appt'               => $this->appointmentSettings(),
         ]);
     }
 
@@ -735,7 +749,7 @@ class FrontendController extends Controller
                             ->map(fn ($d) => [
                                 'type'     => 'Doctor',
                                 'title'    => $d->name,
-                                'desc'     => $d->specialty,
+                                'desc'     => $d->listText('specialty'),
                                 'image'    => $d->photo ? asset('storage/' . $d->photo) : asset('assets/img/team-3.png'),
                                 'icon_svg' => null,
                                 'url'      => route('doctor-details', $d->slug),

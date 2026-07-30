@@ -67,7 +67,7 @@
                             <div class="col-span-2">
                                 <label class="label">Meta Title <span class="text-gray-400 font-normal">({{ (seoForm.gallery_seo_title[activeLang] || '').length }}/160)</span></label>
                                 <input v-model="seoForm.gallery_seo_title[activeLang]" type="text" maxlength="160" class="input"
-                                    placeholder="Gallery | ClinicMaster Medical & Health Care Services" />
+                                    :placeholder="`Gallery | ${appName}`" />
                             </div>
                             <div class="col-span-2">
                                 <label class="label">Meta Description <span class="text-gray-400 font-normal">({{ (seoForm.gallery_seo_description[activeLang] || '').length }}/320)</span></label>
@@ -267,6 +267,7 @@ const props = defineProps({
 });
 
 const languages = computed(() => usePage().props.languages ?? []);
+const appName = computed(() => usePage().props.appName);
 const activeLang = ref(defaultLangCode(languages.value));
 
 // ── Section header form ──

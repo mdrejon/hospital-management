@@ -149,7 +149,7 @@
                         <div>
                             <label class="label">Meta Title <span class="text-xs text-gray-400">(max 160 chars, auto-filled if left blank)</span></label>
                             <input v-model="settingsForm.blog_seo_title[activeLang]" @input="onMetaTitleInput" type="text" maxlength="160" class="input"
-                                placeholder="Blog | ClinicMaster Medical & Health Care Services" />
+                                :placeholder="`Blog | ${appName}`" />
                             <p class="text-xs text-gray-400 mt-1">{{ (settingsForm.blog_seo_title[activeLang] || '').length }}/160</p>
                             <InputError :message="settingsForm.errors[`blog_seo_title.${activeLang}`]" />
                         </div>
@@ -207,8 +207,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { Link, router, useForm } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
@@ -221,6 +221,7 @@ const props = defineProps({
 
 const tab = ref('list');
 const deletingBlog = ref(null);
+const appName = computed(() => usePage().props.appName);
 
 function toggleStatus(blog) {
     router.patch(route('admin.blog.toggle', blog.id));

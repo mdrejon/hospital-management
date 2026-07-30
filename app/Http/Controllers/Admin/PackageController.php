@@ -40,7 +40,7 @@ class PackageController extends Controller
             }
         }
 
-        $data['slug'] = $this->uniqueSlug($data['title'][$this->defaultLocale()] ?? '');
+        $data['slug'] = $this->uniqueSlug($this->slugSource($data['title']));
 
         if (empty($data['seo_keywords'])) {
             $data['seo_keywords'] = $this->autoKeywords(
@@ -78,7 +78,7 @@ class PackageController extends Controller
             }
         }
 
-        $data['slug'] = $this->uniqueSlug($data['title'][$this->defaultLocale()] ?? '', $package->id);
+        $data['slug'] = $this->uniqueSlug($this->slugSource($data['title']), $package->id);
 
         if (empty($data['seo_keywords'])) {
             $data['seo_keywords'] = $this->autoKeywords(
@@ -118,6 +118,18 @@ class PackageController extends Controller
     private function defaultLocale(): string
     {
         return Language::defaultLanguage()?->code ?? config('app.locale');
+    }
+
+    /** Slugs are always built from the English text — regardless of which language is set as the site default — so URLs stay Latin/readable even on a Bangla-first site. Falls back to the default locale, then any filled locale, if English is blank. */
+    private function slugSource(array $translatable): string
+    {
+        if (filled($translatable['en'] ?? null)) {
+            return $translatable['en'];
+        }
+        if (filled($translatable[$this->defaultLocale()] ?? null)) {
+            return $translatable[$this->defaultLocale()];
+        }
+        return collect($translatable)->first(fn ($v) => filled($v)) ?? '';
     }
 
     private function validated(Request $request): array

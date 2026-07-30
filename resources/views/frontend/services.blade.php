@@ -3,7 +3,7 @@
 @php
   $heroTitle = $svc['svc_page_hero_title'] ?? 'Our Services';
   $heroImage = !empty($svc['svc_page_hero_image']) ? asset('storage/' . $svc['svc_page_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $svc['svc_seo_title'] ?? 'Our Services | ClinicMaster Medical & Health Care Services';
+  $seoTitle  = $svc['svc_seo_title'] ?? ('Our Services | ' . config('app.name'));
   $seoDesc   = $svc['svc_seo_description'] ?? 'Explore the full range of medical and health care services offered by ClinicMaster.';
 @endphp
 

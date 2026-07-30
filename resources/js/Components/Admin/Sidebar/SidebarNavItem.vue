@@ -42,7 +42,7 @@
                     :href="child.route ? route(child.route) : '#'"
                     :class="[
                         'flex items-center px-4 py-2 text-sm transition-colors',
-                        isCurrentRoute(child.route)
+                        isNavRouteActive(child.route)
                             ? 'text-blue-600 font-semibold bg-blue-50'
                             : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100',
                     ]"
@@ -56,26 +56,24 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+import { isNavRouteActive } from './activeRoute';
 
 const props = defineProps({
     item:      { type: Object, required: true },
     collapsed: { type: Boolean, default: false },
 });
 
-function isCurrentRoute(routeName) {
-    if (!routeName) return false;
-    try {
-        return route().current(routeName);
-    } catch {
-        return false;
-    }
-}
+// Inertia swaps pages without a reload, so the active state has to re-evaluate
+// whenever the current page changes.
+const page = usePage();
 
 const isActive = computed(() => {
-    if (isCurrentRoute(props.item.route)) return true;
+    void page.url;
+
+    if (isNavRouteActive(props.item.route)) return true;
     if (props.item.children) {
-        return props.item.children.some(c => isCurrentRoute(c.route));
+        return props.item.children.some(c => isNavRouteActive(c.route));
     }
     return false;
 });

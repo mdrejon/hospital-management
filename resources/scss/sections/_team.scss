@@ -55,7 +55,7 @@
 
 // Prev/next arrows, floating just outside the viewport ---------------------
 .team__nav {
-  @apply absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-brand-cyan text-white shadow-lg transition-all duration-200 hover:bg-navy;
+  @apply absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-brand-green text-white shadow-lg transition-all duration-200 hover:bg-white hover:text-brand-green hover:ring-2 hover:ring-brand-green;
 
   &.is-prev {
     @apply left-0 lg:-left-5;
@@ -121,7 +121,7 @@
 }
 
 .team-card__view {
-  @apply flex h-11 w-11 scale-75 items-center justify-center rounded-full bg-brand-cyan text-white opacity-0 shadow-lg transition-all duration-300 hover:bg-white hover:text-brand-cyan;
+  @apply flex h-11 w-11 scale-75 items-center justify-center rounded-full bg-brand-green text-white opacity-0 shadow-lg transition-all duration-300 hover:bg-white hover:text-brand-green;
 }
 
 .team-card:hover .team-card__view {

@@ -9,7 +9,7 @@
             <span class="top-header__value">{{ $headerSettings['header_tagline'] ?? 'Need professional medical & health Care?' }}</span>
           </span>
           <span class="top-header__item">
-            <span class="top-header__icon">
+            <span class="top-header__icon top-header__icon--emergency">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6"/>
               </svg>
@@ -54,7 +54,7 @@
       <div class="top-info-bar__inner">
         <span class="top-info-bar__item">
             <a href="{{ route('home') }}" class="site-logo text-navy">
-            <img src="{{ !empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png') }}" alt="{{ $headerSettings['header_site_name'] ?? 'Sitakund Modern Hospital Ltd.' }}" height="60" style="height:60px;width:auto" />
+            <img src="{{ !empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png') }}" alt="{{ $headerSettings['header_site_name'] ?? 'Sitakund Modern Hospital Ltd.' }}" height="100" style="height:100px;width:auto" />
           </a>
         </span>
         <a href="mailto:{{ $headerSettings['header_email'] ?? 'info@example.com' }}" class="top-info-bar__item">
@@ -128,15 +128,7 @@
           </div>
         </div>
 
-        <div class="has-dropdown">
-          <button type="button" class="main-nav__link {{ request()->routeIs(['services','service-details']) ? 'is-active' : '' }}">
-            {{ __('frontend.nav.our_service') }}
-            <span class="main-nav__caret">+</span>
-          </button>
-          <div class="dropdown-menu">
-            <a href="{{ route('services') }}" class="dropdown-menu__link">{{ __('frontend.nav.service_list') }}</a>
-          </div>
-        </div>
+        <a href="{{ route('services') }}" class="main-nav__link {{ request()->routeIs(['services','service-details']) ? 'is-active' : '' }}">{{ __('frontend.nav.our_service') }}</a>
 
         <div class="has-dropdown">
           <button type="button" class="main-nav__link {{ request()->routeIs(['doctors','doctor-details']) ? 'is-active' : '' }}">
@@ -144,7 +136,11 @@
             <span class="main-nav__caret">+</span>
           </button>
           <div class="dropdown-menu">
+            @forelse ($navDoctorSpecializations ?? [] as $spec)
+            <a href="{{ route('doctors', ['specialization' => $spec->slug]) }}" class="dropdown-menu__link">{{ $spec->name }}</a>
+            @empty
             <a href="{{ route('doctors') }}" class="dropdown-menu__link">{{ __('frontend.nav.doctors_list') }}</a>
+            @endforelse
           </div>
         </div>
 
@@ -204,19 +200,7 @@
         </div>
       </div>
 
-      <div>
-        <button type="button" class="side-panel__nav-link" data-submenu-toggle>
-          {{ __('frontend.nav.our_service') }}
-          <span class="side-panel__nav-caret">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-        </button>
-        <div class="side-panel__submenu">
-          <a href="{{ route('services') }}" class="side-panel__nav-sublink">{{ __('frontend.nav.service_list') }}</a>
-        </div>
-      </div>
+      <a href="{{ route('services') }}" class="side-panel__nav-link">{{ __('frontend.nav.our_service') }}</a>
 
       <div>
         <button type="button" class="side-panel__nav-link" data-submenu-toggle>
@@ -228,7 +212,11 @@
           </span>
         </button>
         <div class="side-panel__submenu">
+          @forelse ($navDoctorSpecializations ?? [] as $spec)
+          <a href="{{ route('doctors', ['specialization' => $spec->slug]) }}" class="side-panel__nav-sublink">{{ $spec->name }}</a>
+          @empty
           <a href="{{ route('doctors') }}" class="side-panel__nav-sublink">{{ __('frontend.nav.doctors_list') }}</a>
+          @endforelse
         </div>
       </div>
 

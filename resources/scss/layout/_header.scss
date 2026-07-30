@@ -29,6 +29,12 @@
 
 .top-header__icon {
   @apply flex h-9 w-9 shrink-0 items-center justify-center text-brand-cyan;
+
+  // The "Call" phone icon specifically — red signals an emergency line,
+  // distinct from the plain informational icons (hours, etc.) nearby.
+  &--emergency {
+    @apply text-brand-red;
+  }
 }
 
 .top-header__value {
@@ -126,7 +132,7 @@
 } 
 
 .header-search__submit {
-  @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-cyan text-white transition-colors duration-150 hover:bg-navy;
+  @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-green text-white transition-colors duration-150 hover:bg-white hover:text-brand-green hover:ring-2 hover:ring-brand-green;
 }
 
 // Main nav row ------------------------------------------------------------
@@ -167,8 +173,9 @@
 .main-nav__link {
   @apply flex items-center gap-[0.3rem] text-[16px] font-bold text-white transition-colors duration-200 hover:text-brand-cyan;
 
+  // Current page — logo green (#87C540) so it stands apart from the cyan hover.
   &.is-active {
-    @apply text-brand-cyan;
+    @apply text-brand-green;
   }
 }
 

@@ -75,5 +75,5 @@
 // Doctors grid ------------------------------------------------------------
 // Cards reuse the homepage's .team-card component (see sections/team).
 .service-doctors {
-  @apply mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4;
+  @apply mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2;
 }

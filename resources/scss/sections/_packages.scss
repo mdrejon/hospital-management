@@ -54,7 +54,7 @@
 }
 
 .packages__nav {
-  @apply absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-brand-cyan text-white shadow-lg transition-all duration-200 hover:bg-navy;
+  @apply absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-brand-green text-white shadow-lg transition-all duration-200 hover:bg-white hover:text-brand-green hover:ring-2 hover:ring-brand-green;
 
   &.is-prev {
     @apply left-3;
@@ -83,7 +83,7 @@
 }
 
 .package-card__plus {
-  @apply pointer-events-none absolute right-6 top-6 z-10 flex h-11 w-11 -translate-y-2 items-center justify-center rounded-lg bg-brand-cyan text-white opacity-0 shadow-lg transition-all duration-300 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100;
+  @apply pointer-events-none absolute right-6 top-6 z-10 flex h-11 w-11 -translate-y-2 items-center justify-center rounded-lg bg-brand-green text-white opacity-0 shadow-lg transition-all duration-300 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100;
 }
 
 .package-card__caption {

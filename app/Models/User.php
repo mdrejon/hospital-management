@@ -51,10 +51,10 @@ class User extends Authenticatable
         return $this->role?->slug === 'operator';
     }
 
-    /** True if the user has no role assigned or their role is super admin */
+    /** True only if the user has an explicit super-admin role. A missing role grants nothing. */
     public function isSuperAdmin(): bool
     {
-        return is_null($this->role_id) || ($this->role && $this->role->is_super_admin);
+        return (bool) $this->role?->is_super_admin;
     }
 
     public function hasPermission(string $module, string $action = 'view'): bool

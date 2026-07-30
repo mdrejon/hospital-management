@@ -27,7 +27,7 @@
 }
 
 .btn-view-all {
-  @apply inline-flex shrink-0 items-center gap-3 rounded-full bg-brand-cyan py-2 pl-5 pr-2 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105;
+  @apply inline-flex shrink-0 items-center gap-3 rounded-full bg-brand-cyan py-2 pl-5 pr-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
 }
 
 .btn-view-all__icon {
@@ -83,7 +83,7 @@
 }
 
 .blog-card--split__cta {
-  @apply relative z-10 inline-flex w-fit items-center gap-3 rounded-full bg-brand-cyan py-2 pl-5 pr-2 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105;
+  @apply relative z-10 inline-flex w-fit items-center gap-3 rounded-full bg-brand-cyan py-2 pl-5 pr-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
 }
 
 .blog-card--split__cta-icon {

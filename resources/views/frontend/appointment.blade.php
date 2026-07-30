@@ -3,7 +3,7 @@
 @php
   $heroTitle = $appt['appt_page_hero_title'] ?? 'Book Appointment';
   $heroImage = !empty($appt['appt_page_hero_image']) ? asset('storage/' . $appt['appt_page_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle  = $appt['appt_seo_title'] ?? 'Book Appointment | ClinicMaster Medical & Health Care Services';
+  $seoTitle  = $appt['appt_seo_title'] ?? ('Book Appointment | ' . config('app.name'));
   $seoDesc   = $appt['appt_seo_description'] ?? 'Schedule your visit with ClinicMaster in just a few clicks — fast, easy appointment booking.';
 @endphp
 

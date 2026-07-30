@@ -1,20 +1,23 @@
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag; ?>
 <?php foreach($attributes->onlyProps([
-    'settings'    => [],
-    'doctors'     => collect(),
-    'source'      => 'appointment_page',
+    'settings'          => [],
+    'doctors'           => collect(),
+    'source'            => 'appointment_page',
+    'preselectedDoctor' => null,
 ]) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 } ?>
 <?php $attributes = $attributes->exceptProps([
-    'settings'    => [],
-    'doctors'     => collect(),
-    'source'      => 'appointment_page',
+    'settings'          => [],
+    'doctors'           => collect(),
+    'source'            => 'appointment_page',
+    'preselectedDoctor' => null,
 ]); ?>
 <?php foreach (array_filter(([
-    'settings'    => [],
-    'doctors'     => collect(),
-    'source'      => 'appointment_page',
+    'settings'          => [],
+    'doctors'           => collect(),
+    'source'            => 'appointment_page',
+    'preselectedDoctor' => null,
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 } ?>
@@ -151,10 +154,13 @@
                 <path d="M14 9v3a4 4 0 0 0 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
+            <?php
+              $selectedDoctorId = old('doctor_id') ?: ($preselectedDoctor?->id ?? null);
+            ?>
             <select name="doctor_id" class="book-appointment__select" data-field="doctor" required>
-              <option value="" selected hidden>Choose a Doctor</option>
+              <option value="" <?php echo e($selectedDoctorId ? '' : 'selected'); ?> hidden>Choose a Doctor</option>
               <?php $__empty_1 = true; $__currentLoopData = $apptDoctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-              <option value="<?php echo e($doc->id); ?>" data-fee="<?php echo e($doc->consultation_fee); ?>" <?php echo e((string) old('doctor_id') === (string) $doc->id ? 'selected' : ''); ?>>
+              <option value="<?php echo e($doc->id); ?>" data-fee="<?php echo e($doc->consultation_fee); ?>" <?php echo e((string) $selectedDoctorId === (string) $doc->id ? 'selected' : ''); ?>>
                 <?php echo e($doc->name); ?><?php echo e($doc->role ? ' — ' . $doc->role : ''); ?>
 
               </option>
@@ -302,6 +308,12 @@
         .then(function (data) { unavailableDates = data.unavailable_dates || []; })
         .catch(function () {});
     });
+
+    // A doctor may already be selected on load (e.g. arriving from that doctor's
+    // profile page) — kick off the same availability/fee lookup the change handler does.
+    if (doctorSelect.value) {
+      doctorSelect.dispatchEvent(new Event('change'));
+    }
 
     dateInput.addEventListener('change', function () {
       resetSlots();

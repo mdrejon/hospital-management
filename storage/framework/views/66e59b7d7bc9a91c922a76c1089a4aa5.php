@@ -1,7 +1,7 @@
 <?php
   $heroTitle   = $about['about_hero_title'] ?? 'About Us';
   $heroImage   = !empty($about['about_hero_image']) ? asset('storage/' . $about['about_hero_image']) : asset('assets/img/breadcumb.webp');
-  $seoTitle    = $about['about_seo_title'] ?? 'About Us | ClinicMaster Medical & Health Care Services';
+  $seoTitle    = $about['about_seo_title'] ?? ('About Us | ' . config('app.name'));
   $seoDesc     = $about['about_seo_description'] ?? "Learn about ClinicMaster's mission, values, and leadership.";
 ?>
 
@@ -45,13 +45,13 @@
       <div class="page-header__inner">
         <h1 class="page-header__title"><?php echo e($heroTitle); ?></h1>
         <nav class="page-header__breadcrumb" aria-label="Breadcrumb">
-          <a href="<?php echo e(route('home')); ?>">Home</a>
+          <a href="<?php echo e(route('home')); ?>"><?php echo e(__('frontend.nav.home')); ?></a>
           <span class="page-header__breadcrumb-sep">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="m7 6 5 6-5 6M13 6l5 6-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
-          <span>About Us</span>
+          <span><?php echo e(__('frontend.breadcrumb.about_us')); ?></span>
         </nav>
       </div>
 
@@ -79,13 +79,14 @@
       ];
       $aboutTitle    = $about['about_title'] ?? 'World Class Patient Facilities Designed For You';
       $aboutDesc     = $about['about_desc'] ?? "Experience the future of healthcare. Our state-of-the-art facilities are equipped with the latest technology, ensuring you receive the world's best quality treatment. Here, cutting-edge tools meet unparalleled expertise, providing a comfortable and effective path to optimal health.";
+      // About-page-only rich description: replaces the shared plain desc here (never on Home)
+      // when the admin actually typed something — an empty TipTap doc still saves "<p></p>".
+      $aboutRichDesc = trim(strip_tags($about['about_page_desc'] ?? '')) !== '' ? $about['about_page_desc'] : null;
       $aboutFeatures = !empty($about['about_features']) ? $about['about_features'] : [
         'Comprehensive Specialties', 'Emergency Services', 'Intensive Care Units (ICUs)', 'Telemedicine Facilities', 'Multidisciplinary Team',
         'Research and Development', 'Advanced Imaging Services', 'Rehabilitation Services', 'Patient-Centric Approach', 'Health Information Technology',
       ];
       $aboutFeatureCols = collect($aboutFeatures)->chunk((int) ceil(count($aboutFeatures) / 2));
-      $aboutBtnText  = $about['about_more_btn_text'] ?? 'Appointment';
-      $aboutBtnUrl   = ($about['about_more_btn_url'] ?? null) ?: route('appointment');
       $aboutPhone    = $headerSettings['header_phone'] ?? '1 123 456 7890';
     ?>
     <section class="about">
@@ -125,10 +126,14 @@
 
           <div class="about__content">
             <h2 class="about__title"><?php echo e($aboutTitle); ?></h2>
-            <p class="about__desc">
-              <?php echo e($aboutDesc); ?>
+            <?php if($aboutRichDesc): ?>
+              <div class="about__desc about__desc--rich"><?php echo $aboutRichDesc; ?></div>
+            <?php else: ?>
+              <p class="about__desc">
+                <?php echo e($aboutDesc); ?>
 
-            </p>
+              </p>
+            <?php endif; ?>
 
             <div class="about__features">
               <?php $__currentLoopData = $aboutFeatureCols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -148,17 +153,8 @@
               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
 
+            
             <div class="about__cta-row">
-              <a href="<?php echo e($aboutBtnUrl); ?>" class="about__btn">
-                <?php echo e($aboutBtnText); ?>
-
-                <span class="about__btn-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-
               <a href="tel:<?php echo e($aboutPhone); ?>" class="about__contact">
                 <span class="about__contact-icon">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

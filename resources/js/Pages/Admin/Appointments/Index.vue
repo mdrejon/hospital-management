@@ -92,6 +92,10 @@
                                     <p class="font-medium">{{ item.name }}</p>
                                     <p class="text-xs text-gray-400">{{ item.email }}</p>
                                     <p v-if="item.phone" class="text-xs text-gray-400">{{ item.phone }}</p>
+                                    <Link v-if="item.patient_id" :href="route('admin.patients.show', item.patient_id)"
+                                        class="inline-block mt-0.5 text-xs text-blue-600 hover:underline">
+                                        View patient history
+                                    </Link>
                                     <div v-if="documentsFor(item).length" class="mt-0.5 flex flex-col gap-0.5">
                                         <a v-for="(doc, i) in documentsFor(item)" :key="doc" :href="'/storage/' + doc" target="_blank" rel="noopener"
                                             class="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline">
@@ -252,7 +256,7 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue';
-import { router, useForm, usePage } from '@inertiajs/vue3';
+import { Link, router, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';

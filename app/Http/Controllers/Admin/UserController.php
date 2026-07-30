@@ -30,7 +30,7 @@ class UserController extends Controller
     {
         return Inertia::render('Admin/Users/Create', [
             'roles'   => Role::where('is_active', true)->get(['id', 'name', 'is_super_admin']),
-            'doctors' => Doctor::orderBy('name')->get(['id', 'name']),
+            'doctors' => $this->doctorOptions(),
         ]);
     }
 
@@ -63,7 +63,7 @@ class UserController extends Controller
         return Inertia::render('Admin/Users/Edit', [
             'user'    => $user->load('role'),
             'roles'   => Role::where('is_active', true)->get(['id', 'name', 'is_super_admin']),
-            'doctors' => Doctor::orderBy('name')->get(['id', 'name']),
+            'doctors' => $this->doctorOptions(),
         ]);
     }
 
@@ -116,5 +116,18 @@ class UserController extends Controller
         $user->update(['is_active' => !$user->is_active]);
 
         return back()->with('success', 'User status updated.');
+    }
+
+    /**
+     * Doctor options for the "Link to Doctor" picker. `name` is translatable, so
+     * ordering by the raw JSON column would sort meaninglessly — resolve each name
+     * via the magic getter first, then sort by that.
+     */
+    private function doctorOptions()
+    {
+        return Doctor::get(['id', 'name'])
+            ->map(fn (Doctor $d) => ['id' => $d->id, 'name' => $d->name])
+            ->sortBy('name')
+            ->values();
     }
 }

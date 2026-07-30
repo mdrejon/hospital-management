@@ -8,6 +8,7 @@ use App\Models\GlobalSetting;
 use App\Models\Language;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -45,20 +46,48 @@ class AwardController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        Award::create($this->validated($request));
+        $data = $this->validated($request);
+
+        if ($request->hasFile('seal_image')) {
+            $data['seal_image'] = $request->file('seal_image')->store('awards', 'public');
+        } else {
+            unset($data['seal_image']);
+        }
+
+        Award::create($data);
 
         return back()->with('success', 'Award added successfully.');
     }
 
     public function update(Request $request, Award $award): RedirectResponse
     {
-        $award->update($this->validated($request));
+        $data = $this->validated($request);
+
+        if ($request->hasFile('seal_image')) {
+            if ($award->seal_image) {
+                Storage::disk('public')->delete($award->seal_image);
+            }
+            $data['seal_image'] = $request->file('seal_image')->store('awards', 'public');
+        } elseif ($request->boolean('remove_seal_image')) {
+            if ($award->seal_image) {
+                Storage::disk('public')->delete($award->seal_image);
+            }
+            $data['seal_image'] = null;
+        } else {
+            unset($data['seal_image']);
+        }
+
+        $award->update($data);
 
         return back()->with('success', 'Award updated.');
     }
 
     public function destroy(Award $award): RedirectResponse
     {
+        if ($award->seal_image) {
+            Storage::disk('public')->delete($award->seal_image);
+        }
+
         $award->delete();
 
         return back()->with('success', 'Award deleted.');
@@ -106,6 +135,8 @@ class AwardController extends Controller
             'link_text'         => 'nullable|array',
             'link_text.*'       => 'nullable|string',
             'link_url'     => 'nullable|string',
+            // No SVG: uploads are served from the app's own origin, and an SVG can carry script.
+            'seal_image'   => 'nullable|image|mimes:jpeg,jpg,png,webp|max:5120',
             'seal_variant' => 'required|integer|min:1|max:3',
             'sort_order'   => 'integer|min:0',
             'is_active'    => 'boolean',

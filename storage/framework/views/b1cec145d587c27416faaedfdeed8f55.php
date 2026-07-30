@@ -1,4 +1,4 @@
-<?php $__env->startSection('title', 'Page Not Found | ClinicMaster Medical & Health Care Services'); ?>
+<?php $__env->startSection('title', 'Page Not Found | ' . config('app.name')); ?>
 
 <?php $__env->startSection('content'); ?>
     <section class="ready-help" style="min-height: 60vh; display: flex; align-items: center;">

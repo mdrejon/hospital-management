@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\WebsiteSettings\AppointmentSettingController;
 use App\Models\AppNotification;
 use App\Models\Appointment;
 use App\Models\Doctor;
+use App\Models\Patient;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -37,7 +38,9 @@ class AppointmentController extends Controller
     {
         return Inertia::render('Admin/Appointments/Create', [
             'departments' => $this->departments(),
-            'doctors'     => Doctor::active()->pluck('name'),
+            // `name` is translatable — pluck() reads the raw column and bypasses the
+            // model's locale-resolving accessor, so map through it explicitly instead.
+            'doctors'     => Doctor::active()->get()->map(fn (Doctor $d) => $d->name)->values(),
         ]);
     }
 
@@ -58,6 +61,14 @@ class AppointmentController extends Controller
         $data['status']    = $data['status'] ?? 'pending';
         $data['source']    = 'admin';
         $data['is_manual'] = true;
+
+        if (!empty($data['phone'])) {
+            $patient = Patient::firstOrCreate(
+                ['phone' => $data['phone']],
+                ['name' => $data['name'], 'email' => $data['email']]
+            );
+            $data['patient_id'] = $patient->id;
+        }
 
         Appointment::create($data);
 
@@ -99,7 +110,9 @@ class AppointmentController extends Controller
     private function departments(): array
     {
         try {
-            return Service::active()->pluck('title')->values()->all();
+            // `title` is translatable — pluck() reads the raw column and bypasses the
+            // model's locale-resolving accessor, so map through it explicitly instead.
+            return Service::active()->get()->map(fn (Service $s) => $s->title)->values()->all();
         } catch (\Throwable) {
             return [];
         }
