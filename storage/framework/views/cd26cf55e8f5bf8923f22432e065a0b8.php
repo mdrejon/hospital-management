@@ -563,10 +563,14 @@
       <div class="container relative mx-auto">
         <div class="faq__grid">
           <div class="faq__copy">
-            <h2 class="faq__title">Frequently Asked Questions</h2>
+            <?php
+              $homeFaqTitle = $homeFaq['title'] ?: 'Frequently Asked Questions';
+              $homeFaqDesc  = $homeFaq['description'] ?: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.';
+            ?>
+            <h2 class="faq__title"><?php echo e($homeFaqTitle); ?></h2>
             <p class="faq__desc">
-              It is a long established fact that a reader will be distracted by the readable content of a page when
-              looking at its layout.
+              <?php echo e($homeFaqDesc); ?>
+
             </p>
 
             <div class="faq__list">
@@ -577,7 +581,7 @@
                   ['question' => 'Can i cancel my appointment', 'answer' => "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution"],
                   ['question' => 'How much do you charge for pedicure ?', 'answer' => "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution"],
                 ];
-                $homeFaqCards = (isset($homeFaqs) && $homeFaqs->isNotEmpty()) ? $homeFaqs : collect($homeFaqDefaults);
+                $homeFaqCards = (!empty($homeFaq['items']) && $homeFaq['items']->isNotEmpty()) ? $homeFaq['items'] : collect($homeFaqDefaults);
               ?>
               <?php $__currentLoopData = $homeFaqCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $faqIndex => $faqCard): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="faq-item <?php if($faqIndex === 0): ?> is-open <?php endif; ?>">
@@ -599,30 +603,9 @@
           </div>
 
           <div class="faq__media">
-            <img src="<?php echo e(asset('assets/img/faq.webp')); ?>" alt="Smiling doctor on a call, ready to answer your questions" class="faq__photo" />
+            <img src="<?php echo e($homeFaq['image'] ?: asset('assets/img/faq.webp')); ?>" alt="<?php echo e($homeFaq['image_alt'] ?: 'Smiling doctor on a call, ready to answer your questions'); ?>" class="faq__photo" />
 
-            <div class="faq__contact-card">
-              <div class="faq__contact-info">
-                <span class="faq__contact-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6"/>
-                  </svg>
-                </span>
-                <div>
-                  <p class="faq__contact-label">Contact us?</p>
-                  <p class="faq__contact-value">1 123 456 7890</p>
-                </div>
-              </div>
-
-              <a href="<?php echo e(route('appointment')); ?>" class="faq__contact-btn">
-                Appointment
-                <span class="faq__contact-btn-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-            </div>
+            <?php echo $__env->make('frontend.partials.faq-contact-card', ['phone' => $aboutPhone], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
           </div>
         </div>
       </div>

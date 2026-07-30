@@ -95,7 +95,7 @@ class AppServiceProvider extends ServiceProvider
             ])->pluck('value', 'key')->toArray();
 
             foreach ($this->headerTranslatableKeys as $key) {
-                $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key] ?? null);
+                $settings[$key] = GlobalSetting::getTranslated($key);
             }
 
             return $settings;
@@ -128,7 +128,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         foreach ($this->footerTranslatableKeys as $key) {
-            $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key] ?? null);
+            $settings[$key] = GlobalSetting::getTranslated($key);
         }
 
         $locale = app()->getLocale();

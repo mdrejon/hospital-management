@@ -69,10 +69,11 @@
 
     <!-- ===================== FAQ ===================== -->
     @php
-      $faqTitle = $faqPage['faq_page_title'] ?? 'Frequently Asked Questions';
-      $faqDesc  = $faqPage['faq_page_desc'] ?? "Answers to the questions patients ask us most often. Can't find what you're looking for? Reach out and our team will be glad to help.";
-      $faqPhoto = !empty($faqPage['faq_page_image']) ? asset('storage/' . $faqPage['faq_page_image']) : asset('assets/img/about-image.webp');
-      $faqList = $faqItems->isNotEmpty() ? $faqItems : collect([
+      $faqTitle = ($faqPage['faq_page_title'] ?? null) ?: ($faqData['title'] ?: 'Frequently Asked Questions');
+      $faqDesc  = ($faqPage['faq_page_desc'] ?? null) ?: ($faqData['description'] ?: "Answers to the questions patients ask us most often. Can't find what you're looking for? Reach out and our team will be glad to help.");
+      $faqPhoto = !empty($faqPage['faq_page_image']) ? asset('storage/' . $faqPage['faq_page_image']) : ($faqData['image'] ?: asset('assets/img/about-image.webp'));
+      $faqPhotoAlt = $faqData['image_alt'] ?: 'Smiling doctor ready to answer your questions';
+      $faqList = (!empty($faqData['items']) && $faqData['items']->isNotEmpty()) ? $faqData['items'] : collect([
         ['question' => 'What types of treatments do you offer?', 'answer' => 'ClinicMaster offers a full range of services, from routine check-ups and diagnostics to specialist care in cardiology, pediatrics, dental, maternity, surgery, and emergency medicine. Visit our Services page for the complete list.'],
         ['question' => 'How do I book my appointment?', 'answer' => "You can book online through our Appointment page by choosing a department, preferred doctor, and time slot, or call us directly at 1 123 456 7890. You'll receive a confirmation once your visit is scheduled."],
         ['question' => 'Can I cancel or reschedule my appointment?', 'answer' => 'Yes. Appointments can be rescheduled or cancelled free of charge up to 24 hours in advance by calling our front desk or emailing support@hospital.com.'],
@@ -80,7 +81,6 @@
         ['question' => 'Is emergency care available 24/7?', 'answer' => 'Yes, our Emergency & Urgent Care department is staffed around the clock, every day of the year, with a dedicated ambulance and trauma team on standby.'],
         ['question' => 'Can I get a telemedicine consultation?', 'answer' => 'Absolutely. Many of our specialists offer video consultations for follow-ups and non-emergency concerns. Select "Telemedicine" when booking your appointment online.'],
       ]);
-      $tr = fn($v) => is_array($v) ? ($v[app()->getLocale()] ?: $v[config('app.fallback_locale')] ?? '') : $v;
     @endphp
     <section class="faq">
       <div class="container mx-auto">
@@ -95,7 +95,7 @@
               @foreach($faqList as $i => $qa)
               <div class="faq-item {{ $i === 0 ? 'is-open' : '' }}">
                 <button type="button" class="faq-item__question" data-faq-toggle>
-                  {{ $tr($qa['question']) }}
+                  {{ $qa['question'] ?? '' }}
                   <span class="faq-item__icon">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -104,7 +104,7 @@
                 </button>
                 <div class="faq-item__answer">
                   <p>
-                    {{ $tr($qa['answer']) }}
+                    {{ $qa['answer'] ?? '' }}
                   </p>
                 </div>
               </div>
@@ -113,30 +113,9 @@
           </div>
 
           <div class="faq__media">
-            <img src="{{ $faqPhoto }}" alt="Smiling doctor ready to answer your questions" class="faq__photo" />
+            <img src="{{ $faqPhoto }}" alt="{{ $faqPhotoAlt }}" class="faq__photo" />
 
-            <div class="faq__contact-card">
-              <div class="faq__contact-info">
-                <span class="faq__contact-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6"/>
-                  </svg>
-                </span>
-                <div>
-                  <p class="faq__contact-label">Contact us?</p>
-                  <p class="faq__contact-value">{{ $footerSettings['footer_phone_1'] ?? '1 123 456 7890' }}</p>
-                </div>
-              </div>
-
-              <a href="{{ route('appointment') }}" class="faq__contact-btn">
-                Appointment
-                <span class="faq__contact-btn-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-            </div>
+            @include('frontend.partials.faq-contact-card', ['phone' => $footerSettings['footer_phone_1'] ?? '1 123 456 7890'])
           </div>
         </div>
       </div>

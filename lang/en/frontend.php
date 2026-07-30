@@ -15,7 +15,7 @@ return [
         'md_message' => 'Message From MD/CEO',
         'our_management' => 'Our Management',
         'our_achievement' => 'Our Achievement',
-        'faq' => 'FAQ',
+        'faq' => "FAQ'S",
         'our_service' => 'Our Service',
         'service_list' => 'Service List',
         'doctors' => "Doctor's",
@@ -41,7 +41,7 @@ return [
         'search' => 'Search',
         'search_results' => 'Search Results',
         'md_message' => 'Message From MD/CEO',
-        'faq' => 'FAQ',
+        'faq' => "FAQ'S",
         'gallery' => 'Gallery',
         'packages' => 'Packages',
         'management' => 'Our Management',
@@ -82,5 +82,10 @@ return [
         'email' => 'Your Email',
         'phone' => 'Phone Number',
         'message' => 'Message',
+    ],
+
+    'faq' => [
+        'contact_label' => 'Contact us?',
+        'contact_btn' => 'Appointment',
     ],
 ];

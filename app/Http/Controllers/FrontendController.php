@@ -46,7 +46,7 @@ class FrontendController extends Controller
             'pkg'              => $this->packageSettings(),
             'appt'                    => $this->appointmentSettings(),
             'appointmentDoctors'      => $this->appointmentBookingDoctors(),
-            'homeFaqs'         => $this->faqItems('home'),
+            'homeFaq'          => $this->faqSection('home'),
             'testimonials'     => $this->activeTestimonials(),
             'testi'            => $this->testimonialSettings(),
             'featuredAwards'   => $this->activeAwards(),
@@ -112,7 +112,7 @@ class FrontendController extends Controller
 
             foreach (['svc_badge', 'svc_title', 'svc_desc', 'svc_btn_text', 'svc_page_hero_title', 'svc_help_title', 'svc_help_desc', 'svc_seo_title', 'svc_seo_description'] as $key) {
                 if (array_key_exists($key, $settings)) {
-                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                    $settings[$key] = GlobalSetting::getTranslated($key);
                 }
             }
 
@@ -140,7 +140,7 @@ class FrontendController extends Controller
 
             foreach (['doc_home_badge', 'doc_home_title', 'doc_page_hero_title', 'doc_badge', 'doc_title', 'doc_seo_title', 'doc_seo_description'] as $key) {
                 if (array_key_exists($key, $settings)) {
-                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                    $settings[$key] = GlobalSetting::getTranslated($key);
                 }
             }
 
@@ -184,7 +184,7 @@ class FrontendController extends Controller
             'why_badge', 'why_title', 'why_desc', 'why_badge_number', 'why_badge_label',
         ] as $key) {
             if (array_key_exists($key, $settings)) {
-                $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                $settings[$key] = GlobalSetting::getTranslated($key);
             }
         }
 
@@ -222,7 +222,7 @@ class FrontendController extends Controller
     {
         return view('frontend.about', [
             'about'    => $this->aboutSettings(),
-            'aboutFaqs' => $this->faqItems('about'),
+            'aboutFaq' => $this->faqSection('about'),
         ]);
     }
 
@@ -245,7 +245,7 @@ class FrontendController extends Controller
 
             foreach (['ach_hero_title', 'ach_title', 'ach_desc', 'ach_seo_title', 'ach_seo_description'] as $key) {
                 if (array_key_exists($key, $settings)) {
-                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                    $settings[$key] = GlobalSetting::getTranslated($key);
                 }
             }
         } catch (\Throwable) {
@@ -363,7 +363,7 @@ class FrontendController extends Controller
 
             foreach (['blog_home_title', 'blog_hero_title', 'blog_seo_title', 'blog_seo_description'] as $key) {
                 if (array_key_exists($key, $settings)) {
-                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                    $settings[$key] = GlobalSetting::getTranslated($key);
                 }
             }
 
@@ -438,7 +438,7 @@ class FrontendController extends Controller
 
             foreach (['contact_hero_title', 'contact_title', 'contact_desc', 'contact_talk_text', 'contact_rating_text', 'contact_form_title', 'contact_form_btn_text', 'contact_seo_title', 'contact_seo_description'] as $key) {
                 if (array_key_exists($key, $settings)) {
-                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                    $settings[$key] = GlobalSetting::getTranslated($key);
                 }
             }
 
@@ -482,8 +482,8 @@ class FrontendController extends Controller
     public function faq(): View
     {
         return view('frontend.faq', [
-            'faqPage'  => $this->faqPageSettings(),
-            'faqItems' => $this->faqItems('faq'),
+            'faqPage' => $this->faqPageSettings(),
+            'faqData' => $this->faqSection('faq'),
         ]);
     }
 
@@ -498,7 +498,7 @@ class FrontendController extends Controller
 
             foreach (['faq_hero_title', 'faq_seo_title', 'faq_seo_description', 'faq_page_badge', 'faq_page_title', 'faq_page_desc'] as $key) {
                 if (array_key_exists($key, $settings)) {
-                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                    $settings[$key] = GlobalSetting::getTranslated($key);
                 }
             }
 
@@ -508,20 +508,33 @@ class FrontendController extends Controller
         }
     }
 
-    /** Merged Q&A items from all active FAQ groups assigned to the given page. Empty collection if the DB isn't ready. */
-    private function faqItems(string $page): Collection
+    /**
+     * FAQ section for the given page (home|about|faq): heading fields (badge/title/description/image)
+     * from the first active `Faq` group for that page (Admin > Website Management > FAQ's), plus the
+     * merged Q&A items from every active group assigned to that page. Empty/blank if the DB isn't ready.
+     */
+    private function faqSection(string $page): array
     {
         $tr = fn ($v) => is_array($v) ? ($v[app()->getLocale()] ?: $v[config('app.fallback_locale')] ?? '') : $v;
 
         try {
-            return Faq::forPage($page)->get()
-                ->flatMap(fn ($group) => $group->items ?? [])
-                ->map(fn ($item) => [
-                    'question' => $tr($item['question'] ?? ''),
-                    'answer'   => $tr($item['answer'] ?? ''),
-                ]);
+            $groups = Faq::forPage($page)->get();
+            $first  = $groups->first();
+
+            return [
+                'badge'       => $first?->badge ?? '',
+                'title'       => $first?->title ?? '',
+                'description' => $first?->description ?? '',
+                'image'       => $first?->image ? asset('storage/' . $first->image) : null,
+                'image_alt'   => $first?->image_alt ?? '',
+                'items'       => $groups->flatMap(fn ($group) => $group->items ?? [])
+                    ->map(fn ($item) => [
+                        'question' => $tr($item['question'] ?? ''),
+                        'answer'   => $tr($item['answer'] ?? ''),
+                    ]),
+            ];
         } catch (\Throwable) {
-            return collect();
+            return ['badge' => '', 'title' => '', 'description' => '', 'image' => null, 'image_alt' => '', 'items' => collect()];
         }
     }
 
@@ -543,7 +556,7 @@ class FrontendController extends Controller
 
             foreach (['testi_badge', 'testi_title', 'testi_image_alt'] as $key) {
                 if (array_key_exists($key, $settings)) {
-                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                    $settings[$key] = GlobalSetting::getTranslated($key);
                 }
             }
 
@@ -574,7 +587,7 @@ class FrontendController extends Controller
 
             foreach (['award_badge', 'award_title', 'award_desc', 'ach_award_title', 'ach_award_desc'] as $key) {
                 if (array_key_exists($key, $settings)) {
-                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                    $settings[$key] = GlobalSetting::getTranslated($key);
                 }
             }
 
@@ -610,7 +623,7 @@ class FrontendController extends Controller
 
             foreach (['gallery_badge', 'gallery_title', 'gallery_subtitle', 'gallery_hero_title', 'gallery_seo_title', 'gallery_seo_description'] as $key) {
                 if (array_key_exists($key, $settings)) {
-                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                    $settings[$key] = GlobalSetting::getTranslated($key);
                 }
             }
 
@@ -635,7 +648,7 @@ class FrontendController extends Controller
 
             foreach (['hist_hero_title', 'hist_badge', 'hist_title', 'hist_desc', 'hist_seo_title', 'hist_seo_description'] as $key) {
                 if (array_key_exists($key, $settings)) {
-                    $settings[$key] = GlobalSetting::getTranslated($key, null, $settings[$key]);
+                    $settings[$key] = GlobalSetting::getTranslated($key);
                 }
             }
         } catch (\Throwable) {

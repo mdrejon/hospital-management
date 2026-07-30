@@ -166,6 +166,21 @@
                     </div>
                 </section>
 
+                <!-- ─── Opening Time ─── -->
+                <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                    <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">
+                        Opening Time
+                        <span class="text-xs text-gray-400 font-normal ml-2">also used in Footer</span>
+                    </h2>
+                    <LanguageTabs v-model="activeLang" />
+                    <div>
+                        <label class="label">Opening Time</label>
+                        <input v-model="form.footer_opening_time[activeLang]" type="text" class="input"
+                            placeholder="Mon-Thu: 8:00am-5:00pm Fri: 8:00am-1:00pm" />
+                        <InputError :message="form.errors[`footer_opening_time.${activeLang}`]" />
+                    </div>
+                </section>
+
                 <!-- ─── Social Links ─── -->
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
                     <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">
@@ -291,6 +306,8 @@ const form = useForm({
     // Address
     footer_address_line1:   seed('footer_address_line1'),
     footer_address_line2:   seed('footer_address_line2'),
+    // Opening Time
+    footer_opening_time:    seed('footer_opening_time'),
     // Social
     footer_facebook_url:    s.footer_facebook_url    ?? '',
     footer_twitter_url:     s.footer_twitter_url     ?? '',

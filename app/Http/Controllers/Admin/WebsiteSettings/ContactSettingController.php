@@ -36,6 +36,7 @@ class ContactSettingController extends Controller
         'footer_email_2',
         'footer_address_line1',
         'footer_address_line2',
+        'footer_opening_time',
         // Social (shared with footer)
         'footer_facebook_url',
         'footer_twitter_url',
@@ -55,6 +56,7 @@ class ContactSettingController extends Controller
         'contact_rating_text', 'contact_form_title', 'contact_form_btn_text',
         'contact_seo_title', 'contact_seo_description',
         'footer_phone_1', 'footer_phone_2', 'footer_phone_3', 'footer_address_line1', 'footer_address_line2',
+        'footer_opening_time',
     ];
 
     public function edit(): Response

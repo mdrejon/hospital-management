@@ -297,13 +297,17 @@
 
     <!-- ===================== FAQ ===================== -->
     @php
+      $aboutFaqTitle = $aboutFaq['title'] ?: 'Frequently Asked Questions';
+      $aboutFaqDesc  = $aboutFaq['description'] ?: 'Answers to the questions our patients ask us most about visiting ClinicMaster.';
+      $aboutFaqPhoto = $aboutFaq['image'] ?: asset('assets/img/faq.webp');
+      $aboutFaqPhotoAlt = $aboutFaq['image_alt'] ?: 'Smiling doctor on a call, ready to answer your questions';
       $aboutFaqDefaults = [
         ['question' => 'What insurance plans do you accept?', 'answer' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution'],
         ['question' => 'Do I need a referral to see a specialist?', 'answer' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution'],
         ['question' => 'What should I bring to my first visit?', 'answer' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution'],
         ['question' => 'How can I access my medical records?', 'answer' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution'],
       ];
-      $aboutFaqCards = (isset($aboutFaqs) && $aboutFaqs->isNotEmpty()) ? $aboutFaqs : collect($aboutFaqDefaults);
+      $aboutFaqCards = (!empty($aboutFaq['items']) && $aboutFaq['items']->isNotEmpty()) ? $aboutFaq['items'] : collect($aboutFaqDefaults);
     @endphp
     <section class="faq">
       <img src="{{ asset('assets/img/faq-bg.png') }}" alt="" class="faq__bg" aria-hidden="true" />
@@ -311,9 +315,9 @@
       <div class="container relative mx-auto">
         <div class="faq__grid">
           <div class="faq__copy">
-            <h2 class="faq__title">Frequently Asked Questions</h2>
+            <h2 class="faq__title">{{ $aboutFaqTitle }}</h2>
             <p class="faq__desc">
-              Answers to the questions our patients ask us most about visiting ClinicMaster.
+              {{ $aboutFaqDesc }}
             </p>
 
             <div class="faq__list">
@@ -336,30 +340,9 @@
           </div>
 
           <div class="faq__media">
-            <img src="{{ asset('assets/img/faq.webp') }}" alt="Smiling doctor on a call, ready to answer your questions" class="faq__photo" />
+            <img src="{{ $aboutFaqPhoto }}" alt="{{ $aboutFaqPhotoAlt }}" class="faq__photo" />
 
-            <div class="faq__contact-card">
-              <div class="faq__contact-info">
-                <span class="faq__contact-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6"/>
-                  </svg>
-                </span>
-                <div>
-                  <p class="faq__contact-label">Contact us?</p>
-                  <p class="faq__contact-value">{{ $aboutPhone }}</p>
-                </div>
-              </div>
-
-              <a href="{{ route('appointment') }}" class="faq__contact-btn">
-                Appointment
-                <span class="faq__contact-btn-icon">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </a>
-            </div>
+            @include('frontend.partials.faq-contact-card', ['phone' => $aboutPhone])
           </div>
         </div>
       </div>
