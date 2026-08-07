@@ -1,0 +1,150 @@
+// ==========================================================================
+// Video Gallery Page — Consistent with ClinicMaster / Hospital Design System
+// ==========================================================================
+
+@use "../abstracts/mixins" as m;
+
+.video-gallery-section {
+  @apply bg-[#f8fafc] py-20 sm:py-24;
+}
+
+.video-gallery__grid {
+  @apply mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3;
+}
+
+.video-card {
+  @apply relative flex flex-col overflow-hidden rounded-2xl border border-[#ECEEF3] bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl;
+}
+
+.video-card__media {
+  @apply relative aspect-video w-full cursor-pointer overflow-hidden bg-navy;
+}
+
+.video-card__img {
+  @apply h-full w-full object-cover transition-transform duration-500;
+
+  .video-card:hover & {
+    @apply scale-105;
+  }
+}
+
+.video-card__overlay {
+  @apply pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-transparent transition-opacity duration-300;
+}
+
+.video-card__play {
+  @apply absolute inset-0 m-auto flex h-14 w-14 items-center justify-center rounded-full bg-brand-cyan text-white shadow-lg transition-all duration-300;
+
+  svg {
+    margin-left: 2px;
+  }
+
+  .video-card:hover & {
+    @apply scale-110 bg-brand-green shadow-2xl;
+  }
+}
+
+.video-card__badge-type {
+  @apply absolute left-4 top-4 rounded-lg bg-navy/85 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow-md backdrop-blur-sm;
+}
+
+.video-card__badge-duration {
+  @apply absolute bottom-3.5 right-3.5 flex items-center gap-1.5 rounded-md bg-black/80 px-2.5 py-1 font-mono text-[11px] font-semibold text-white backdrop-blur-sm;
+}
+
+.video-card__body {
+  @apply flex flex-1 flex-col justify-between p-6;
+}
+
+.video-card__meta {
+  @apply flex items-center justify-between gap-2;
+}
+
+.video-card__tag {
+  @apply flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-cyan;
+}
+
+.video-card__tag-dot {
+  @apply h-2 w-2 rounded-full bg-brand-cyan;
+}
+
+.video-card__featured-pill {
+  @apply rounded-full border border-brand-green/30 bg-brand-green/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand-green;
+}
+
+.video-card__title {
+  @apply mt-3 text-lg font-bold leading-snug text-navy transition-colors duration-200;
+
+  a {
+    @apply text-navy transition-colors duration-200 hover:text-brand-cyan;
+  }
+}
+
+.video-card__desc {
+  @apply mt-2 text-sm leading-relaxed text-muted line-clamp-2;
+}
+
+.video-card__footer {
+  @apply mt-6 flex items-center justify-between border-t border-[#ECEEF3] pt-4;
+}
+
+.video-card__btn {
+  @apply inline-flex items-center gap-2 rounded-full bg-footer-bg px-5 py-2 text-xs font-bold uppercase tracking-wider text-navy transition-all duration-200 hover:bg-brand-cyan hover:text-white;
+}
+
+.video-card__btn-icon {
+  @apply flex h-3.5 w-3.5 items-center justify-center transition-transform duration-200;
+
+  .video-card__btn:hover & {
+    @apply translate-x-0.5 -translate-y-0.5;
+  }
+}
+
+.video-card__channel {
+  @apply text-[11px] font-semibold uppercase tracking-wider text-muted;
+}
+
+// Lightbox Modal for Video ------------------------------------------------
+.video-lightbox {
+  @apply fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-6 transition-all duration-300;
+
+  &.is-open {
+    @apply flex;
+  }
+}
+
+.video-lightbox__backdrop {
+  @apply absolute inset-0 bg-navy/90 backdrop-blur-md;
+}
+
+.video-lightbox__container {
+  @apply relative z-10 w-full max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-navy shadow-2xl;
+}
+
+.video-lightbox__header {
+  @apply flex items-center justify-between border-b border-white/10 bg-navy-dark px-6 py-4 text-white;
+}
+
+.video-lightbox__title-wrap {
+  @apply flex items-center gap-2.5 overflow-hidden pr-4;
+}
+
+.video-lightbox__dot {
+  @apply h-2.5 w-2.5 shrink-0 rounded-full bg-brand-cyan;
+}
+
+.video-lightbox__title {
+  @apply truncate text-sm font-bold sm:text-base text-white;
+}
+
+.video-lightbox__close {
+  @apply flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors duration-150 hover:bg-brand-red;
+}
+
+.video-lightbox__player {
+  @apply relative aspect-video w-full bg-black;
+
+  iframe {
+    @apply h-full w-full;
+  }
+}

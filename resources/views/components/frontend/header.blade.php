@@ -31,6 +31,9 @@
             <span class="top-header__value">{{ $headerSettings['header_hours'] ?? 'Mon - Fri: 8:00 am - 7:00 pm' }}</span>
           </span>
           <div class="top-header__divider"></div>
+          <a href="{{ route('login') }}" class="top-header__item" style="color: #2563eb; font-weight: 700; text-decoration: none;" title="Agent Login Portal">
+            🔑 Agent Portal
+          </a>
           @foreach ($languages ?? [] as $lang)
             <a href="{{ route('language.switch', $lang->code) }}" class="top-header__lang {{ app()->getLocale() === $lang->code ? 'is-active' : '' }}">{{ strtoupper($lang->code) }}</a>
           @endforeach
@@ -144,7 +147,16 @@
           </div>
         </div>
 
-        <a href="{{ route('gallery') }}" class="main-nav__link {{ request()->routeIs('gallery') ? 'is-active' : '' }}">{{ __('frontend.nav.gallery') }}</a>
+        <div class="has-dropdown">
+          <button type="button" class="main-nav__link {{ request()->routeIs(['gallery','video-gallery']) ? 'is-active' : '' }}">
+            {{ __('frontend.nav.gallery') }}
+            <span class="main-nav__caret">+</span>
+          </button>
+          <div class="dropdown-menu">
+            <a href="{{ route('gallery') }}" class="dropdown-menu__link">Photo Gallery</a>
+            <a href="{{ route('video-gallery') }}" class="dropdown-menu__link">Video Gallery</a>
+          </div>
+        </div>
         <a href="{{ route('blog-list') }}" class="main-nav__link {{ request()->routeIs(['blog-list','blog-details']) ? 'is-active' : '' }}">{{ __('frontend.nav.blog') }}</a>
         <a href="{{ route('contact') }}" class="main-nav__link {{ request()->routeIs('contact') ? 'is-active' : '' }}">{{ __('frontend.nav.contact_us') }}</a>
       </nav>
@@ -220,9 +232,24 @@
         </div>
       </div>
 
-      <a href="{{ route('gallery') }}" class="side-panel__nav-link">{{ __('frontend.nav.gallery') }}</a>
+      <div>
+        <button type="button" class="side-panel__nav-link" data-submenu-toggle>
+          {{ __('frontend.nav.gallery') }}
+          <span class="side-panel__nav-caret">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+        <div class="side-panel__submenu">
+          <a href="{{ route('gallery') }}" class="side-panel__nav-sublink">Photo Gallery</a>
+          <a href="{{ route('video-gallery') }}" class="side-panel__nav-sublink">Video Gallery</a>
+        </div>
+      </div>
+
       <a href="{{ route('blog-list') }}" class="side-panel__nav-link">{{ __('frontend.nav.blog') }}</a>
       <a href="{{ route('contact') }}" class="side-panel__nav-link">{{ __('frontend.nav.contact_us') }}</a>
+      <a href="{{ route('login') }}" class="side-panel__nav-link" style="color: #2563eb; font-weight: 700;">🔑 Agent Login / Portal</a>
     </nav>
 
     <h3 class="side-panel__title">{{ __('frontend.nav.contact_us') }}</h3>

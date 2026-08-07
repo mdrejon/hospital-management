@@ -14,10 +14,6 @@ export const navItems = [
         route: 'admin.inquiries.index',
         module: 'inquiries',
         icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`,
-        children: [
-            { name: 'List',              route: 'admin.inquiries.index' },
-            // { name: 'View & Make Reply', route: null },
-        ],
     },
 
     // ── Appointments ─────────────────────────────────────────────────────────
@@ -26,6 +22,33 @@ export const navItems = [
         route: 'admin.appointments.index',
         module: 'appointments',
         icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M16 2v4M8 2v4M3 10h18"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 16 2 2 4-4"/></svg>`,
+    },
+
+    // ── Medical Tests ─────────────────────────────────────────────────────────
+    {
+        name: 'Medical Tests',
+        route: 'admin.medical-test-bookings.index',
+        module: 'medical-tests',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>`,
+        children: [
+            { name: 'Test Bookings',    route: 'admin.medical-test-bookings.index' },
+            { name: 'New Test Booking', route: 'admin.medical-test-bookings.create' },
+            { name: 'Tests Catalog',    route: 'admin.medical-tests.index' },
+            { name: 'Test Categories',  route: 'admin.medical-test-categories.index' },
+        ],
+    },
+
+    // ── Agents Management ───────────────────────────────────────────────────
+    {
+        name: 'Agents',
+        route: 'admin.agents.index',
+        module: 'agents',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>`,
+        children: [
+            { name: 'All Agents',        route: 'admin.agents.index' },
+            { name: 'Add Agent',         route: 'admin.agents.create' },
+            { name: 'Cash Out Requests', route: 'admin.withdrawals.index' },
+        ],
     },
 
     // ── Patients ────────────────────────────────────────────────────────────
@@ -44,7 +67,7 @@ export const navItems = [
         icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9" stroke-width="2"/></svg>`,
     },
 
-    // ── Operator (Operator role) ────────────────────────────────────────────
+    // ── Operator (Operator role) ────────────────────────────────────
     {
         name: 'Operator',
         route: 'admin.operator.dashboard',
@@ -63,22 +86,23 @@ export const navItems = [
         module: 'website-management',
         icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>`,
         children: [
-            { name: 'About Settings', route: 'admin.website-settings.about.edit' },
-            { name: 'Contact Settings', route: 'admin.website-settings.contact.edit' },
-            { name: 'History Settings', route: 'admin.website-settings.history.edit' },
-            { name: 'Achievements Settings', route: 'admin.website-settings.achievements.edit' },
-            { name: 'Management Team', route: 'admin.management-members.index' },
-            { name: 'Services',       route: 'admin.services.index' },
-            { name: 'Doctors',        route: 'admin.doctors.index' },
+            { name: 'About Settings',         route: 'admin.website-settings.about.edit' },
+            { name: 'Contact Settings',       route: 'admin.website-settings.contact.edit' },
+            { name: 'History Settings',       route: 'admin.website-settings.history.edit' },
+            { name: 'Achievements Settings',  route: 'admin.website-settings.achievements.edit' },
+            { name: 'Management Team',        route: 'admin.management-members.index' },
+            { name: 'Services',               route: 'admin.services.index' },
+            { name: 'Doctors',                route: 'admin.doctors.index' },
             { name: 'Doctor Specializations', route: 'admin.doctor-specializations.index' },
-            { name: 'Packages',       route: 'admin.packages.index' },
-            { name: 'Gallery',        route: 'admin.website-settings.gallery.index' },
-            { name: "FAQ's",          route: 'admin.faqs.index' },
-            { name: 'Testimonials',   route: 'admin.testimonials.index' },
-            { name: 'Awards',         route: 'admin.awards.index' },
-            { name: 'Blog Category',  route: 'admin.blog-categories.index' },
-            { name: 'Blog Posts',     route: 'admin.blog.index' },
-            { name: 'Pages',          route: 'admin.pages.index' },
+            { name: 'Packages',               route: 'admin.packages.index' },
+            { name: 'Photo Gallery',          route: 'admin.website-settings.gallery.index' },
+            { name: 'Video Gallery',          route: 'admin.website-settings.video-gallery.index' },
+            { name: "FAQ's",                  route: 'admin.faqs.index' },
+            { name: 'Testimonials',           route: 'admin.testimonials.index' },
+            { name: 'Awards',                 route: 'admin.awards.index' },
+            { name: 'Blog Category',          route: 'admin.blog-categories.index' },
+            { name: 'Blog Posts',             route: 'admin.blog.index' },
+            { name: 'Pages',                  route: 'admin.pages.index' },
         ],
     },
 
@@ -89,18 +113,15 @@ export const navItems = [
         module: 'global-settings',
         icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`,
         children: [
-            { name: 'Hero Slider',       route: 'admin.website-settings.sliders.index' },
-            { name: 'Header Settings',   route: 'admin.website-settings.header.edit' },
-            { name: 'Footer Settings',   route: 'admin.website-settings.footer.edit' },
-            { name: 'About Section',     route: 'admin.website-settings.global-about.edit' },
-            { name: 'Why Choose Us',     route: 'admin.website-settings.why-choose-us.edit' },
-            { name: 'Languages',         route: 'admin.website-settings.languages.index' },
-
+            { name: 'Hero Slider',         route: 'admin.website-settings.sliders.index' },
+            { name: 'Header Settings',     route: 'admin.website-settings.header.edit' },
+            { name: 'Footer Settings',     route: 'admin.website-settings.footer.edit' },
+            { name: 'About Section',       route: 'admin.website-settings.global-about.edit' },
+            { name: 'Why Choose Us',       route: 'admin.website-settings.why-choose-us.edit' },
+            { name: 'Languages',           route: 'admin.website-settings.languages.index' },
+            { name: 'SMS Gateway',         route: 'admin.website-settings.sms.edit' },
+            { name: 'Payment Gateways',    route: 'admin.website-settings.payment-gateways.edit' },
             { name: 'Email Notifications', route: 'admin.website-settings.email-notifications.edit' },
-            // { name: 'Room Features',     route: null },
-            // { name: 'Social Media',      route: null },
-            // { name: 'SEO Settings',      route: null },
-            // { name: 'General Settings',  route: null },
         ],
     },
 

@@ -41,6 +41,11 @@ class User extends Authenticatable
         return $this->belongsTo(Doctor::class);
     }
 
+    public function agentProfile()
+    {
+        return $this->hasOne(AgentProfile::class);
+    }
+
     public function isDoctor(): bool
     {
         return $this->role?->slug === 'doctor';
@@ -49,6 +54,11 @@ class User extends Authenticatable
     public function isOperator(): bool
     {
         return $this->role?->slug === 'operator';
+    }
+
+    public function isAgent(): bool
+    {
+        return $this->role?->slug === 'agent' || $this->agentProfile()->exists();
     }
 
     /** True only if the user has an explicit super-admin role. A missing role grants nothing. */

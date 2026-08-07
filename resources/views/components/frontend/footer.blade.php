@@ -108,8 +108,10 @@
           @empty
           <a href="{{ route('about') }}" class="footer-col__link">{{ __('frontend.footer.about_us') }}</a>
           <a href="{{ route('doctors') }}" class="footer-col__link">{{ __('frontend.footer.team') }}</a>
-          <a href="{{ route('services') }}" class="footer-col__link">{{ __('frontend.footer.services') }}</a>
-          <a href="{{ route('contact') }}" class="footer-col__link">{{ __('frontend.footer.contact_us') }}</a>
+          <a href="{{ route('video-gallery') }}" class="footer-col__link">Video Gallery</a>
+          <a href="{{ route('gallery') }}" class="footer-col__link">Photo Gallery</a>
+          <a href="{{ route('agent.register') }}" class="footer-col__link" style="color: #60a5fa;">Join as Agent Partner</a>
+          <a href="{{ route('login') }}" class="footer-col__link" style="color: #60a5fa;">Agent Portal Login</a>
           <a href="{{ route('appointment') }}" class="footer-col__link">{{ __('frontend.footer.appointment') }}</a>
           @endforelse
         </div>

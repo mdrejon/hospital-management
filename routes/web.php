@@ -43,7 +43,23 @@ use App\Http\Controllers\Admin\WebsiteSettings\FaqPageSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\BlogSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\EmailSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\MailSettingController;
+use App\Http\Controllers\Admin\AgentController;
+use App\Http\Controllers\Admin\AgentWithdrawalController;
+use App\Http\Controllers\Admin\MedicalTestCategoryController;
+use App\Http\Controllers\Admin\MedicalTestController;
+use App\Http\Controllers\Admin\MedicalTestBookingController;
+use App\Http\Controllers\Admin\WebsiteSettings\VideoGalleryController;
+use App\Http\Controllers\Admin\WebsiteSettings\SmsSettingController;
+use App\Http\Controllers\Agent\AgentAuthController;
+use App\Http\Controllers\Agent\AgentDashboardController;
+use App\Http\Controllers\Agent\AgentDoctorBookingController;
+use App\Http\Controllers\Agent\AgentMedicalTestBookingController;
+use App\Http\Controllers\Agent\AgentBookingsController;
+use App\Http\Controllers\Agent\AgentWalletController;
+use App\Http\Controllers\Agent\AgentProfileController;
 use App\Http\Controllers\Admin\WebsiteSettings\LanguageController;
+use App\Http\Controllers\Admin\WebsiteSettings\PaymentGatewaySettingController;
+use App\Http\Controllers\PaymentController;
 
 use App\Http\Controllers\Admin\BackupController;
 use Illuminate\Support\Facades\Route;
@@ -77,6 +93,7 @@ Route::get('/doctors',              [FrontendController::class, 'doctors'])->nam
 Route::get('/doctors/{slug}',       [FrontendController::class, 'doctorDetails'])->name('doctor-details');
 Route::get('/faq',                  [FrontendController::class, 'faq'])->name('faq');
 Route::get('/gallery',              [FrontendController::class, 'gallery'])->name('gallery');
+Route::get('/video-gallery',        [FrontendController::class, 'videoGallery'])->name('video-gallery');
 Route::get('/history',              [FrontendController::class, 'history'])->name('history');
 Route::get('/management',           [FrontendController::class, 'management'])->name('management');
 Route::get('/md-message',           [FrontendController::class, 'mdMessage'])->name('md-message');
@@ -87,14 +104,42 @@ Route::get('/services/{slug}',      [FrontendController::class, 'serviceDetails'
 Route::get('/search',               [FrontendController::class, 'search'])->name('search');
 Route::get('/language/{code}',      [LocaleController::class, 'update'])->name('language.switch');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+// Agent Public Registration & Login Helper
+Route::get('/agent/register',  [AgentAuthController::class, 'showRegister'])->name('agent.register');
+Route::post('/agent/register', [AgentAuthController::class, 'register'])->name('agent.register.submit');
+
+Route::get('/dashboard', function (\Illuminate\Http\Request $request) {
+    $user = $request->user();
+    if ($user->isAgent()) {
+        return redirect()->route('agent.dashboard');
+    }
+    if ($user->isDoctor()) {
+        return redirect()->route('admin.doctor-dashboard.index');
+    }
+    if ($user->isOperator()) {
+        return redirect()->route('admin.operator.dashboard');
+    }
+    return redirect()->route('admin.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Agent Portal Routes (For logged in agents)
+Route::prefix('agent')->name('agent.')->middleware(['auth'])->group(function () {
+    Route::get('/dashboard',                  [AgentDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/book-doctor',                [AgentDoctorBookingController::class, 'create'])->name('doctor.create');
+    Route::post('/book-doctor',               [AgentDoctorBookingController::class, 'store'])->name('doctor.store');
+    Route::get('/book-test',                  [AgentMedicalTestBookingController::class, 'create'])->name('test.create');
+    Route::post('/book-test',                 [AgentMedicalTestBookingController::class, 'store'])->name('test.store');
+    Route::get('/bookings',                   [AgentBookingsController::class, 'index'])->name('bookings.index');
+    Route::get('/wallet',                     [AgentWalletController::class, 'index'])->name('wallet.index');
+    Route::post('/wallet/withdraw',           [AgentWalletController::class, 'requestWithdrawal'])->name('wallet.withdraw');
+    Route::get('/profile',                    [AgentProfileController::class, 'show'])->name('profile.show');
+    Route::post('/profile',                   [AgentProfileController::class, 'update'])->name('profile.update');
 });
 
 // Admin Routes
@@ -113,11 +158,48 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
     Route::delete('/inquiries/{inquiry}',            [InquiryController::class, 'destroy'])->name('inquiries.destroy');
 
     // Appointments
-    Route::get('/appointments',                       [AppointmentController::class, 'index'])->name('appointments.index');
-    Route::get('/appointments/create',                [AppointmentController::class, 'create'])->name('appointments.create');
-    Route::post('/appointments',                      [AppointmentController::class, 'store'])->name('appointments.store');
-    Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
-    Route::delete('/appointments/{appointment}',      [AppointmentController::class, 'destroy'])->name('appointments.destroy');
+    Route::get('/appointments',                         [AppointmentController::class, 'index'])->name('appointments.index');
+    Route::get('/appointments/create',                  [AppointmentController::class, 'create'])->name('appointments.create');
+    Route::post('/appointments',                        [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::patch('/appointments/{appointment}/status',  [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
+    Route::patch('/appointments/{appointment}/payment', [AppointmentController::class, 'updatePayment'])->name('appointments.update-payment');
+    Route::delete('/appointments/{appointment}',        [AppointmentController::class, 'destroy'])->name('appointments.destroy');
+
+    // Medical Tests & Diagnostic Management
+    Route::get('/medical-test-categories',                     [MedicalTestCategoryController::class, 'index'])->name('medical-test-categories.index');
+    Route::post('/medical-test-categories',                    [MedicalTestCategoryController::class, 'store'])->name('medical-test-categories.store');
+    Route::put('/medical-test-categories/{category}',          [MedicalTestCategoryController::class, 'update'])->name('medical-test-categories.update');
+    Route::delete('/medical-test-categories/{category}',       [MedicalTestCategoryController::class, 'destroy'])->name('medical-test-categories.destroy');
+
+    Route::get('/medical-tests',                               [MedicalTestController::class, 'index'])->name('medical-tests.index');
+    Route::get('/medical-tests/create',                        [MedicalTestController::class, 'create'])->name('medical-tests.create');
+    Route::post('/medical-tests',                              [MedicalTestController::class, 'store'])->name('medical-tests.store');
+    Route::get('/medical-tests/{medicalTest}/edit',            [MedicalTestController::class, 'edit'])->name('medical-tests.edit');
+    Route::put('/medical-tests/{medicalTest}',                 [MedicalTestController::class, 'update'])->name('medical-tests.update');
+    Route::delete('/medical-tests/{medicalTest}',              [MedicalTestController::class, 'destroy'])->name('medical-tests.destroy');
+
+    Route::get('/medical-test-bookings',                       [MedicalTestBookingController::class, 'index'])->name('medical-test-bookings.index');
+    Route::get('/medical-test-bookings/create',                [MedicalTestBookingController::class, 'create'])->name('medical-test-bookings.create');
+    Route::post('/medical-test-bookings',                      [MedicalTestBookingController::class, 'store'])->name('medical-test-bookings.store');
+    Route::get('/medical-test-bookings/{medicalTestBooking}',  [MedicalTestBookingController::class, 'show'])->name('medical-test-bookings.show');
+    Route::patch('/medical-test-bookings/{medicalTestBooking}/status',  [MedicalTestBookingController::class, 'updateStatus'])->name('medical-test-bookings.update-status');
+    Route::patch('/medical-test-bookings/{medicalTestBooking}/payment', [MedicalTestBookingController::class, 'updatePayment'])->name('medical-test-bookings.update-payment');
+    Route::post('/medical-test-bookings/items/{item}/upload-report',   [MedicalTestBookingController::class, 'uploadReport'])->name('medical-test-bookings.upload-report');
+
+    // Agent Management (Admin)
+    Route::get('/agents',                        [AgentController::class, 'index'])->name('agents.index');
+    Route::get('/agents/create',                 [AgentController::class, 'create'])->name('agents.create');
+    Route::post('/agents',                       [AgentController::class, 'store'])->name('agents.store');
+    Route::get('/agents/{agent}',                [AgentController::class, 'show'])->name('agents.show');
+    Route::get('/agents/{agent}/edit',           [AgentController::class, 'edit'])->name('agents.edit');
+    Route::put('/agents/{agent}',                [AgentController::class, 'update'])->name('agents.update');
+    Route::delete('/agents/{agent}',             [AgentController::class, 'destroy'])->name('agents.destroy');
+    Route::post('/agents/{agent}/adjust-balance',[AgentController::class, 'adjustBalance'])->name('agents.adjust-balance');
+
+    // Cash Out / Withdrawals
+    Route::get('/withdrawals',                       [AgentWithdrawalController::class, 'index'])->name('withdrawals.index');
+    Route::post('/withdrawals/{withdrawal}/approve', [AgentWithdrawalController::class, 'approve'])->name('withdrawals.approve');
+    Route::post('/withdrawals/{withdrawal}/reject',  [AgentWithdrawalController::class, 'reject'])->name('withdrawals.reject');
 
     // Patients — directory + full per-patient appointment history
     Route::get('/patients',              [PatientController::class, 'index'])->name('patients.index');
@@ -342,7 +424,23 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
         Route::delete('/gallery/{gallery}',              [GalleryController::class, 'destroy'])->name('gallery.destroy');
         Route::patch('/gallery/{gallery}/toggle',        [GalleryController::class, 'toggleStatus'])->name('gallery.toggle');
         Route::post('/gallery/reorder',                  [GalleryController::class, 'reorder'])->name('gallery.reorder');
-        Route::post('/gallery/settings',                 [GalleryController::class, 'updateSettings'])->name('gallery.settings');
+        // Video Gallery CMS
+        Route::get('/video-gallery',                           [VideoGalleryController::class, 'index'])->name('video-gallery.index');
+        Route::post('/video-gallery',                          [VideoGalleryController::class, 'store'])->name('video-gallery.store');
+        Route::put('/video-gallery/{videoGallery}',            [VideoGalleryController::class, 'update'])->name('video-gallery.update');
+        Route::delete('/video-gallery/{videoGallery}',         [VideoGalleryController::class, 'destroy'])->name('video-gallery.destroy');
+        Route::post('/video-gallery/reorder',                  [VideoGalleryController::class, 'reorder'])->name('video-gallery.reorder');
+        Route::post('/video-gallery/settings',                 [VideoGalleryController::class, 'updateSettings'])->name('video-gallery.settings');
+
+        // SMS Gateway Configuration & Template Editor
+        Route::get('/sms',        [SmsSettingController::class, 'edit'])->name('sms.edit');
+        Route::post('/sms',       [SmsSettingController::class, 'update'])->name('sms.update');
+        Route::post('/sms/test',  [SmsSettingController::class, 'testSms'])->name('sms.test');
+        Route::get('/sms/logs',   [SmsSettingController::class, 'logs'])->name('sms.logs');
+
+        // Payment Gateways Settings (SSLCommerz & bKash)
+        Route::get('/payment-gateways',  [PaymentGatewaySettingController::class, 'edit'])->name('payment-gateways.edit');
+        Route::post('/payment-gateways', [PaymentGatewaySettingController::class, 'update'])->name('payment-gateways.update');
     });
 
     // Database Backup
@@ -354,6 +452,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
         Route::post('/{backup}/restore',   [BackupController::class, 'restore'])->name('restore');
         Route::delete('/{backup}',         [BackupController::class, 'destroy'])->name('destroy');
     });
+});
+
+// Payment Processing Endpoints (Public & Webhooks)
+Route::prefix('payment')->name('payment.')->group(function () {
+    Route::post('/initiate',                  [PaymentController::class, 'initiate'])->name('initiate');
+    Route::get('/checkout/{payment}',         [PaymentController::class, 'checkout'])->name('checkout');
+    Route::post('/sandbox/process/{payment}', [PaymentController::class, 'processSandbox'])->name('sandbox.process');
+    Route::match(['get', 'post'], '/sslcommerz/success', [PaymentController::class, 'sslSuccess'])->name('sslcommerz.success');
+    Route::match(['get', 'post'], '/sslcommerz/fail',    [PaymentController::class, 'sslFail'])->name('sslcommerz.fail');
+    Route::match(['get', 'post'], '/sslcommerz/cancel',  [PaymentController::class, 'sslCancel'])->name('sslcommerz.cancel');
+    Route::post('/sslcommerz/ipn',                       [PaymentController::class, 'sslIpn'])->name('sslcommerz.ipn');
+    Route::match(['get', 'post'], '/bkash/callback',     [PaymentController::class, 'bkashCallback'])->name('bkash.callback');
+    Route::get('/receipt/{payment}',          [PaymentController::class, 'receipt'])->name('receipt');
+    Route::get('/failed/{payment?}',          [PaymentController::class, 'failed'])->name('failed');
+    Route::get('/cancelled/{payment?}',       [PaymentController::class, 'cancelled'])->name('cancelled');
 });
 
 require __DIR__.'/auth.php';

@@ -605,6 +605,40 @@ class FrontendController extends Controller
         ]);
     }
 
+    public function videoGallery(): View
+    {
+        return view('frontend.video-gallery', [
+            'videos'       => $this->videoGalleryItems(),
+            'pageSettings' => $this->videoGallerySettings(),
+        ]);
+    }
+
+    private function videoGalleryItems(): Collection
+    {
+        try {
+            return \App\Models\VideoGallery::active()->get();
+        } catch (\Throwable) {
+            return collect();
+        }
+    }
+
+    private function videoGallerySettings(): array
+    {
+        try {
+            $settings = GlobalSetting::where('key', 'like', 'video_gallery_%')->pluck('value', 'key')->toArray();
+
+            foreach (['video_gallery_hero_title', 'video_gallery_hero_subtitle', 'video_gallery_badge', 'video_gallery_title', 'video_gallery_seo_title', 'video_gallery_seo_description'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key);
+                }
+            }
+
+            return $settings;
+        } catch (\Throwable) {
+            return [];
+        }
+    }
+
     /** Active gallery images for the public Gallery page. Empty collection if the DB isn't ready. */
     private function galleryImages(): Collection
     {

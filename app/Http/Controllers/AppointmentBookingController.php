@@ -11,6 +11,8 @@ use App\Models\Patient;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\AppointmentAvailabilityService;
+use App\Services\PaymentService;
+use App\Services\SmsService;
 use App\Support\EmailNotificationSettings;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -59,23 +61,25 @@ class AppointmentBookingController extends Controller
     }
 
     /** POST /appointment */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $data = $request->validate([
-            'patient_name'    => 'required|string|max:255',
-            'date_of_birth'   => 'nullable|date|before_or_equal:today',
-            'gender'          => 'required|in:male,female,other',
-            'phone'           => 'required|string|max:30',
-            'email'           => 'nullable|email|max:255',
-            'address'         => 'nullable|string',
-            'appointment_type' => 'required|in:opd,follow_up',
-            'doctor_id'       => 'required|exists:doctors,id',
-            'appointment_date' => 'required|date|after_or_equal:today',
-            'time_slot'       => 'required|string',
-            'symptoms'        => 'nullable|string',
+            'patient_name'        => 'required|string|max:255',
+            'date_of_birth'       => 'nullable|date|before_or_equal:today',
+            'gender'              => 'required|in:male,female,other',
+            'phone'               => 'required|string|max:30',
+            'email'               => 'nullable|email|max:255',
+            'address'             => 'nullable|string',
+            'appointment_type'    => 'required|in:opd,follow_up',
+            'doctor_id'           => 'required|exists:doctors,id',
+            'appointment_date'    => 'required|date|after_or_equal:today',
+            'time_slot'           => 'required|string',
+            'symptoms'            => 'nullable|string',
             'medical_documents'   => 'nullable|array|max:5',
             'medical_documents.*' => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
-            'source'          => 'nullable|in:home,appointment_page,doctor_details_page',
+            'source'              => 'nullable|in:home,appointment_page,doctor_details_page',
+            'payment_type'        => 'nullable|in:without_pay,online',
+            'payment_gateway'     => 'nullable|required_if:payment_type,online|in:sslcommerz,bkash',
         ]);
 
         $doctor = Doctor::findOrFail($data['doctor_id']);
@@ -121,6 +125,9 @@ class AppointmentBookingController extends Controller
                 'time_slot'         => $data['time_slot'],
                 'serial_number'     => $this->availability->nextSerialNumber($doctor, $date),
                 'fee'               => $doctor->consultation_fee,
+                'payment_status'    => 'unpaid',
+                'paid_amount'       => 0,
+                'payment_method'    => ($data['payment_type'] ?? '') === 'online' ? $data['payment_gateway'] : 'without_pay',
                 'symptoms'          => $data['symptoms'] ?? null,
                 'document'          => $documentPaths[0] ?? null,
                 'documents'         => $documentPaths ?: null,
@@ -131,6 +138,34 @@ class AppointmentBookingController extends Controller
         });
 
         $this->notify($appointment, $doctor);
+
+        try {
+            SmsService::sendAppointmentBookedAlert($appointment);
+        } catch (\Throwable $e) {}
+
+        // If online payment is requested and fee > 0
+        if (($data['payment_type'] ?? '') === 'online' && (float) $doctor->consultation_fee > 0) {
+            $payment = PaymentService::createPayment(
+                $appointment,
+                $data['payment_gateway'],
+                (float) $doctor->consultation_fee
+            );
+
+            $result = PaymentService::processPayment(
+                $payment,
+                [
+                    'name'    => $appointment->name,
+                    'phone'   => $appointment->phone,
+                    'email'   => $appointment->email,
+                    'address' => $appointment->patient?->address ?? 'Dhaka, Bangladesh',
+                ],
+                route('appointment')
+            );
+
+            if (!empty($result['redirect_url'])) {
+                return redirect($result['redirect_url']);
+            }
+        }
 
         return back()->with('success', "Thank you! Your appointment request has been received. Your serial number is #{$appointment->serial_number} for {$date->format('d M Y')} at {$appointment->time_slot}. We'll confirm shortly.");
     }

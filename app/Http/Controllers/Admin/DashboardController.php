@@ -27,6 +27,10 @@ class DashboardController extends Controller
             return redirect()->route('admin.operator.dashboard');
         }
 
+        if ($user->isAgent()) {
+            return redirect()->route('agent.dashboard');
+        }
+
         $today = today();
 
         return Inertia::render('Admin/Dashboard', [

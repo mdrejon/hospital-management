@@ -743,6 +743,68 @@ function initScrollReveal() {
   units.forEach((el) => io.observe(el));
 }
 
+// Video modal lightbox: triggers [data-embed] on any .js-video-trigger
+// to open the shared video modal overlay. Escape / close / backdrop click closes.
+function initVideoModal() {
+  const modal = document.getElementById("videoModal");
+  if (!modal) return;
+
+  const iframe = document.getElementById("videoIframe");
+  const titleEl = document.getElementById("videoModalTitle");
+  const closeBtn = document.getElementById("closeVideoModal");
+  const backdrop = document.getElementById("videoModalBackdrop");
+
+  const resolveEmbedUrl = (rawUrl) => {
+    if (!rawUrl) return "";
+    let url = rawUrl.trim();
+    // YouTube detection (watch?v=, youtu.be, embed/)
+    const ytMatch = url.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i);
+    if (ytMatch && ytMatch[1]) {
+      return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0&enablejsapi=1`;
+    }
+    // Vimeo detection
+    const vimeoMatch = url.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)/);
+    if (vimeoMatch && vimeoMatch[vimeoMatch.length - 1]) {
+      return `https://player.vimeo.com/video/${vimeoMatch[vimeoMatch.length - 1]}?autoplay=1`;
+    }
+    return url;
+  };
+
+  const openVideo = (embed, title) => {
+    if (!embed || !iframe) return;
+    iframe.src = resolveEmbedUrl(embed);
+    if (titleEl) titleEl.textContent = title || "Video Player";
+    modal.classList.add("is-open");
+    document.body.classList.add("overflow-hidden");
+  };
+
+  const closeVideo = () => {
+    modal.classList.remove("is-open");
+    if (iframe) iframe.src = "";
+    document.body.classList.remove("overflow-hidden");
+  };
+
+  document.querySelectorAll(".js-video-trigger").forEach((trigger) => {
+    trigger.addEventListener("click", (e) => {
+      e.preventDefault();
+      const embed = trigger.getAttribute("data-embed");
+      const title = trigger.getAttribute("data-title");
+      openVideo(embed, title);
+    });
+  });
+
+  closeBtn?.addEventListener("click", closeVideo);
+  backdrop?.addEventListener("click", closeVideo);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeVideo();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (!modal.classList.contains("is-open")) return;
+    if (e.key === "Escape") closeVideo();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initSidePanel();
   initFaqAccordion();
@@ -754,5 +816,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initAwardsSlider();
   initStickySidebar();
   initGalleryLightbox();
+  initVideoModal();
   initScrollReveal();
 });

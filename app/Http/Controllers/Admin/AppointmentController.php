@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\WebsiteSettings\AppointmentSettingController;
+use App\Models\AgentProfile;
 use App\Models\AppNotification;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Service;
 use App\Models\User;
+use App\Services\CommissionService;
+use App\Services\SmsService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,7 +22,9 @@ class AppointmentController extends Controller
 {
     public function index(): Response
     {
-        $appointments = Appointment::with('doctor:id,name')->orderByDesc('id')->get();
+        $appointments = Appointment::with(['doctor:id,name', 'agent.user'])
+            ->orderByDesc('id')
+            ->get();
 
         $stats = ['total' => $appointments->count()];
         foreach (Appointment::STATUSES as $status) {
@@ -31,6 +36,7 @@ class AppointmentController extends Controller
             'stats'        => $stats,
             'statuses'     => Appointment::STATUSES,
             'pageSettings' => app(AppointmentSettingController::class)->currentSettings(),
+            'agents'       => AgentProfile::with('user')->active()->get(),
         ]);
     }
 
@@ -38,9 +44,8 @@ class AppointmentController extends Controller
     {
         return Inertia::render('Admin/Appointments/Create', [
             'departments' => $this->departments(),
-            // `name` is translatable — pluck() reads the raw column and bypasses the
-            // model's locale-resolving accessor, so map through it explicitly instead.
-            'doctors'     => Doctor::active()->get()->map(fn (Doctor $d) => $d->name)->values(),
+            'doctors'     => Doctor::active()->get(['id', 'name', 'consultation_fee']),
+            'agents'      => AgentProfile::with('user')->active()->get(),
         ]);
     }
 
@@ -51,16 +56,26 @@ class AppointmentController extends Controller
             'email'            => 'required|email|max:255',
             'phone'            => 'nullable|string|max:30',
             'department'       => 'nullable|string',
+            'doctor_id'        => 'nullable|exists:doctors,id',
+            'agent_id'         => 'nullable|exists:agent_profiles,id',
             'preferred_doctor' => 'nullable|string',
             'preferred_date'   => 'nullable|string',
+            'appointment_date' => 'nullable|date',
+            'time_slot'        => 'nullable|string',
+            'fee'              => 'nullable|numeric|min:0',
+            'payment_status'   => 'nullable|in:unpaid,paid',
+            'paid_amount'      => 'nullable|numeric|min:0',
+            'payment_method'   => 'nullable|in:cash,bkash,nagad,rocket,card,online',
             'message'          => 'nullable|string',
             'status'           => 'nullable|in:' . implode(',', Appointment::STATUSES),
             'notes'            => 'nullable|string',
         ]);
 
-        $data['status']    = $data['status'] ?? 'pending';
-        $data['source']    = 'admin';
-        $data['is_manual'] = true;
+        $data['status']         = $data['status'] ?? 'pending';
+        $data['payment_status'] = $data['payment_status'] ?? 'unpaid';
+        $data['source']         = 'admin';
+        $data['is_manual']      = true;
+        $data['booked_by_user_id'] = $request->user()->id;
 
         if (!empty($data['phone'])) {
             $patient = Patient::firstOrCreate(
@@ -70,7 +85,15 @@ class AppointmentController extends Controller
             $data['patient_id'] = $patient->id;
         }
 
-        Appointment::create($data);
+        $appointment = Appointment::create($data);
+
+        // Handle Commission if booked by agent
+        if ($appointment->agent_id) {
+            CommissionService::handleAppointmentCommission($appointment);
+        }
+
+        // Send confirmation SMS
+        SmsService::sendAppointmentBookedAlert($appointment);
 
         return redirect()->route('admin.appointments.index')
             ->with('success', 'Appointment created successfully.');
@@ -94,9 +117,35 @@ class AppointmentController extends Controller
                 "{$appointment->name} — {$appointment->appointment_date?->format('d M')} at {$appointment->time_slot}.",
                 route('admin.doctor-dashboard.index')
             ));
+
+            if ($data['status'] === Appointment::STATUS_CONFIRMED) {
+                SmsService::sendAppointmentConfirmedAlert($appointment);
+            }
         }
 
-        return back()->with('success', 'Appointment updated.');
+        // If completed, credit agent commission if needed
+        if ($data['status'] === Appointment::STATUS_COMPLETED && $appointment->agent_id) {
+            CommissionService::handleAppointmentCommission($appointment);
+        }
+
+        return back()->with('success', 'Appointment status updated.');
+    }
+
+    public function updatePayment(Request $request, Appointment $appointment): RedirectResponse
+    {
+        $validated = $request->validate([
+            'payment_status' => ['required', 'in:unpaid,paid'],
+            'paid_amount'    => ['required', 'numeric', 'min:0'],
+            'payment_method' => ['required', 'in:cash,bkash,nagad,rocket,card,online'],
+        ]);
+
+        $appointment->update($validated);
+
+        if ($validated['payment_status'] === 'paid' && $appointment->agent_id) {
+            CommissionService::handleAppointmentCommission($appointment);
+        }
+
+        return back()->with('success', 'Payment details updated successfully.');
     }
 
     public function destroy(Appointment $appointment): RedirectResponse
@@ -110,8 +159,6 @@ class AppointmentController extends Controller
     private function departments(): array
     {
         try {
-            // `title` is translatable — pluck() reads the raw column and bypasses the
-            // model's locale-resolving accessor, so map through it explicitly instead.
             return Service::active()->get()->map(fn (Service $s) => $s->title)->values()->all();
         } catch (\Throwable) {
             return [];

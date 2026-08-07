@@ -34,6 +34,17 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $user = $request->user();
+        if ($user->isAgent()) {
+            return redirect()->intended(route('agent.dashboard'));
+        }
+        if ($user->isDoctor()) {
+            return redirect()->intended(route('admin.doctor-dashboard.index'));
+        }
+        if ($user->isOperator()) {
+            return redirect()->intended(route('admin.operator.dashboard'));
+        }
+
         return redirect()->intended(route('admin.dashboard'));
     }
 

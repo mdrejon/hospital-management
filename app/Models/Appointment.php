@@ -8,20 +8,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Appointment extends Model
 {
     protected $fillable = [
-        'patient_id', 'doctor_id', 'booked_by_user_id',
+        'patient_id', 'doctor_id', 'booked_by_user_id', 'agent_id',
         'name', 'email', 'phone', 'department', 'appointment_type',
         'preferred_doctor', 'preferred_date', 'appointment_date', 'time_slot',
-        'serial_number', 'fee',
+        'serial_number', 'fee', 'payment_status', 'paid_amount', 'payment_method',
+        'agent_commission_amount', 'agent_commission_status',
         'message', 'symptoms', 'document', 'documents', 'prescription_file',
         'status', 'source', 'is_manual', 'notes',
     ];
 
     protected $casts = [
-        'is_manual'        => 'boolean',
-        'appointment_date' => 'date',
-        'fee'              => 'decimal:2',
-        'serial_number'    => 'integer',
-        'documents'        => 'array',
+        'is_manual'               => 'boolean',
+        'appointment_date'        => 'date',
+        'fee'                     => 'decimal:2',
+        'paid_amount'             => 'decimal:2',
+        'agent_commission_amount' => 'decimal:2',
+        'serial_number'           => 'integer',
+        'documents'               => 'array',
     ];
 
     const STATUS_PENDING            = 'pending';
@@ -61,6 +64,26 @@ class Appointment extends Model
     public function bookedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'booked_by_user_id');
+    }
+
+    public function agent(): BelongsTo
+    {
+        return $this->belongsTo(AgentProfile::class, 'agent_id');
+    }
+
+    public function commissions()
+    {
+        return $this->hasMany(AgentCommission::class, 'source_id')->where('source_type', 'appointment');
+    }
+
+    public function payments()
+    {
+        return $this->morphMany(Payment::class, 'payable');
+    }
+
+    public function latestPayment()
+    {
+        return $this->morphOne(Payment::class, 'payable')->latestOfMany();
     }
 
     public function scopeToday($query)
