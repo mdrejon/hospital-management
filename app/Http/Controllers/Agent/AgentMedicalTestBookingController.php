@@ -28,7 +28,10 @@ class AgentMedicalTestBookingController extends Controller
         }])->active()->get();
 
         $allTests = MedicalTest::with('category')->active()->get();
-        $doctors = Doctor::active()->get(['id', 'name']);
+        $doctors = Doctor::active()->get(['id', 'name'])->map(fn ($d) => [
+            'id' => $d->id,
+            'name' => $d->name
+        ]);
         $paymentSettings = PaymentService::getActiveGateways();
 
         return Inertia::render('Agent/BookMedicalTest', [
@@ -49,6 +52,7 @@ class AgentMedicalTestBookingController extends Controller
             'phone'           => ['required', 'string', 'max:30'],
             'email'           => ['nullable', 'email', 'max:255'],
             'gender'          => ['required', 'in:male,female,other'],
+            'marital_status'  => ['required', 'string'],
             'date_of_birth'   => ['nullable', 'date'],
             'address'         => ['nullable', 'string'],
             'doctor_id'       => ['nullable', 'exists:doctors,id'],
@@ -67,8 +71,9 @@ class AgentMedicalTestBookingController extends Controller
                 [
                     'name'          => $validated['patient_name'],
                     'email'         => $validated['email'] ?? null,
-                    'gender'        => $validated['gender'],
-                    'date_of_birth' => $validated['date_of_birth'] ?? null,
+                    'gender'         => $validated['gender'],
+                    'marital_status' => $validated['marital_status'],
+                    'date_of_birth'  => $validated['date_of_birth'] ?? null,
                     'address'       => $validated['address'] ?? null,
                 ]
             );
@@ -152,7 +157,7 @@ class AgentMedicalTestBookingController extends Controller
                     'email'   => $booking->email,
                     'address' => $booking->address ?? 'Dhaka, Bangladesh',
                 ],
-                route('agent.bookings.index')
+                route('agent.bookings.tests')
             );
 
             if (!empty($result['redirect_url'])) {
@@ -160,7 +165,6 @@ class AgentMedicalTestBookingController extends Controller
             }
         }
 
-        return redirect()->route('agent.bookings.index')
-            ->with('success', "Medical test booking #{$booking->booking_number} created successfully!");
+        return redirect()->route('agent.bookings.tests')->with('success', "Medical test booking #{$booking->booking_number} created successfully!");
     }
 }

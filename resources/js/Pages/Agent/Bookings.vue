@@ -17,16 +17,11 @@
                 </div>
             </div>
 
-            <!-- Tabs & Search Filter -->
+            <!-- Search Filter -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200">
-                <div class="flex gap-6">
-                    <button @click="currentTab = 'appointments'" :class="currentTab === 'appointments' ? 'border-blue-600 text-blue-600 font-semibold' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 text-xs border-b-2 transition-colors flex items-center gap-2">
-                        <span>🩺</span> Doctor Appointments ({{ appointments.total || 0 }})
-                    </button>
-                    <button @click="currentTab = 'tests'" :class="currentTab === 'tests' ? 'border-blue-600 text-blue-600 font-semibold' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 text-xs border-b-2 transition-colors flex items-center gap-2">
-                        <span>🔬</span> Medical Tests ({{ testBookings.total || 0 }})
-                    </button>
-                </div>
+                <h2 class="pb-3 text-sm font-bold text-gray-800">
+                    Doctor Appointments ({{ appointments.total || 0 }})
+                </h2>
 
                 <div class="pb-3 flex items-center gap-2">
                     <input v-model="filterSearch" @keyup.enter="applySearch" type="text" placeholder="Search by patient, phone..." class="px-3 py-1.5 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 w-full sm:w-64" />
@@ -37,7 +32,7 @@
             </div>
 
             <!-- 1. Doctor Appointments Table -->
-            <div v-if="currentTab === 'appointments'" class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-600">
                         <thead class="bg-gray-50 text-xs font-semibold text-gray-600 border-b border-gray-200">
@@ -110,85 +105,6 @@
                     </Link>
                 </div>
             </div>
-
-            <!-- 2. Medical Tests Table -->
-            <div v-if="currentTab === 'tests'" class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-gray-600">
-                        <thead class="bg-gray-50 text-xs font-semibold text-gray-600 border-b border-gray-200">
-                            <tr>
-                                <th class="px-5 py-3">Booking # / Patient</th>
-                                <th class="px-5 py-3">Date</th>
-                                <th class="px-5 py-3">Selected Tests</th>
-                                <th class="px-5 py-3">Net Bill</th>
-                                <th class="px-5 py-3">Payment</th>
-                                <th class="px-5 py-3">Status</th>
-                                <th class="px-5 py-3">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            <tr v-for="tb in testBookings.data" :key="tb.id" class="hover:bg-gray-50">
-                                <td class="px-5 py-3.5">
-                                    <div class="font-mono font-semibold text-blue-600">#{{ tb.booking_number }}</div>
-                                    <div class="font-medium text-gray-900 mt-0.5">{{ tb.patient_name }}</div>
-                                    <div class="text-2xs text-gray-400">{{ tb.phone }}</div>
-                                </td>
-                                <td class="px-5 py-3.5">
-                                    <div class="font-medium text-gray-800">{{ tb.booking_date }}</div>
-                                </td>
-                                <td class="px-5 py-3.5">
-                                    <div class="space-y-0.5">
-                                        <div v-for="item in tb.items" :key="item.id" class="text-xs text-gray-700 flex items-center gap-1.5">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
-                                            <span>{{ localized(item.medical_test?.name) || item.test_name }}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-5 py-3.5 font-mono font-bold text-gray-900 text-sm">
-                                    BDT {{ Number(tb.total_amount || 0).toLocaleString() }}
-                                </td>
-                                <td class="px-5 py-3.5">
-                                    <div class="space-y-1">
-                                        <span :class="paymentBadge(tb.payment_status)" class="px-2 py-0.5 rounded-full text-3xs font-bold uppercase">
-                                            {{ tb.payment_status }}
-                                        </span>
-                                        <div v-if="tb.payment_method" class="text-3xs text-gray-400 uppercase font-mono">
-                                            {{ tb.payment_method }}
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-5 py-3.5">
-                                    <span :class="statusBadge(tb.status)" class="px-2 py-0.5 rounded-full text-2xs font-semibold uppercase">
-                                        {{ tb.status }}
-                                    </span>
-                                </td>
-                                <td class="px-5 py-3.5">
-                                    <div class="flex items-center gap-1.5">
-                                        <button v-if="tb.payment_status === 'unpaid' && tb.total_amount > 0 && paymentSettings?.has_online" @click="openPayModal('medical_test', tb.id, tb.total_amount, tb.patient_name)" class="px-2.5 py-1 text-2xs font-bold text-white bg-purple-600 hover:bg-purple-700 rounded shadow-xs transition-colors">
-                                            💳 Pay Online
-                                        </button>
-                                        <a v-else-if="tb.payment_status === 'paid' && tb.payments?.[0]" :href="route('payment.receipt', tb.payments[0].id)" target="_blank" class="px-2.5 py-1 text-2xs font-medium text-purple-600 bg-purple-50 hover:bg-purple-100 rounded border border-purple-200 transition-colors">
-                                            🧾 Receipt
-                                        </a>
-                                        <span v-else class="text-2xs text-gray-400 font-mono">—</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr v-if="testBookings.data.length === 0">
-                                <td colspan="7" class="px-5 py-12 text-center text-gray-400">
-                                    No medical test bookings found.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Pagination -->
-                <div v-if="testBookings.links?.length > 3" class="p-3.5 border-t border-gray-100 flex justify-center gap-1">
-                    <Link v-for="(link, i) in testBookings.links" :key="i" :href="link.url || '#'" :class="[link.active ? 'bg-blue-600 text-white font-semibold' : 'text-gray-600 hover:bg-gray-100', !link.url ? 'opacity-50 cursor-not-allowed' : '']" class="px-3 py-1 rounded text-xs" v-html="link.label">
-                    </Link>
-                </div>
-            </div>
         </div>
 
         <!-- Quick Online Payment Modal -->
@@ -247,14 +163,11 @@ import { Link, router } from '@inertiajs/vue3';
 import AgentLayout from '@/Layouts/AgentLayout.vue';
 
 const props = defineProps({
-    appointments:    { type: Object, default: () => ({ data: [], total: 0, links: [] }) },
-    testBookings:    { type: Object, default: () => ({ data: [], total: 0, links: [] }) },
-    activeTab:       { type: String, default: 'appointments' },
+    appointments:    { type: Object, default: () => ({ data: [], total: 0 }) },
     search:          { type: String, default: '' },
     paymentSettings: { type: Object, default: () => ({}) },
 });
 
-const currentTab = ref(props.activeTab);
 const filterSearch = ref(props.search);
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
@@ -297,7 +210,6 @@ function localized(val) {
 
 function applySearch() {
     router.get(route('agent.bookings.index'), {
-        tab: currentTab.value,
         search: filterSearch.value
     }, { preserveState: true });
 }

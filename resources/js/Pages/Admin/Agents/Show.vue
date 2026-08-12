@@ -91,14 +91,20 @@
 
                 <!-- Activity Tabs & Lists -->
                 <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-200/80 shadow-xs overflow-hidden">
-                    <div class="border-b border-gray-200 flex px-6 pt-4 gap-6">
-                        <button @click="activeTab = 'appointments'" :class="activeTab === 'appointments' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 text-sm font-semibold border-b-2 transition-colors">
-                            Doctor Appointments ({{ agent.appointments?.length || 0 }})
+                    <div class="border-b border-gray-200 flex px-6 pt-4 gap-6 overflow-x-auto">
+                        <button @click="activeTab = 'appointments'" :class="activeTab === 'appointments' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 text-sm font-semibold border-b-2 transition-colors whitespace-nowrap">
+                            Doctor Appointments
                         </button>
-                        <button @click="activeTab = 'tests'" :class="activeTab === 'tests' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 text-sm font-semibold border-b-2 transition-colors">
-                            Medical Tests ({{ agent.medical_test_bookings?.length || 0 }})
+                        <button @click="activeTab = 'tests'" :class="activeTab === 'tests' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 text-sm font-semibold border-b-2 transition-colors whitespace-nowrap">
+                            Medical Tests
                         </button>
-                        <button @click="activeTab = 'ledger'" :class="activeTab === 'ledger' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 text-sm font-semibold border-b-2 transition-colors">
+                        <button @click="activeTab = 'commissions'" :class="activeTab === 'commissions' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 text-sm font-semibold border-b-2 transition-colors whitespace-nowrap">
+                            Commissions
+                        </button>
+                        <button @click="activeTab = 'withdrawals'" :class="activeTab === 'withdrawals' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 text-sm font-semibold border-b-2 transition-colors whitespace-nowrap">
+                            Withdrawals
+                        </button>
+                        <button @click="activeTab = 'ledger'" :class="activeTab === 'ledger' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 text-sm font-semibold border-b-2 transition-colors whitespace-nowrap">
                             Wallet Transactions
                         </button>
                     </div>
@@ -106,10 +112,10 @@
                     <div class="p-6">
                         <!-- 1. Appointments -->
                         <div v-if="activeTab === 'appointments'" class="space-y-3">
-                            <div v-if="agent.appointments?.length === 0" class="text-center py-8 text-gray-400 text-sm">
+                            <div v-if="recentAppointments?.length === 0" class="text-center py-8 text-gray-400 text-sm">
                                 No appointments booked yet.
                             </div>
-                            <div v-for="apt in agent.appointments" :key="apt.id" class="p-4 rounded-xl border border-gray-100 hover:bg-gray-50/70 transition-colors flex items-center justify-between">
+                            <div v-for="apt in recentAppointments" :key="apt.id" class="p-4 rounded-xl border border-gray-100 hover:bg-gray-50/70 transition-colors flex items-center justify-between">
                                 <div>
                                     <div class="font-bold text-gray-900">{{ apt.name }} &bull; <span class="text-xs font-normal text-gray-500">{{ apt.phone }}</span></div>
                                     <div class="text-xs text-blue-600 mt-0.5">Doctor: {{ apt.doctor?.name || apt.preferred_doctor }} ({{ apt.appointment_date }})</div>
@@ -125,10 +131,10 @@
 
                         <!-- 2. Medical Tests -->
                         <div v-if="activeTab === 'tests'" class="space-y-3">
-                            <div v-if="agent.medical_test_bookings?.length === 0" class="text-center py-8 text-gray-400 text-sm">
+                            <div v-if="recentTestBookings?.length === 0" class="text-center py-8 text-gray-400 text-sm">
                                 No medical tests booked yet.
                             </div>
-                            <div v-for="t in agent.medical_test_bookings" :key="t.id" class="p-4 rounded-xl border border-gray-100 hover:bg-gray-50/70 transition-colors flex items-center justify-between">
+                            <div v-for="t in recentTestBookings" :key="t.id" class="p-4 rounded-xl border border-gray-100 hover:bg-gray-50/70 transition-colors flex items-center justify-between">
                                 <div>
                                     <div class="font-bold text-gray-900">#{{ t.booking_number }} &bull; {{ t.patient_name }}</div>
                                     <div class="text-xs text-gray-500 mt-0.5">{{ t.items?.length || 0 }} test(s) &bull; {{ t.booking_date }}</div>
@@ -142,12 +148,46 @@
                             </div>
                         </div>
 
-                        <!-- 3. Wallet Transactions -->
+                        <!-- 3. Commissions -->
+                        <div v-if="activeTab === 'commissions'" class="space-y-2">
+                            <div v-if="recentCommissions?.length === 0" class="text-center py-8 text-gray-400 text-sm">
+                                No commissions recorded yet.
+                            </div>
+                            <div v-for="c in recentCommissions" :key="c.id" class="p-3 rounded-lg border border-gray-100 flex items-center justify-between text-xs hover:bg-gray-50">
+                                <div>
+                                    <div class="font-semibold text-gray-800 capitalize">{{ c.source_type }} Commission</div>
+                                    <div class="text-gray-400 mt-0.5">Ref: {{ c.booking_reference }} &bull; {{ new Date(c.created_at).toLocaleString() }}</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-mono font-bold text-emerald-600">BDT {{ Number(c.amount).toLocaleString() }}</div>
+                                    <span :class="statusBadgeClass(c.status)" class="px-1.5 py-0.5 rounded text-[10px] uppercase font-bold">{{ c.status }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Withdrawals -->
+                        <div v-if="activeTab === 'withdrawals'" class="space-y-2">
+                            <div v-if="recentWithdrawals?.length === 0" class="text-center py-8 text-gray-400 text-sm">
+                                No withdrawals recorded yet.
+                            </div>
+                            <div v-for="w in recentWithdrawals" :key="w.id" class="p-3 rounded-lg border border-gray-100 flex items-center justify-between text-xs hover:bg-gray-50">
+                                <div>
+                                    <div class="font-semibold text-gray-800">Withdrawal via {{ w.payout_method }}</div>
+                                    <div class="text-gray-400 mt-0.5">Ref: {{ w.reference_id }} &bull; {{ new Date(w.created_at).toLocaleString() }}</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-mono font-bold text-gray-900">BDT {{ Number(w.amount).toLocaleString() }}</div>
+                                    <span :class="statusBadgeClass(w.status)" class="px-1.5 py-0.5 rounded text-[10px] uppercase font-bold">{{ w.status }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. Wallet Transactions -->
                         <div v-if="activeTab === 'ledger'" class="space-y-2">
-                            <div v-if="agent.wallet_transactions?.length === 0" class="text-center py-8 text-gray-400 text-sm">
+                            <div v-if="recentLedger?.length === 0" class="text-center py-8 text-gray-400 text-sm">
                                 No transactions recorded yet.
                             </div>
-                            <div v-for="tx in agent.wallet_transactions" :key="tx.id" class="p-3 rounded-lg border border-gray-100 flex items-center justify-between text-xs">
+                            <div v-for="tx in recentLedger" :key="tx.id" class="p-3 rounded-lg border border-gray-100 flex items-center justify-between text-xs hover:bg-gray-50">
                                 <div>
                                     <div class="font-semibold text-gray-800">{{ tx.description }}</div>
                                     <div class="text-gray-400 mt-0.5">{{ new Date(tx.created_at).toLocaleString() }}</div>
@@ -212,6 +252,12 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 
 const props = defineProps({
     agent: { type: Object, required: true },
+    recentAppointments: { type: Array, default: () => [] },
+    recentTestBookings: { type: Array, default: () => [] },
+    recentWithdrawals:  { type: Array, default: () => [] },
+    recentLedger:       { type: Array, default: () => [] },
+    recentCommissions:  { type: Array, default: () => [] },
+    stats: { type: Object, default: () => ({}) },
 });
 
 const activeTab = ref('appointments');

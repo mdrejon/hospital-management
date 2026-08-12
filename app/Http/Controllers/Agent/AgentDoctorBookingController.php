@@ -50,6 +50,10 @@ class AgentDoctorBookingController extends Controller
             'time_slot'        => ['nullable', 'string', 'max:50'],
             'symptoms'         => ['nullable', 'string'],
             'message'          => ['nullable', 'string'],
+            'gender'           => ['required', 'in:male,female,other'],
+            'marital_status'   => ['required', 'string'],
+            'address'          => ['required', 'string'],
+            'date_of_birth'    => ['nullable', 'date'],
             'payment_type'     => ['required', 'in:without_pay,online'],
             'payment_gateway'  => ['nullable', 'required_if:payment_type,online', 'in:sslcommerz,bkash'],
         ]);
@@ -61,8 +65,12 @@ class AgentDoctorBookingController extends Controller
         $patient = Patient::firstOrCreate(
             ['phone' => $validated['phone']],
             [
-                'name'  => $validated['name'],
-                'email' => $validated['email'] ?? null,
+                'name'           => $validated['name'],
+                'email'          => $validated['email'] ?? null,
+                'gender'         => $validated['gender'],
+                'marital_status' => $validated['marital_status'],
+                'date_of_birth'  => $validated['date_of_birth'] ?? null,
+                'address'        => $validated['address'],
             ]
         );
 

@@ -57,6 +57,7 @@ use App\Http\Controllers\Agent\AgentMedicalTestBookingController;
 use App\Http\Controllers\Agent\AgentBookingsController;
 use App\Http\Controllers\Agent\AgentWalletController;
 use App\Http\Controllers\Agent\AgentProfileController;
+use App\Http\Controllers\Agent\AgentReportController;
 use App\Http\Controllers\Admin\WebsiteSettings\LanguageController;
 use App\Http\Controllers\Admin\WebsiteSettings\PaymentGatewaySettingController;
 use App\Http\Controllers\PaymentController;
@@ -136,10 +137,13 @@ Route::prefix('agent')->name('agent.')->middleware(['auth'])->group(function () 
     Route::get('/book-test',                  [AgentMedicalTestBookingController::class, 'create'])->name('test.create');
     Route::post('/book-test',                 [AgentMedicalTestBookingController::class, 'store'])->name('test.store');
     Route::get('/bookings',                   [AgentBookingsController::class, 'index'])->name('bookings.index');
+    Route::get('/bookings/tests',             [AgentBookingsController::class, 'tests'])->name('bookings.tests');
     Route::get('/wallet',                     [AgentWalletController::class, 'index'])->name('wallet.index');
     Route::post('/wallet/withdraw',           [AgentWalletController::class, 'requestWithdrawal'])->name('wallet.withdraw');
     Route::get('/profile',                    [AgentProfileController::class, 'show'])->name('profile.show');
     Route::post('/profile',                   [AgentProfileController::class, 'update'])->name('profile.update');
+    Route::get('/reports',                    [AgentReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/pdf',                [AgentReportController::class, 'printPdf'])->name('reports.pdf');
 });
 
 // Admin Routes

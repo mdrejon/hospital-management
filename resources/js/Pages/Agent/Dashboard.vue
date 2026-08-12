@@ -84,7 +84,7 @@
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <div class="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
                         <h2 class="text-sm font-semibold text-gray-700">Recent Doctor Bookings</h2>
-                        <Link :href="route('agent.bookings.index', { tab: 'appointments' })" class="text-xs text-blue-600 hover:underline">
+                        <Link :href="route('agent.bookings.index')" class="text-xs text-blue-600 hover:underline">
                             View all
                         </Link>
                     </div>
@@ -106,7 +106,7 @@
                                     <p class="font-medium text-gray-800 text-xs">{{ a.name }}</p>
                                     <p class="text-2xs text-gray-400">{{ a.phone }}</p>
                                 </td>
-                                <td class="px-4 py-3 text-gray-600 text-xs">{{ a.doctor?.name || a.preferred_doctor || '—' }}</td>
+                                <td class="px-4 py-3 text-gray-600 text-xs">{{ localized(a.doctor?.name) || a.preferred_doctor || '—' }}</td>
                                 <td class="px-4 py-3 text-gray-600 text-xs">{{ a.appointment_date }}</td>
                                 <td class="px-4 py-3 text-center">
                                     <span :class="statusBadge(a.status)" class="px-2 py-0.5 rounded-full text-2xs font-semibold uppercase">
@@ -122,7 +122,7 @@
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <div class="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
                         <h2 class="text-sm font-semibold text-gray-700">Recent Medical Test Orders</h2>
-                        <Link :href="route('agent.bookings.index', { tab: 'tests' })" class="text-xs text-blue-600 hover:underline">
+                        <Link :href="route('agent.bookings.tests')" class="text-xs text-blue-600 hover:underline">
                             View all
                         </Link>
                     </div>
@@ -245,5 +245,24 @@ function formatDate(val) {
     } catch {
         return val;
     }
+}
+
+function localized(val) {
+    if (!val) return '';
+    if (typeof val === 'string') {
+        try {
+            const parsed = JSON.parse(val);
+            if (typeof parsed === 'object' && parsed !== null) {
+                return parsed.en || parsed[Object.keys(parsed)[0]] || val;
+            }
+        } catch (e) {
+            return val;
+        }
+        return val;
+    }
+    if (typeof val === 'object') {
+        return val.en || val[Object.keys(val)[0]] || '';
+    }
+    return String(val);
 }
 </script>

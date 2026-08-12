@@ -15,7 +15,6 @@ class AgentBookingsController extends Controller
     public function index(Request $request): Response
     {
         $agent = $request->user()->agentProfile;
-        $tab = $request->input('tab', 'appointments'); // appointments or tests
         $search = $request->input('search');
 
         $appointments = $agent->appointments()
@@ -30,8 +29,22 @@ class AgentBookingsController extends Controller
                 });
             })
             ->latest()
-            ->paginate(15, ['*'], 'apt_page')
+            ->paginate(15)
             ->withQueryString();
+
+        $paymentSettings = PaymentService::getActiveGateways();
+
+        return Inertia::render('Agent/Bookings', [
+            'appointments'    => $appointments,
+            'search'          => $search,
+            'paymentSettings' => $paymentSettings,
+        ]);
+    }
+
+    public function tests(Request $request): Response
+    {
+        $agent = $request->user()->agentProfile;
+        $search = $request->input('search');
 
         $testBookings = $agent->medicalTestBookings()
             ->with(['items.medicalTest', 'payments' => function ($q) {
@@ -45,15 +58,13 @@ class AgentBookingsController extends Controller
                 });
             })
             ->latest()
-            ->paginate(15, ['*'], 'test_page')
+            ->paginate(15)
             ->withQueryString();
 
         $paymentSettings = PaymentService::getActiveGateways();
 
-        return Inertia::render('Agent/Bookings', [
-            'appointments'    => $appointments,
+        return Inertia::render('Agent/TestBookings', [
             'testBookings'    => $testBookings,
-            'activeTab'       => $tab,
             'search'          => $search,
             'paymentSettings' => $paymentSettings,
         ]);

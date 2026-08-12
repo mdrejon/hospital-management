@@ -52,7 +52,7 @@
 
                             <div>
                                 <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Date of Birth</label>
-                                <input v-model="form.date_of_birth" type="date" class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                                <FlatpickrInput v-model="form.date_of_birth" :options="{ maxDate: 'today', dateFormat: 'Y-m-d' }" placeholder="Select Date" />
                             </div>
 
                             <div class="md:col-span-2">
@@ -85,12 +85,12 @@
 
                             <div>
                                 <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Booking Date *</label>
-                                <input v-model="form.booking_date" type="date" required class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                                <FlatpickrInput v-model="form.booking_date" required :options="{ dateFormat: 'Y-m-d' }" placeholder="Select Booking Date" />
                             </div>
 
                             <div>
                                 <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Preferred Sample Collection Date</label>
-                                <input v-model="form.preferred_date" type="date" class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                                <FlatpickrInput v-model="form.preferred_date" :options="{ dateFormat: 'Y-m-d' }" placeholder="Select Preferred Date" />
                             </div>
                         </div>
                     </div>
@@ -187,6 +187,7 @@
 import { ref, computed } from 'vue';
 import { useForm, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FlatpickrInput from '@/Components/Admin/Shared/FlatpickrInput.vue';
 
 const props = defineProps({
     tests:    { type: Array, default: () => [] },

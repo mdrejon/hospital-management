@@ -7,7 +7,7 @@
                     <h1 class="text-lg font-semibold text-gray-800">Order Medical Tests</h1>
                     <p class="text-xs text-gray-400 mt-0.5">Book lab tests & health checkups for patients. Earn instant commissions credited to your wallet.</p>
                 </div>
-                <Link :href="route('agent.bookings.index', { tab: 'tests' })" class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                <Link :href="route('agent.bookings.tests')" class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors">
                     &larr; Test Bookings History
                 </Link>
             </div>
@@ -16,48 +16,39 @@
                 <!-- Left 2 Cols: Catalog & Patient Form -->
                 <div class="lg:col-span-2 space-y-5">
                     <!-- 1. Test Selection Catalog -->
-                    <div class="bg-white rounded-lg shadow-sm p-5 space-y-4">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 pb-2.5">
-                            <h2 class="text-xs font-bold uppercase tracking-wider text-purple-700">
-                                1. Select Diagnostic Tests ({{ selectedTests.length }} chosen)
-                            </h2>
-                            <input v-model="searchQuery" type="text" placeholder="Search tests..." class="px-3 py-1.5 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-purple-500 w-full sm:w-60" />
-                        </div>
-
-                        <!-- Categories filter -->
-                        <div class="flex flex-wrap gap-1.5">
-                            <button type="button" @click="selectedCategoryId = ''" :class="selectedCategoryId === '' ? 'bg-purple-600 text-white font-semibold' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="px-2.5 py-1 rounded text-xs transition-colors">
-                                All Categories
-                            </button>
-                            <button v-for="cat in categories" :key="cat.id" type="button" @click="selectedCategoryId = cat.id" :class="selectedCategoryId === cat.id ? 'bg-purple-600 text-white font-semibold' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="px-2.5 py-1 rounded text-xs transition-colors">
-                                {{ localized(cat.name) }}
-                            </button>
-                        </div>
-
-                        <!-- Tests List -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-96 overflow-y-auto p-1">
-                            <div v-for="test in filteredTests" :key="test.id" @click="toggleTest(test)" :class="[
-                                'p-3 rounded border cursor-pointer transition-all flex flex-col justify-between',
-                                isSelected(test) ? 'border-purple-600 bg-purple-50/50 ring-1 ring-purple-500' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                            ]">
-                                <div class="flex items-start justify-between gap-2">
-                                    <div>
-                                        <div class="font-semibold text-xs text-gray-900">{{ localized(test.name) }}</div>
-                                        <div class="text-2xs font-mono text-gray-400 mt-0.5">{{ test.code }} • {{ localized(test.category?.name) }}</div>
-                                    </div>
-                                    <input type="checkbox" :checked="isSelected(test)" class="w-4 h-4 rounded text-purple-600 focus:ring-purple-500 mt-0.5" />
-                                </div>
-
-                                <div class="mt-2.5 pt-2 border-t border-gray-100 flex items-center justify-between text-2xs">
-                                    <div>
-                                        <span class="font-bold text-gray-900">BDT {{ Number(test.final_price).toLocaleString() }}</span>
-                                        <span v-if="test.discount_percent > 0" class="text-2xs text-gray-400 line-through ml-1.5">BDT {{ Number(test.price).toLocaleString() }}</span>
-                                    </div>
-                                    <span class="font-bold text-emerald-600">+BDT {{ Math.round((test.final_price * agentRate) / 100) }} comm.</span>
-                                </div>
+                    <div class="bg-purple-50/30 p-5 rounded-xl border border-purple-100 space-y-4">
+                        <h3 class="text-sm font-bold text-gray-800">1. Select Diagnostic Tests ({{ selectedTests.length }} chosen)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div v-if="false">
+                                <label class="block text-2xs font-semibold text-gray-600 mb-1">Branch</label>
+                                <select disabled class="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-gray-50 focus:outline-none">
+                                    <option>Main Branch</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-2xs font-semibold text-gray-600 mb-1">Category</label>
+                                <select v-model="selectedCategoryId" class="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 bg-white outline-none">
+                                    <option value="">All Categories</option>
+                                    <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ localized(cat.name) }}</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-2xs font-semibold text-gray-600 mb-1">Sub-category</label>
+                                <select disabled class="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-gray-50 focus:outline-none">
+                                    <option>N/A</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-2xs font-semibold text-gray-600 mb-1">Test *</label>
+                                <select v-model="selectedTestId" @change="addTest" class="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 bg-white outline-none font-semibold">
+                                    <option value="" disabled>Select a test to add</option>
+                                    <option v-for="test in filteredTests" :key="test.id" :value="test.id">
+                                        {{ localized(test.name) }} (BDT {{ Number(test.final_price).toLocaleString() }})
+                                    </option>
+                                </select>
+                                <div v-if="form.errors.test_ids" class="text-red-600 text-3xs mt-1">{{ form.errors.test_ids }}</div>
                             </div>
                         </div>
-                        <div v-if="form.errors.test_ids" class="text-red-600 text-xs">{{ form.errors.test_ids }}</div>
                     </div>
 
                     <!-- 2. Patient Information -->
@@ -66,7 +57,7 @@
                             2. Patient Information
                         </h2>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Patient Full Name *</label>
                                 <input v-model="form.patient_name" type="text" required placeholder="Patient full name" class="w-full px-3 py-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none" />
@@ -74,11 +65,19 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Mobile Phone (For SMS) *</label>
+                                <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Mobile Phone *</label>
                                 <input v-model="form.phone" type="text" required placeholder="017XXXXXXXX" class="w-full px-3 py-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none" />
                                 <div v-if="form.errors.phone" class="text-red-600 text-xs mt-1">{{ form.errors.phone }}</div>
                             </div>
 
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Email (Optional)</label>
+                                <input v-model="form.email" type="email" placeholder="patient@example.com" class="w-full px-3 py-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none" />
+                                <div v-if="form.errors.email" class="text-red-600 text-xs mt-1">{{ form.errors.email }}</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Gender *</label>
                                 <select v-model="form.gender" required class="w-full px-3 py-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none bg-white">
@@ -89,10 +88,21 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Date of Birth</label>
-                                <input v-model="form.date_of_birth" type="date" class="w-full px-3 py-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none" />
+                                <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Marital Status *</label>
+                                <select v-model="form.marital_status" required class="w-full px-3 py-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none bg-white">
+                                    <option value="Single">Single</option>
+                                    <option value="Married">Married</option>
+                                    <option value="Divorced">Divorced</option>
+                                    <option value="Widowed">Widowed</option>
+                                </select>
                             </div>
+                        </div>
 
+                        <!-- Age / DOB Component -->
+                        <AgeDateSync v-model="form.date_of_birth" />
+                        <div v-if="form.errors.date_of_birth" class="text-red-600 text-xs mt-1">{{ form.errors.date_of_birth }}</div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                             <div>
                                 <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Referring Doctor (Optional)</label>
                                 <select v-model="form.doctor_id" class="w-full px-3 py-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none bg-white">
@@ -102,14 +112,16 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Sample Collection / Booking Date</label>
-                                <input v-model="form.booking_date" type="date" :min="today" required class="w-full px-3 py-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none" />
+                                <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Sample Collection / Booking Date *</label>
+                                <FlatpickrInput v-model="form.booking_date" :options="{ minDate: 'today', dateFormat: 'Y-m-d', enableTime: false }" required placeholder="Select Booking Date" />
+                                <div v-if="form.errors.booking_date" class="text-red-600 text-xs mt-1">{{ form.errors.booking_date }}</div>
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Patient Address / Notes</label>
-                            <textarea v-model="form.address" rows="2" placeholder="Address or special lab remarks..." class="w-full px-3 py-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none"></textarea>
+                            <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Patient Address / Notes *</label>
+                            <textarea v-model="form.address" rows="2" required placeholder="Address or special lab remarks..." class="w-full px-3 py-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none"></textarea>
+                            <div v-if="form.errors.address" class="text-red-600 text-xs mt-1">{{ form.errors.address }}</div>
                         </div>
                     </div>
                 </div>
@@ -125,8 +137,13 @@
                                 <div class="font-medium text-gray-800 truncate">{{ localized(test.name) }}</div>
                                 <div class="text-2xs text-gray-400 font-mono">{{ test.code }}</div>
                             </div>
-                            <div class="font-mono font-semibold text-gray-900 shrink-0">
-                                BDT {{ Number(test.final_price).toLocaleString() }}
+                            <div class="flex items-center gap-2">
+                                <div class="font-mono font-semibold text-gray-900 shrink-0">
+                                    BDT {{ Number(test.final_price).toLocaleString() }}
+                                </div>
+                                <button @click="removeTest(test)" type="button" class="text-red-500 hover:text-red-700 p-0.5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
                             </div>
                         </div>
 
@@ -221,6 +238,8 @@
 import { ref, computed } from 'vue';
 import { useForm, Link } from '@inertiajs/vue3';
 import AgentLayout from '@/Layouts/AgentLayout.vue';
+import FlatpickrInput from '@/Components/Admin/Shared/FlatpickrInput.vue';
+import AgeDateSync from '@/Components/Agent/AgeDateSync.vue';
 
 const props = defineProps({
     categories:      { type: [Array, Object], default: () => [] },
@@ -232,7 +251,7 @@ const props = defineProps({
 
 const today = new Date().toISOString().split('T')[0];
 const selectedCategoryId = ref('');
-const searchQuery = ref('');
+const selectedTestId = ref('');
 const selectedTests = ref([]);
 
 const agentRate = computed(() => Number(props.agent?.test_commission_rate || 15));
@@ -262,12 +281,7 @@ const testsList = computed(() => {
 
 const filteredTests = computed(() => {
     return testsList.value.filter(t => {
-        const matchesCat = !selectedCategoryId.value || t.medical_test_category_id === selectedCategoryId.value;
-        const name = localized(t.name).toLowerCase();
-        const code = (t.code || '').toLowerCase();
-        const q = searchQuery.value.toLowerCase();
-        const matchesSearch = !q || name.includes(q) || code.includes(q);
-        return matchesCat && matchesSearch;
+        return !selectedCategoryId.value || t.medical_test_category_id === selectedCategoryId.value;
     });
 });
 
@@ -275,12 +289,18 @@ function isSelected(test) {
     return selectedTests.value.some(t => t.id === test.id);
 }
 
-function toggleTest(test) {
-    if (isSelected(test)) {
-        selectedTests.value = selectedTests.value.filter(t => t.id !== test.id);
-    } else {
+function addTest() {
+    if (!selectedTestId.value) return;
+    const test = testsList.value.find(t => t.id === selectedTestId.value);
+    if (test && !isSelected(test)) {
         selectedTests.value.push(test);
+        form.test_ids = selectedTests.value.map(t => t.id);
     }
+    selectedTestId.value = ''; // reset so they can pick another
+}
+
+function removeTest(test) {
+    selectedTests.value = selectedTests.value.filter(t => t.id !== test.id);
     form.test_ids = selectedTests.value.map(t => t.id);
 }
 
@@ -311,6 +331,7 @@ const form = useForm({
     phone: '',
     email: '',
     gender: 'male',
+    marital_status: 'Married',
     date_of_birth: '',
     address: '',
     doctor_id: null,

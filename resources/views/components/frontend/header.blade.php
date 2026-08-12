@@ -31,7 +31,7 @@
             <span class="top-header__value">{{ $headerSettings['header_hours'] ?? 'Mon - Fri: 8:00 am - 7:00 pm' }}</span>
           </span>
           <div class="top-header__divider"></div>
-          <a href="{{ route('login') }}" class="top-header__item" style="color: #2563eb; font-weight: 700; text-decoration: none;" title="Agent Login Portal">
+          <a href="{{ route('login') }}" class="top-header__item" style="display: none; color: #2563eb; font-weight: 700; text-decoration: none;" title="Agent Login Portal">
             🔑 Agent Portal
           </a>
           @foreach ($languages ?? [] as $lang)

@@ -135,7 +135,7 @@
 
                             <div>
                                 <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Report Delivery Date</label>
-                                <input v-model="statusForm.report_delivery_date" type="date" class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                                <FlatpickrInput v-model="statusForm.report_delivery_date" :options="{ dateFormat: 'Y-m-d' }" placeholder="Select Report Delivery Date" />
                             </div>
 
                             <button type="submit" :disabled="statusForm.processing" class="w-full py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-xs transition-all">
@@ -239,6 +239,7 @@
 import { ref } from 'vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FlatpickrInput from '@/Components/Admin/Shared/FlatpickrInput.vue';
 
 const props = defineProps({
     booking: { type: Object, required: true },

@@ -169,6 +169,12 @@ class AgentController extends Controller
             ->take(15)
             ->get();
 
+        $recentCommissions = $agent->commissions()
+            ->with('source')
+            ->latest()
+            ->take(15)
+            ->get();
+
         $stats = [
             'total_appointments'  => $agent->appointments()->count(),
             'total_tests_booked'  => $agent->medicalTestBookings()->count(),
@@ -184,6 +190,7 @@ class AgentController extends Controller
             'recentTestBookings' => $recentTestBookings,
             'recentWithdrawals'  => $recentWithdrawals,
             'recentLedger'       => $recentLedger,
+            'recentCommissions'  => $recentCommissions,
             'stats'              => $stats,
         ]);
     }

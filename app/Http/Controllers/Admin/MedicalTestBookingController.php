@@ -78,7 +78,11 @@ class MedicalTestBookingController extends Controller
     public function create(): Response
     {
         $tests = MedicalTest::with('category')->active()->get();
-        $doctors = Doctor::active()->get(['id', 'name', 'phone']);
+        $doctors = Doctor::active()->get(['id', 'name', 'phone'])->map(fn ($d) => [
+            'id' => $d->id,
+            'name' => $d->name,
+            'phone' => $d->phone
+        ]);
         $agents = AgentProfile::with('user')->active()->get();
         $patients = Patient::latest()->take(50)->get(['id', 'name', 'phone', 'email', 'gender', 'date_of_birth', 'address']);
 

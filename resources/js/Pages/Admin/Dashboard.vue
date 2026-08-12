@@ -76,7 +76,7 @@
                                     <p class="font-medium text-gray-800">{{ a.name }}</p>
                                     <p class="text-xs text-gray-400">{{ a.phone }}</p>
                                 </td>
-                                <td class="px-4 py-3 text-gray-600 text-xs">{{ a.doctor?.name || '—' }}</td>
+                                <td class="px-4 py-3 text-gray-600 text-xs">{{ localized(a.doctor?.name) || '—' }}</td>
                                 <td class="px-4 py-3 text-gray-600 text-xs">
                                     {{ a.appointment_date }} <span class="text-gray-400">{{ a.time_slot }}</span>
                                 </td>
@@ -163,5 +163,24 @@ function statusBarColor(s) {
         completed: 'bg-blue-500', follow_up_required: 'bg-orange-400',
         cancelled: 'bg-red-400', no_show: 'bg-gray-400',
     }[s] ?? 'bg-gray-400';
+}
+
+function localized(val) {
+    if (!val) return '';
+    if (typeof val === 'string') {
+        try {
+            const parsed = JSON.parse(val);
+            if (typeof parsed === 'object' && parsed !== null) {
+                return parsed.en || parsed[Object.keys(parsed)[0]] || val;
+            }
+        } catch (e) {
+            return val;
+        }
+        return val;
+    }
+    if (typeof val === 'object') {
+        return val.en || val[Object.keys(val)[0]] || '';
+    }
+    return String(val);
 }
 </script>

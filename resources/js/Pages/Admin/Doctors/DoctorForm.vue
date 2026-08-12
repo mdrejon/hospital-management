@@ -156,7 +156,7 @@
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-3">
             <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Leave Days <span class="text-xs font-normal text-gray-400">(disables online booking for that date)</span></h2>
             <div v-for="(leave, i) in form.leaves" :key="i" class="flex gap-2">
-                <input v-model="leave.date" type="date" class="input max-w-[180px]" />
+                <FlatpickrInput v-model="leave.date" :options="{ minDate: 'today', dateFormat: 'Y-m-d' }" class="max-w-[180px]" placeholder="Select Date" />
                 <input v-model="leave.reason" type="text" class="input" placeholder="Reason (optional)" />
                 <button type="button" @click="form.leaves.splice(i, 1)"
                     class="px-3 py-2 text-red-500 hover:bg-red-50 rounded text-sm flex-shrink-0">✕</button>
@@ -297,6 +297,7 @@ import InputError from '@/Components/InputError.vue';
 import RichEditor from '@/Components/Admin/Shared/RichEditor.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
 import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import FlatpickrInput from '@/Components/Admin/Shared/FlatpickrInput.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
 import { emptyTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 

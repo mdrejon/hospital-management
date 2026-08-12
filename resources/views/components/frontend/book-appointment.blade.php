@@ -133,7 +133,7 @@
               </svg>
             </span>
             @php
-              $selectedDoctorId = old('doctor_id') ?: ($preselectedDoctor?->id ?? null);
+              $selectedDoctorId = old('doctor_id') ?: data_get($preselectedDoctor, 'id');
             @endphp
             <select name="doctor_id" class="book-appointment__select" data-field="doctor" required>
               <option value="" {{ $selectedDoctorId ? '' : 'selected' }} hidden>Choose a Doctor</option>

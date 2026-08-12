@@ -39,7 +39,7 @@
                         </div>
                         <div>
                             <label class="label">Date of Birth</label>
-                            <input v-model="form.date_of_birth" type="date" class="input" :max="today" />
+                            <FlatpickrInput v-model="form.date_of_birth" :options="{ maxDate: 'today', dateFormat: 'Y-m-d' }" placeholder="Select Date of Birth" />
                         </div>
                         <div>
                             <label class="label">Gender <span class="text-red-500">*</span></label>
@@ -90,7 +90,7 @@
                         </div>
                         <div>
                             <label class="label">Appointment Date <span class="text-red-500">*</span></label>
-                            <input v-model="form.appointment_date" @change="loadSlots" type="date" class="input" :min="today" :disabled="!form.doctor_id" />
+                            <FlatpickrInput v-model="form.appointment_date" @update:modelValue="loadSlots" :options="{ minDate: 'today', dateFormat: 'Y-m-d' }" :disabled="!form.doctor_id" placeholder="Select Appointment Date" />
                             <InputError :message="form.errors.appointment_date" />
                         </div>
                         <div class="col-span-2">
@@ -129,6 +129,7 @@ import { ref, computed } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
+import FlatpickrInput from '@/Components/Admin/Shared/FlatpickrInput.vue';
 
 const props = defineProps({
     departments: { type: Array, default: () => [] },

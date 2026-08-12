@@ -44,7 +44,11 @@ class AppointmentController extends Controller
     {
         return Inertia::render('Admin/Appointments/Create', [
             'departments' => $this->departments(),
-            'doctors'     => Doctor::active()->get(['id', 'name', 'consultation_fee']),
+            'doctors'     => Doctor::active()->get(['id', 'name', 'consultation_fee'])->map(fn ($d) => [
+                'id' => $d->id,
+                'name' => $d->name,
+                'consultation_fee' => $d->consultation_fee
+            ]),
             'agents'      => AgentProfile::with('user')->active()->get(),
         ]);
     }

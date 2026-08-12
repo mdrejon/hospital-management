@@ -73,7 +73,7 @@
                     <option v-for="a in agents" :key="a.id" :value="a.id">{{ a.user?.name }} ({{ a.agent_code }})</option>
                 </select>
 
-                <input v-model="filterDate" @change="applyFilters" type="date" class="py-1.5 px-3 text-xs border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" />
+                <FlatpickrInput v-model="filterDate" @update:modelValue="applyFilters" :options="{ dateFormat: 'Y-m-d' }" placeholder="Filter by date..." />
 
                 <button @click="applyFilters" class="px-4 py-1.5 text-xs font-semibold text-white bg-gray-800 rounded-lg hover:bg-gray-900">
                     Apply
@@ -174,6 +174,7 @@
 import { ref } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FlatpickrInput from '@/Components/Admin/Shared/FlatpickrInput.vue';
 
 const props = defineProps({
     bookings: { type: Object, required: true },

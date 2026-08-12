@@ -27,7 +27,7 @@
                         </div>
                         <div>
                             <label class="label">Preferred Date &amp; Time</label>
-                            <input v-model="form.preferred_date" type="text" class="input" placeholder="e.g. 20 Jul 2026, 11:00 AM" />
+                            <FlatpickrInput v-model="form.preferred_date" placeholder="e.g. 20 Jul 2026, 11:00 AM" />
                             <InputError :message="form.errors.preferred_date" />
                         </div>
                         <div>
@@ -84,6 +84,7 @@
 import { useForm } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
+import FlatpickrInput from '@/Components/Admin/Shared/FlatpickrInput.vue';
 
 defineProps({
     departments: { type: Array, default: () => [] },
