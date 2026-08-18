@@ -21,23 +21,12 @@
 
             <!-- Page content -->
             <main class="flex-1 overflow-y-auto p-4 sm:p-6">
-                <!-- Flash messages -->
-                <div v-if="$page.props.flash?.success" class="mb-4 p-4 rounded-lg bg-green-50 border border-green-200 text-green-800 text-sm font-medium flex items-center gap-2">
-                    <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>{{ $page.props.flash.success }}</span>
-                </div>
-                <div v-if="$page.props.flash?.error" class="mb-4 p-4 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm font-medium flex items-center gap-2">
-                    <svg class="w-5 h-5 text-red-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>{{ $page.props.flash.error }}</span>
-                </div>
-
                 <slot />
             </main>
         </div>
+        
+        <!-- Global Toast Notification -->
+        <ToastMessage />
     </div>
 </template>
 
@@ -46,6 +35,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AgentSidebar from '@/Components/Agent/Sidebar/AgentSidebar.vue';
 import AgentTopbar  from '@/Components/Agent/Topbar/AgentTopbar.vue';
+import ToastMessage from '@/Components/ToastMessage.vue';
 
 const COLLAPSE_KEY = 'agent.sidebar-collapsed';
 

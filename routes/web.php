@@ -138,6 +138,8 @@ Route::prefix('agent')->name('agent.')->middleware(['auth'])->group(function () 
     Route::post('/book-test',                 [AgentMedicalTestBookingController::class, 'store'])->name('test.store');
     Route::get('/bookings',                   [AgentBookingsController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/tests',             [AgentBookingsController::class, 'tests'])->name('bookings.tests');
+    Route::get('/bookings/{appointment}',     [AgentBookingsController::class, 'show'])->name('bookings.show');
+    Route::get('/bookings/{appointment}/invoice', [AgentBookingsController::class, 'invoice'])->name('bookings.invoice');
     Route::get('/wallet',                     [AgentWalletController::class, 'index'])->name('wallet.index');
     Route::post('/wallet/withdraw',           [AgentWalletController::class, 'requestWithdrawal'])->name('wallet.withdraw');
     Route::get('/profile',                    [AgentProfileController::class, 'show'])->name('profile.show');
@@ -165,6 +167,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
     Route::get('/appointments',                         [AppointmentController::class, 'index'])->name('appointments.index');
     Route::get('/appointments/create',                  [AppointmentController::class, 'create'])->name('appointments.create');
     Route::post('/appointments',                        [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::get('/appointments/{appointment}',           [AppointmentController::class, 'show'])->name('appointments.show');
+    Route::get('/appointments/{appointment}/invoice',   [AppointmentController::class, 'invoice'])->name('appointments.invoice');
     Route::patch('/appointments/{appointment}/status',  [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::patch('/appointments/{appointment}/payment', [AppointmentController::class, 'updatePayment'])->name('appointments.update-payment');
     Route::delete('/appointments/{appointment}',        [AppointmentController::class, 'destroy'])->name('appointments.destroy');
@@ -186,6 +190,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
     Route::get('/medical-test-bookings/create',                [MedicalTestBookingController::class, 'create'])->name('medical-test-bookings.create');
     Route::post('/medical-test-bookings',                      [MedicalTestBookingController::class, 'store'])->name('medical-test-bookings.store');
     Route::get('/medical-test-bookings/{medicalTestBooking}',  [MedicalTestBookingController::class, 'show'])->name('medical-test-bookings.show');
+    Route::get('/medical-test-bookings/{medicalTestBooking}/invoice', [MedicalTestBookingController::class, 'invoice'])->name('medical-test-bookings.invoice');
     Route::patch('/medical-test-bookings/{medicalTestBooking}/status',  [MedicalTestBookingController::class, 'updateStatus'])->name('medical-test-bookings.update-status');
     Route::patch('/medical-test-bookings/{medicalTestBooking}/payment', [MedicalTestBookingController::class, 'updatePayment'])->name('medical-test-bookings.update-payment');
     Route::post('/medical-test-bookings/items/{item}/upload-report',   [MedicalTestBookingController::class, 'uploadReport'])->name('medical-test-bookings.upload-report');

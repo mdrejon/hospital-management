@@ -11,13 +11,6 @@
                 </Link>
             </div>
 
-            <div v-if="$page.props.flash?.success" class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg text-sm">
-                {{ $page.props.flash.success }}
-            </div>
-            <div v-if="$page.props.flash?.error" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm">
-                {{ $page.props.flash.error }}
-            </div>
-
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">

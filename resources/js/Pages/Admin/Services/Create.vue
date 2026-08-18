@@ -42,6 +42,7 @@ const form = useForm({
     features:       [],
     faqs:           [],
     doctor_ids:     [],
+    show_doctors:   false,
     is_featured:    false,
     sort_order:     0,
     is_active:      true,

@@ -100,16 +100,10 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-2xs font-semibold text-gray-600 mb-1">Department</label>
-                                    <select v-model="selectedDept" @change="form.doctor_id = ''; selectedDoctor = null" class="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#0b8b6a] focus:border-[#0b8b6a] bg-white outline-none">
-                                        <option value="">All Departments</option>
-                                        <option v-for="dept in departments" :key="dept" :value="dept">{{ localized(dept) }}</option>
-                                    </select>
-                                </div>
-                                <div>
                                     <label class="block text-2xs font-semibold text-gray-600 mb-1">Specialization</label>
-                                    <select disabled class="w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-gray-50 focus:outline-none">
-                                        <option>{{ selectedDept || 'Select Department first' }}</option>
+                                    <select v-model="selectedSpec" @change="form.doctor_id = ''; selectedDoctor = null" class="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#0b8b6a] focus:border-[#0b8b6a] bg-white outline-none">
+                                        <option value="">All Specializations</option>
+                                        <option v-for="spec in specializations" :key="spec.id" :value="spec.id">{{ localized(spec.name) }}</option>
                                     </select>
                                 </div>
                                 <div>
@@ -230,13 +224,13 @@ import AgeDateSync from '@/Components/Agent/AgeDateSync.vue';
 
 const props = defineProps({
     doctors:         { type: [Array, Object], default: () => [] },
-    departments:     { type: [Array, Object], default: () => [] },
+    specializations: { type: [Array, Object], default: () => [] },
     agent:           { type: Object, default: () => ({}) },
     paymentSettings: { type: Object, default: () => ({}) },
 });
 
 const today = new Date().toISOString().split('T')[0];
-const selectedDept = ref('');
+const selectedSpec = ref('');
 const selectedDoctor = ref(null);
 
 function localized(val) {
@@ -263,8 +257,8 @@ const doctorList = computed(() => {
 });
 
 const filteredDoctors = computed(() => {
-    if (!selectedDept.value) return doctorList.value;
-    return doctorList.value.filter(d => (localized(d.specialization?.name) || d.department) === selectedDept.value);
+    if (!selectedSpec.value) return doctorList.value;
+    return doctorList.value.filter(d => d.doctor_specialization_id === selectedSpec.value || d.specialization_id === selectedSpec.value);
 });
 
 // Update the selected doctor object when the ID changes

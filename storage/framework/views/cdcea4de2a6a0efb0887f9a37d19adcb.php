@@ -2,6 +2,7 @@
 <?php foreach($attributes->onlyProps([
     'settings'          => [],
     'doctors'           => collect(),
+    'specializations'   => collect(),
     'source'            => 'appointment_page',
     'preselectedDoctor' => null,
 ]) as $__key => $__value) {
@@ -10,12 +11,14 @@
 <?php $attributes = $attributes->exceptProps([
     'settings'          => [],
     'doctors'           => collect(),
+    'specializations'   => collect(),
     'source'            => 'appointment_page',
     'preselectedDoctor' => null,
 ]); ?>
 <?php foreach (array_filter(([
     'settings'          => [],
     'doctors'           => collect(),
+    'specializations'   => collect(),
     'source'            => 'appointment_page',
     'preselectedDoctor' => null,
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
@@ -35,6 +38,7 @@
   $apptImage        = !empty($settings['appt_image']) ? asset('storage/' . $settings['appt_image']) : asset('assets/img/appoinment-img.jpg');
 
   $apptDoctors = $doctors instanceof \Illuminate\Support\Collection ? $doctors : collect();
+  $apptSpecializations = $specializations instanceof \Illuminate\Support\Collection ? $specializations : collect();
 ?>
 
 <section class="book-appointment">
@@ -149,6 +153,25 @@
             <span class="book-appointment__field-icon">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6 3v6a4 4 0 0 0 8 0V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <select class="book-appointment__select" data-field="specialization">
+              <option value="">All Specializations</option>
+              <?php $__currentLoopData = $apptSpecializations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($spec->id); ?>"><?php echo e($spec->name); ?></option>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </select>
+            <span class="book-appointment__field-caret">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </label>
+
+          <label class="book-appointment__field">
+            <span class="book-appointment__field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 3v6a4 4 0 0 0 8 0V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
                 <path d="M6 3H4.5M14 3h1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
                 <circle cx="18" cy="14" r="2.2" stroke="currentColor" stroke-width="1.6"/>
                 <path d="M14 9v3a4 4 0 0 0 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
@@ -160,7 +183,7 @@
             <select name="doctor_id" class="book-appointment__select" data-field="doctor" required>
               <option value="" <?php echo e($selectedDoctorId ? '' : 'selected'); ?> hidden>Choose a Doctor</option>
               <?php $__empty_1 = true; $__currentLoopData = $apptDoctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-              <option value="<?php echo e($doc->id); ?>" data-fee="<?php echo e($doc->consultation_fee); ?>" <?php echo e((string) $selectedDoctorId === (string) $doc->id ? 'selected' : ''); ?>>
+              <option value="<?php echo e($doc->id); ?>" data-spec-id="<?php echo e($doc->doctor_specialization_id); ?>" data-fee="<?php echo e($doc->consultation_fee); ?>" <?php echo e((string) $selectedDoctorId === (string) $doc->id ? 'selected' : ''); ?>>
                 <?php echo e($doc->name); ?><?php echo e($doc->role ? ' — ' . $doc->role : ''); ?>
 
               </option>
@@ -282,7 +305,9 @@
 <script>
 (function () {
   document.querySelectorAll('[data-booking-form]').forEach(function (form) {
+    var specSelect   = form.querySelector('[data-field="specialization"]');
     var doctorSelect = form.querySelector('[data-field="doctor"]');
+    var doctorOptions = Array.from(doctorSelect ? doctorSelect.options : []);
     var doctorHint   = form.querySelector('[data-field="doctor-hint"]');
     var dateInput    = form.querySelector('[data-field="date"]');
     var dateHint     = form.querySelector('[data-field="date-hint"]');
@@ -328,6 +353,35 @@
 
     function updateSubmitState() {
       submitBtn.disabled = !(doctorSelect.value && dateInput.value && slotInput.value);
+    }
+
+    if (specSelect) {
+      specSelect.addEventListener('change', function () {
+        var selectedSpec = this.value;
+        doctorSelect.innerHTML = '';
+        var hasDoctors = false;
+        
+        doctorOptions.forEach(function (opt) {
+          if (!opt.value) { // The hidden "Choose a Doctor" option
+            doctorSelect.appendChild(opt);
+          } else if (!selectedSpec || opt.dataset.specId === selectedSpec) {
+            doctorSelect.appendChild(opt);
+            hasDoctors = true;
+          }
+        });
+
+        if (!hasDoctors) {
+          var noDocOpt = document.createElement('option');
+          noDocOpt.value = "";
+          noDocOpt.disabled = true;
+          noDocOpt.selected = true;
+          noDocOpt.textContent = "No doctors available";
+          doctorSelect.appendChild(noDocOpt);
+        } else {
+          doctorSelect.value = ""; // reset doctor
+        }
+        doctorSelect.dispatchEvent(new Event('change'));
+      });
     }
 
     doctorSelect.addEventListener('change', function () {

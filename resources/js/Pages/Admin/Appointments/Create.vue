@@ -1,54 +1,46 @@
 <template>
     <AdminLayout>
-        <div class="max-w-2xl space-y-4">
-            <div class="flex items-center gap-3">
-                <a :href="route('admin.appointments.index')" class="text-gray-400 hover:text-gray-600 text-sm">← Back</a>
-                <h1 class="text-lg font-semibold text-gray-800">Add Manual Appointment</h1>
+        <div class="max-w-4xl mx-auto space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-xl font-bold text-gray-900">Add Manual Appointment</h1>
+                    <p class="text-xs text-gray-500 mt-1">Use this to record an appointment taken over the phone or in person.</p>
+                </div>
+                <a :href="route('admin.appointments.index')" class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    &larr; Back to List
+                </a>
             </div>
-            <p class="text-xs text-gray-400 -mt-2">Use this to record an appointment taken over the phone or in person.</p>
 
-            <form @submit.prevent="submit" class="space-y-6">
-                <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
-                    <div class="grid grid-cols-2 gap-4">
+            <form @submit.prevent="submit" class="bg-white rounded-2xl shadow-sm p-6 lg:p-8 space-y-6">
+                
+                <!-- Doctor & Schedule -->
+                <div class="bg-emerald-50/30 p-5 rounded-xl border border-emerald-100 space-y-4">
+                    <h3 class="text-sm font-bold text-gray-800 border-b border-emerald-100/50 pb-2">Doctor & Schedule</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="label">Patient Name <span class="text-red-500">*</span></label>
-                            <input v-model="form.name" type="text" class="input" placeholder="e.g. John Carter" />
-                            <InputError :message="form.errors.name" />
-                        </div>
-                        <div>
-                            <label class="label">Email <span class="text-red-500">*</span></label>
-                            <input v-model="form.email" type="email" class="input" placeholder="e.g. john@example.com" />
-                            <InputError :message="form.errors.email" />
-                        </div>
-                        <div>
-                            <label class="label">Phone</label>
-                            <input v-model="form.phone" type="text" class="input" placeholder="e.g. 1 123 456 7890" />
-                            <InputError :message="form.errors.phone" />
-                        </div>
-                        <div>
-                            <label class="label">Preferred Date &amp; Time</label>
-                            <FlatpickrInput v-model="form.preferred_date" placeholder="e.g. 20 Jul 2026, 11:00 AM" />
-                            <InputError :message="form.errors.preferred_date" />
-                        </div>
-                        <div>
-                            <label class="label">Department</label>
-                            <select v-model="form.department" class="input">
-                                <option value="">— Select —</option>
-                                <option v-for="d in departments" :key="d" :value="d">{{ d }}</option>
+                            <label class="block text-2xs font-semibold text-gray-600 mb-1">Specialization</label>
+                            <select v-model="form.specialization_id" class="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 bg-white outline-none">
+                                <option value="">— All Specializations —</option>
+                                <option v-for="s in specializations" :key="s.id" :value="s.id">{{ s.name }}</option>
                             </select>
-                            <InputError :message="form.errors.department" />
+                            <InputError :message="form.errors.specialization_id" />
                         </div>
                         <div>
-                            <label class="label">Preferred Doctor</label>
-                            <select v-model="form.preferred_doctor" class="input">
+                            <label class="block text-2xs font-semibold text-gray-600 mb-1">Preferred Doctor</label>
+                            <select v-model="form.preferred_doctor" class="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 bg-white outline-none">
                                 <option value="">— Select —</option>
-                                <option v-for="d in doctors" :key="d" :value="d">{{ d }}</option>
+                                <option v-for="d in filteredDoctors" :key="d.id" :value="d.name">{{ d.name }}</option>
                             </select>
                             <InputError :message="form.errors.preferred_doctor" />
                         </div>
                         <div>
-                            <label class="label">Status</label>
-                            <select v-model="form.status" class="input">
+                            <label class="block text-2xs font-semibold text-gray-600 mb-1">Preferred Date & Time</label>
+                            <FlatpickrInput v-model="form.preferred_date" placeholder="e.g. 20 Jul 2026, 11:00 AM" inputClass="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 bg-white outline-none" />
+                            <InputError :message="form.errors.preferred_date" />
+                        </div>
+                        <div>
+                            <label class="block text-2xs font-semibold text-gray-600 mb-1">Status</label>
+                            <select v-model="form.status" class="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 bg-white outline-none">
                                 <option value="pending">Pending</option>
                                 <option value="confirmed">Confirmed</option>
                                 <option value="completed">Completed</option>
@@ -56,22 +48,48 @@
                             </select>
                             <InputError :message="form.errors.status" />
                         </div>
-                        <div class="col-span-2">
-                            <label class="label">Message</label>
-                            <textarea v-model="form.message" rows="3" class="input resize-none"></textarea>
-                            <InputError :message="form.errors.message" />
+                    </div>
+                </div>
+
+                <!-- Patient Information -->
+                <div class="bg-blue-50/30 p-5 rounded-xl border border-blue-100 space-y-4">
+                    <h3 class="text-sm font-bold text-gray-800 border-b border-blue-100/50 pb-2">Patient Information</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-2xs font-semibold text-gray-600 mb-1">Patient Name <span class="text-red-500">*</span></label>
+                            <input v-model="form.name" type="text" class="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="e.g. John Carter" />
+                            <InputError :message="form.errors.name" />
                         </div>
-                        <div class="col-span-2">
-                            <label class="label">Internal Notes <span class="text-xs text-gray-400">(staff only)</span></label>
-                            <textarea v-model="form.notes" rows="2" class="input resize-none"></textarea>
-                            <InputError :message="form.errors.notes" />
+                        <div>
+                            <label class="block text-2xs font-semibold text-gray-600 mb-1">Phone</label>
+                            <input v-model="form.phone" type="text" class="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="e.g. 017XXXXXXXX" />
+                            <InputError :message="form.errors.phone" />
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-2xs font-semibold text-gray-600 mb-1">Email <span class="text-red-500">*</span></label>
+                            <input v-model="form.email" type="email" class="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="e.g. john@example.com" />
+                            <InputError :message="form.errors.email" />
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <div class="flex justify-end">
+                <!-- Additional Details -->
+                <div class="space-y-4 pt-2">
+                    <div>
+                        <label class="block text-2xs font-semibold text-gray-700 mb-1">Message</label>
+                        <textarea v-model="form.message" rows="3" class="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none resize-none"></textarea>
+                        <InputError :message="form.errors.message" />
+                    </div>
+                    <div>
+                        <label class="block text-2xs font-semibold text-gray-700 mb-1">Internal Notes <span class="text-gray-400 font-normal">(staff only)</span></label>
+                        <textarea v-model="form.notes" rows="2" class="w-full px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none resize-none bg-gray-50"></textarea>
+                        <InputError :message="form.errors.notes" />
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-100 flex justify-end">
                     <button type="submit" :disabled="form.processing"
-                        class="px-6 py-2.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-60">
+                        class="px-8 py-3 rounded-lg font-bold text-sm bg-blue-600 text-white hover:bg-blue-700 transition-colors disabled:opacity-50">
                         {{ form.processing ? 'Saving...' : 'Create Appointment' }}
                     </button>
                 </div>
@@ -86,21 +104,28 @@ import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import FlatpickrInput from '@/Components/Admin/Shared/FlatpickrInput.vue';
 
-defineProps({
-    departments: { type: Array, default: () => [] },
-    doctors:     { type: Array, default: () => [] },
+import { computed } from 'vue';
+
+const props = defineProps({
+    specializations: { type: Array, default: () => [] },
+    doctors:         { type: Array, default: () => [] },
 });
 
 const form = useForm({
     name:             '',
     email:            '',
     phone:            '',
-    department:       '',
+    specialization_id:'',
     preferred_doctor: '',
     preferred_date:   '',
     message:          '',
     status:           'pending',
     notes:            '',
+});
+
+const filteredDoctors = computed(() => {
+    if (!form.specialization_id) return props.doctors;
+    return props.doctors.filter(d => d.specialization_id === form.specialization_id);
 });
 
 function submit() {

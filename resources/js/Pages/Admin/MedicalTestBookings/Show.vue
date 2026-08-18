@@ -19,9 +19,9 @@
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <button @click="printReceipt" class="px-3.5 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 shadow-xs flex items-center gap-1.5">
+                    <a :href="route('admin.medical-test-bookings.invoice', booking.id)" target="_blank" class="px-3.5 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 shadow-xs flex items-center gap-1.5">
                         <span>🖨️</span> Print Invoice / Token
-                    </button>
+                    </a>
                     <Link :href="route('admin.medical-test-bookings.index')" class="px-3.5 py-2 text-xs font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                         &larr; Back
                     </Link>
@@ -109,7 +109,7 @@
                             </div>
                             <div v-if="booking.doctor">
                                 <span class="text-gray-400 block">Referring Doctor</span>
-                                <span class="text-blue-700 font-semibold">Dr. {{ booking.doctor.name }}</span>
+                                <span class="text-blue-700 font-semibold">Dr. {{ displayTranslatable(booking.doctor.name, langs) }}</span>
                             </div>
                         </div>
                     </div>
@@ -236,14 +236,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { Link, useForm } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { Link, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import FlatpickrInput from '@/Components/Admin/Shared/FlatpickrInput.vue';
+import { displayTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     booking: { type: Object, required: true },
 });
+
+const langs = computed(() => usePage().props.languages ?? []);
 
 const uploadingItem = ref(null);
 
@@ -313,7 +316,4 @@ function submitReportUpload() {
     });
 }
 
-function printReceipt() {
-    window.print();
-}
 </script>

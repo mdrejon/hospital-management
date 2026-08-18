@@ -6,11 +6,6 @@
                 <h1 class="text-lg font-semibold text-gray-800">Edit Page — {{ displayTranslatable(pageRecord.title, languages) }}</h1>
             </div>
 
-            <div v-if="$page.props.flash?.success"
-                class="px-4 py-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded">
-                {{ $page.props.flash.success }}
-            </div>
-
             <form @submit.prevent="submit" class="space-y-6">
                 <PageForm :form="form" :existing="pageRecord" :parent-options="parentOptions" @image-change="onImageChange" />
 

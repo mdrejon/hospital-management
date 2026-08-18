@@ -109,23 +109,56 @@
 
         <!-- ── Available Doctors ── -->
         <section class="bg-white rounded-lg shadow-sm p-6 space-y-3">
-            <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Available Doctors <span class="text-xs font-normal text-gray-400">(shown on the detail page)</span></h2>
-            <p class="text-xs text-gray-400 -mt-1">Hold Ctrl (Windows) or Cmd (Mac) to select multiple doctors.</p>
-            <select v-model="form.doctor_ids" multiple class="input" size="8">
-                <option v-for="d in doctors" :key="d.id" :value="d.id">
-                    {{ d.name }}{{ d.specialty ? ' — ' + d.specialty : '' }}
-                </option>
-            </select>
-            <p v-if="!doctors.length" class="text-xs text-gray-400">No doctors found — add doctors first under Website Management → Doctors.</p>
-
-            <div v-if="selectedDoctors.length" class="flex flex-wrap gap-2 pt-1">
-                <span v-for="d in selectedDoctors" :key="d.id"
-                    class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">
-                    {{ d.name }}
-                    <button type="button" @click="removeDoctor(d.id)" class="text-blue-400 hover:text-blue-700 leading-none">&times;</button>
-                </span>
+            <div class="flex items-center justify-between border-b pb-2">
+                <h2 class="text-sm font-semibold text-gray-700">
+                    Available Doctors
+                    <span class="text-xs font-normal text-gray-400">(shown on the detail page)</span>
+                </h2>
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                    <span class="text-xs text-gray-500">Show on frontend</span>
+                    <div class="relative inline-flex items-center">
+                        <input
+                            v-model="form.show_doctors"
+                            type="checkbox"
+                            class="sr-only peer"
+                            id="toggle-show-doctors"
+                        />
+                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 transition-colors cursor-pointer"></div>
+                        <div
+                            class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform pointer-events-none"
+                            :class="form.show_doctors ? 'translate-x-4' : 'translate-x-0'"
+                        ></div>
+                    </div>
+                </label>
             </div>
-            <InputError :message="form.errors.doctor_ids" />
+
+            <!-- Info banner when hidden -->
+            <div v-if="!form.show_doctors" class="flex items-start gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded text-xs text-amber-700">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="mt-0.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                The Available Doctors section is <strong>hidden</strong> on the service detail page. Enable the toggle above to show it.
+            </div>
+
+            <!-- Doctor selector (always editable, visibility controlled by toggle) -->
+            <div :class="{ 'opacity-50': !form.show_doctors }">
+                <p class="text-xs text-gray-400 -mt-1">Hold Ctrl (Windows) or Cmd (Mac) to select multiple doctors.</p>
+                <select v-model="form.doctor_ids" multiple class="input" size="8">
+                    <option v-for="d in doctors" :key="d.id" :value="d.id">
+                        {{ d.name }}{{ d.specialty ? ' — ' + d.specialty : '' }}
+                    </option>
+                </select>
+                <p v-if="!doctors.length" class="text-xs text-gray-400">No doctors found — add doctors first under Website Management → Doctors.</p>
+
+                <div v-if="selectedDoctors.length" class="flex flex-wrap gap-2 pt-1">
+                    <span v-for="d in selectedDoctors" :key="d.id"
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">
+                        {{ d.name }}
+                        <button type="button" @click="removeDoctor(d.id)" class="text-blue-400 hover:text-blue-700 leading-none">&times;</button>
+                    </span>
+                </div>
+                <InputError :message="form.errors.doctor_ids" />
+            </div>
         </section>
 
         <!-- ── SEO ── -->

@@ -18,10 +18,6 @@
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-xl px-4">
             <div class="bg-slate-800/90 backdrop-blur-md border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
                 <!-- Flash error -->
-                <div v-if="$page.props.flash?.error" class="p-4 rounded-xl bg-rose-950/60 border border-rose-800 text-rose-300 text-xs font-semibold">
-                    {{ $page.props.flash.error }}
-                </div>
-
                 <form @submit.prevent="submit" class="space-y-6">
                     <!-- Step 1: Personal & Account Info -->
                     <div class="space-y-4">

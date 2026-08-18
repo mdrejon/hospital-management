@@ -8,11 +8,6 @@
                 </p>
             </div>
 
-            <div v-if="$page.props.flash?.success"
-                class="px-4 py-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded">
-                {{ $page.props.flash.success }}
-            </div>
-
             <form @submit.prevent="submit" class="space-y-6">
 
                 <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">

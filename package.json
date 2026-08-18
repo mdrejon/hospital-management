@@ -26,6 +26,7 @@
         "@tiptap/pm": "^3.26.1",
         "@tiptap/starter-kit": "^3.26.1",
         "@tiptap/vue-3": "^3.26.1",
-        "flatpickr": "^4.6.13"
+        "flatpickr": "^4.6.13",
+        "vue3-toastify": "^0.2.9"
     }
 }

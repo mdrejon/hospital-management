@@ -11,11 +11,6 @@
             </div>
 
             <!-- Flash -->
-            <div v-if="$page.props.flash?.success"
-                class="px-4 py-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded">
-                {{ $page.props.flash.success }}
-            </div>
-
             <!-- Stats + filter tabs -->
             <div class="flex items-center gap-3">
                 <button v-for="tab in tabs" :key="tab.key"

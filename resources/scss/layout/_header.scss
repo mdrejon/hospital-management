@@ -171,7 +171,7 @@
 }
 
 .main-nav__link {
-  @apply flex items-center gap-[0.3rem] text-[16px] font-bold text-white transition-colors duration-200 hover:text-brand-cyan;
+  @apply flex items-center gap-[0.3rem] text-[18px] font-bold text-white transition-colors duration-200 hover:text-brand-cyan;
 
   // Current page — logo green (#87C540) so it stands apart from the cyan hover.
   &.is-active {
@@ -196,7 +196,7 @@
   }
 
   .dropdown-menu__link {
-    @apply block px-5 py-2 text-sm font-medium text-navy transition-colors duration-150 hover:bg-footer-bg hover:text-brand-cyan;
+    @apply block px-5 py-2 text-[18px] font-medium text-navy transition-colors duration-150 hover:bg-footer-bg hover:text-brand-cyan;
   }
 }
 

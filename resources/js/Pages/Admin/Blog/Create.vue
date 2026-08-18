@@ -7,11 +7,6 @@
                     class="text-sm text-gray-500 hover:text-gray-700">← Back to Posts</Link>
             </div>
 
-            <div v-if="$page.props.flash?.success"
-                class="px-4 py-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded">
-                {{ $page.props.flash.success }}
-            </div>
-
             <BlogForm
                 :form="form"
                 :categories="categories"

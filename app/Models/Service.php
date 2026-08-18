@@ -15,16 +15,17 @@ class Service extends Model
         'title', 'slug', 'icon_svg', 'image', 'short_desc',
         'description',
         'features', 'faqs',
-        'is_featured', 'sort_order', 'is_active',
+        'is_featured', 'sort_order', 'is_active', 'show_doctors',
         'seo_title', 'seo_description', 'seo_keywords', 'seo_og_image',
     ];
 
     protected $casts = [
-        'features'    => 'array',
-        'faqs'        => 'array',
-        'is_featured' => 'boolean',
-        'is_active'   => 'boolean',
-        'sort_order'  => 'integer',
+        'features'     => 'array',
+        'faqs'         => 'array',
+        'is_featured'  => 'boolean',
+        'is_active'    => 'boolean',
+        'show_doctors' => 'boolean',
+        'sort_order'   => 'integer',
     ];
 
     public function scopeActive($query)

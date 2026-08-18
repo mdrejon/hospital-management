@@ -25,13 +25,13 @@ class AgentDoctorBookingController extends Controller
             ->active()
             ->get();
 
-        $departments = Service::active()->get()->map(fn ($s) => $s->title)->values();
+        $specializations = \App\Models\DoctorSpecialization::active()->get(['id', 'name']);
 
         $paymentSettings = PaymentService::getActiveGateways();
 
         return Inertia::render('Agent/BookDoctor', [
             'doctors'         => $doctors,
-            'departments'     => $departments,
+            'specializations' => $specializations,
             'agent'           => $agent,
             'paymentSettings' => $paymentSettings,
         ]);

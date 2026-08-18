@@ -79,14 +79,16 @@
                                     </span>
                                 </td>
                                 <td class="px-5 py-3.5">
-                                    <div class="flex items-center gap-1.5">
-                                        <button v-if="apt.payment_status === 'unpaid' && apt.fee > 0 && paymentSettings?.has_online" @click="openPayModal('appointment', apt.id, apt.fee, apt.name)" class="px-2.5 py-1 text-2xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded shadow-xs transition-colors">
+                                    <div class="flex flex-col gap-2">
+                                        <Link :href="route('agent.bookings.show', apt.id)" class="px-3 py-1 text-xs font-semibold text-center text-blue-700 bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition-colors">
+                                            Details &rarr;
+                                        </Link>
+                                        <button v-if="apt.payment_status === 'unpaid' && apt.fee > 0 && paymentSettings?.has_online" @click="openPayModal('appointment', apt.id, apt.fee, apt.name)" class="px-3 py-1 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded shadow-xs transition-colors text-center">
                                             💳 Pay Online
                                         </button>
-                                        <a v-else-if="apt.payment_status === 'paid' && apt.payments?.[0]" :href="route('payment.receipt', apt.payments[0].id)" target="_blank" class="px-2.5 py-1 text-2xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition-colors">
+                                        <a v-else-if="apt.payment_status === 'paid' && apt.payments?.[0]" :href="route('payment.receipt', apt.payments[0].id)" target="_blank" class="px-3 py-1 text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition-colors text-center">
                                             🧾 Receipt
                                         </a>
-                                        <span v-else class="text-2xs text-gray-400 font-mono">—</span>
                                     </div>
                                 </td>
                             </tr>

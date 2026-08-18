@@ -22,7 +22,9 @@ class AppointmentController extends Controller
 {
     public function index(): Response
     {
-        $appointments = Appointment::with(['doctor:id,name', 'agent.user'])
+        $appointments = Appointment::with(['doctor.specialization', 'agent.user', 'payments' => function ($q) {
+                $q->latest();
+            }])
             ->orderByDesc('id')
             ->get();
 
@@ -43,11 +45,12 @@ class AppointmentController extends Controller
     public function create(): Response
     {
         return Inertia::render('Admin/Appointments/Create', [
-            'departments' => $this->departments(),
-            'doctors'     => Doctor::active()->get(['id', 'name', 'consultation_fee'])->map(fn ($d) => [
+            'specializations' => \App\Models\DoctorSpecialization::active()->get(['id', 'name']),
+            'doctors'     => Doctor::active()->get(['id', 'name', 'consultation_fee', 'doctor_specialization_id'])->map(fn ($d) => [
                 'id' => $d->id,
                 'name' => $d->name,
-                'consultation_fee' => $d->consultation_fee
+                'consultation_fee' => $d->consultation_fee,
+                'specialization_id' => $d->doctor_specialization_id,
             ]),
             'agents'      => AgentProfile::with('user')->active()->get(),
         ]);
@@ -101,6 +104,34 @@ class AppointmentController extends Controller
 
         return redirect()->route('admin.appointments.index')
             ->with('success', 'Appointment created successfully.');
+    }
+
+    public function show(Appointment $appointment): Response
+    {
+        $appointment->load([
+            'doctor.specialization',
+            'agent.user',
+            'patient',
+            'payments',
+        ]);
+
+        return Inertia::render('Admin/Appointments/Show', [
+            'booking' => $appointment,
+        ]);
+    }
+
+    public function invoice(Appointment $appointment): Response
+    {
+        $appointment->load([
+            'doctor.specialization',
+            'agent.user',
+            'patient',
+            'payments',
+        ]);
+
+        return Inertia::render('Admin/Appointments/Invoice', [
+            'booking' => $appointment,
+        ]);
     }
 
     public function updateStatus(Request $request, Appointment $appointment): RedirectResponse

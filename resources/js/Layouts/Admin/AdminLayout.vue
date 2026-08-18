@@ -24,6 +24,9 @@
                 <slot />
             </main>
         </div>
+        
+        <!-- Global Toast Notification -->
+        <ToastMessage />
     </div>
 </template>
 
@@ -32,6 +35,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AdminSidebar from '@/Components/Admin/Sidebar/AdminSidebar.vue';
 import AdminTopbar  from '@/Components/Admin/Topbar/AdminTopbar.vue';
+import ToastMessage from '@/Components/ToastMessage.vue';
 
 // Desktop collapse state persists across navigations and reloads: the layout
 // remounts on every Inertia visit, so it must be re-read from localStorage.

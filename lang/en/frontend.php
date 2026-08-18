@@ -19,7 +19,6 @@ return [
         'our_service' => 'Our Service',
         'service_list' => 'Service List',
         'doctors' => "Doctor's",
-        'doctors_list' => "Doctor's List",
         'gallery' => 'Gallery',
         'blog' => 'Blog',
         'contact_us' => 'Contact Us',

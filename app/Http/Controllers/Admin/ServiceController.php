@@ -165,6 +165,7 @@ class ServiceController extends Controller
             'faqs.*.answer.*'   => 'nullable|string',
             'doctor_ids'        => 'nullable|array',
             'doctor_ids.*'      => 'exists:doctors,id',
+            'show_doctors'      => 'boolean',
             'is_featured'       => 'boolean',
             'sort_order'        => 'integer|min:0',
             'is_active'         => 'boolean',

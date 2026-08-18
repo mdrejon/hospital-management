@@ -19,11 +19,6 @@
             </div>
 
             <!-- Flash -->
-            <div v-if="$page.props.flash?.success"
-                class="px-4 py-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded">
-                {{ $page.props.flash.success }}
-            </div>
-
             <!-- Comments -->
             <div class="space-y-4">
                 <div v-if="!comments.length" class="bg-white rounded-xl shadow-sm border border-gray-100 px-4 py-12 text-center text-gray-400 text-sm">

@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
             'currentLanguage' => fn () => app()->getLocale(),
             'appName' => config('app.name'),
             'site' => fn () => [
-                'name'      => GlobalSetting::get('site_name', config('app.name')),
+                'name'      => GlobalSetting::get('header_site_name', config('app.name')),
                 'logo'      => GlobalSetting::get('header_logo'),
                 'tagline'   => GlobalSetting::get('site_tagline', 'Compassionate Care, Trusted Doctors'),
                 'phone'     => GlobalSetting::get('contact_phone', GlobalSetting::getTranslated('header_phone', null, '')),

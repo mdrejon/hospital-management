@@ -14,11 +14,6 @@
             </div>
 
             <!-- Flash -->
-            <div v-if="$page.props.flash?.success"
-                class="px-4 py-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded">
-                {{ $page.props.flash.success }}
-            </div>
-
             <!-- Tabs -->
             <div class="border-b border-gray-200 flex gap-6">
                 <button type="button" @click="tab = 'list'"
@@ -73,30 +68,28 @@
                     <table class="w-full text-sm min-w-[960px]">
                         <thead class="bg-gray-50 border-b border-gray-200">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Patient</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Department</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Doctor</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Date / Slot / Serial</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Source</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600">Status</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">Received</th>
-                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600">Actions</th>
+                                <th class="px-5 py-3 text-left text-xs font-semibold text-gray-600">Patient Details</th>
+                                <th class="px-5 py-3 text-left text-xs font-semibold text-gray-600">Doctor & Specialization</th>
+                                <th class="px-5 py-3 text-left text-xs font-semibold text-gray-600">Date, Slot & Source</th>
+                                <th class="px-5 py-3 text-left text-xs font-semibold text-gray-600">Visit Fee</th>
+                                <th class="px-5 py-3 text-left text-xs font-semibold text-gray-600">Payment</th>
+                                <th class="px-5 py-3 text-left text-xs font-semibold text-gray-600">Status</th>
+                                <th class="px-5 py-3 text-left text-xs font-semibold text-gray-600">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <tr v-if="filtered.length === 0">
-                                <td colspan="8" class="px-4 py-8 text-center text-gray-400 text-sm">No appointments found.</td>
+                                <td colspan="7" class="px-4 py-8 text-center text-gray-400 text-sm">No appointments found.</td>
                             </tr>
                             <tr v-for="item in filtered" :key="item.id" class="hover:bg-gray-50">
-                                <td class="px-4 py-3 text-gray-800">
-                                    <p class="font-medium">{{ item.name }}</p>
-                                    <p class="text-xs text-gray-400">{{ item.email }}</p>
-                                    <p v-if="item.phone" class="text-xs text-gray-400">{{ item.phone }}</p>
+                                <td class="px-5 py-3.5">
+                                    <div class="font-medium text-gray-900">{{ item.name }}</div>
+                                    <div class="text-xs text-gray-400 font-mono mt-0.5">{{ item.phone || item.email }}</div>
                                     <Link v-if="item.patient_id" :href="route('admin.patients.show', item.patient_id)"
-                                        class="inline-block mt-0.5 text-xs text-blue-600 hover:underline">
+                                        class="inline-block mt-1 text-xs text-blue-600 hover:underline">
                                         View patient history
                                     </Link>
-                                    <div v-if="documentsFor(item).length" class="mt-0.5 flex flex-col gap-0.5">
+                                    <div v-if="documentsFor(item).length" class="mt-1 flex flex-col gap-0.5">
                                         <a v-for="(doc, i) in documentsFor(item)" :key="doc" :href="'/storage/' + doc" target="_blank" rel="noopener"
                                             class="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
@@ -104,34 +97,58 @@
                                         </a>
                                     </div>
                                 </td>
-                                <td class="px-4 py-3 text-gray-600 text-xs">{{ item.department || '—' }}</td>
-                                <td class="px-4 py-3 text-gray-600 text-xs">{{ item.doctor?.name || item.preferred_doctor || '—' }}</td>
-                                <td class="px-4 py-3 text-gray-600 text-xs">
-                                    <template v-if="item.appointment_date">
-                                        {{ formatDate(item.appointment_date) }} · {{ item.time_slot }}
-                                        <span v-if="item.serial_number" class="text-gray-400">· #{{ item.serial_number }}</span>
-                                    </template>
-                                    <template v-else>{{ item.preferred_date || '—' }}</template>
+                                <td class="px-5 py-3.5">
+                                    <div class="font-medium text-gray-800">{{ formatDoctorName(item) }}</div>
+                                    <div class="text-xs text-blue-600 mt-0.5">
+                                        {{ displayTranslatable(item.doctor?.specialization?.name || '', $page.props.languages) || item.department || '—' }}
+                                    </div>
                                 </td>
-                                <td class="px-4 py-3">
-                                    <span :class="item.is_manual ? 'bg-purple-100 text-purple-700' : 'bg-teal-100 text-teal-700'"
-                                        class="px-2 py-0.5 rounded text-xs font-medium">
-                                        {{ item.is_manual ? 'Manual' : sourceLabel(item.source) }}
-                                    </span>
+                                <td class="px-5 py-3.5">
+                                    <div class="font-medium text-gray-800">
+                                        <template v-if="item.appointment_date">{{ formatDate(item.appointment_date) }}</template>
+                                        <template v-else>{{ item.preferred_date || '—' }}</template>
+                                    </div>
+                                    <div class="text-xs text-purple-600 font-medium mt-0.5">
+                                        <template v-if="item.appointment_date">Serial #{{ item.serial_number || 'TBD' }} • {{ item.time_slot }}</template>
+                                    </div>
+                                    <div class="mt-1">
+                                        <span :class="item.is_manual ? 'bg-purple-100 text-purple-700' : 'bg-teal-100 text-teal-700'"
+                                            class="px-2 py-0.5 rounded text-2xs font-medium uppercase">
+                                            {{ item.is_manual ? 'Manual' : sourceLabel(item.source) }}
+                                        </span>
+                                    </div>
                                 </td>
-                                <td class="px-4 py-3 text-center">
+                                <td class="px-5 py-3.5 font-mono font-semibold text-gray-900 text-xs">
+                                    BDT {{ Number(item.fee || item.doctor?.consultation_fee || 0).toLocaleString() }}
+                                </td>
+                                <td class="px-5 py-3.5">
+                                    <div class="space-y-1">
+                                        <span :class="paymentBadge(item.payment_status)" class="px-2 py-0.5 rounded-full text-xs font-bold uppercase">
+                                            {{ item.payment_status || 'unpaid' }}
+                                        </span>
+                                        <div v-if="item.payment_method" class="text-xs text-gray-400 uppercase font-mono mt-0.5">
+                                            {{ item.payment_method }}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-5 py-3.5">
                                     <select :value="item.status" @change="updateStatus(item, $event.target.value)"
                                         :class="statusBadge(item.status)"
                                         class="px-2 py-1 rounded-full text-xs font-medium border-0 cursor-pointer">
                                         <option v-for="s in statuses" :key="s" :value="s">{{ statusLabel(s) }}</option>
                                     </select>
+                                    <div class="text-2xs text-gray-400 mt-1">Received: {{ formatDate(item.created_at) }}</div>
                                 </td>
-                                <td class="px-4 py-3 text-xs text-gray-500">{{ formatDate(item.created_at) }}</td>
-                                <td class="px-4 py-3 text-center">
-                                    <button @click="confirmDelete(item)"
-                                        class="text-xs px-3 py-1 rounded border border-red-300 text-red-600 hover:bg-red-50">
-                                        Delete
-                                    </button>
+                                <td class="px-5 py-3.5">
+                                    <div class="flex flex-col gap-2">
+                                        <Link :href="route('admin.appointments.show', item.id)" class="px-3 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-xs font-semibold text-center transition-colors">
+                                            Details &rarr;
+                                        </Link>
+                                        <button @click="confirmDelete(item)"
+                                            class="text-xs px-3 py-1.5 rounded-lg border border-red-300 text-red-600 hover:bg-red-50 text-center transition-colors">
+                                            Delete
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -262,7 +279,7 @@ import InputError from '@/Components/InputError.vue';
 import DropZone from '@/Components/Admin/Shared/DropZone.vue';
 import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
 import { useSeoAutoFill } from '@/Composables/useSeoAutoFill';
-import { seedTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
+import { seedTranslatable, defaultLangCode, displayTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     appointments: { type: Array,  default: () => [] },
@@ -318,6 +335,29 @@ function statusBadge(s) {
         cancelled:           'bg-red-100 text-red-700',
         no_show:             'bg-gray-200 text-gray-700',
     }[s] ?? 'bg-gray-100 text-gray-600';
+}
+
+function paymentBadge(status) {
+    const s = String(status || '').toLowerCase();
+    if (s === 'paid') return 'bg-emerald-100 text-emerald-800';
+    if (s === 'partially_paid') return 'bg-blue-100 text-blue-800';
+    return 'bg-gray-100 text-gray-700';
+}
+
+function formatDoctorName(item) {
+    const langs = usePage().props.languages ?? [];
+    if (item.doctor?.name) {
+        return displayTranslatable(item.doctor.name, langs);
+    }
+    if (item.preferred_doctor) {
+        if (item.preferred_doctor.trim().startsWith('{')) {
+            try {
+                return displayTranslatable(JSON.parse(item.preferred_doctor), langs);
+            } catch (e) {}
+        }
+        return item.preferred_doctor;
+    }
+    return '—';
 }
 
 function updateStatus(item, status) {

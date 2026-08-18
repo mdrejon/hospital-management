@@ -159,6 +159,7 @@
               @endforeach
             </div>
 
+            @if($service->show_doctors)
             <h2 class="service-detail__subtitle">Available Doctors</h2>
             @php
               $serviceDoctorDefaults = [
@@ -217,6 +218,7 @@
               </article>
               @endforeach
             </div>
+            @endif
 
             <h2 class="service-detail__subtitle">Frequently asked questions</h2>
             @php

@@ -111,8 +111,8 @@
           <a href="<?php echo e(route('doctors')); ?>" class="footer-col__link"><?php echo e(__('frontend.footer.team')); ?></a>
           <a href="<?php echo e(route('video-gallery')); ?>" class="footer-col__link">Video Gallery</a>
           <a href="<?php echo e(route('gallery')); ?>" class="footer-col__link">Photo Gallery</a>
-          <a href="<?php echo e(route('agent.register')); ?>" class="footer-col__link" style="color: #60a5fa;">Join as Agent Partner</a>
-          <a href="<?php echo e(route('login')); ?>" class="footer-col__link" style="color: #60a5fa;">Agent Portal Login</a>
+          <a href="<?php echo e(route('agent.register')); ?>" class="footer-col__link" style="display: none; color: #60a5fa;">Join as Agent Partner</a>
+          <a href="<?php echo e(route('login')); ?>" class="footer-col__link" style="display: none; color: #60a5fa;">Agent Portal Login</a>
           <a href="<?php echo e(route('appointment')); ?>" class="footer-col__link"><?php echo e(__('frontend.footer.appointment')); ?></a>
           <?php endif; ?>
         </div>

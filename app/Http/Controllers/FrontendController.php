@@ -46,6 +46,7 @@ class FrontendController extends Controller
             'pkg'              => $this->packageSettings(),
             'appt'                    => $this->appointmentSettings(),
             'appointmentDoctors'      => $this->appointmentBookingDoctors(),
+            'appointmentSpecializations' => $this->appointmentSpecializations(),
             'homeFaq'          => $this->faqSection('home'),
             'testimonials'     => $this->activeTestimonials(),
             'testi'            => $this->testimonialSettings(),
@@ -68,7 +69,16 @@ class FrontendController extends Controller
     private function appointmentBookingDoctors(): Collection
     {
         try {
-            return Doctor::active()->get(['id', 'name', 'role', 'consultation_fee']);
+            return Doctor::active()->get(['id', 'name', 'role', 'consultation_fee', 'doctor_specialization_id']);
+        } catch (\Throwable) {
+            return collect();
+        }
+    }
+
+    private function appointmentSpecializations(): Collection
+    {
+        try {
+            return \App\Models\DoctorSpecialization::active()->get(['id', 'name']);
         } catch (\Throwable) {
             return collect();
         }
@@ -273,6 +283,7 @@ class FrontendController extends Controller
         return view('frontend.appointment', [
             'appt'               => $this->appointmentSettings(),
             'appointmentDoctors' => $this->appointmentBookingDoctors(),
+            'appointmentSpecializations' => $this->appointmentSpecializations(),
         ]);
     }
 
@@ -475,6 +486,7 @@ class FrontendController extends Controller
             'doctor'             => $doctor,
             'doc'                => $this->doctorSettings(),
             'appointmentDoctors' => $this->appointmentBookingDoctors(),
+            'appointmentSpecializations' => $this->appointmentSpecializations(),
             'appt'               => $this->appointmentSettings(),
         ]);
     }

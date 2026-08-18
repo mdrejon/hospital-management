@@ -1,6 +1,7 @@
 @props([
     'settings'          => [],
     'doctors'           => collect(),
+    'specializations'   => collect(),
     'source'            => 'appointment_page',
     'preselectedDoctor' => null,
 ])
@@ -13,6 +14,7 @@
   $apptImage        = !empty($settings['appt_image']) ? asset('storage/' . $settings['appt_image']) : asset('assets/img/appoinment-img.jpg');
 
   $apptDoctors = $doctors instanceof \Illuminate\Support\Collection ? $doctors : collect();
+  $apptSpecializations = $specializations instanceof \Illuminate\Support\Collection ? $specializations : collect();
 @endphp
 
 <section class="book-appointment">
@@ -127,6 +129,25 @@
             <span class="book-appointment__field-icon">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6 3v6a4 4 0 0 0 8 0V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <select class="book-appointment__select" data-field="specialization">
+              <option value="">All Specializations</option>
+              @foreach($apptSpecializations as $spec)
+              <option value="{{ $spec->id }}">{{ $spec->name }}</option>
+              @endforeach
+            </select>
+            <span class="book-appointment__field-caret">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </label>
+
+          <label class="book-appointment__field">
+            <span class="book-appointment__field-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 3v6a4 4 0 0 0 8 0V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
                 <path d="M6 3H4.5M14 3h1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
                 <circle cx="18" cy="14" r="2.2" stroke="currentColor" stroke-width="1.6"/>
                 <path d="M14 9v3a4 4 0 0 0 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
@@ -138,7 +159,7 @@
             <select name="doctor_id" class="book-appointment__select" data-field="doctor" required>
               <option value="" {{ $selectedDoctorId ? '' : 'selected' }} hidden>Choose a Doctor</option>
               @forelse($apptDoctors as $doc)
-              <option value="{{ $doc->id }}" data-fee="{{ $doc->consultation_fee }}" {{ (string) $selectedDoctorId === (string) $doc->id ? 'selected' : '' }}>
+              <option value="{{ $doc->id }}" data-spec-id="{{ $doc->doctor_specialization_id }}" data-fee="{{ $doc->consultation_fee }}" {{ (string) $selectedDoctorId === (string) $doc->id ? 'selected' : '' }}>
                 {{ $doc->name }}{{ $doc->role ? ' — ' . $doc->role : '' }}
               </option>
               @empty
@@ -259,7 +280,9 @@
 <script>
 (function () {
   document.querySelectorAll('[data-booking-form]').forEach(function (form) {
+    var specSelect   = form.querySelector('[data-field="specialization"]');
     var doctorSelect = form.querySelector('[data-field="doctor"]');
+    var doctorOptions = Array.from(doctorSelect ? doctorSelect.options : []);
     var doctorHint   = form.querySelector('[data-field="doctor-hint"]');
     var dateInput    = form.querySelector('[data-field="date"]');
     var dateHint     = form.querySelector('[data-field="date-hint"]');
@@ -305,6 +328,35 @@
 
     function updateSubmitState() {
       submitBtn.disabled = !(doctorSelect.value && dateInput.value && slotInput.value);
+    }
+
+    if (specSelect) {
+      specSelect.addEventListener('change', function () {
+        var selectedSpec = this.value;
+        doctorSelect.innerHTML = '';
+        var hasDoctors = false;
+        
+        doctorOptions.forEach(function (opt) {
+          if (!opt.value) { // The hidden "Choose a Doctor" option
+            doctorSelect.appendChild(opt);
+          } else if (!selectedSpec || opt.dataset.specId === selectedSpec) {
+            doctorSelect.appendChild(opt);
+            hasDoctors = true;
+          }
+        });
+
+        if (!hasDoctors) {
+          var noDocOpt = document.createElement('option');
+          noDocOpt.value = "";
+          noDocOpt.disabled = true;
+          noDocOpt.selected = true;
+          noDocOpt.textContent = "No doctors available";
+          doctorSelect.appendChild(noDocOpt);
+        } else {
+          doctorSelect.value = ""; // reset doctor
+        }
+        doctorSelect.dispatchEvent(new Event('change'));
+      });
     }
 
     doctorSelect.addEventListener('change', function () {

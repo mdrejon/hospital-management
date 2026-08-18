@@ -5,11 +5,6 @@
                 {{ unlinked ? 'Doctor Dashboard' : `Welcome, ${doctorName}` }}
             </h1>
 
-            <div v-if="$page.props.flash?.success"
-                class="px-4 py-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded">
-                {{ $page.props.flash.success }}
-            </div>
-
             <div v-if="unlinked" class="px-4 py-3 bg-yellow-50 border border-yellow-200 text-yellow-700 text-sm rounded">
                 Your login isn't linked to a doctor profile yet. Ask an administrator to set the "Linked Doctor Profile" on your user account.
             </div>

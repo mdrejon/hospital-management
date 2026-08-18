@@ -4,15 +4,6 @@
 
         <div class="space-y-6">
             <!-- Flash messages -->
-            <div v-if="$page.props.flash?.success"
-                 class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
-                {{ $page.props.flash.success }}
-            </div>
-            <div v-if="$page.props.flash?.error"
-                 class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                {{ $page.props.flash.error }}
-            </div>
-
             <!-- Header -->
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <div>

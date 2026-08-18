@@ -3,10 +3,6 @@
         <div class="max-w-4xl space-y-4">
             <h1 class="text-lg font-semibold text-gray-800">Footer Settings</h1>
 
-            <div v-if="$page.props.flash?.success" class="px-4 py-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded">
-                {{ $page.props.flash.success }}
-            </div>
-
             <form @submit.prevent="submit" class="space-y-6">
 
                 <!-- Brand -->

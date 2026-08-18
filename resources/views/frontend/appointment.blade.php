@@ -66,5 +66,5 @@
         <span class="page-header__call-text">{{ $headerSettings['header_phone'] ?? '1 123 456 7890' }}</span>
       </a>
     </section>
-    <x-frontend.book-appointment :settings="$appt" :doctors="$appointmentDoctors" source="appointment_page" />
+    <x-frontend.book-appointment :settings="$appt" :doctors="$appointmentDoctors" :specializations="$appointmentSpecializations" source="appointment_page" />
 @endsection

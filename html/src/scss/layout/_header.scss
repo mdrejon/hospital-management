@@ -164,7 +164,7 @@
 }
 
 .main-nav__link {
-  @apply flex items-center gap-[0.3rem] text-[16px] font-bold text-white transition-colors duration-200 hover:text-brand-cyan;
+  @apply flex items-center gap-[0.3rem] text-[18px] font-bold text-white transition-colors duration-200 hover:text-brand-cyan;
 
   &.is-active {
     @apply text-brand-cyan;

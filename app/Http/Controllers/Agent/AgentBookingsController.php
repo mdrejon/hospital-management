@@ -41,6 +41,47 @@ class AgentBookingsController extends Controller
         ]);
     }
 
+    public function show(Request $request, Appointment $appointment): Response
+    {
+        $agent = $request->user()->agentProfile;
+        
+        // Ensure the appointment belongs to this agent
+        if ($appointment->agent_id !== $agent->id) {
+            abort(403);
+        }
+
+        $appointment->load([
+            'doctor.specialization',
+            'patient',
+            'payments',
+        ]);
+
+        return Inertia::render('Agent/Appointments/Show', [
+            'booking' => $appointment,
+        ]);
+    }
+
+    public function invoice(Request $request, Appointment $appointment): Response
+    {
+        $agent = $request->user()->agentProfile;
+        
+        // Ensure the appointment belongs to this agent
+        if ($appointment->agent_id !== $agent->id) {
+            abort(403);
+        }
+
+        $appointment->load([
+            'doctor.specialization',
+            'agent.user',
+            'patient',
+            'payments',
+        ]);
+
+        return Inertia::render('Agent/Appointments/Invoice', [
+            'booking' => $appointment,
+        ]);
+    }
+
     public function tests(Request $request): Response
     {
         $agent = $request->user()->agentProfile;

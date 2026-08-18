@@ -120,7 +120,7 @@
                                         <span>🧑‍💼</span> {{ b.agent.user?.name }} ({{ b.agent.agent_code }})
                                     </div>
                                     <div v-else-if="b.doctor" class="text-blue-700">
-                                        👨‍⚕️ Dr. {{ b.doctor.name }}
+                                        👨‍⚕️ Dr. {{ displayTranslatable(b.doctor.name, langs) }}
                                     </div>
                                     <div v-else class="text-gray-400">Direct Patient</div>
                                 </td>
@@ -171,10 +171,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import FlatpickrInput from '@/Components/Admin/Shared/FlatpickrInput.vue';
+import { displayTranslatable } from '@/Composables/useTranslatable';
 
 const props = defineProps({
     bookings: { type: Object, required: true },
@@ -182,6 +183,8 @@ const props = defineProps({
     filters:  { type: Object, default: () => ({}) },
     stats:    { type: Object, default: () => ({}) },
 });
+
+const langs = computed(() => usePage().props.languages ?? []);
 
 const filterSearch  = ref(props.filters.search || '');
 const filterStatus  = ref(props.filters.status || '');

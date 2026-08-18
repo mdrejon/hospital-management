@@ -6,11 +6,6 @@
                 <h1 class="text-lg font-semibold text-gray-800">Edit Service — {{ displayTranslatable(service.title, languages) }}</h1>
             </div>
 
-            <div v-if="$page.props.flash?.success"
-                class="px-4 py-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded">
-                {{ $page.props.flash.success }}
-            </div>
-
             <form @submit.prevent="submit" class="space-y-6">
                 <ServiceForm :form="form" :existing="service" :doctors="doctors" @image-change="onImageChange" />
 
@@ -49,6 +44,7 @@ const form = useForm({
     features:        Array.isArray(s.features) ? s.features.map(f => ({ ...f })) : [],
     faqs:            Array.isArray(s.faqs)     ? s.faqs.map(f => ({ question: { ...f.question }, answer: { ...f.answer } })) : [],
     doctor_ids:      Array.isArray(s.doctor_ids) ? [...s.doctor_ids] : [],
+    show_doctors:    s.show_doctors    ?? false,
     is_featured:     s.is_featured    ?? false,
     sort_order:      s.sort_order     ?? 0,
     is_active:       s.is_active      ?? true,

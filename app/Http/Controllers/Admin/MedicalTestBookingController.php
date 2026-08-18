@@ -230,6 +230,21 @@ class MedicalTestBookingController extends Controller
         ]);
     }
 
+    public function invoice(MedicalTestBooking $medicalTestBooking): Response
+    {
+        $medicalTestBooking->load([
+            'items.medicalTest',
+            'agent.user',
+            'doctor',
+            'patient',
+            'bookedBy',
+        ]);
+
+        return Inertia::render('Admin/MedicalTestBookings/Invoice', [
+            'booking' => $medicalTestBooking,
+        ]);
+    }
+
     public function updateStatus(Request $request, MedicalTestBooking $medicalTestBooking): RedirectResponse
     {
         $validated = $request->validate([

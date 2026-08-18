@@ -12,15 +12,6 @@
                 </a>
             </div>
 
-            <div v-if="$page.props.flash?.success"
-                class="px-4 py-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded">
-                {{ $page.props.flash.success }}
-            </div>
-            <div v-if="$page.props.flash?.error"
-                class="px-4 py-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded">
-                {{ $page.props.flash.error }}
-            </div>
-
             <div class="bg-white rounded-lg shadow-sm overflow-x-auto">
                 <table class="w-full text-sm">
                     <thead>

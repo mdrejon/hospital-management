@@ -17,7 +17,7 @@ export default {
                 // Public hospital frontend (resources/scss, resources/views/frontend)
                 // uses Poppins — namespaced separately so it doesn't affect the
                 // admin panel's font-sans.
-                poppins: ['Poppins', 'Segoe UI', 'sans-serif'],
+                poppins: ['Poppins', 'SolaimanLipi', 'Kalpurush', 'SutonnyOMJ', 'SutonnyMJ', 'Segoe UI', 'sans-serif'],
             },
             colors: {
                 // Values come from CSS custom properties defined once in

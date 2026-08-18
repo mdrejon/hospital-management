@@ -235,5 +235,5 @@
       </div>
     </section>
 
-    <x-frontend.book-appointment :settings="$appt" :doctors="$appointmentDoctors" :preselected-doctor="$doctor" source="doctor_details_page" />
+    <x-frontend.book-appointment :settings="$appt" :doctors="$appointmentDoctors" :specializations="$appointmentSpecializations" :preselected-doctor="$doctor" source="doctor_details_page" />
 @endsection

@@ -845,14 +845,14 @@
     <!-- ===================== Make an Appointment ===================== -->
     <?php if (isset($component)) { $__componentOriginald60bc4ce403b880ef3c1cf57c71fbc24 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginald60bc4ce403b880ef3c1cf57c71fbc24 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.book-appointment','data' => ['settings' => $appt,'doctors' => $appointmentDoctors,'source' => 'home']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.book-appointment','data' => ['settings' => $appt,'doctors' => $appointmentDoctors,'specializations' => $appointmentSpecializations,'source' => 'home']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
 <?php $component->withName('frontend.book-appointment'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['settings' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($appt),'doctors' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($appointmentDoctors),'source' => 'home']); ?>
+<?php $component->withAttributes(['settings' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($appt),'doctors' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($appointmentDoctors),'specializations' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($appointmentSpecializations),'source' => 'home']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginald60bc4ce403b880ef3c1cf57c71fbc24)): ?>

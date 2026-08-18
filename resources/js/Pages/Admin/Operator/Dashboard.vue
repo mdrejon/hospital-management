@@ -12,11 +12,6 @@
                 </a>
             </div>
 
-            <div v-if="$page.props.flash?.success"
-                class="px-4 py-3 bg-green-50 border border-green-200 text-green-700 text-sm rounded">
-                {{ $page.props.flash.success }}
-            </div>
-
             <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
                 <div class="bg-white rounded-lg shadow-sm p-4 text-center">
                     <div class="text-2xl font-bold text-gray-700">{{ stats.today }}</div>
