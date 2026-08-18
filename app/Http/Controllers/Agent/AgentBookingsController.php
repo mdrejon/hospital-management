@@ -110,4 +110,43 @@ class AgentBookingsController extends Controller
             'paymentSettings' => $paymentSettings,
         ]);
     }
+    public function testShow(Request $request, MedicalTestBooking $testBooking): Response
+    {
+        $agent = $request->user()->agentProfile;
+        
+        // Ensure the booking belongs to this agent
+        if ($testBooking->agent_id !== $agent->id) {
+            abort(403);
+        }
+
+        $testBooking->load([
+            'items.medicalTest',
+            'agent.user',
+            'payments',
+        ]);
+
+        return Inertia::render('Agent/MedicalTests/Show', [
+            'booking' => $testBooking,
+        ]);
+    }
+
+    public function testInvoice(Request $request, MedicalTestBooking $testBooking): Response
+    {
+        $agent = $request->user()->agentProfile;
+        
+        // Ensure the booking belongs to this agent
+        if ($testBooking->agent_id !== $agent->id) {
+            abort(403);
+        }
+
+        $testBooking->load([
+            'items.medicalTest',
+            'agent.user',
+            'payments',
+        ]);
+
+        return Inertia::render('Agent/MedicalTests/Invoice', [
+            'booking' => $testBooking,
+        ]);
+    }
 }

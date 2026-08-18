@@ -138,6 +138,8 @@ Route::prefix('agent')->name('agent.')->middleware(['auth'])->group(function () 
     Route::post('/book-test',                 [AgentMedicalTestBookingController::class, 'store'])->name('test.store');
     Route::get('/bookings',                   [AgentBookingsController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/tests',             [AgentBookingsController::class, 'tests'])->name('bookings.tests');
+    Route::get('/bookings/tests/{testBooking}', [AgentBookingsController::class, 'testShow'])->name('bookings.test.show');
+    Route::get('/bookings/tests/{testBooking}/invoice', [AgentBookingsController::class, 'testInvoice'])->name('bookings.test.invoice');
     Route::get('/bookings/{appointment}',     [AgentBookingsController::class, 'show'])->name('bookings.show');
     Route::get('/bookings/{appointment}/invoice', [AgentBookingsController::class, 'invoice'])->name('bookings.invoice');
     Route::get('/wallet',                     [AgentWalletController::class, 'index'])->name('wallet.index');
