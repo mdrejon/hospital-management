@@ -168,6 +168,50 @@
                         </div>
                     </div>
                 </section>
+                <!-- Floating Contact Buttons -->
+                <section class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                    <h2 class="text-sm font-semibold text-gray-700 border-b pb-2">Floating Contact Buttons</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Let's Talk -->
+                        <div class="border rounded-lg p-4 space-y-3 bg-gray-50">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-medium text-gray-800 flex items-center gap-2">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                    "Let's Talk" Button
+                                </h3>
+                                <label class="flex items-center cursor-pointer gap-2">
+                                    <input type="checkbox" v-model="form.footer_lets_talk_enabled" class="sr-only peer" />
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600 relative"></div>
+                                    <span class="text-xs text-gray-600 font-medium select-none">{{ form.footer_lets_talk_enabled ? 'Enabled' : 'Disabled' }}</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-600 mb-1">Phone Number</label>
+                                <input v-model="form.footer_lets_talk_phone" type="text" class="input bg-white" placeholder="e.g. +1234567890" />
+                            </div>
+                        </div>
+
+                        <!-- WhatsApp -->
+                        <div class="border rounded-lg p-4 space-y-3 bg-gray-50">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-medium text-gray-800 flex items-center gap-2">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                    WhatsApp Button
+                                </h3>
+                                <label class="flex items-center cursor-pointer gap-2">
+                                    <input type="checkbox" v-model="form.footer_whatsapp_enabled" class="sr-only peer" />
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600 relative"></div>
+                                    <span class="text-xs text-gray-600 font-medium select-none">{{ form.footer_whatsapp_enabled ? 'Enabled' : 'Disabled' }}</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-600 mb-1">WhatsApp Number (with country code)</label>
+                                <input v-model="form.footer_whatsapp_number" type="text" class="input bg-white" placeholder="e.g. 1234567890" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 <div class="flex justify-end">
                     <button type="submit" :disabled="form.processing" class="px-6 py-2.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-60">
@@ -227,6 +271,10 @@ const form = useForm({
     footer_privacy_url:       props.settings.footer_privacy_url ?? '',
     footer_terms_url:         props.settings.footer_terms_url ?? '',
     footer_copyright_text:    seed('footer_copyright_text'),
+    footer_lets_talk_phone:   props.settings.footer_lets_talk_phone ?? '',
+    footer_lets_talk_enabled: props.settings.footer_lets_talk_enabled == '1',
+    footer_whatsapp_number:   props.settings.footer_whatsapp_number ?? '',
+    footer_whatsapp_enabled:  props.settings.footer_whatsapp_enabled == '1',
 });
 
 function onLogoChange(file) {

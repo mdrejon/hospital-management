@@ -23,10 +23,10 @@ class ModuleRegistry
             ['key' => 'doctor-dashboard',    'name' => 'Doctor Dashboard',    'actions' => ['view', 'edit']],
             ['key' => 'operator-dashboard',  'name' => 'Operator Dashboard',  'actions' => ['view', 'create', 'edit']],
             ['key' => 'website-management',  'name' => 'Website Management',  'actions' => ['view', 'create', 'edit', 'delete']],
-            ['key' => 'global-settings',     'name' => 'Global Settings',     'actions' => ['view', 'create', 'edit', 'delete']],
-            ['key' => 'email-smtp-setting',  'name' => 'Email SMTP Setting',  'actions' => ['view', 'edit']],
+            ['key' => 'global-settings',     'name' => 'Global Settings',     'actions' => ['view', 'create', 'edit', 'delete'], 'developer_only' => true],
+            ['key' => 'email-smtp-setting',  'name' => 'Email SMTP Setting',  'actions' => ['view', 'edit'], 'developer_only' => true],
             ['key' => 'user-management',     'name' => 'User Management',     'actions' => ['view', 'create', 'edit', 'delete']],
-            ['key' => 'backups',             'name' => 'Backup',              'actions' => ['view', 'create', 'delete']],
+            ['key' => 'backups',             'name' => 'Backup',              'actions' => ['view', 'create', 'delete'], 'developer_only' => true],
         ];
     }
 

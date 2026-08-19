@@ -30,6 +30,37 @@
                                 placeholder="Brief description of this specialization..."></textarea>
                         </div>
                     </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="col-span-2">
+                            <label class="label">Heading</label>
+                            <input v-model="form.heading[activeLang]" type="text" class="input" placeholder="Page Heading" />
+                        </div>
+                        <div class="col-span-2">
+                            <label class="label">Content</label>
+                            <textarea v-model="form.content[activeLang]" rows="4" class="input"
+                                placeholder="Page content..."></textarea>
+                        </div>
+                        <div class="col-span-2">
+                            <label class="label">Image</label>
+                            <DropZone 
+                                @change="form.image = $event"
+                                @remove="form.image = null"
+                                :existingPreview="editingId && form.image === null && editingSpec?.image ? '/storage/' + editingSpec.image : null"
+                            />
+                            <p v-if="form.errors.image" class="text-xs text-red-500 mt-1">{{ form.errors.image }}</p>
+                        </div>
+                        <div class="col-span-2 pt-4 border-t">
+                            <h3 class="text-sm font-semibold text-gray-700 mb-2">SEO Configurations</h3>
+                        </div>
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="label">SEO Title</label>
+                            <input v-model="form.seo_title[activeLang]" type="text" class="input" placeholder="SEO Title" />
+                        </div>
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="label">SEO Description</label>
+                            <textarea v-model="form.seo_description[activeLang]" rows="2" class="input" placeholder="SEO Description..."></textarea>
+                        </div>
+                    </div>
                     <div class="flex items-center justify-between">
                         <label class="flex items-center gap-2 cursor-pointer">
                             <input v-model="form.is_active" type="checkbox" class="w-4 h-4 rounded text-blue-600" />
@@ -131,6 +162,7 @@ import { ref, computed } from 'vue';
 import { Link, useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import LanguageTabs from '@/Components/Admin/Shared/LanguageTabs.vue';
+import DropZone from '@/Components/Admin/Shared/DropZone.vue';
 import { emptyTranslatable, seedTranslatable, displayTranslatable, defaultLangCode } from '@/Composables/useTranslatable';
 
 const props = defineProps({
@@ -141,31 +173,48 @@ const languages = computed(() => usePage().props.languages ?? []);
 const activeLang = ref(defaultLangCode(languages.value));
 
 const editingId    = ref(null);
+const editingSpec  = ref(null);
 const deletingSpec = ref(null);
 
 const form = useForm({
     name:        emptyTranslatable(languages.value),
     description: emptyTranslatable(languages.value),
+    heading:     emptyTranslatable(languages.value),
+    content:     emptyTranslatable(languages.value),
+    seo_title:   emptyTranslatable(languages.value),
+    seo_description: emptyTranslatable(languages.value),
+    image:       null,
     is_active:   true,
     sort_order:  0,
+    _method:     'post',
 });
 
 function submitSpecialization() {
     if (editingId.value) {
-        form.put(route('admin.doctor-specializations.update', editingId.value), {
+        form._method = 'put';
+        form.post(route('admin.doctor-specializations.update', editingId.value), {
             onSuccess: () => cancelEdit(),
+            forceFormData: true,
         });
     } else {
+        form._method = 'post';
         form.post(route('admin.doctor-specializations.store'), {
             onSuccess: () => form.reset(),
+            forceFormData: true,
         });
     }
 }
 
 function startEdit(spec) {
     editingId.value  = spec.id;
+    editingSpec.value = spec;
     form.name        = seedTranslatable(languages.value, spec.name);
     form.description = seedTranslatable(languages.value, spec.description);
+    form.heading     = seedTranslatable(languages.value, spec.heading);
+    form.content     = seedTranslatable(languages.value, spec.content);
+    form.seo_title   = seedTranslatable(languages.value, spec.seo_title);
+    form.seo_description = seedTranslatable(languages.value, spec.seo_description);
+    form.image       = null;
     form.is_active    = spec.is_active;
     form.sort_order   = spec.sort_order ?? 0;
     form.clearErrors();
@@ -174,6 +223,7 @@ function startEdit(spec) {
 
 function cancelEdit() {
     editingId.value = null;
+    editingSpec.value = null;
     form.reset();
     form.clearErrors();
 }

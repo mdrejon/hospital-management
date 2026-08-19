@@ -36,6 +36,10 @@ class FooterSettingController extends Controller
         'footer_privacy_url',
         'footer_terms_url',
         'footer_copyright_text',
+        'footer_lets_talk_phone',
+        'footer_lets_talk_enabled',
+        'footer_whatsapp_number',
+        'footer_whatsapp_enabled',
     ];
 
     private array $jsonKeys = [
@@ -100,6 +104,10 @@ class FooterSettingController extends Controller
             'footer_website_url'       => 'nullable|string',
             'footer_privacy_url'       => 'nullable|string',
             'footer_terms_url'         => 'nullable|string',
+            'footer_lets_talk_phone'   => 'nullable|string',
+            'footer_lets_talk_enabled' => 'nullable|boolean',
+            'footer_whatsapp_number'   => 'nullable|string',
+            'footer_whatsapp_enabled'  => 'nullable|boolean',
         ];
         foreach ($this->translatableKeys as $key) {
             $rules[$key] = 'nullable|array';

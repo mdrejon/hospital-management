@@ -16,10 +16,15 @@ class RoleController extends Controller
 {
     public function index(): Response
     {
-        $roles = Role::withCount('users')
+        $query = Role::withCount('users')
             ->orderByDesc('is_super_admin')
-            ->orderBy('name')
-            ->get();
+            ->orderBy('name');
+
+        if (! auth()->user()->role?->is_developer) {
+            $query->where('is_developer', false);
+        }
+
+        $roles = $query->get();
 
         return Inertia::render('Admin/Roles/Index', [
             'roles' => $roles,
@@ -29,7 +34,7 @@ class RoleController extends Controller
     public function create(): Response
     {
         return Inertia::render('Admin/Roles/Create', [
-            'modules' => ModuleRegistry::all(),
+            'modules' => $this->getAvailableModules(),
         ]);
     }
 
@@ -64,6 +69,10 @@ class RoleController extends Controller
 
     public function edit(Role $role): Response
     {
+        if ($role->is_developer && ! auth()->user()->role?->is_developer) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $role->load('permissions');
 
         $existingPerms = $role->permissions->keyBy('module_key');
@@ -76,7 +85,7 @@ class RoleController extends Controller
                 'can_edit'   => (bool) ($existing->can_edit   ?? false),
                 'can_delete' => (bool) ($existing->can_delete ?? false),
             ]);
-        }, ModuleRegistry::all());
+        }, $this->getAvailableModules());
 
         return Inertia::render('Admin/Roles/Edit', [
             'role'    => $role,
@@ -86,6 +95,10 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role): RedirectResponse
     {
+        if ($role->is_developer && ! auth()->user()->role?->is_developer) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = $request->validate([
             'name'           => 'required|string',
             'description'    => 'nullable|string',
@@ -115,6 +128,10 @@ class RoleController extends Controller
 
     public function destroy(Role $role): RedirectResponse
     {
+        if ($role->is_developer && ! auth()->user()->role?->is_developer) {
+            abort(403, 'Unauthorized action.');
+        }
+
         if ($role->users()->exists()) {
             return back()->with('error', 'Cannot delete a role that has users assigned. Reassign users first.');
         }
@@ -126,8 +143,12 @@ class RoleController extends Controller
 
     private function syncPermissions(Role $role, array $permissions): void
     {
+        // Only allow syncing modules the current user can manage
+        $allowedKeys = array_column($this->getAvailableModules(), 'key');
+
         foreach ($permissions as $perm) {
             if (empty($perm['key'])) continue;
+            if (!in_array($perm['key'], $allowedKeys)) continue; // skip forbidden modules
 
             RolePermission::updateOrCreate(
                 ['role_id' => $role->id, 'module_key' => $perm['key']],
@@ -139,5 +160,28 @@ class RoleController extends Controller
                 ]
             );
         }
+    }
+
+    private function getAvailableModules(): array
+    {
+        $user = auth()->user();
+        $isDeveloper = $user->role?->is_developer ?? false;
+        $isSuperAdmin = $user->isSuperAdmin();
+        $userPerms = $user->sharedPermissions(); // array of module_key => [view, create, ...]
+
+        return array_values(array_filter(ModuleRegistry::all(), function ($module) use ($isDeveloper, $isSuperAdmin, $userPerms) {
+            // If the module is strictly for developers, only developers can see it
+            if (!empty($module['developer_only']) && !$isDeveloper) {
+                return false;
+            }
+
+            // Super admins (including developers) can see all modules (except hidden developer ones handled above)
+            if ($isSuperAdmin) {
+                return true;
+            }
+
+            // Regular admins can only assign permissions for modules they are allowed to view themselves
+            return isset($userPerms[$module['key']]) && !empty($userPerms[$module['key']]['view']);
+        }));
     }
 }

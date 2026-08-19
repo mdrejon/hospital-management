@@ -480,6 +480,15 @@ class FrontendController extends Controller
 
     public function doctorDetails(string $slug): View
     {
+        $specialization = DoctorSpecialization::where('slug', $slug)->where('is_active', true)->first();
+        if ($specialization) {
+            return view('frontend.doctor-specialization', [
+                'specialization' => $specialization,
+                'doctors'        => Doctor::active()->where('doctor_specialization_id', $specialization->id)->get(),
+                'doc'            => $this->doctorSettings(),
+            ]);
+        }
+
         $doctor = Doctor::where('slug', $slug)->where('is_active', true)->firstOrFail();
 
         return view('frontend.doctor-details', [

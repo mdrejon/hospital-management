@@ -78,16 +78,33 @@ const avatarUrl = computed(() =>
     `https://ui-avatars.com/api/?name=${encodeURIComponent(userName.value)}&background=4f46e5&color=fff`
 );
 
-function canView(module) {
-    if (!module) return true; // no module restriction
+function canView(item) {
+    if (item.developerOnly && !page.props.auth?.is_developer) {
+        return false;
+    }
+    
+    if (!item.module) return true; // no module restriction
     const perms = page.props.auth?.permissions;
     if (perms === null || perms === undefined) return true; // super admin
-    return perms?.[module]?.view ?? false;
+    return perms?.[item.module]?.view ?? false;
 }
 
-const visibleNavItems = computed(() =>
-    navItems.filter(item => canView(item.module ?? null))
-);
+const visibleNavItems = computed(() => {
+    return navItems.map(item => {
+        if (!canView(item)) return null;
+        
+        if (item.children) {
+            const visibleChildren = item.children.filter(child => {
+                if (child.developerOnly && !page.props.auth?.is_developer) return false;
+                return true;
+            });
+            if (visibleChildren.length === 0) return null;
+            return { ...item, children: visibleChildren };
+        }
+        
+        return item;
+    }).filter(Boolean);
+});
 
 // Inline minimal SVG icons to avoid external dependency
 const ChevronLeftIcon  = { template: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>` };

@@ -248,7 +248,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive, computed, watch } from 'vue';
 import { useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/Admin/AdminLayout.vue';
 import InputError  from '@/Components/InputError.vue';
@@ -335,10 +335,15 @@ function uploadImages() {
 
 // ── Local reorder ──
 const localImages  = ref([...props.images]);
-const originalOrder = props.images.map(i => i.id).join(',');
+const originalOrder = ref(props.images.map(i => i.id).join(','));
+
+watch(() => props.images, (newImages) => {
+    localImages.value = [...newImages];
+    originalOrder.value = newImages.map(i => i.id).join(',');
+}, { deep: true });
 
 const orderChanged = computed(() =>
-    localImages.value.map(i => i.id).join(',') !== originalOrder
+    localImages.value.map(i => i.id).join(',') !== originalOrder.value
 );
 
 // ── Drag and drop reorder ──

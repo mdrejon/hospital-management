@@ -149,7 +149,7 @@
           </a>
           <div class="dropdown-menu">
             <?php $__empty_1 = true; $__currentLoopData = $navDoctorSpecializations ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-            <a href="<?php echo e(route('doctors', ['specialization' => $spec->slug])); ?>" class="dropdown-menu__link"><?php echo e($spec->name); ?></a>
+            <a href="<?php echo e(route('doctor-details', $spec->slug)); ?>" class="dropdown-menu__link"><?php echo e($spec->name); ?></a>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <a href="<?php echo e(route('doctors')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.doctors_list')); ?></a>
             <?php endif; ?>
@@ -239,7 +239,7 @@
         </button>
         <div class="side-panel__submenu">
           <?php $__empty_1 = true; $__currentLoopData = $navDoctorSpecializations ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-          <a href="<?php echo e(route('doctors', ['specialization' => $spec->slug])); ?>" class="side-panel__nav-sublink"><?php echo e($spec->name); ?></a>
+          <a href="<?php echo e(route('doctor-details', $spec->slug)); ?>" class="side-panel__nav-sublink"><?php echo e($spec->name); ?></a>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
           <a href="<?php echo e(route('doctors')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.doctors_list')); ?></a>
           <?php endif; ?>

@@ -17,9 +17,16 @@ class UserController extends Controller
 {
     public function index(): Response
     {
-        $users = User::with('role')
-            ->orderByDesc('id')
-            ->get();
+        $query = User::with('role')
+            ->orderByDesc('id');
+
+        if (! auth()->user()->role?->is_developer) {
+            $query->whereHas('role', function ($q) {
+                $q->where('is_developer', false);
+            })->orWhereNull('role_id');
+        }
+
+        $users = $query->get();
 
         return Inertia::render('Admin/Users/Index', [
             'users' => $users,
@@ -28,8 +35,13 @@ class UserController extends Controller
 
     public function create(): Response
     {
+        $rolesQuery = Role::where('is_active', true);
+        if (! auth()->user()->role?->is_developer) {
+            $rolesQuery->where('is_developer', false);
+        }
+
         return Inertia::render('Admin/Users/Create', [
-            'roles'   => Role::where('is_active', true)->get(['id', 'name', 'is_super_admin']),
+            'roles'   => $rolesQuery->get(['id', 'name', 'is_super_admin']),
             'doctors' => $this->doctorOptions(),
         ]);
     }
@@ -60,15 +72,28 @@ class UserController extends Controller
 
     public function edit(User $user): Response
     {
+        if ($user->role?->is_developer && ! auth()->user()->role?->is_developer) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $rolesQuery = Role::where('is_active', true);
+        if (! auth()->user()->role?->is_developer) {
+            $rolesQuery->where('is_developer', false);
+        }
+
         return Inertia::render('Admin/Users/Edit', [
             'user'    => $user->load('role'),
-            'roles'   => Role::where('is_active', true)->get(['id', 'name', 'is_super_admin']),
+            'roles'   => $rolesQuery->get(['id', 'name', 'is_super_admin']),
             'doctors' => $this->doctorOptions(),
         ]);
     }
 
     public function update(Request $request, User $user): RedirectResponse
     {
+        if ($user->role?->is_developer && ! auth()->user()->role?->is_developer) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = $request->validate([
             'name'      => 'required|string',
             'email'     => 'required|email|unique:users,email,' . $user->id,
@@ -98,6 +123,10 @@ class UserController extends Controller
 
     public function destroy(User $user): RedirectResponse
     {
+        if ($user->role?->is_developer && ! auth()->user()->role?->is_developer) {
+            abort(403, 'Unauthorized action.');
+        }
+
         if ($user->id === auth()->id()) {
             return back()->with('error', 'You cannot delete your own account.');
         }
@@ -109,6 +138,10 @@ class UserController extends Controller
 
     public function toggleStatus(User $user): RedirectResponse
     {
+        if ($user->role?->is_developer && ! auth()->user()->role?->is_developer) {
+            abort(403, 'Unauthorized action.');
+        }
+
         if ($user->id === auth()->id()) {
             return back()->with('error', 'You cannot deactivate your own account.');
         }

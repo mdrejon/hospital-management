@@ -16,7 +16,7 @@ return [
         'our_management' => 'Our Management',
         'our_achievement' => 'Our Achievement',
         'faq' => "FAQ'S",
-        'our_service' => 'Our Service',
+        'our_service' => 'Our Services',
         'service_list' => 'Service List',
         'doctors' => "Doctor's",
         'gallery' => 'Gallery',

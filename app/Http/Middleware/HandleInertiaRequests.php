@@ -26,6 +26,7 @@ class HandleInertiaRequests extends Middleware
                 'user'        => $user,
                 'permissions' => $user?->sharedPermissions(), // null = super admin (full access)
                 'role_name'   => $user ? ($user->isSuperAdmin() ? 'Super Admin' : ($user->role?->name ?? 'Admin')) : null,
+                'is_developer' => (bool) $user?->role?->is_developer,
             ],
             'ziggy' => fn () => [
                 ...(new \Tighten\Ziggy\Ziggy)->toArray(),

@@ -70,28 +70,21 @@
     <!-- ===================== Gallery ===================== -->
     @php
       $aspectClasses = ['aspect-[4/3]', 'aspect-[3/4]', 'aspect-square', 'aspect-[4/5]', 'aspect-[16/11]', 'aspect-[3/4]', 'aspect-square', 'aspect-[4/3]', 'aspect-[4/5]'];
-      $galleryCards = $images->isNotEmpty()
-        ? $images->values()->map(fn ($img, $i) => [
+      $galleryCards = $images->values()->map(fn ($img, $i) => [
             'image'     => asset('storage/' . $img->image),
             'alt'       => $img->alt ?: $img->caption ?: 'ClinicMaster gallery photo',
             'sub_title' => $img->sub_title,
             'title'     => $img->caption,
             'aspect'    => $aspectClasses[$i % count($aspectClasses)],
-          ])
-        : collect([
-            ['image' => asset('assets/img/slider-1.2.jpg'),  'alt' => 'ClinicMaster treatment room',            'sub_title' => 'Child Care',     'title' => 'Gentle Pediatric Checkups',   'aspect' => 'aspect-[4/3]'],
-            ['image' => asset('assets/img/sr-1-1.jpg'),      'alt' => 'Radiology and imaging department',       'sub_title' => 'Surgery',        'title' => 'Modern Operating Theatre',    'aspect' => 'aspect-[3/4]'],
-            ['image' => asset('assets/img/projects-2.jpg'),  'alt' => 'Doctors reviewing patient charts',       'sub_title' => 'Consultation',   'title' => 'Patient Case Review',         'aspect' => 'aspect-square'],
-            ['image' => asset('assets/img/sr-1-2.jpg'),      'alt' => 'Doctor consulting with a patient',       'sub_title' => 'Dental Care',    'title' => 'Comfortable Dental Visits',   'aspect' => 'aspect-[4/5]'],
-            ['image' => asset('assets/img/slider-1.3.jpg'),  'alt' => 'Medical team on duty',                   'sub_title' => 'Emergency',      'title' => 'Round-the-Clock Response',    'aspect' => 'aspect-[16/11]'],
-            ['image' => asset('assets/img/projects-3.jpg'),  'alt' => 'Cardiology department',                  'sub_title' => 'Cardiology',     'title' => 'Advanced Cardiac Care',       'aspect' => 'aspect-[3/4]'],
-            ['image' => asset('assets/img/sr-1-3.jpg'),      'alt' => 'Doctor in the medical library',          'sub_title' => 'Dermatology',    'title' => 'Skin & Laser Treatments',     'aspect' => 'aspect-square'],
-            ['image' => asset('assets/img/projects-4.jpg'),  'alt' => 'Surgery preparation room',                'sub_title' => 'Laboratory',     'title' => 'Precision Diagnostics',       'aspect' => 'aspect-[4/3]'],
-            ['image' => asset('assets/img/appoinment.jpg'),  'alt' => 'Reception and appointment desk',         'sub_title' => 'Appointments',   'title' => 'One-on-One Guidance',         'aspect' => 'aspect-[4/5]'],
-          ]);
+      ]);
     @endphp
     <section class="gallery">
       <div class="container mx-auto">
+        @if($galleryCards->isEmpty())
+        <div class="py-16 text-center">
+            <h3 class="text-2xl font-bold text-gray-500">No photo gallery available at this moment</h3>
+        </div>
+        @else
         <div class="team__head">
           <p class="team__eyebrow">
             <span class="team__eyebrow-dot"></span>
@@ -128,6 +121,7 @@
           </a>
           @endforeach
         </div>
+        @endif
       </div>
     </section>
 

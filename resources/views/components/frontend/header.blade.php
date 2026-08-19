@@ -147,7 +147,7 @@
           </a>
           <div class="dropdown-menu">
             @forelse ($navDoctorSpecializations ?? [] as $spec)
-            <a href="{{ route('doctors', ['specialization' => $spec->slug]) }}" class="dropdown-menu__link">{{ $spec->name }}</a>
+            <a href="{{ route('doctor-details', $spec->slug) }}" class="dropdown-menu__link">{{ $spec->name }}</a>
             @empty
             <a href="{{ route('doctors') }}" class="dropdown-menu__link">{{ __('frontend.nav.doctors_list') }}</a>
             @endforelse
@@ -233,7 +233,7 @@
         </button>
         <div class="side-panel__submenu">
           @forelse ($navDoctorSpecializations ?? [] as $spec)
-          <a href="{{ route('doctors', ['specialization' => $spec->slug]) }}" class="side-panel__nav-sublink">{{ $spec->name }}</a>
+          <a href="{{ route('doctor-details', $spec->slug) }}" class="side-panel__nav-sublink">{{ $spec->name }}</a>
           @empty
           <a href="{{ route('doctors') }}" class="side-panel__nav-sublink">{{ __('frontend.nav.doctors_list') }}</a>
           @endforelse

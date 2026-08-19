@@ -122,6 +122,8 @@ class AppServiceProvider extends ServiceProvider
                 'footer_email_1', 'footer_email_2',
                 'footer_address_line1', 'footer_address_line2', 'footer_website_url', 'footer_opening_time',
                 'footer_newsletter_title', 'footer_privacy_url', 'footer_terms_url', 'footer_copyright_text',
+                'footer_lets_talk_phone', 'footer_lets_talk_enabled',
+                'footer_whatsapp_number', 'footer_whatsapp_enabled',
             ])->pluck('value', 'key')->toArray();
         } catch (\Throwable) {
             return [];

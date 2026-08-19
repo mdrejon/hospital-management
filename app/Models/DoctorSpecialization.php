@@ -10,9 +10,9 @@ class DoctorSpecialization extends Model
 {
     use HasTranslations;
 
-    public array $translatable = ['name', 'description'];
+    public array $translatable = ['name', 'description', 'heading', 'content', 'seo_title', 'seo_description'];
 
-    protected $fillable = ['name', 'slug', 'description', 'is_active', 'sort_order'];
+    protected $fillable = ['name', 'slug', 'description', 'is_active', 'sort_order', 'image', 'heading', 'content', 'seo_title', 'seo_description'];
 
     protected $casts = [
         'is_active'  => 'boolean',
