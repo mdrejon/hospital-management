@@ -101,5 +101,7 @@
     </svg>
   </a>
   @endif
+
+  <script src="{{ asset('assets/main.js') }}" defer></script>
 </body>
 </html>

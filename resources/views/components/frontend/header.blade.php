@@ -194,7 +194,7 @@
     </a>
 
     <p class="side-panel__desc">
-      {{ $headerSettings['header_sidebar_description'] ?? "ClinicMaster Ipsum Dolor Sit Amet, Consectetuer Adipiscing Elit, Sed Diam Nonummy Nibh Euismod Tincidunt Ut Laoreet Dolore Agna Aliquam Erat. Wisi Enim Ad Minim Veniam, Quis Tation." }}
+      {{ $headerSettings['header_sidebar_description'] ?? "We are committed to providing compassionate, high-quality healthcare services to our patients and community. Your health is our priority." }}
     </p>
 
     <nav class="side-panel__nav">

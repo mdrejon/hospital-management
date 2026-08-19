@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', 'Sitakund Modern Hospital Ltd.')
+@section('title', $headerSettings['header_site_name'] ?? __('frontend.meta.default_title'))
 
 @section('content')
 
