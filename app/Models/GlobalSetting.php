@@ -19,6 +19,9 @@ class GlobalSetting extends Model
     /** Set (upsert) a single setting. */
     public static function set(string $key, mixed $value): void
     {
+        if (is_array($value)) {
+            $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
         static::updateOrCreate(['key' => $key], ['value' => $value]);
     }
 
