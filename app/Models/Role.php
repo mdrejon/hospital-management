@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Role extends Model
 {
-    protected $fillable = ['name', 'slug', 'description', 'is_super_admin', 'is_active'];
+    protected $fillable = ['name', 'slug', 'description', 'is_super_admin', 'is_developer', 'is_active'];
 
     protected $casts = [
         'is_super_admin' => 'boolean',
+        'is_developer'   => 'boolean',
         'is_active'      => 'boolean',
     ];
 
@@ -26,7 +27,14 @@ class Role extends Model
 
     public function hasPermission(string $module, string $action = 'view'): bool
     {
-        if ($this->is_super_admin) return true;
+        $moduleConfig = collect(\App\Support\ModuleRegistry::all())->firstWhere('key', $module);
+        $isDeveloperOnly = !empty($moduleConfig['developer_only']);
+
+        if ($isDeveloperOnly) {
+            if ($this->is_developer) return true;
+        } else {
+            if ($this->is_super_admin) return true;
+        }
 
         $perm = $this->permissions->firstWhere('module_key', $module);
 

@@ -81,15 +81,38 @@ class User extends Authenticatable
         return $this->role->hasPermission($module, $action);
     }
 
-    /** Returns permissions keyed array for Inertia shared props; null = super admin */
-    public function sharedPermissions(): ?array
+    /** Returns permissions keyed array for Inertia shared props */
+    public function sharedPermissions(): array
     {
-        if ($this->isSuperAdmin()) return null;
-
         if (!$this->role) return [];
 
         if (!$this->role->relationLoaded('permissions')) {
             $this->role->load('permissions');
+        }
+
+        if ($this->isSuperAdmin()) {
+            $map = [];
+            foreach (\App\Support\ModuleRegistry::all() as $module) {
+                $isDeveloperOnly = !empty($module['developer_only']);
+                
+                if ($isDeveloperOnly) {
+                    if ($this->role->is_developer) {
+                        $map[$module['key']] = ['view' => true, 'create' => true, 'edit' => true, 'delete' => true];
+                    } else {
+                        // For non-developer super admins, check explicit permissions
+                        $perm = $this->role->permissions->firstWhere('module_key', $module['key']);
+                        $map[$module['key']] = [
+                            'view'   => (bool) ($perm?->can_view),
+                            'create' => (bool) ($perm?->can_create),
+                            'edit'   => (bool) ($perm?->can_edit),
+                            'delete' => (bool) ($perm?->can_delete),
+                        ];
+                    }
+                } else {
+                    $map[$module['key']] = ['view' => true, 'create' => true, 'edit' => true, 'delete' => true];
+                }
+            }
+            return $map;
         }
 
         return $this->role->permissionsArray();

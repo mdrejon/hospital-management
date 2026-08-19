@@ -79,29 +79,15 @@ const avatarUrl = computed(() =>
 );
 
 function canView(item) {
-    if (item.developerOnly && !page.props.auth?.is_developer) {
-        return false;
-    }
-    
     if (!item.module) return true; // no module restriction
     const perms = page.props.auth?.permissions;
-    if (perms === null || perms === undefined) return true; // super admin
+    if (!perms) return false;
     return perms?.[item.module]?.view ?? false;
 }
 
 const visibleNavItems = computed(() => {
     return navItems.map(item => {
         if (!canView(item)) return null;
-        
-        if (item.children) {
-            const visibleChildren = item.children.filter(child => {
-                if (child.developerOnly && !page.props.auth?.is_developer) return false;
-                return true;
-            });
-            if (visibleChildren.length === 0) return null;
-            return { ...item, children: visibleChildren };
-        }
-        
         return item;
     }).filter(Boolean);
 });
