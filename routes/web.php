@@ -77,6 +77,13 @@ use Inertia\Inertia;
 |
 */
 
+Route::get('/admin/clear-cache', function () {
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    return 'Cache cleared successfully!';
+});
+
+
 // Frontend / Public Routes
 Route::get('/',                    [FrontendController::class, 'home'])->name('home');
 Route::get('/about',                [FrontendController::class, 'about'])->name('about');
@@ -205,7 +212,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
     Route::get('/agents/{agent}/edit',           [AgentController::class, 'edit'])->name('agents.edit');
     Route::put('/agents/{agent}',                [AgentController::class, 'update'])->name('agents.update');
     Route::delete('/agents/{agent}',             [AgentController::class, 'destroy'])->name('agents.destroy');
-    Route::post('/agents/{agent}/adjust-balance',[AgentController::class, 'adjustBalance'])->name('agents.adjust-balance');
+    Route::post('/agents/{agent}/adjust-balance', [AgentController::class, 'adjustBalance'])->name('agents.adjust-balance');
 
     // Cash Out / Withdrawals
     Route::get('/withdrawals',                       [AgentWithdrawalController::class, 'index'])->name('withdrawals.index');
@@ -255,7 +262,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
     Route::get('/users/{user}/edit',    [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}',         [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}',      [UserController::class, 'destroy'])->name('users.destroy');
-    Route::patch('/users/{user}/toggle',[UserController::class, 'toggleStatus'])->name('users.toggle');
+    Route::patch('/users/{user}/toggle', [UserController::class, 'toggleStatus'])->name('users.toggle');
 
     // Roles Management
     Route::get('/roles',                [RoleController::class, 'index'])->name('roles.index');
@@ -328,14 +335,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
     Route::post('/blog-categories',                       [BlogCategoryController::class, 'store'])->name('blog-categories.store');
     Route::put('/blog-categories/{blogCategory}',         [BlogCategoryController::class, 'update'])->name('blog-categories.update');
     Route::delete('/blog-categories/{blogCategory}',      [BlogCategoryController::class, 'destroy'])->name('blog-categories.destroy');
-    Route::patch('/blog-categories/{blogCategory}/toggle',[BlogCategoryController::class, 'toggleStatus'])->name('blog-categories.toggle');
+    Route::patch('/blog-categories/{blogCategory}/toggle', [BlogCategoryController::class, 'toggleStatus'])->name('blog-categories.toggle');
 
     // Testimonials CRUD
     Route::get('/testimonials',                       [TestimonialController::class, 'index'])->name('testimonials.index');
     Route::post('/testimonials',                      [TestimonialController::class, 'store'])->name('testimonials.store');
     Route::put('/testimonials/{testimonial}',         [TestimonialController::class, 'update'])->name('testimonials.update');
     Route::delete('/testimonials/{testimonial}',      [TestimonialController::class, 'destroy'])->name('testimonials.destroy');
-    Route::patch('/testimonials/{testimonial}/toggle',[TestimonialController::class, 'toggleStatus'])->name('testimonials.toggle');
+    Route::patch('/testimonials/{testimonial}/toggle', [TestimonialController::class, 'toggleStatus'])->name('testimonials.toggle');
     Route::post('/testimonials/settings',             [TestimonialController::class, 'updateSettings'])->name('testimonials.settings');
 
     // Awards CRUD
@@ -355,7 +362,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
         Route::get('/sliders/{slider}/edit',    [SliderController::class, 'edit'])->name('sliders.edit');
         Route::post('/sliders/{slider}',        [SliderController::class, 'update'])->name('sliders.update');
         Route::delete('/sliders/{slider}',      [SliderController::class, 'destroy'])->name('sliders.destroy');
-        Route::patch('/sliders/{slider}/toggle',[SliderController::class, 'toggleStatus'])->name('sliders.toggle');
+        Route::patch('/sliders/{slider}/toggle', [SliderController::class, 'toggleStatus'])->name('sliders.toggle');
 
         // Languages CRUD
         Route::get('/languages',                      [LanguageController::class, 'index'])->name('languages.index');
@@ -480,7 +487,7 @@ Route::prefix('payment')->name('payment.')->group(function () {
     Route::get('/cancelled/{payment?}',       [PaymentController::class, 'cancelled'])->name('cancelled');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // CMS Pages catch-all — MUST stay the last route in the file so it never
 // shadows any of the specific/admin routes registered above it (including

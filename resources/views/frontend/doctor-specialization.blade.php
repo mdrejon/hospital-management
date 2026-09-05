@@ -124,6 +124,8 @@
           ])
         : collect();
     @endphp
+    
+    @if($doctorCards->isNotEmpty())
     <section class="doctors-page bg-gray-50 pt-16 pb-20">
       <div class="container mx-auto">
         <div class="team__head">
@@ -135,9 +137,6 @@
           <h2 class="team__title">{{ $specialization->name }} Specialists</h2>
         </div>
 
-        @if($doctorCards->isEmpty())
-        <p class="text-center text-muted py-12">No doctors found under "{{ $specialization->name }}" yet. Please check back soon.</p>
-        @else
         <div class="doctors-page__grid">
           @foreach($doctorCards as $card)
           <article class="team-card">
@@ -176,7 +175,7 @@
           </article>
           @endforeach
         </div>
-        @endif
       </div>
     </section>
+    @endif
 @endsection

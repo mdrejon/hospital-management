@@ -87,6 +87,8 @@ class DoctorSpecializationController extends Controller
                 Storage::disk('public')->delete($doctorSpecialization->image);
             }
             $data['image'] = $request->file('image')->store('doctor-specializations', 'public');
+        } else {
+            unset($data['image']);
         }
 
         $doctorSpecialization->update($data);

@@ -123,6 +123,8 @@
           ])
         : collect();
     ?>
+    
+    <?php if($doctorCards->isNotEmpty()): ?>
     <section class="doctors-page bg-gray-50 pt-16 pb-20">
       <div class="container mx-auto">
         <div class="team__head">
@@ -135,9 +137,6 @@
           <h2 class="team__title"><?php echo e($specialization->name); ?> Specialists</h2>
         </div>
 
-        <?php if($doctorCards->isEmpty()): ?>
-        <p class="text-center text-muted py-12">No doctors found under "<?php echo e($specialization->name); ?>" yet. Please check back soon.</p>
-        <?php else: ?>
         <div class="doctors-page__grid">
           <?php $__currentLoopData = $doctorCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <article class="team-card">
@@ -176,9 +175,9 @@
           </article>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
-        <?php endif; ?>
       </div>
     </section>
+    <?php endif; ?>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.frontend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laragon-new\laragon\www\hospital-management\resources\views/frontend/doctor-specialization.blade.php ENDPATH**/ ?>
