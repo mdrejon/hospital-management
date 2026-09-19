@@ -1,17 +1,60 @@
-import { ref, watch } from 'vue';
+import { ref, watch } from "vue";
 
 const STOP = new Set([
-    'a','an','the','and','or','but','in','on','at','to','for','of','with',
-    'by','from','as','is','was','are','were','be','been','being','have',
-    'has','had','do','does','did','will','would','could','should','may',
-    'might','can','this','that','these','those','it','its','we','our',
-    'you','your',
+    "a",
+    "an",
+    "the",
+    "and",
+    "or",
+    "but",
+    "in",
+    "on",
+    "at",
+    "to",
+    "for",
+    "of",
+    "with",
+    "by",
+    "from",
+    "as",
+    "is",
+    "was",
+    "are",
+    "were",
+    "be",
+    "been",
+    "being",
+    "have",
+    "has",
+    "had",
+    "do",
+    "does",
+    "did",
+    "will",
+    "would",
+    "could",
+    "should",
+    "may",
+    "might",
+    "can",
+    "this",
+    "that",
+    "these",
+    "those",
+    "it",
+    "its",
+    "we",
+    "our",
+    "you",
+    "your",
 ]);
 
 function buildKeywords(a, b) {
-    const text = ((a || '') + ' ' + (b || '')).toLowerCase().replace(/<[^>]*>/g, ' ');
-    const words = text.split(/\W+/).filter(w => w.length > 3 && !STOP.has(w));
-    return [...new Set(words)].slice(0, 12).join(', ');
+    const text = ((a || "") + " " + (b || ""))
+        .toLowerCase()
+        .replace(/<[^>]*>/g, " ");
+    const words = text.split(/\W+/).filter((w) => w.length > 3 && !STOP.has(w));
+    return [...new Set(words)].slice(0, 12).join(", ");
 }
 
 /**
@@ -22,7 +65,7 @@ function buildKeywords(a, b) {
  * @param {object} opts
  * @param {function} titleSource  - () => string  title source getter
  * @param {function} descSource   - () => string  description source getter
- * @param {string} titleSuffix    - appended to auto title (default ' | ClinicMaster')
+ * @param {string} titleSuffix    - appended to auto title (default ' | Sitakund Modern Hospital Ltd.')
  * @param {string} titleKey       - form key for meta title     (default 'meta_title')
  * @param {string} descKey        - form key for meta desc      (default 'meta_description')
  * @param {string} keywordsKey    - form key for meta keywords  (default 'meta_keywords')
@@ -31,39 +74,55 @@ function buildKeywords(a, b) {
  *   `form[key][activeLang.value]` instead of `form[key]` directly. Keys whose value is still a plain string
  *   (e.g. an un-translated keywords field) are unaffected — detected automatically per key.
  */
-export function useSeoAutoFill(form, {
-    titleSource,
-    descSource,
-    titleSuffix  = ' | ClinicMaster',
-    titleKey     = 'meta_title',
-    descKey      = 'meta_description',
-    keywordsKey  = 'meta_keywords',
-    activeLang   = null,
-} = {}) {
-    const isTranslatable = (key) => !!activeLang && form[key] !== null && typeof form[key] === 'object';
-    const getField = (key) => isTranslatable(key) ? form[key][activeLang.value] : form[key];
+export function useSeoAutoFill(
+    form,
+    {
+        titleSource,
+        descSource,
+        titleSuffix = " | Sitakund Modern Hospital Ltd.",
+        titleKey = "meta_title",
+        descKey = "meta_description",
+        keywordsKey = "meta_keywords",
+        activeLang = null,
+    } = {},
+) {
+    const isTranslatable = (key) =>
+        !!activeLang && form[key] !== null && typeof form[key] === "object";
+    const getField = (key) =>
+        isTranslatable(key) ? form[key][activeLang.value] : form[key];
     const setField = (key, val) => {
-        if (isTranslatable(key)) { form[key][activeLang.value] = val; }
-        else { form[key] = val; }
+        if (isTranslatable(key)) {
+            form[key][activeLang.value] = val;
+        } else {
+            form[key] = val;
+        }
     };
 
-    const titleAuto    = ref(!getField(titleKey));
-    const descAuto     = ref(!getField(descKey));
+    const titleAuto = ref(!getField(titleKey));
+    const descAuto = ref(!getField(descKey));
     const keywordsAuto = ref(!getField(keywordsKey));
 
     watch(titleSource, (val) => {
-        if (titleAuto.value)    setField(titleKey, val ? (val + titleSuffix) : '');
-        if (keywordsAuto.value) setField(keywordsKey, buildKeywords(val, descSource()));
+        if (titleAuto.value) setField(titleKey, val ? val + titleSuffix : "");
+        if (keywordsAuto.value)
+            setField(keywordsKey, buildKeywords(val, descSource()));
     });
 
     watch(descSource, (val) => {
-        if (descAuto.value)     setField(descKey, val || '');
-        if (keywordsAuto.value) setField(keywordsKey, buildKeywords(titleSource(), val));
+        if (descAuto.value) setField(descKey, val || "");
+        if (keywordsAuto.value)
+            setField(keywordsKey, buildKeywords(titleSource(), val));
     });
 
     return {
-        onMetaTitleInput:    () => { titleAuto.value    = false; },
-        onMetaDescInput:     () => { descAuto.value     = false; },
-        onMetaKeywordsInput: () => { keywordsAuto.value = false; },
+        onMetaTitleInput: () => {
+            titleAuto.value = false;
+        },
+        onMetaDescInput: () => {
+            descAuto.value = false;
+        },
+        onMetaKeywordsInput: () => {
+            keywordsAuto.value = false;
+        },
     };
 }

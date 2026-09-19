@@ -27,8 +27,12 @@ html {
 }
 
 body {
-  font-family: "Poppins", "SolaimanLipi", "Kalpurush", "SutonnyOMJ", "SutonnyMJ", "Segoe UI", sans-serif;
+  font-family: "Poppins", "Noto Sans Bengali", "SolaimanLipi", "Kalpurush", "SutonnyOMJ", "SutonnyMJ", "Segoe UI", sans-serif;
   color: v.$color-navy;
+}
+
+:lang(bn) {
+  font-family: "Noto Sans Bengali", "SolaimanLipi", sans-serif;
 }
 
 a {

@@ -3,7 +3,7 @@
 @php
 $heroImage = !empty($svc['svc_page_hero_image']) ? asset('storage/' . $svc['svc_page_hero_image']) : asset('assets/img/breadcumb.webp');
 $seoTitle = $service->seo_title ?: ($svc['svc_seo_title'] ?? null) ?: ($service->title . ' | ' . config('app.name'));
-$seoDesc = $service->seo_description ?: ($svc['svc_seo_description'] ?? null) ?: $service->short_desc ?: 'Learn more about this service at ClinicMaster.';
+$seoDesc = $service->seo_description ?: ($svc['svc_seo_description'] ?? null) ?: $service->short_desc ?: 'Learn more about this service at Sitakund Modern Hospital Ltd..';
 @endphp
 
 @section('title', $seoTitle)
@@ -26,7 +26,7 @@ $seoDesc = $service->seo_description ?: ($svc['svc_seo_description'] ?? null) ?:
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ $heroImage }}" alt="Team of ClinicMaster doctors" class="page-header__bg" />
+    <img src="{{ $heroImage }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 
