@@ -127,7 +127,7 @@ class AppointmentBookingController extends Controller
                 'fee'               => $doctor->consultation_fee,
                 'payment_status'    => 'unpaid',
                 'paid_amount'       => 0,
-                'payment_method'    => ($data['payment_type'] ?? '') === 'online' ? $data['payment_gateway'] : 'without_pay',
+                'payment_method'    => ($data['payment_type'] ?? '') === 'online' ? ($data['payment_gateway'] === 'bkash' ? 'bkash' : 'online') : 'cash',
                 'symptoms'          => $data['symptoms'] ?? null,
                 'document'          => $documentPaths[0] ?? null,
                 'documents'         => $documentPaths ?: null,

@@ -15,7 +15,7 @@ class AwardCards
     public static function from(?Collection $awards): Collection
     {
         if ($awards && $awards->isNotEmpty()) {
-            return $awards->map(fn ($a) => [
+            return $awards->map(fn($a) => [
                 'title'        => $a->title,
                 'subtitle'     => $a->subtitle,
                 'link_text'    => $a->link_text,
@@ -30,8 +30,8 @@ class AwardCards
 
     private static function defaults(): array
     {
-        return collect(range(0, 5))->map(fn ($i) => [
-            'title'        => 'ClinicMaster 2024',
+        return collect(range(0, 5))->map(fn($i) => [
+            'title'        => 'Sitakund Modern Hospital Ltd. 2024',
             'subtitle'     => 'Quality and Accreditation Institute',
             'link_text'    => 'Save the Children',
             'link_url'     => '#',

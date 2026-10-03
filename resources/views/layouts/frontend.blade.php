@@ -23,6 +23,30 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{{ asset('assets/main.css') }}" />
+  @if(!empty($themeSettings))
+  <style>
+    :root {
+      @if(!empty($themeSettings['theme_color_primary']))
+      --color-primary: {{ $themeSettings['theme_color_primary'] }};
+      @endif
+      @if(!empty($themeSettings['theme_color_secondary']))
+      --color-secondary: {{ $themeSettings['theme_color_secondary'] }};
+      @endif
+      @if(!empty($themeSettings['theme_color_navy']))
+      --color-navy: {{ $themeSettings['theme_color_navy'] }};
+      @endif
+      @if(!empty($themeSettings['theme_color_navy_dark']))
+      --color-navy-dark: {{ $themeSettings['theme_color_navy_dark'] }};
+      @endif
+      @if(!empty($themeSettings['theme_color_accent_green']))
+      --color-accent-green: {{ $themeSettings['theme_color_accent_green'] }};
+      @endif
+      @if(!empty($themeSettings['theme_color_accent_red']))
+      --color-accent-red: {{ $themeSettings['theme_color_accent_red'] }};
+      @endif
+    }
+  </style>
+  @endif
 </head>
 <body class="font-sans">
 

@@ -38,7 +38,7 @@ return new class extends Migration
                 'content'     => $this->privacyPolicyContent(),
                 'is_active'   => true,
                 'sort_order'  => 0,
-                'seo_title'   => 'Privacy Policy | ClinicMaster Medical & Health Care Services',
+                'seo_title'   => 'Privacy Policy | Sitakund Modern Hospital Ltd. Medical & Health Care Services',
                 'created_at'  => $now,
                 'updated_at'  => $now,
             ],
@@ -49,7 +49,7 @@ return new class extends Migration
                 'content'     => $this->termsConditionsContent(),
                 'is_active'   => true,
                 'sort_order'  => 1,
-                'seo_title'   => 'Terms & Conditions | ClinicMaster Medical & Health Care Services',
+                'seo_title'   => 'Terms & Conditions | Sitakund Modern Hospital Ltd. Medical & Health Care Services',
                 'created_at'  => $now,
                 'updated_at'  => $now,
             ],
@@ -64,7 +64,7 @@ return new class extends Migration
     private function privacyPolicyContent(): string
     {
         return <<<'HTML'
-<p>ClinicMaster ("we", "us", or "our") is committed to protecting the privacy of our patients and website visitors. This Privacy Policy explains what information we collect, how we use it, and the choices you have regarding your data.</p>
+<p>Sitakund Modern Hospital Ltd. ("we", "us", or "our") is committed to protecting the privacy of our patients and website visitors. This Privacy Policy explains what information we collect, how we use it, and the choices you have regarding your data.</p>
 <h2>Information We Collect</h2>
 <p>We may collect personal information you provide directly, such as your name, contact details, date of birth, and medical history when you book an appointment, fill out a contact form, or subscribe to our newsletter.</p>
 <ul>
@@ -87,7 +87,7 @@ HTML;
     private function termsConditionsContent(): string
     {
         return <<<'HTML'
-<p>These Terms &amp; Conditions govern your use of the ClinicMaster website and the healthcare services booked through it. By using our website or booking an appointment, you agree to these terms.</p>
+<p>These Terms &amp; Conditions govern your use of the Sitakund Modern Hospital Ltd. website and the healthcare services booked through it. By using our website or booking an appointment, you agree to these terms.</p>
 <h2>Appointments &amp; Cancellations</h2>
 <p>Appointments booked online or by phone are subject to confirmation by our staff. You may reschedule or cancel an appointment free of charge up to 24 hours before your scheduled visit. Late cancellations or no-shows may be subject to a fee.</p>
 <h2>Medical Disclaimer</h2>
@@ -97,7 +97,7 @@ HTML;
 <h2>Website Use</h2>
 <p>You agree not to misuse this website, attempt unauthorized access to our systems, or submit false information when booking an appointment or contacting our team.</p>
 <h2>Limitation of Liability</h2>
-<p>ClinicMaster is not liable for any indirect or consequential damages arising from your use of this website. Nothing in these terms limits our liability for matters that cannot be excluded under applicable law.</p>
+<p>Sitakund Modern Hospital Ltd. is not liable for any indirect or consequential damages arising from your use of this website. Nothing in these terms limits our liability for matters that cannot be excluded under applicable law.</p>
 <h2>Contact</h2>
 <p>Questions about these Terms &amp; Conditions can be sent to support@hospital.com or 1 123 456 7890.</p>
 HTML;

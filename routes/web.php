@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\WebsiteSettings\FooterSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\AboutSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\GlobalAboutSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\WhyChooseUsSettingController;
+use App\Http\Controllers\Admin\WebsiteSettings\ThemeSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\GalleryController;
 use App\Http\Controllers\Admin\WebsiteSettings\ContactSettingController;
 use App\Http\Controllers\Admin\WebsiteSettings\ServiceSettingController;
@@ -391,6 +392,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'module.
         // About Section Settings
         Route::get('/about',  [AboutSettingController::class, 'edit'])->name('about.edit');
         Route::post('/about', [AboutSettingController::class, 'update'])->name('about.update');
+
+        // Theme / Colors Settings
+        Route::get('/theme',  [ThemeSettingController::class, 'edit'])->name('theme.edit');
+        Route::post('/theme', [ThemeSettingController::class, 'update'])->name('theme.update');
+        Route::post('/theme/reset', [ThemeSettingController::class, 'reset'])->name('theme.reset');
 
         // History Page Settings
         Route::get('/history',  [HistorySettingController::class, 'edit'])->name('history.edit');

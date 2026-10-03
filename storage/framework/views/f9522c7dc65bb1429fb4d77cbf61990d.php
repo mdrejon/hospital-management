@@ -23,6 +23,30 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="<?php echo e(asset('assets/main.css')); ?>" />
+  <?php if(!empty($themeSettings)): ?>
+  <style>
+    :root {
+      <?php if(!empty($themeSettings['theme_color_primary'])): ?>
+      --color-primary: <?php echo e($themeSettings['theme_color_primary']); ?>;
+      <?php endif; ?>
+      <?php if(!empty($themeSettings['theme_color_secondary'])): ?>
+      --color-secondary: <?php echo e($themeSettings['theme_color_secondary']); ?>;
+      <?php endif; ?>
+      <?php if(!empty($themeSettings['theme_color_navy'])): ?>
+      --color-navy: <?php echo e($themeSettings['theme_color_navy']); ?>;
+      <?php endif; ?>
+      <?php if(!empty($themeSettings['theme_color_navy_dark'])): ?>
+      --color-navy-dark: <?php echo e($themeSettings['theme_color_navy_dark']); ?>;
+      <?php endif; ?>
+      <?php if(!empty($themeSettings['theme_color_accent_green'])): ?>
+      --color-accent-green: <?php echo e($themeSettings['theme_color_accent_green']); ?>;
+      <?php endif; ?>
+      <?php if(!empty($themeSettings['theme_color_accent_red'])): ?>
+      --color-accent-red: <?php echo e($themeSettings['theme_color_accent_red']); ?>;
+      <?php endif; ?>
+    }
+  </style>
+  <?php endif; ?>
 </head>
 <body class="font-sans">
 

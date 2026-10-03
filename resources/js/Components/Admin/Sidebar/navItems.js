@@ -120,6 +120,7 @@ export const navItems = [
             { name: 'About Section',       route: 'admin.website-settings.global-about.edit' },
             { name: 'Why Choose Us',       route: 'admin.website-settings.why-choose-us.edit' },
             { name: 'Languages',           route: 'admin.website-settings.languages.index' },
+            { name: 'Theme Settings',      route: 'admin.website-settings.theme.edit' },
             { name: 'SMS Gateway',         route: 'admin.website-settings.sms.edit' },
             { name: 'Payment Gateways',    route: 'admin.website-settings.payment-gateways.edit' },
             { name: 'Email Notifications', route: 'admin.website-settings.email-notifications.edit' },

@@ -52,6 +52,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with('footerSettings', $this->footerSettings());
             $view->with('languages', $this->activeLanguages());
             $view->with('currentLanguage', app()->getLocale());
+            $view->with('themeSettings', $this->themeSettings());
             $view->with('navDoctorSpecializations', $this->navDoctorSpecializations());
         });
     }
@@ -146,5 +147,38 @@ class AppServiceProvider extends ServiceProvider
         }
 
         return $settings;
+    }
+
+    /** Pulled from Admin > Global Settings > Theme Settings. Empty array if the DB isn't ready. */
+    private function themeSettings(): array
+    {
+        try {
+            $settings = GlobalSetting::whereIn('key', [
+                'theme_color_primary', 'theme_color_secondary',
+                'theme_color_navy', 'theme_color_navy_dark',
+                'theme_color_accent_green', 'theme_color_accent_red'
+            ])->pluck('value', 'key')->toArray();
+
+            $formattedSettings = [];
+            foreach ($settings as $key => $hex) {
+                if ($hex) {
+                    $hex = ltrim($hex, '#');
+                    if (strlen($hex) == 3) {
+                        $r = hexdec(str_repeat(substr($hex, 0, 1), 2));
+                        $g = hexdec(str_repeat(substr($hex, 1, 1), 2));
+                        $b = hexdec(str_repeat(substr($hex, 2, 1), 2));
+                    } else {
+                        $r = hexdec(substr($hex, 0, 2));
+                        $g = hexdec(substr($hex, 2, 2));
+                        $b = hexdec(substr($hex, 4, 2));
+                    }
+                    $formattedSettings[$key] = "$r $g $b";
+                }
+            }
+
+            return $formattedSettings;
+        } catch (\Throwable) {
+            return [];
+        }
     }
 }

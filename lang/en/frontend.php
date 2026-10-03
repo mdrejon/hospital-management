@@ -3,8 +3,8 @@
 return [
 
     'meta' => [
-        'default_title' => 'ClinicMaster | Medical & Health Care Services',
-        'default_description' => 'ClinicMaster provides compassionate, modern medical and health care services.',
+        'default_title' => 'Sitakund Modern Hospital Ltd. | Medical & Health Care Services',
+        'default_description' => 'Sitakund Modern Hospital Ltd. provides compassionate, modern medical and health care services.',
     ],
 
     'nav' => [
