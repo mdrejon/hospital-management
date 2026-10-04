@@ -31,10 +31,10 @@
 <?php unset($__defined_vars); ?>
 
 <?php
-  $apptBadge        = $settings['appt_badge']         ?? 'Make an Appointment';
-  $apptTitle        = $settings['appt_title']         ?? 'Fast & Easy Scheduling Today!';
-  $apptFormTitle    = $settings['appt_form_title']    ?? 'Please enter your info';
-  $apptFormSubtitle = $settings['appt_form_subtitle'] ?? 'Strong communication and teamwork skills enable effective collaboration';
+  $apptBadge        = $settings['appt_badge']         ?? __('frontend.home.appt_badge');
+  $apptTitle        = $settings['appt_title']         ?? __('frontend.home.appt_title');
+  $apptFormTitle    = $settings['appt_form_title']    ?? __('frontend.home.appt_form_title');
+  $apptFormSubtitle = $settings['appt_form_subtitle'] ?? __('frontend.home.appt_form_subtitle');
   $apptImage        = !empty($settings['appt_image']) ? asset('storage/' . $settings['appt_image']) : asset('assets/img/appoinment-img.jpg');
 
   $apptDoctors = $doctors instanceof \Illuminate\Support\Collection ? $doctors : collect();
@@ -67,7 +67,7 @@
           <input type="hidden" name="source" value="<?php echo e($source); ?>" />
           <input type="hidden" name="time_slot" data-field="time_slot" required />
 
-          <p class="book-appointment__section-label">Patient Information</p>
+          <p class="book-appointment__section-label"><?php echo e(__('frontend.appointment_form.patient_info')); ?></p>
 
           <label class="book-appointment__field">
             <span class="book-appointment__field-icon">
@@ -76,18 +76,21 @@
                 <path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <input type="text" name="patient_name" value="<?php echo e(old('patient_name')); ?>" class="book-appointment__input" placeholder="Patient Full Name" required />
+            <input type="text" name="patient_name" value="<?php echo e(old('patient_name')); ?>" class="book-appointment__input" placeholder="<?php echo e(__('frontend.appointment_form.patient_name')); ?>" required />
           </label>
 
           <div class="book-appointment__radio-group">
             <label class="book-appointment__radio">
-              <input type="radio" name="gender" value="male" <?php echo e(old('gender') !== 'female' && old('gender') !== 'other' ? 'checked' : ''); ?> required /> Male
+              <input type="radio" name="gender" value="male" <?php echo e(old('gender') !== 'female' && old('gender') !== 'other' ? 'checked' : ''); ?> required /> <?php echo e(__('frontend.appointment_form.male')); ?>
+
             </label>
             <label class="book-appointment__radio">
-              <input type="radio" name="gender" value="female" <?php echo e(old('gender') === 'female' ? 'checked' : ''); ?> /> Female
+              <input type="radio" name="gender" value="female" <?php echo e(old('gender') === 'female' ? 'checked' : ''); ?> /> <?php echo e(__('frontend.appointment_form.female')); ?>
+
             </label>
             <label class="book-appointment__radio">
-              <input type="radio" name="gender" value="other" <?php echo e(old('gender') === 'other' ? 'checked' : ''); ?> /> Other
+              <input type="radio" name="gender" value="other" <?php echo e(old('gender') === 'other' ? 'checked' : ''); ?> /> <?php echo e(__('frontend.appointment_form.other')); ?>
+
             </label>
           </div>
 
@@ -98,7 +101,7 @@
                 <path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <input type="date" name="date_of_birth" value="<?php echo e(old('date_of_birth')); ?>" class="book-appointment__input" placeholder="Date of Birth (optional)" data-field="dob" max="<?php echo e(now()->toDateString()); ?>" />
+            <input type="date" name="date_of_birth" value="<?php echo e(old('date_of_birth')); ?>" class="book-appointment__input" placeholder="<?php echo e(__('frontend.appointment_form.dob')); ?>" data-field="dob" max="<?php echo e(now()->toDateString()); ?>" />
           </label>
 
           <label class="book-appointment__field">
@@ -107,7 +110,7 @@
                 <path d="M12 20h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <input type="number" min="0" max="130" class="book-appointment__input" placeholder="Age" data-field="age" />
+            <input type="number" min="0" max="130" class="book-appointment__input" placeholder="<?php echo e(__('frontend.appointment_form.age')); ?>" data-field="age" />
           </label>
 
           <label class="book-appointment__field">
@@ -116,7 +119,7 @@
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6"/>
               </svg>
             </span>
-            <input type="tel" name="phone" value="<?php echo e(old('phone')); ?>" class="book-appointment__input" placeholder="Mobile Number" required />
+            <input type="tel" name="phone" value="<?php echo e(old('phone')); ?>" class="book-appointment__input" placeholder="<?php echo e(__('frontend.appointment_form.mobile')); ?>" required />
           </label>
 
           <label class="book-appointment__field">
@@ -126,7 +129,7 @@
                 <path d="m4 6 8 7 8-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
-            <input type="email" name="email" value="<?php echo e(old('email')); ?>" class="book-appointment__input" placeholder="Email Address (optional)" />
+            <input type="email" name="email" value="<?php echo e(old('email')); ?>" class="book-appointment__input" placeholder="<?php echo e(__('frontend.appointment_form.email')); ?>" />
           </label>
 
           <label class="book-appointment__field book-appointment__message">
@@ -135,17 +138,19 @@
                 <path d="M6 3v6a4 4 0 0 0 8 0V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <textarea class="book-appointment__textarea" placeholder="Present Address (optional)" rows="2" data-field="address" name="address"><?php echo e(old('address')); ?></textarea>
+            <textarea class="book-appointment__textarea" placeholder="<?php echo e(__('frontend.appointment_form.address')); ?>" rows="2" data-field="address" name="address"><?php echo e(old('address')); ?></textarea>
           </label>
 
-          <p class="book-appointment__section-label">Appointment Details</p>
+          <p class="book-appointment__section-label"><?php echo e(__('frontend.appointment_form.appt_details')); ?></p>
 
           <div class="book-appointment__radio-group">
             <label class="book-appointment__radio">
-              <input type="radio" name="appointment_type" value="opd" <?php echo e(old('appointment_type') !== 'follow_up' ? 'checked' : ''); ?> required /> Outpatient Consultation (OPD)
+              <input type="radio" name="appointment_type" value="opd" <?php echo e(old('appointment_type') !== 'follow_up' ? 'checked' : ''); ?> required /> <?php echo e(__('frontend.appointment_form.opd')); ?>
+
             </label>
             <label class="book-appointment__radio">
-              <input type="radio" name="appointment_type" value="follow_up" <?php echo e(old('appointment_type') === 'follow_up' ? 'checked' : ''); ?> /> Follow-up Consultation
+              <input type="radio" name="appointment_type" value="follow_up" <?php echo e(old('appointment_type') === 'follow_up' ? 'checked' : ''); ?> /> <?php echo e(__('frontend.appointment_form.follow_up')); ?>
+
             </label>
           </div>
 
@@ -156,7 +161,7 @@
               </svg>
             </span>
             <select class="book-appointment__select" data-field="specialization">
-              <option value="">All Specializations</option>
+              <option value=""><?php echo e(__('frontend.appointment_form.all_spec')); ?></option>
               <?php $__currentLoopData = $apptSpecializations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <option value="<?php echo e($spec->id); ?>"><?php echo e($spec->name); ?></option>
               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -181,14 +186,14 @@
               $selectedDoctorId = old('doctor_id') ?: data_get($preselectedDoctor, 'id');
             ?>
             <select name="doctor_id" class="book-appointment__select" data-field="doctor" required>
-              <option value="" <?php echo e($selectedDoctorId ? '' : 'selected'); ?> hidden>Choose a Doctor</option>
+              <option value="" <?php echo e($selectedDoctorId ? '' : 'selected'); ?> hidden><?php echo e(__('frontend.appointment_form.choose_doctor')); ?></option>
               <?php $__empty_1 = true; $__currentLoopData = $apptDoctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
               <option value="<?php echo e($doc->id); ?>" data-spec-id="<?php echo e($doc->doctor_specialization_id); ?>" data-fee="<?php echo e($doc->consultation_fee); ?>" <?php echo e((string) $selectedDoctorId === (string) $doc->id ? 'selected' : ''); ?>>
                 <?php echo e($doc->name); ?><?php echo e($doc->role ? ' — ' . $doc->role : ''); ?>
 
               </option>
               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-              <option value="" disabled>No doctors available right now</option>
+              <option value="" disabled><?php echo e(__('frontend.appointment_form.no_doctors')); ?></option>
               <?php endif; ?>
             </select>
             <span class="book-appointment__field-caret">
@@ -206,11 +211,11 @@
                 <path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <input type="date" name="appointment_date" value="<?php echo e(old('appointment_date')); ?>" class="book-appointment__input" placeholder="Appointment Date" data-field="date" disabled required />
+            <input type="date" name="appointment_date" value="<?php echo e(old('appointment_date')); ?>" class="book-appointment__input" placeholder="<?php echo e(__('frontend.appointment_form.appt_date')); ?>" data-field="date" disabled required />
           </label>
           <p class="book-appointment__hint" data-field="date-hint"></p>
 
-          <p class="book-appointment__section-label" data-field="slots-label" style="display:none;">Available Time Slot</p>
+          <p class="book-appointment__section-label" data-field="slots-label" style="display:none;"><?php echo e(__('frontend.appointment_form.time_slot')); ?></p>
           <div class="book-appointment__slots" data-field="slots"></div>
 
           <label class="book-appointment__field book-appointment__message">
@@ -220,7 +225,7 @@
                 <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
               </svg>
             </span>
-            <textarea name="symptoms" class="book-appointment__textarea" placeholder="Reason for visit / symptoms (optional)" rows="3"><?php echo e(old('symptoms')); ?></textarea>
+            <textarea name="symptoms" class="book-appointment__textarea" placeholder="<?php echo e(__('frontend.appointment_form.symptoms')); ?>" rows="3"><?php echo e(old('symptoms')); ?></textarea>
           </label>
 
           <div class="book-appointment__dropzone sm:col-span-2" data-field="dropzone" tabindex="0" role="button" aria-label="Upload medical documents">
@@ -235,9 +240,10 @@
                 </svg>
               </span>
               <p class="book-appointment__dropzone-text" data-field="dropzone-label">
-                <span class="book-appointment__dropzone-browse">Upload medical documents</span> or drag &amp; drop
+                <span class="book-appointment__dropzone-browse"><?php echo e(__('frontend.appointment_form.upload_docs')); ?></span> <?php echo __('frontend.appointment_form.drag_drop'); ?>
+
               </p>
-              <p class="book-appointment__dropzone-hint">Previous reports, prescriptions or test results — JPG, PNG, PDF or DOC, up to 5 files, 5&nbsp;MB each (optional)</p>
+              <p class="book-appointment__dropzone-hint"><?php echo e(__('frontend.appointment_form.upload_hint')); ?></p>
             </div>
 
             <div class="book-appointment__dropzone-list" data-field="dropzone-list"></div>
@@ -248,18 +254,18 @@
             $paymentSettings = \App\Services\PaymentService::getActiveGateways();
           ?>
           <?php if($paymentSettings['has_online'] || $paymentSettings['allow_without_pay']): ?>
-          <p class="book-appointment__section-label">Payment Option</p>
+          <p class="book-appointment__section-label"><?php echo e(__('frontend.appointment_form.payment_option')); ?></p>
           <div class="book-appointment__radio-group" style="grid-column: span 2; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
             <?php if($paymentSettings['allow_without_pay']): ?>
             <label class="book-appointment__radio" style="padding: 10px 14px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500;">
               <input type="radio" name="payment_type" value="without_pay" checked data-payment-type />
-              <span>🏥 Pay at Hospital (Without Pay)</span>
+              <span>🏥 <?php echo e(__('frontend.appointment_form.pay_hospital')); ?></span>
             </label>
             <?php endif; ?>
             <?php if($paymentSettings['has_online']): ?>
             <label class="book-appointment__radio" style="padding: 10px 14px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500;">
               <input type="radio" name="payment_type" value="online" <?php echo e(!$paymentSettings['allow_without_pay'] ? 'checked' : ''); ?> data-payment-type />
-              <span>💳 Pay Online Instantly</span>
+              <span>💳 <?php echo e(__('frontend.appointment_form.pay_online')); ?></span>
             </label>
             <?php endif; ?>
           </div>
@@ -269,13 +275,13 @@
             <?php if(!empty($paymentSettings['gateways']['bkash'])): ?>
             <label style="padding: 10px 14px; border: 1px solid #fbcfe8; background: #fdf2f8; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #be185d;">
               <input type="radio" name="payment_gateway" value="bkash" checked />
-              <span>bKash Payment</span>
+              <span><?php echo e(__('frontend.appointment_form.bkash')); ?></span>
             </label>
             <?php endif; ?>
             <?php if(!empty($paymentSettings['gateways']['sslcommerz'])): ?>
             <label style="padding: 10px 14px; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #1d4ed8;">
               <input type="radio" name="payment_gateway" value="sslcommerz" <?php echo e(empty($paymentSettings['gateways']['bkash']) ? 'checked' : ''); ?> />
-              <span>SSLCommerz (Cards/Banks/MFS)</span>
+              <span><?php echo e(__('frontend.appointment_form.sslcommerz')); ?></span>
             </label>
             <?php endif; ?>
           </div>
@@ -284,7 +290,8 @@
 
           <div class="book-appointment__submit-wrap">
             <button type="submit" class="book-appointment__submit" data-field="submit" disabled>
-              Submit now
+              <?php echo e(__('frontend.appointment_form.submit')); ?>
+
               <span class="book-appointment__submit-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -375,7 +382,7 @@
           noDocOpt.value = "";
           noDocOpt.disabled = true;
           noDocOpt.selected = true;
-          noDocOpt.textContent = "No doctors available";
+          noDocOpt.textContent = "<?php echo e(__('frontend.appointment_form.no_doctors')); ?>";
           doctorSelect.appendChild(noDocOpt);
         } else {
           doctorSelect.value = ""; // reset doctor
@@ -391,7 +398,7 @@
 
       dateInput.disabled = false;
       var opt = doctorSelect.options[doctorSelect.selectedIndex];
-      dateHint.textContent = (opt && opt.dataset.fee) ? 'Consultation fee: ' + opt.dataset.fee : '';
+      dateHint.textContent = (opt && opt.dataset.fee) ? '<?php echo e(__('frontend.appointment_form.fee_prefix')); ?>' + opt.dataset.fee : '';
 
       fetch('<?php echo e(route('appointment.availability')); ?>?doctor_id=' + encodeURIComponent(doctorSelect.value))
         .then(function (r) { return r.json(); })
@@ -411,12 +418,12 @@
 
       if (unavailableDates.indexOf(dateInput.value) !== -1) {
         slotsLabel.style.display = '';
-        slotsWrap.innerHTML = '<span class="book-appointment__hint is-error">The doctor is unavailable or fully booked on this date — please choose another date.</span>';
+        slotsWrap.innerHTML = '<span class="book-appointment__hint is-error"><?php echo e(__('frontend.appointment_form.err_unavailable')); ?></span>';
         return;
       }
 
       slotsLabel.style.display = '';
-      slotsWrap.innerHTML = '<span class="book-appointment__hint">Loading available time slots…</span>';
+      slotsWrap.innerHTML = '<span class="book-appointment__hint"><?php echo e(__('frontend.appointment_form.loading_slots')); ?></span>';
 
       fetch('<?php echo e(route('appointment.slots')); ?>?doctor_id=' + encodeURIComponent(doctorSelect.value) + '&date=' + encodeURIComponent(dateInput.value))
         .then(function (r) { return r.json(); })
@@ -424,7 +431,7 @@
           slotsWrap.innerHTML = '';
           var slots = data.slots || [];
           if (!slots.length) {
-            slotsWrap.innerHTML = '<span class="book-appointment__hint is-error">No slots available on this date — please choose another date.</span>';
+            slotsWrap.innerHTML = '<span class="book-appointment__hint is-error"><?php echo e(__('frontend.appointment_form.err_no_slots')); ?></span>';
             return;
           }
           slots.forEach(function (time) {
@@ -442,7 +449,7 @@
           });
         })
         .catch(function () {
-          slotsWrap.innerHTML = '<span class="book-appointment__hint is-error">Could not load time slots. Please try again.</span>';
+          slotsWrap.innerHTML = '<span class="book-appointment__hint is-error"><?php echo e(__('frontend.appointment_form.err_load_slots')); ?></span>';
         });
     });
 
@@ -498,7 +505,7 @@
       });
 
       dropzone.classList.toggle('has-file', selectedFiles.length > 0);
-      var browseText = selectedFiles.length === 0 ? 'Upload medical documents' : 'Add another file';
+      var browseText = selectedFiles.length === 0 ? '<?php echo e(__('frontend.appointment_form.upload_docs')); ?>' : '<?php echo e(__('frontend.appointment_form.add_another')); ?>';
       promptLabel.innerHTML = '<span class="book-appointment__dropzone-browse">' + browseText + '</span> or drag &amp; drop';
       promptView.style.display = selectedFiles.length < maxFiles ? '' : 'none';
     }
@@ -507,11 +514,11 @@
       var allowed = ['image/jpeg', 'image/png', 'application/pdf', 'application/msword',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
       if (allowed.indexOf(file.type) === -1) {
-        fileHint.textContent = 'Unsupported file type — "' + file.name + '" was skipped. Please upload JPG, PNG, PDF or DOC files.';
+        fileHint.textContent = '<?php echo e(__('frontend.appointment_form.unsupported_file')); ?>'.replace(':file', file.name);
         return false;
       }
       if (file.size > maxFileBytes) {
-        fileHint.textContent = '"' + file.name + '" is too large — the maximum size is 5 MB.';
+        fileHint.textContent = '<?php echo e(__('frontend.appointment_form.file_too_large')); ?>'.replace(':file', file.name);
         return false;
       }
       var isDuplicate = selectedFiles.some(function (f) {
@@ -525,7 +532,7 @@
       fileHint.textContent = '';
       Array.prototype.forEach.call(fileList, function (file) {
         if (selectedFiles.length >= maxFiles) {
-          fileHint.textContent = 'You can attach up to ' + maxFiles + ' files.';
+          fileHint.textContent = '<?php echo e(__('frontend.appointment_form.max_files')); ?>'.replace(':max', maxFiles);
           return;
         }
         if (acceptFile(file)) selectedFiles.push(file);

@@ -60,6 +60,18 @@
   @apply relative flex items-center gap-2.5 rounded-lg border border-[#E7EAF0] bg-white px-4 py-3.5 text-sm text-navy transition-colors duration-150 focus-within:border-brand-cyan;
 }
 
+.book-appointment__radio-group {
+  @apply flex flex-wrap items-center gap-4 sm:col-span-2;
+}
+
+.book-appointment__radio {
+  @apply flex cursor-pointer items-center gap-2 text-sm font-medium text-navy;
+  
+  input[type="radio"] {
+    @apply h-4 w-4 cursor-pointer text-brand-cyan focus:ring-brand-cyan focus:ring-offset-1;
+  }
+}
+
 .book-appointment__field-icon {
   @apply flex-shrink-0 text-[#8894AB];
 }

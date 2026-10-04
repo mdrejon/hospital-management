@@ -124,26 +124,60 @@
                     <div class="bg-white rounded-xl border border-gray-200/80 shadow-xs p-6 space-y-5 sticky top-4">
                         <h2 class="text-sm font-bold uppercase tracking-wider text-emerald-700 border-b pb-3">Billing Summary</h2>
 
-                        <div class="space-y-2 text-xs">
+                        <!-- Agent Discount (private to agent) -->
+                        <div class="border-t pt-4 space-y-3">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-purple-700">
+                                🎁 Agent Discount (Optional)
+                            </h3>
+                            
+                            <!-- Discount Type Selector -->
+                            <div class="flex gap-2">
+                                <button type="button" @click="form.agent_discount_type = 'none'; form.agent_discount_value = 0" 
+                                    :class="form.agent_discount_type === 'none' ? 'bg-gray-200 font-bold' : 'bg-gray-50 hover:bg-gray-100'"
+                                    class="flex-1 py-1.5 text-xs rounded border text-gray-700 transition-colors">None</button>
+                                <button type="button" @click="form.agent_discount_type = 'percentage'"
+                                    :class="form.agent_discount_type === 'percentage' ? 'bg-purple-100 text-purple-700 font-bold border-purple-400' : 'bg-gray-50 hover:bg-gray-100'"
+                                    class="flex-1 py-1.5 text-xs rounded border transition-colors">%</button>
+                                <button type="button" @click="form.agent_discount_type = 'fixed'"
+                                    :class="form.agent_discount_type === 'fixed' ? 'bg-blue-100 text-blue-700 font-bold border-blue-400' : 'bg-gray-50 hover:bg-gray-100'"
+                                    class="flex-1 py-1.5 text-xs rounded border transition-colors">BDT</button>
+                            </div>
+                            
+                            <!-- Discount Value Input -->
+                            <div v-if="form.agent_discount_type !== 'none'" class="relative">
+                                <span class="absolute left-3 top-2 text-gray-400 text-xs font-mono">
+                                    {{ form.agent_discount_type === 'percentage' ? '%' : 'BDT' }}
+                                </span>
+                                <input v-model.number="form.agent_discount_value" type="number" min="0"
+                                    :max="form.agent_discount_type === 'percentage' ? maxDiscountPct : maxDiscountFixed"
+                                    step="0.01" class="w-full pl-10 pr-3 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none" 
+                                    :placeholder="form.agent_discount_type === 'percentage' ? `Max ${maxDiscountPct}%` : `Max BDT ${maxDiscountFixed}`" />
+                            </div>
+
+                            <!-- Applied discount preview -->
+                            <div v-if="agentDiscountAmount > 0" class="flex justify-between text-purple-700 text-xs">
+                                <span>Agent Discount Applied:</span>
+                                <span class="font-bold">-BDT {{ agentDiscountAmount.toLocaleString() }}</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 text-xs border-t pt-4">
                             <div class="flex justify-between text-gray-500">
                                 <span>Subtotal ({{ form.test_ids.length }} tests):</span>
                                 <span class="font-semibold text-gray-900">BDT {{ totalSubtotal.toLocaleString() }}</span>
                             </div>
                             <div v-if="totalDiscounts > 0" class="flex justify-between text-emerald-600">
-                                <span>Total Discounts Applied:</span>
+                                <span>System Discounts:</span>
                                 <span class="font-semibold">- BDT {{ totalDiscounts.toLocaleString() }}</span>
                             </div>
+                            <div v-if="agentDiscountAmount > 0" class="flex justify-between text-purple-600">
+                                <span>Agent Discount:</span>
+                                <span class="font-semibold">- BDT {{ agentDiscountAmount.toLocaleString() }}</span>
+                            </div>
                             <div class="border-t pt-3 flex justify-between items-baseline">
-                                <span class="text-sm font-bold text-gray-900">Net Payable Amount:</span>
+                                <span class="text-sm font-bold text-gray-900">Net Payable:</span>
                                 <span class="text-xl font-black text-blue-700">BDT {{ netPayable.toLocaleString() }}</span>
                             </div>
-                        </div>
-
-                        <!-- Agent Commission Box -->
-                        <div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-1">
-                            <div class="text-xs uppercase font-bold tracking-wider text-emerald-700">Your Agent Commission</div>
-                            <div class="text-xl font-black text-emerald-700">BDT {{ agentCommission.toLocaleString() }}</div>
-                            <div class="text-xs text-emerald-600">{{ agentRate }}% commission credited to your wallet</div>
                         </div>
 
                         <!-- Payment Collection -->
@@ -218,6 +252,8 @@ const props = defineProps({
     doctors:         { type: [Array, Object], default: () => [] },
     agent:           { type: Object, default: () => ({}) },
     paymentSettings: { type: Object, default: () => ({}) },
+    maxDiscountPct:  { type: Number, default: 20 },
+    maxDiscountFixed:{ type: Number, default: 500 },
 });
 
 const today = new Date().toISOString().split('T')[0];
@@ -277,6 +313,8 @@ const form = useForm({
     preferred_date: '',
     test_ids: [],
     notes: '',
+    agent_discount_type: 'none',
+    agent_discount_value: 0,
     payment_type: props.paymentSettings?.allow_without_pay !== false ? 'without_pay' : 'online',
     payment_gateway: defaultGateway.value || 'bkash',
 });
@@ -298,13 +336,21 @@ const totalDiscounts = computed(() => {
     }, 0);
 });
 
-const netPayable = computed(() => {
-    return Math.max(0, totalSubtotal.value - totalDiscounts.value);
+const agentDiscountAmount = computed(() => {
+    if (form.agent_discount_type === 'none' || !form.agent_discount_value) return 0;
+    const afterCatalog = totalSubtotal.value - totalDiscounts.value;
+    if (form.agent_discount_type === 'percentage') {
+        const pct = Math.min(form.agent_discount_value, props.maxDiscountPct);
+        return Math.round(afterCatalog * pct / 100);
+    }
+    return Math.min(form.agent_discount_value, afterCatalog, props.maxDiscountFixed);
 });
 
-const agentCommission = computed(() => {
-    return Math.round((netPayable.value * agentRate.value) / 100);
+const netPayable = computed(() => {
+    return Math.max(0, totalSubtotal.value - totalDiscounts.value - agentDiscountAmount.value);
 });
+
+
 
 function submit() {
     form.post(route('agent.test.store'));

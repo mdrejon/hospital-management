@@ -17,15 +17,23 @@ class MedicalTestBookingItem extends Model
         'test_code',
         'unit_price',
         'discount_amount',
+        'agent_discount_amount',
         'final_price',
+        'commission_rate',
+        'commission_amount',
+        'commission_base_price',
         'status',
         'report_file',
     ];
 
     protected $casts = [
-        'unit_price'      => 'decimal:2',
-        'discount_amount' => 'decimal:2',
-        'final_price'     => 'decimal:2',
+        'unit_price'            => 'decimal:2',
+        'discount_amount'       => 'decimal:2',
+        'agent_discount_amount' => 'decimal:2',
+        'final_price'           => 'decimal:2',
+        'commission_rate'       => 'decimal:2',
+        'commission_amount'     => 'decimal:2',
+        'commission_base_price' => 'decimal:2',
     ];
 
     const STATUS_PENDING          = 'pending';

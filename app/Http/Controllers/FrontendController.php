@@ -55,11 +55,18 @@ class FrontendController extends Controller
         ]);
     }
 
-    /** Admin > Website Management > Appointments > "Page Settings" tab. Empty array (falls back to static defaults) if the DB isn't ready. */
     private function appointmentSettings(): array
     {
         try {
-            return GlobalSetting::where('key', 'like', 'appt_%')->pluck('value', 'key')->toArray();
+            $settings = GlobalSetting::where('key', 'like', 'appt_%')->pluck('value', 'key')->toArray();
+
+            foreach (['appt_badge', 'appt_title', 'appt_form_title', 'appt_form_subtitle', 'appt_page_hero_title', 'appt_seo_title', 'appt_seo_description'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key);
+                }
+            }
+
+            return $settings;
         } catch (\Throwable) {
             return [];
         }
@@ -94,11 +101,18 @@ class FrontendController extends Controller
         }
     }
 
-    /** Admin > Website Management > Packages > "Page Settings" tab. Empty array (falls back to static defaults) if the DB isn't ready. */
     private function packageSettings(): array
     {
         try {
-            return GlobalSetting::where('key', 'like', 'pkg_%')->pluck('value', 'key')->toArray();
+            $settings = GlobalSetting::where('key', 'like', 'pkg_%')->pluck('value', 'key')->toArray();
+
+            foreach (['pkg_page_hero_title', 'pkg_seo_title', 'pkg_seo_description', 'pkg_badge', 'pkg_title', 'pkg_desc'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key);
+                }
+            }
+
+            return $settings;
         } catch (\Throwable) {
             return [];
         }
@@ -746,11 +760,18 @@ class FrontendController extends Controller
         }
     }
 
-    /** Admin > Website Management > Management Team > Page Settings. Empty array (falls back to static defaults) if the DB isn't ready. */
     private function managementSettings(): array
     {
         try {
-            return GlobalSetting::where('key', 'like', 'mgmt_%')->pluck('value', 'key')->toArray();
+            $settings = GlobalSetting::where('key', 'like', 'mgmt_%')->pluck('value', 'key')->toArray();
+
+            foreach (['mgmt_hero_title', 'mgmt_badge', 'mgmt_title', 'mgmt_seo_title', 'mgmt_seo_description'] as $key) {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = GlobalSetting::getTranslated($key);
+                }
+            }
+
+            return $settings;
         } catch (\Throwable) {
             return [];
         }

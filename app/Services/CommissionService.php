@@ -8,6 +8,7 @@ use App\Models\AgentWalletTransaction;
 use App\Models\AgentWithdrawal;
 use App\Models\Appointment;
 use App\Models\GlobalSetting;
+use App\Models\MedicalTest;
 use App\Models\MedicalTestBooking;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -33,6 +34,20 @@ class CommissionService
             'type'   => $type,
             'amount' => max(0, $amount),
         ];
+    }
+
+    /**
+     * Resolve commission rate for a specific test.
+     * Priority: test-specific rate > agent global rate > system default.
+     */
+    public static function resolveTestCommissionRate(MedicalTest $test, AgentProfile $agent): float
+    {
+        // If test has its own rate (non-null), use it
+        if ($test->commission_rate !== null) {
+            return (float) $test->commission_rate;
+        }
+        // Otherwise fall back to agent's global test rate
+        return (float) ($agent->test_commission_rate ?? GlobalSetting::get('agent_default_test_commission_rate', 15.00));
     }
 
     /**
@@ -116,7 +131,7 @@ class CommissionService
     /**
      * Handle Medical Test booking commission creation.
      */
-    public static function handleMedicalTestCommission(MedicalTestBooking $booking): ?AgentCommission
+    public static function handleMedicalTestCommission(MedicalTestBooking $booking, float $agentDiscountTotal = 0.0): ?AgentCommission
     {
         if (!$booking->agent_id || $booking->total_amount <= 0) {
             return null;
@@ -127,17 +142,49 @@ class CommissionService
             return null;
         }
 
-        $calc = self::calculateTestCommission($agent, (float) $booking->total_amount);
-        $amount = $calc['amount'];
-        if ($amount <= 0) {
+        $items = $booking->items()->with('medicalTest')->get();
+        if ($items->isEmpty()) {
+            return null;
+        }
+
+        $totalCommission = 0.0;
+        $effectiveTotal = (float) $booking->total_amount; // already includes agent discount
+
+        // Distribute agent discount proportionally across items
+        $subtotalAfterCatalogDiscount = $items->sum(fn($item) => (float)$item->final_price);
+
+        foreach ($items as $item) {
+            $test = $item->medicalTest;
+            $rate = self::resolveTestCommissionRate($test, $agent);
+
+            // Proportional agent discount for this item
+            $proportion = $subtotalAfterCatalogDiscount > 0
+                ? ((float)$item->final_price / $subtotalAfterCatalogDiscount)
+                : (1 / max(1, $items->count()));
+
+            $itemAgentDiscount = round($agentDiscountTotal * $proportion, 2);
+            $commissionBase   = max(0, (float)$item->final_price - $itemAgentDiscount);
+            $itemCommission   = round($commissionBase * $rate / 100, 2);
+            $totalCommission += $itemCommission;
+
+            // Update the booking item with commission breakdown
+            $item->update([
+                'agent_discount_amount'  => $itemAgentDiscount,
+                'commission_rate'        => $rate,
+                'commission_base_price'  => $commissionBase,
+                'commission_amount'      => $itemCommission,
+            ]);
+        }
+
+        if ($totalCommission <= 0) {
             return null;
         }
 
         $isPaid = $booking->payment_status === MedicalTestBooking::PAYMENT_PAID || $booking->status === MedicalTestBooking::STATUS_COMPLETED;
         $status = $isPaid ? AgentCommission::STATUS_CREDITED : AgentCommission::STATUS_PENDING;
 
-        return DB::transaction(function () use ($booking, $agent, $calc, $amount, $status, $isPaid) {
-            $booking->agent_commission_amount = $amount;
+        return DB::transaction(function () use ($booking, $agent, $totalCommission, $status, $isPaid) {
+            $booking->agent_commission_amount = $totalCommission;
             $booking->agent_commission_status = $status;
             $booking->saveQuietly();
 
@@ -149,8 +196,8 @@ class CommissionService
                 ],
                 [
                     'booking_reference' => $booking->booking_number,
-                    'amount'            => $amount,
-                    'commission_rate'   => $calc['rate'],
+                    'amount'            => $totalCommission,
+                    'commission_rate'   => 0,
                     'status'            => $status,
                     'credited_at'       => $isPaid ? now() : null,
                     'notes'             => "Commission for Medical Test Booking {$booking->booking_number}",
@@ -160,7 +207,7 @@ class CommissionService
             if ($isPaid) {
                 self::creditWallet(
                     $agent,
-                    $amount,
+                    $totalCommission,
                     $commission,
                     "Medical test booking commission: {$booking->booking_number}"
                 );

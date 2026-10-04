@@ -3737,3 +3737,7 @@ Did you mean one of these?
 [stacktrace]
 #0 {main}
 "} 
+[2026-10-03 14:24:03] local.ERROR: Cannot use App\Models\MedicalTest as MedicalTest because the name is already in use {"userId":2,"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot use App\\Models\\MedicalTest as MedicalTest because the name is already in use at D:/laragon-new/laragon/www/hospital-management/app/Http/Controllers/Agent/AgentMedicalTestBookingController.php:11)
+[stacktrace]
+#0 {main}
+"} 

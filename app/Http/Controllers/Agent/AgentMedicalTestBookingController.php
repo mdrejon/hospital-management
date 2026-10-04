@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Agent;
 
 use App\Http\Controllers\Controller;
 use App\Models\Doctor;
+use App\Models\GlobalSetting;
 use App\Models\MedicalTest;
 use App\Models\MedicalTestBooking;
 use App\Models\MedicalTestBookingItem;
@@ -34,12 +35,17 @@ class AgentMedicalTestBookingController extends Controller
         ]);
         $paymentSettings = PaymentService::getActiveGateways();
 
+        $maxDiscountPct = (float) GlobalSetting::get('agent_max_discount_pct', 20.00);
+        $maxDiscountFixed = (float) GlobalSetting::get('agent_max_discount_fixed', 500.00);
+
         return Inertia::render('Agent/BookMedicalTest', [
-            'categories'      => $categories,
-            'allTests'        => $allTests,
-            'doctors'         => $doctors,
-            'agent'           => $agent,
-            'paymentSettings' => $paymentSettings,
+            'categories'       => $categories,
+            'allTests'         => $allTests,
+            'doctors'          => $doctors,
+            'agent'            => $agent,
+            'paymentSettings'  => $paymentSettings,
+            'maxDiscountPct'   => $maxDiscountPct,
+            'maxDiscountFixed' => $maxDiscountFixed,
         ]);
     }
 
@@ -59,9 +65,11 @@ class AgentMedicalTestBookingController extends Controller
             'booking_date'    => ['required', 'date'],
             'preferred_date'  => ['nullable', 'date'],
             'test_ids'        => ['required', 'array', 'min:1'],
-            'test_ids.*'      => ['required', 'exists:medical_tests,id'],
-            'notes'           => ['nullable', 'string'],
-            'payment_type'    => ['required', 'in:without_pay,online'],
+            'test_ids.*'           => ['required', 'exists:medical_tests,id'],
+            'notes'                => ['nullable', 'string'],
+            'agent_discount_type'  => ['required', 'in:none,percentage,fixed'],
+            'agent_discount_value' => ['required_unless:agent_discount_type,none', 'numeric', 'min:0'],
+            'payment_type'         => ['required', 'in:without_pay,online'],
             'payment_gateway' => ['nullable', 'required_if:payment_type,online', 'in:sslcommerz,bkash'],
         ]);
 
@@ -102,29 +110,46 @@ class AgentMedicalTestBookingController extends Controller
 
             $totalAmount = max(0, $subtotal - $discountTotal);
 
+            $agentDiscountType  = $validated['agent_discount_type'] ?? 'none';
+            $agentDiscountValue = (float) ($validated['agent_discount_value'] ?? 0);
+            $agentDiscountAmount = 0;
+
+            if ($agentDiscountType === 'percentage' && $agentDiscountValue > 0) {
+                $maxDiscountFixed = (float) GlobalSetting::get('agent_max_discount_fixed', 500.00);
+                $agentDiscountAmount = round($totalAmount * $agentDiscountValue / 100, 2);
+                $agentDiscountAmount = min($agentDiscountAmount, $maxDiscountFixed);
+            } elseif ($agentDiscountType === 'fixed' && $agentDiscountValue > 0) {
+                $agentDiscountAmount = min($agentDiscountValue, $totalAmount);
+            }
+
+            $finalPayable = max(0, $totalAmount - $agentDiscountAmount);
+
             $booking = MedicalTestBooking::create([
-                'booking_number'    => MedicalTestBooking::generateNumber(),
-                'patient_id'        => $patient->id,
-                'doctor_id'         => $validated['doctor_id'] ?? null,
-                'booked_by_user_id' => $request->user()->id,
-                'agent_id'          => $agent->id,
-                'patient_name'      => $validated['patient_name'],
-                'phone'             => $validated['phone'],
-                'email'             => $validated['email'] ?? null,
-                'gender'            => $validated['gender'],
-                'date_of_birth'     => $validated['date_of_birth'] ?? null,
-                'address'           => $validated['address'] ?? null,
-                'booking_date'      => $validated['booking_date'],
-                'preferred_date'    => $validated['preferred_date'] ?? null,
-                'subtotal_amount'   => $subtotal,
-                'discount_amount'   => $discountTotal,
-                'total_amount'      => $totalAmount,
-                'paid_amount'       => 0,
-                'due_amount'        => $totalAmount,
-                'payment_method'    => $validated['payment_type'] === 'online' ? $validated['payment_gateway'] : 'without_pay',
-                'payment_status'    => MedicalTestBooking::PAYMENT_UNPAID,
-                'status'            => MedicalTestBooking::STATUS_PENDING,
-                'notes'             => $validated['notes'] ?? null,
+                'booking_number'        => MedicalTestBooking::generateNumber(),
+                'patient_id'            => $patient->id,
+                'doctor_id'             => $validated['doctor_id'] ?? null,
+                'booked_by_user_id'     => $request->user()->id,
+                'agent_id'              => $agent->id,
+                'patient_name'          => $validated['patient_name'],
+                'phone'                 => $validated['phone'],
+                'email'                 => $validated['email'] ?? null,
+                'gender'                => $validated['gender'],
+                'date_of_birth'         => $validated['date_of_birth'] ?? null,
+                'address'               => $validated['address'] ?? null,
+                'booking_date'          => $validated['booking_date'],
+                'preferred_date'        => $validated['preferred_date'] ?? null,
+                'subtotal_amount'       => $subtotal,
+                'discount_amount'       => $discountTotal,
+                'agent_discount_amount' => $agentDiscountAmount,
+                'agent_discount_type'   => $agentDiscountType,
+                'agent_discount_value'  => $agentDiscountValue,
+                'total_amount'          => $finalPayable,
+                'paid_amount'           => 0,
+                'due_amount'            => $finalPayable,
+                'payment_method'        => $validated['payment_type'] === 'online' ? $validated['payment_gateway'] : 'without_pay',
+                'payment_status'        => MedicalTestBooking::PAYMENT_UNPAID,
+                'status'                => MedicalTestBooking::STATUS_PENDING,
+                'notes'                 => $validated['notes'] ?? null,
             ]);
 
             foreach ($itemsData as $item) {
@@ -132,7 +157,7 @@ class AgentMedicalTestBookingController extends Controller
                 MedicalTestBookingItem::create($item);
             }
 
-            CommissionService::handleMedicalTestCommission($booking);
+            CommissionService::handleMedicalTestCommission($booking, $agentDiscountAmount);
 
             return $booking;
         });

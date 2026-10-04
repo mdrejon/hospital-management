@@ -115,6 +115,7 @@
                                     <th class="px-5 py-3">Details & Remarks</th>
                                     <th class="px-5 py-3">Rate Applied</th>
                                     <th class="px-5 py-3 text-right">Commission Earned</th>
+                                    <th class="px-5 py-3 text-center">Details</th>
                                     <th class="px-5 py-3 text-center">Status</th>
                                     <th class="px-5 py-3 text-right">Credited Date</th>
                                 </tr>
@@ -143,6 +144,14 @@
                                         +BDT {{ Number(com.amount).toLocaleString() }}
                                     </td>
                                     <td class="px-5 py-3.5 text-center">
+                                        <button v-if="com.source_type === 'medical_test' && com.booking_items?.length"
+                                            @click="openCommissionDetail(com)"
+                                            class="px-2 py-1 text-2xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded hover:bg-blue-100 transition-colors">
+                                            📋 Details
+                                        </button>
+                                        <span v-else class="text-gray-300 text-2xs">—</span>
+                                    </td>
+                                    <td class="px-5 py-3.5 text-center">
                                         <span :class="commissionStatusBadge(com.status)" class="px-2 py-0.5 rounded-full text-2xs font-semibold uppercase">
                                             {{ com.status }}
                                         </span>
@@ -152,7 +161,7 @@
                                     </td>
                                 </tr>
                                 <tr v-if="!commissions?.data || commissions.data.length === 0">
-                                    <td colspan="7" class="px-6 py-12 text-center text-gray-400">
+                                    <td colspan="8" class="px-6 py-12 text-center text-gray-400">
                                         <div class="text-2xl mb-1">🏷️</div>
                                         <div class="font-medium text-gray-600">No commissions recorded yet.</div>
                                         <div class="text-xs text-gray-400 mt-0.5">Book doctor appointments or medical tests to start earning commissions!</div>
@@ -300,6 +309,90 @@
                             class="px-3 py-1 rounded text-xs" 
                             v-html="link.label"
                         />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Per-Test Commission Breakdown Modal -->
+            <div v-if="selectedCommission" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
+                <div class="bg-white rounded-xl max-w-3xl w-full shadow-2xl overflow-hidden">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between p-5 border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-blue-50">
+                        <div>
+                            <h3 class="font-bold text-gray-800">Commission Breakdown</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">
+                                Booking: <span class="font-mono text-blue-600">{{ selectedCommission.booking_reference }}</span>
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-gray-500">Total Commission</div>
+                            <div class="text-xl font-black text-emerald-600">
+                                BDT {{ Number(selectedCommission.amount).toLocaleString() }}
+                            </div>
+                        </div>
+                        <button @click="selectedCommission = null" class="ml-4 w-7 h-7 rounded hover:bg-gray-200 text-gray-400 text-lg flex items-center justify-center">&times;</button>
+                    </div>
+
+                    <!-- Per-Test Table -->
+                    <div class="overflow-x-auto max-h-[60vh] overflow-y-auto">
+                        <table class="w-full text-xs text-gray-600">
+                            <thead class="bg-gray-50 border-b border-gray-200 sticky top-0">
+                                <tr>
+                                    <th class="px-4 py-2.5 text-left font-semibold">Test Name</th>
+                                    <th class="px-4 py-2.5 text-right font-semibold">Test Price</th>
+                                    <th class="px-4 py-2.5 text-right font-semibold">Agent Discount</th>
+                                    <th class="px-4 py-2.5 text-right font-semibold">Commission Base</th>
+                                    <th class="px-4 py-2.5 text-right font-semibold">Rate</th>
+                                    <th class="px-4 py-2.5 text-right font-semibold text-emerald-700">Commission</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr v-for="item in selectedCommission.booking_items" :key="item.test_code" class="hover:bg-gray-50">
+                                    <td class="px-4 py-3">
+                                        <div class="font-semibold text-gray-800">{{ item.test_name }}</div>
+                                        <div class="text-2xs text-gray-400 font-mono">{{ item.test_code }}</div>
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-mono text-gray-700">
+                                        BDT {{ Number(item.unit_price).toLocaleString() }}
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-mono text-purple-600">
+                                        <span v-if="item.agent_discount_amount > 0">
+                                            -BDT {{ Number(item.agent_discount_amount).toLocaleString() }}
+                                        </span>
+                                        <span v-else class="text-gray-300">—</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-mono text-gray-800 font-semibold">
+                                        BDT {{ Number(item.commission_base_price).toLocaleString() }}
+                                    </td>
+                                    <td class="px-4 py-3 text-right">
+                                        <span class="bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-bold">
+                                            {{ item.commission_rate }}%
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-mono font-bold text-emerald-600">
+                                        +BDT {{ Number(item.commission_amount).toLocaleString() }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="bg-emerald-50 border-t-2 border-emerald-200">
+                                <tr>
+                                    <td colspan="5" class="px-4 py-3 text-sm font-bold text-right text-gray-700">
+                                        Total Commission Earned:
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-mono font-black text-emerald-700 text-sm">
+                                        +BDT {{ Number(selectedCommission.amount).toLocaleString() }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <!-- Status badge -->
+                    <div class="p-4 border-t flex items-center justify-between">
+                        <span :class="commissionStatusBadge(selectedCommission.status)" class="px-3 py-1 rounded-full text-xs font-semibold uppercase">
+                            {{ selectedCommission.status }}
+                        </span>
+                        <button @click="selectedCommission = null" class="px-4 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded transition-colors">Close</button>
                     </div>
                 </div>
             </div>
@@ -487,6 +580,11 @@ const props = defineProps({
 
 const activeTab = ref('commissions');
 const showModal = ref(false);
+const selectedCommission = ref(null);
+
+function openCommissionDetail(commission) {
+    selectedCommission.value = commission;
+}
 
 const paymentMethods = [
     { id: 'bkash',  name: 'bKash',  icon: '📱' },

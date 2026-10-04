@@ -19,9 +19,12 @@
     $faviconType = ['png' => 'image/png', 'svg' => 'image/svg+xml', 'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'webp' => 'image/webp'][$faviconExt] ?? 'image/x-icon';
   ?>
   <link rel="icon" href="<?php echo e($faviconPath); ?>" type="<?php echo e($faviconType); ?>" />
+  <link rel="manifest" href="<?php echo e(route('manifest')); ?>" />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="apple-touch-icon" href="<?php echo e($faviconPath); ?>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="<?php echo e(asset('assets/main.css')); ?>" />
   <?php if(!empty($themeSettings)): ?>
   <style>
@@ -152,7 +155,7 @@
         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
-    <span class="floating-btn-text">Let's Talk</span>
+    <span class="floating-btn-text"><?php echo e(__('frontend.home.lets_talk')); ?></span>
   </a>
   <?php endif; ?>
 
@@ -165,6 +168,19 @@
   <?php endif; ?>
 
   <script src="<?php echo e(asset('assets/main.js')); ?>" defer></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          })
+          .catch(err => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    }
+  </script>
 </body>
 </html>
 <?php /**PATH D:\laragon-new\laragon\www\hospital-management\resources\views/layouts/frontend.blade.php ENDPATH**/ ?>

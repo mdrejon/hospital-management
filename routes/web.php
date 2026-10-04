@@ -86,6 +86,29 @@ Route::get('/admin/clear-cache', function () {
 
 
 // Frontend / Public Routes
+Route::get('/manifest.json', function () {
+    $headerSettings = \App\Models\GlobalSetting::getSettings('header');
+    $appName = config('app.name', 'Sitakund Modern Hospital Ltd.');
+    $faviconPath = !empty($headerSettings['header_favicon']) ? asset('storage/' . $headerSettings['header_favicon']) : asset('favicon.ico');
+    
+    return response()->json([
+        'name' => $appName,
+        'short_name' => 'Hospital App',
+        'start_url' => '/',
+        'display' => 'standalone',
+        'background_color' => '#ffffff',
+        'theme_color' => '#0f172a',
+        'icons' => [
+            [
+                'src' => $faviconPath,
+                'sizes' => '192x192 512x512',
+                'type' => 'image/png',
+                'purpose' => 'any maskable'
+            ]
+        ]
+    ]);
+})->name('manifest');
+
 Route::get('/',                    [FrontendController::class, 'home'])->name('home');
 Route::get('/about',                [FrontendController::class, 'about'])->name('about');
 Route::get('/achievements',        [FrontendController::class, 'achievements'])->name('achievements');

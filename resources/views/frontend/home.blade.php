@@ -70,7 +70,7 @@ $heroSlides = $sliders->isNotEmpty()
             </p>
             @endif
             <a href="{{ $slide['button_url'] ?: route('appointment') }}" class="hero-slide__cta">
-              {{ $slide['button_text'] ?: 'Make Appointment' }}
+              {{ $slide['button_text'] ?: __('frontend.home.make_appointment') }}
               <span class="hero-slide__cta-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
@@ -104,7 +104,7 @@ $heroSlides = $sliders->isNotEmpty()
           </svg>
         </a>
       </div>
-      <span class="hero__social-label">Follow Social :</span>
+      <span class="hero__social-label">{{ __('frontend.home.follow_social') }}</span>
     </div>
 
     <!-- Vertical dot nav -->
@@ -129,14 +129,14 @@ $aboutHours = !empty($about['about_hours']) ? $about['about_hours'] : [
 ['day' => 'Friday', 'time' => '09:30 - 07:30'],
 ['day' => 'Saturday', 'time' => '09:30 - 07:30'],
 ];
-$aboutTitle = $about['about_title'] ?? 'World Class Patient Facilities Designed For You';
-$aboutDesc = $about['about_desc'] ?? "Experience the future of healthcare. Our state-of-the-art facilities are equipped with the latest technology, ensuring you receive the world's best quality treatment. Here, cutting-edge tools meet unparalleled expertise, providing a comfortable and effective path to optimal health.";
+$aboutTitle = $about['about_title'] ?? __('frontend.home.about_title');
+$aboutDesc = $about['about_desc'] ?? __('frontend.home.about_desc');
 $aboutFeatures = !empty($about['about_features']) ? $about['about_features'] : [
 'Comprehensive Specialties', 'Emergency Services', 'Intensive Care Units (ICUs)', 'Telemedicine Facilities', 'Multidisciplinary Team',
 'Research and Development', 'Advanced Imaging Services', 'Rehabilitation Services', 'Patient-Centric Approach', 'Health Information Technology',
 ];
 $aboutFeatureCols = collect($aboutFeatures)->chunk((int) ceil(count($aboutFeatures) / 2));
-$aboutBtnText = $about['about_more_btn_text'] ?? 'Read More';
+$aboutBtnText = $about['about_more_btn_text'] ?? __('frontend.common.read_more');
 $aboutBtnUrl = ($about['about_more_btn_url'] ?? null) ?: route('about');
 $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
 @endphp
@@ -215,7 +215,7 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
               </svg>
             </span>
             <span class="about__contact-text">
-              <span class="about__contact-label">Contact us?</span>
+              <span class="about__contact-label">{{ __('frontend.faq.contact_label') }}</span>
               <span class="about__contact-value">{{ $aboutPhone }}</span>
             </span>
           </a>
@@ -262,13 +262,13 @@ $deptCards = $featuredServices->isNotEmpty()
     <span class="departments__banner-overlay"></span>
 
     <div class="departments__head">
-      <p class="departments__eyebrow">{{ $svc['svc_badge'] ?? 'Medical & General Care!' }}</p>
-      <h2 class="departments__title">{{ $svc['svc_title'] ?? 'Amazing Services' }}</h2>
+      <p class="departments__eyebrow">{{ $svc['svc_badge'] ?? __('frontend.home.services_badge') }}</p>
+      <h2 class="departments__title">{{ $svc['svc_title'] ?? __('frontend.home.services_title') }}</h2>
       <p class="departments__desc">
-        {{ $svc['svc_desc'] ?? 'Proactively revolutionize granular customer service after pandemic internal or "organic" sources distinctively impact proactive human' }}
+        {{ $svc['svc_desc'] ?? __('frontend.home.services_desc') }}
       </p>
       <a href="{{ ($svc['svc_btn_url'] ?? null) ?: route('services') }}" class="btn-services-all" style="margin-top:14px;display:inline-flex;">
-        {{ $svc['svc_btn_text'] ?? 'View All Services' }}
+        {{ $svc['svc_btn_text'] ?? __('frontend.home.view_all_services') }}
       </a>
     </div>
   </div>
@@ -349,10 +349,10 @@ $teamCards = $featuredDoctors->isNotEmpty()
     <div class="team__head">
       <p class="team__eyebrow">
         <span class="team__eyebrow-dot"></span>
-        {{ $doc['doc_home_badge'] ?? 'Our Doctor' }}
+        {{ $doc['doc_home_badge'] ?? __('frontend.home.doctors_badge') }}
         <span class="team__eyebrow-dot"></span>
       </p>
-      <h2 class="team__title">{{ $doc['doc_home_title'] ?? 'Meet Our Doctor' }}</h2>
+      <h2 class="team__title">{{ $doc['doc_home_title'] ?? __('frontend.home.doctors_title') }}</h2>
     </div>
 
     <div class="team__slider" data-team-slider>
@@ -427,7 +427,7 @@ $teamCards = $featuredDoctors->isNotEmpty()
 <!-- ===================== Why Choose Us ===================== -->
 @php
 $whyBadge = $about['why_badge'] ?? null;
-$whyTitle = $about['why_title'] ?? 'Why Choose Us For Your Health Care Needs';
+$whyTitle = $about['why_title'] ?? __('frontend.home.why_choose_us_title');
 $whyDesc = $about['why_desc'] ?? null;
 $whyPhoto = !empty($about['why_photo']) ? asset('storage/' . $about['why_photo']) : asset('assets/img/choose-us-image.webp');
 $whyBgPhoto = !empty($about['why_bg_photo']) ? asset('storage/' . $about['why_bg_photo']) : null;
@@ -519,11 +519,11 @@ $packageCards = $featuredPackages->isNotEmpty()
   <div class="packages__head">
     <p class="packages__eyebrow">
       <span class="packages__eyebrow-dot"></span>
-      {{ $pkg['pkg_badge'] ?? 'Our Health Packages' }}
+      {{ $pkg['pkg_badge'] ?? __('frontend.home.packages_badge') }}
       <span class="packages__eyebrow-dot"></span>
     </p>
     <h2 class="packages__title">
-      {{ $pkg['pkg_title'] ?? 'Best Medical Assistance Packages' }}
+      {{ $pkg['pkg_title'] ?? __('frontend.home.packages_title') }}
     </h2>
   </div>
 
@@ -574,8 +574,8 @@ $packageCards = $featuredPackages->isNotEmpty()
     <div class="faq__grid">
       <div class="faq__copy">
         @php
-        $homeFaqTitle = $homeFaq['title'] ?: 'Frequently Asked Questions';
-        $homeFaqDesc = $homeFaq['description'] ?: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.';
+        $homeFaqTitle = $homeFaq['title'] ?: __('frontend.home.faq_title');
+        $homeFaqDesc = $homeFaq['description'] ?: __('frontend.home.faq_desc');
         @endphp
         <h2 class="faq__title">{{ $homeFaqTitle }}</h2>
         <p class="faq__desc">
@@ -644,7 +644,7 @@ $packageCards = $featuredPackages->isNotEmpty()
       </div>
 
       <div class="testimonials__content">
-        <h2 class="testimonials__title">{{ ($testi['testi_title'] ?? null) ?: 'Real Patients, Real Stories. And Our Achievements' }}</h2>
+        <h2 class="testimonials__title">{{ ($testi['testi_title'] ?? null) ?: __('frontend.home.testimonials_title') }}</h2>
 
         <div class="testimonial-slider" data-testimonials-slider>
           <button type="button" class="testimonials__nav is-prev" data-testimonials-prev aria-label="Previous testimonial">
@@ -681,7 +681,7 @@ $packageCards = $featuredPackages->isNotEmpty()
                           <path d="M8 5v14l11-7z" />
                         </svg>
                       </span>
-                      Watch The Video
+                      {{ __('frontend.home.watch_video') }}
                     </button>
                   </div>
                   <p class="testimonial-card__name">{{ $tCard['name'] }}</p>
@@ -719,9 +719,9 @@ $packageCards = $featuredPackages->isNotEmpty()
   <div class="container mx-auto">
     <div class="awards__grid">
       <div class="awards__intro">
-        <h2 class="awards__title">{{ ($award['award_title'] ?? null) ?: 'Awards' }}</h2>
+        <h2 class="awards__title">{{ ($award['award_title'] ?? null) ?: __('frontend.home.awards_title') }}</h2>
         <p class="awards__desc">
-          {{ ($award['award_desc'] ?? null) ?: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.' }}
+          {{ ($award['award_desc'] ?? null) ?: __('frontend.home.awards_desc') }}
         </p>
       </div>
 
@@ -759,9 +759,9 @@ $blogCards = $latestBlogs->isNotEmpty()
 <section class="blog">
   <div class="container mx-auto">
     <div class="blog__head">
-      <h2 class="blog__title">{{ $blog['blog_home_title'] ?? 'Stay Informed With Our Latest Health Blogs' }}</h2>
+      <h2 class="blog__title">{{ $blog['blog_home_title'] ?? __('frontend.home.blog_title') }}</h2>
       <a href="{{ route('blog-list') }}" class="btn-view-all">
-        View All
+        {{ __('frontend.common.view_all') }}
         <span class="btn-view-all__icon">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -785,7 +785,7 @@ $blogCards = $latestBlogs->isNotEmpty()
           <h3 class="blog-card--split__title">{{ $card['title'] }}</h3>
         </div>
         <a href="{{ $card['url'] }}" class="blog-card--split__cta">
-          Read More
+          {{ __('frontend.common.read_more') }}
           <span class="blog-card--split__cta-icon">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />

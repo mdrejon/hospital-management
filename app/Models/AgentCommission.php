@@ -44,4 +44,12 @@ class AgentCommission extends Model
         }
         return $this->belongsTo(MedicalTestBooking::class, 'source_id');
     }
+
+    public function bookingItems()
+    {
+        if ($this->source_type === 'medical_test') {
+            return MedicalTestBookingItem::where('medical_test_booking_id', $this->source_id)->get();
+        }
+        return collect();
+    }
 }

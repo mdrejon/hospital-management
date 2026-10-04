@@ -86,9 +86,9 @@ class MedicalTestController extends Controller
     public function edit(MedicalTest $medicalTest): Response
     {
         return Inertia::render('Admin/MedicalTests/Edit', [
-            'test'       => $medicalTest,
-            'categories' => MedicalTestCategory::active()->get(),
-            'languages'  => Language::active(),
+            'medicalTest' => $medicalTest,
+            'categories'  => MedicalTestCategory::active()->get(),
+            'languages'   => Language::active(),
         ]);
     }
 

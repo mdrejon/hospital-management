@@ -7,6 +7,7 @@ use App\Models\AgentCommission;
 use App\Models\AgentProfile;
 use App\Models\AgentWithdrawal;
 use App\Models\GlobalSetting;
+use App\Models\MedicalTestBookingItem;
 use App\Services\CommissionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -43,6 +44,15 @@ class AgentWalletController extends Controller
             ->latest()
             ->paginate(15, ['*'], 'com_page')
             ->withQueryString();
+
+        $commissions->getCollection()->transform(function ($com) {
+            if ($com->source_type === 'medical_test') {
+                $com->booking_items = MedicalTestBookingItem::where('medical_test_booking_id', $com->source_id)
+                    ->get(['test_name', 'test_code', 'unit_price', 'discount_amount', 
+                           'agent_discount_amount', 'commission_rate', 'commission_base_price', 'commission_amount']);
+            }
+            return $com;
+        });
 
         // 2. Cash Out Requests
         $withdrawals = $agent->withdrawals()

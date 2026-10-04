@@ -78,6 +78,12 @@
                             <input v-model="form.discount_amount" type="number" step="0.01" min="0" class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="0" />
                         </div>
 
+                        <div>
+                            <label class="block text-xs font-semibold text-purple-700 uppercase mb-1">Agent Commission Rate (%)</label>
+                            <input v-model="form.commission_rate" type="number" step="0.01" min="0" class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none" placeholder="e.g. 10" />
+                            <p class="text-2xs text-gray-400 mt-1">Leave empty to use agent's default global rate.</p>
+                        </div>
+
                         <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-center">
                             <div class="text-2xs font-semibold text-emerald-700 uppercase">Effective Net Price</div>
                             <div class="text-xl font-black text-emerald-800 mt-0.5">BDT {{ calculatedNetPrice.toLocaleString() }}</div>
@@ -153,6 +159,7 @@ const form = useForm({
     discount_price: null,
     discount_amount: 0,
     discount_type: 'percentage',
+    commission_rate: null,
     sample_type: 'Blood',
     delivery_time: 'Same Day (4-6 Hours)',
     sort_order: 0,
