@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 class ServiceSeeder extends Seeder
 {
     /**
-     * Seed content sourced from the Sitakund Modern Hospital Ltd. print brochure's service list.
+     * Seed content sourced from the Medicare Lab Ltd. print brochure's service list.
      */
     public function run(): void
     {

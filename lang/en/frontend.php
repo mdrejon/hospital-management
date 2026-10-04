@@ -3,8 +3,8 @@
 return [
 
     'meta' => [
-        'default_title' => 'Sitakund Modern Hospital Ltd. | Medical & Health Care Services',
-        'default_description' => 'Sitakund Modern Hospital Ltd. provides compassionate, modern medical and health care services.',
+        'default_title' => 'Medicare Lab Ltd. | Medical & Health Care Services',
+        'default_description' => 'Medicare Lab Ltd. provides compassionate, modern medical and health care services.',
     ],
 
     'nav' => [
@@ -98,29 +98,29 @@ return [
         'services_badge' => 'Medical & General Care!',
         'services_title' => 'Amazing Services',
         'services_desc'  => 'Proactively revolutionize granular customer service after pandemic internal or "organic" sources distinctively impact proactive human',
-        
+
         'doctors_badge' => 'Our Doctor',
         'doctors_title' => 'Meet Our Doctor',
-        
+
         'packages_badge' => 'Our Health Packages',
         'packages_title' => 'Best Medical Assistance Packages',
-        
+
         'testimonials_title' => 'Real Patients, Real Stories. And Our Achievements',
-        
+
         'about_title' => 'World Class Patient Facilities Designed For You',
         'about_desc'  => "Experience the future of healthcare. Our state-of-the-art facilities are equipped with the latest technology, ensuring you receive the world's best quality treatment. Here, cutting-edge tools meet unparalleled expertise, providing a comfortable and effective path to optimal health.",
         'about_hours_title' => 'Open Hours',
-        
+
         'why_choose_us_title' => 'Why Choose Us For Your Health Care Needs',
-        
+
         'faq_title' => 'Frequently Asked Questions',
         'faq_desc'  => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-        
+
         'awards_title' => 'Awards',
         'awards_desc'  => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-        
+
         'blog_title' => 'Stay Informed With Our Latest Health Blogs',
-        
+
         'appt_badge' => 'Make an Appointment',
         'appt_title' => 'Fast & Easy Scheduling Today!',
         'appt_form_title' => 'Please enter your info',

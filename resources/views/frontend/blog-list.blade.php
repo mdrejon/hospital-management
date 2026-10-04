@@ -4,7 +4,7 @@
 $heroTitle = $blog['blog_hero_title'] ?? 'Our Blog';
 $heroImage = !empty($blog['blog_hero_image']) ? asset('storage/' . $blog['blog_hero_image']) : asset('assets/img/breadcumb.webp');
 $seoTitle = $blog['blog_seo_title'] ?? ('Blog | ' . config('app.name'));
-$seoDesc = $blog['blog_seo_description'] ?? 'Read the latest health tips, medical insights, and hospital news from Sitakund Modern Hospital Ltd..';
+$seoDesc = $blog['blog_seo_description'] ?? 'Read the latest health tips, medical insights, and hospital news from Medicare Lab Ltd..';
 $fallbackImages = [
 asset('assets/img/sr-1-3.jpg'), asset('assets/img/projects-3.jpg'), asset('assets/img/sr-1-2.jpg'),
 asset('assets/img/appoinment.jpg'), asset('assets/img/about-image.webp'), asset('assets/img/slider-1.3.jpg'),
@@ -27,7 +27,7 @@ asset('assets/img/appoinment.jpg'), asset('assets/img/about-image.webp'), asset(
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ $heroImage }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ $heroImage }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 
@@ -113,7 +113,7 @@ asset('assets/img/appoinment.jpg'), asset('assets/img/about-image.webp'), asset(
             <p class="blog-post-card__meta">
               {{ $p['date'] }}
               <span class="blog-post-card__meta-dot"></span>
-              BY <span class="blog-post-card__meta-author">Sitakund Modern Hospital Ltd. Team</span>
+              BY <span class="blog-post-card__meta-author">Medicare Lab Ltd. Team</span>
             </p>
             <h3 class="blog-post-card__title">{{ $p['title'] }}</h3>
             <p class="blog-post-card__desc">{{ $p['desc'] }}</p>
@@ -137,7 +137,7 @@ asset('assets/img/appoinment.jpg'), asset('assets/img/about-image.webp'), asset(
             <p class="blog-post-card__meta">
               {{ ($post->published_at ?: $post->created_at)->format('F j, Y') }}
               <span class="blog-post-card__meta-dot"></span>
-              BY <span class="blog-post-card__meta-author">{{ $post->author_name ?: 'Sitakund Modern Hospital Ltd. Team' }}</span>
+              BY <span class="blog-post-card__meta-author">{{ $post->author_name ?: 'Medicare Lab Ltd. Team' }}</span>
             </p>
             <h3 class="blog-post-card__title">{{ $post->title }}</h3>
             <p class="blog-post-card__desc">

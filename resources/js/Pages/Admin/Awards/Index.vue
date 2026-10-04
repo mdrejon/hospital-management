@@ -104,7 +104,7 @@
                                 v-model="form.title[activeLang]"
                                 type="text"
                                 class="input"
-                                placeholder="e.g. Sitakund Modern Hospital Ltd. 2024"
+                                placeholder="e.g. Medicare Lab Ltd. 2024"
                             />
                             <InputError
                                 :message="form.errors[`title.${activeLang}`]"

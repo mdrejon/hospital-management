@@ -4,7 +4,7 @@
 $heroTitle = $contact['contact_hero_title'] ?? 'Contact Us';
 $heroImage = !empty($contact['contact_hero_image']) ? asset('storage/' . $contact['contact_hero_image']) : asset('assets/img/breadcumb.webp');
 $seoTitle = $contact['contact_seo_title'] ?? ('Contact Us | ' . config('app.name'));
-$seoDesc = $contact['contact_seo_description'] ?? "Get in touch with Sitakund Modern Hospital Ltd.. We're happy to help you schedule an appointment or answer your questions.";
+$seoDesc = $contact['contact_seo_description'] ?? "Get in touch with Medicare Lab Ltd.. We're happy to help you schedule an appointment or answer your questions.";
 @endphp
 
 @section('title', $seoTitle)
@@ -23,7 +23,7 @@ $seoDesc = $contact['contact_seo_description'] ?? "Get in touch with Sitakund Mo
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ $heroImage }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ $heroImage }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 

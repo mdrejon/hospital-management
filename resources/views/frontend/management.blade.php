@@ -4,7 +4,7 @@
 $heroTitle = $mgmt['mgmt_hero_title'] ?? 'Our Management';
 $heroImage = !empty($mgmt['mgmt_hero_image']) ? asset('storage/' . $mgmt['mgmt_hero_image']) : asset('assets/img/breadcumb.webp');
 $seoTitle = $mgmt['mgmt_seo_title'] ?? ('Our Management | ' . config('app.name'));
-$seoDesc = $mgmt['mgmt_seo_description'] ?? "Meet the leadership team guiding Sitakund Modern Hospital Ltd.'s mission of compassionate, expert healthcare.";
+$seoDesc = $mgmt['mgmt_seo_description'] ?? "Meet the leadership team guiding Medicare Lab Ltd.'s mission of compassionate, expert healthcare.";
 @endphp
 
 @section('title', $seoTitle)
@@ -23,7 +23,7 @@ $seoDesc = $mgmt['mgmt_seo_description'] ?? "Meet the leadership team guiding Si
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ $heroImage }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ $heroImage }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 

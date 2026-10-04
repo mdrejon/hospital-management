@@ -16,7 +16,7 @@
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Site / Hospital Name (logo alt text)</label>
-                        <input v-model="form.header_site_name" type="text" class="input" placeholder="Sitakund Modern Hospital Ltd." />
+                        <input v-model="form.header_site_name" type="text" class="input" placeholder="Medicare Lab Ltd." />
                         <InputError :message="form.errors.header_site_name" />
                     </div>
                     <div>

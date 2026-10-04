@@ -173,7 +173,7 @@
                             rows="3"
                             class="input resize-none"
                             maxlength="320"
-                            placeholder="Explore Sitakund Modern Hospital Ltd.'s awards, accreditations, and commitment to patient care."
+                            placeholder="Explore Medicare Lab Ltd.'s awards, accreditations, and commitment to patient care."
                         ></textarea>
                         <p class="text-xs text-gray-400 mt-1">
                             {{
@@ -200,7 +200,7 @@
                             @input="onMetaKeywordsInput"
                             type="text"
                             class="input"
-                            placeholder="hospital awards, healthcare accreditation, Sitakund Modern Hospital Ltd. achievements"
+                            placeholder="hospital awards, healthcare accreditation, Medicare Lab Ltd. achievements"
                         />
                         <InputError :message="form.errors.ach_seo_keywords" />
                     </div>
@@ -317,7 +317,7 @@ const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } =
         titleKey: "ach_seo_title",
         descKey: "ach_seo_description",
         keywordsKey: "ach_seo_keywords",
-        titleSuffix: " | Sitakund Modern Hospital Ltd.",
+        titleSuffix: " | Medicare Lab Ltd.",
     });
 
 function onImg(file, type) {

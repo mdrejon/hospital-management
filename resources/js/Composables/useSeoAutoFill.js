@@ -65,7 +65,7 @@ function buildKeywords(a, b) {
  * @param {object} opts
  * @param {function} titleSource  - () => string  title source getter
  * @param {function} descSource   - () => string  description source getter
- * @param {string} titleSuffix    - appended to auto title (default ' | Sitakund Modern Hospital Ltd.')
+ * @param {string} titleSuffix    - appended to auto title (default ' | Medicare Lab Ltd.')
  * @param {string} titleKey       - form key for meta title     (default 'meta_title')
  * @param {string} descKey        - form key for meta desc      (default 'meta_description')
  * @param {string} keywordsKey    - form key for meta keywords  (default 'meta_keywords')
@@ -79,7 +79,7 @@ export function useSeoAutoFill(
     {
         titleSource,
         descSource,
-        titleSuffix = " | Sitakund Modern Hospital Ltd.",
+        titleSuffix = " | Medicare Lab Ltd.",
         titleKey = "meta_title",
         descKey = "meta_description",
         keywordsKey = "meta_keywords",

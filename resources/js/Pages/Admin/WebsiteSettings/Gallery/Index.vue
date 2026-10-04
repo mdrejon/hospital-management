@@ -59,7 +59,7 @@
                                 "
                                 rows="2"
                                 class="input resize-none"
-                                placeholder="From modern treatment rooms to advanced diagnostic facilities — take a look at the spaces and people behind Sitakund Modern Hospital Ltd.'s award-winning care."
+                                placeholder="From modern treatment rooms to advanced diagnostic facilities — take a look at the spaces and people behind Medicare Lab Ltd.'s award-winning care."
                             ></textarea>
                             <InputError
                                 :message="
@@ -173,7 +173,7 @@
                                     rows="3"
                                     maxlength="320"
                                     class="input resize-none"
-                                    placeholder="Browse photos of Sitakund Modern Hospital Ltd.'s treatment rooms, diagnostic facilities, and medical team..."
+                                    placeholder="Browse photos of Medicare Lab Ltd.'s treatment rooms, diagnostic facilities, and medical team..."
                                 ></textarea>
                             </div>
                             <div class="col-span-2">
@@ -182,7 +182,7 @@
                                     v-model="seoForm.gallery_seo_keywords"
                                     type="text"
                                     class="input"
-                                    placeholder="hospital gallery, medical facility photos, Sitakund Modern Hospital Ltd."
+                                    placeholder="hospital gallery, medical facility photos, Medicare Lab Ltd."
                                 />
                             </div>
                             <div class="col-span-2 md:col-span-1">

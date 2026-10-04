@@ -47,7 +47,7 @@ class MedicalTestAndAgentSeeder extends Seeder
 
         // Create a demo Agent User if not exists
         $demoAgentUser = User::firstOrCreate(
-            ['email' => 'agent@modernhospital.com'],
+            ['email' => 'agent@medicarelab.com'],
             [
                 'name'      => 'Demo Medical Agent',
                 'password'  => Hash::make('12345678'),

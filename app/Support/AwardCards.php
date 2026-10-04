@@ -31,7 +31,7 @@ class AwardCards
     private static function defaults(): array
     {
         return collect(range(0, 5))->map(fn($i) => [
-            'title'        => 'Sitakund Modern Hospital Ltd. 2024',
+            'title'        => 'Medicare Lab Ltd. 2024',
             'subtitle'     => 'Quality and Accreditation Institute',
             'link_text'    => 'Save the Children',
             'link_url'     => '#',

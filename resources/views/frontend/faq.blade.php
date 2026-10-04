@@ -23,7 +23,7 @@ $seoDesc = $faqPage['faq_seo_description'] ?? "Answers to the questions patients
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ $heroImage }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ $heroImage }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 
@@ -84,7 +84,7 @@ $faqDesc = ($faqPage['faq_page_desc'] ?? null) ?: ($faqData['description'] ?: "A
 $faqPhoto = !empty($faqPage['faq_page_image']) ? asset('storage/' . $faqPage['faq_page_image']) : ($faqData['image'] ?: asset('assets/img/about-image.webp'));
 $faqPhotoAlt = $faqData['image_alt'] ?: 'Smiling doctor ready to answer your questions';
 $faqList = (!empty($faqData['items']) && $faqData['items']->isNotEmpty()) ? $faqData['items'] : collect([
-['question' => 'What types of treatments do you offer?', 'answer' => 'Sitakund Modern Hospital Ltd. offers a full range of services, from routine check-ups and diagnostics to specialist care in cardiology, pediatrics, dental, maternity, surgery, and emergency medicine. Visit our Services page for the complete list.'],
+['question' => 'What types of treatments do you offer?', 'answer' => 'Medicare Lab Ltd. offers a full range of services, from routine check-ups and diagnostics to specialist care in cardiology, pediatrics, dental, maternity, surgery, and emergency medicine. Visit our Services page for the complete list.'],
 ['question' => 'How do I book my appointment?', 'answer' => "You can book online through our Appointment page by choosing a department, preferred doctor, and time slot, or call us directly at 1 123 456 7890. You'll receive a confirmation once your visit is scheduled."],
 ['question' => 'Can I cancel or reschedule my appointment?', 'answer' => 'Yes. Appointments can be rescheduled or cancelled free of charge up to 24 hours in advance by calling our front desk or emailing support@hospital.com.'],
 ['question' => 'Do you accept health insurance?', 'answer' => 'We work with most major insurance providers. Bring your insurance card to your first visit, or contact our billing team beforehand to confirm your coverage and any out-of-pocket costs.'],

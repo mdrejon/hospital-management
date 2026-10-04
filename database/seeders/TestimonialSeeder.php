@@ -25,7 +25,7 @@ class TestimonialSeeder extends Seeder
                 'role'   => ['en' => 'Patient', 'bn' => 'রোগী'],
                 'rating' => 5,
                 'review' => [
-                    'en' => 'I had my delivery at Sitakund Modern Hospital and the care from the doctors and nurses was excellent. They explained everything clearly and made me feel safe throughout.',
+                    'en' => 'I had my delivery at Medicare Lab and the care from the doctors and nurses was excellent. They explained everything clearly and made me feel safe throughout.',
                     'bn' => 'আমি সীতাকুণ্ড মডার্ণ হসপিটালে আমার ডেলিভারী করিয়েছি এবং ডাক্তার ও নার্সদের সেবা ছিল অসাধারণ। তারা সবকিছু পরিষ্কারভাবে বুঝিয়ে দিয়েছেন এবং আমাকে নিরাপদ বোধ করিয়েছেন।',
                 ],
                 'is_active' => true,

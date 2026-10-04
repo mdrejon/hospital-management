@@ -57,7 +57,7 @@ $seoDesc = $doctor->seo_description ?: \Illuminate\Support\Str::limit(strip_tags
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ asset('assets/img/breadcumb.webp') }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ asset('assets/img/breadcumb.webp') }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 

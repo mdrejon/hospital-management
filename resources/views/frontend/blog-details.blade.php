@@ -25,7 +25,7 @@ $seoDesc = $post->meta_description ?: $post->excerpt ?: ($blog['blog_seo_descrip
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ asset('assets/img/breadcumb.webp') }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ asset('assets/img/breadcumb.webp') }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 
@@ -95,7 +95,7 @@ $seoDesc = $post->meta_description ?: $post->excerpt ?: ($blog['blog_seo_descrip
         <p class="blog-details__meta">
           {{ ($post->published_at ?: $post->created_at)->format('F j, Y') }}
           <span class="blog-post-card__meta-dot"></span>
-          BY <span class="blog-post-card__meta-author">{{ $post->author_name ?: 'Sitakund Modern Hospital Ltd. Team' }}</span>
+          BY <span class="blog-post-card__meta-author">{{ $post->author_name ?: 'Medicare Lab Ltd. Team' }}</span>
         </p>
         <h2 class="blog-details__title">{{ $post->title }}</h2>
 
@@ -141,9 +141,9 @@ $seoDesc = $post->meta_description ?: $post->excerpt ?: ($blog['blog_seo_descrip
         </div>
 
         <div class="blog-details__author">
-          <img src="{{ $post->author_avatar ? asset('storage/' . $post->author_avatar) : asset('assets/img/about-image.webp') }}" alt="{{ $post->author_name ?: 'Sitakund Modern Hospital Ltd. Team' }}" class="blog-details__author-photo" />
+          <img src="{{ $post->author_avatar ? asset('storage/' . $post->author_avatar) : asset('assets/img/about-image.webp') }}" alt="{{ $post->author_name ?: 'Medicare Lab Ltd. Team' }}" class="blog-details__author-photo" />
           <div>
-            <h3 class="blog-details__author-name">By {{ $post->author_name ?: 'Sitakund Modern Hospital Ltd. Team' }}</h3>
+            <h3 class="blog-details__author-name">By {{ $post->author_name ?: 'Medicare Lab Ltd. Team' }}</h3>
             <p class="blog-details__author-bio">
               {{ $post->author_bio ?: 'A dedicated medical professional with extensive experience in providing compassionate, patient-centered care committed to the well-being of every patient.' }}
             </p>

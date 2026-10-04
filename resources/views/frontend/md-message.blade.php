@@ -6,14 +6,14 @@ $ceoBadgeValue = $about['ceo_badge_value'] ?? '16+';
 $ceoBadgeLabel = $about['ceo_badge_label'] ?? "Years\nExperienced";
 $ceoEyebrow = $about['ceo_eyebrow'] ?? 'A Message From Our MD/CEO';
 $ceoTitle = $about['ceo_title'] ?? 'Dr. Natali Jackson';
-$ceoMessage = $about['ceo_message'] ?? "As CEO of Sitakund Modern Hospital Ltd., I'm committed to building a hospital where compassionate care meets clinical excellence. Every decision we make, from staffing to technology, starts with what's best for the patients and families who trust us with their health.\n\nWhen we opened our doors over a decade ago, our promise was simple: treat every patient like family. That promise has guided every expansion, every new department, and every hire since — and it's why thousands of families continue to choose Sitakund Modern Hospital Ltd. for their care today.\n\nI'm proud of what our doctors, nurses, and support staff accomplish every single day. Whether you're here for a routine check-up or a life-changing procedure, you have my personal commitment that you'll be treated with the dignity, honesty, and warmth every patient deserves.";
+$ceoMessage = $about['ceo_message'] ?? "As CEO of Medicare Lab Ltd., I'm committed to building a hospital where compassionate care meets clinical excellence. Every decision we make, from staffing to technology, starts with what's best for the patients and families who trust us with their health.\n\nWhen we opened our doors over a decade ago, our promise was simple: treat every patient like family. That promise has guided every expansion, every new department, and every hire since — and it's why thousands of families continue to choose Medicare Lab Ltd. for their care today.\n\nI'm proud of what our doctors, nurses, and support staff accomplish every single day. Whether you're here for a routine check-up or a life-changing procedure, you have my personal commitment that you'll be treated with the dignity, honesty, and warmth every patient deserves.";
 $ceoFocusLabel = $about['ceo_focus_label'] ?? 'Leadership Focus';
 $ceoFocusItems = !empty($about['ceo_focus_items']) ? $about['ceo_focus_items'] : [
 'Patient-Centered Care', 'Clinical Innovation', 'Operational Excellence', 'Community Outreach', 'Quality Assurance', 'Strategic Growth',
 ];
 $ceoAwards = !empty($about['ceo_awards']) ? $about['ceo_awards'] : [
-['year' => 'Sitakund Modern Hospital Ltd. 2024', 'org' => 'Quality and Accreditation Institute', 'label' => 'Healthcare Leadership Award'],
-['year' => 'Sitakund Modern Hospital Ltd. 2023', 'org' => 'National Hospital Federation', 'label' => 'Excellence in Patient Care'],
+['year' => 'Medicare Lab Ltd. 2024', 'org' => 'Quality and Accreditation Institute', 'label' => 'Healthcare Leadership Award'],
+['year' => 'Medicare Lab Ltd. 2023', 'org' => 'National Hospital Federation', 'label' => 'Excellence in Patient Care'],
 ];
 $seoTitle = $about['about_seo_title'] ?? ($ceoTitle . ' | Message From MD/CEO | ' . config('app.name'));
 $seoDesc = \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMessage), 160);
@@ -29,7 +29,7 @@ $seoDesc = \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMes
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ asset('assets/img/breadcumb.webp') }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ asset('assets/img/breadcumb.webp') }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 

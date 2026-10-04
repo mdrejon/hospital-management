@@ -101,7 +101,7 @@
                             @input="onMetaDescInput"
                             rows="3"
                             class="input resize-none"
-                            placeholder="Learn about Sitakund Modern Hospital Ltd.'s mission, values, and leadership."
+                            placeholder="Learn about Medicare Lab Ltd.'s mission, values, and leadership."
                             maxlength="320"
                         ></textarea>
                         <p class="text-xs text-gray-400 mt-1">
@@ -375,7 +375,7 @@
                                 v-model="award.year"
                                 type="text"
                                 class="input"
-                                placeholder="Sitakund Modern Hospital Ltd. 2024"
+                                placeholder="Medicare Lab Ltd. 2024"
                             />
                             <input
                                 v-model="award.org"

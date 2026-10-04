@@ -16,7 +16,7 @@
             <div class="header">
                 <div class="logo">
                     <!-- Usually you'd use a real logo here, but text is safe -->
-                    <h1>Sitakund Modern Hospital Ltd.</h1>
+                    <h1>Medicare Lab Ltd.</h1>
                     <p>36D Street Brooklyn, New York</p>
                     <p>Phone: +1 (234) 5688 9990</p>
                 </div>
@@ -105,7 +105,7 @@
 
             <!-- Footer -->
             <div class="footer">
-                <p>Thank you for choosing Sitakund Modern Hospital.</p>
+                <p>Thank you for choosing Medicare Lab.</p>
                 <p>This is a computer-generated invoice and requires no signature.</p>
             </div>
         </div>

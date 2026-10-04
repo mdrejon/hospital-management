@@ -11,7 +11,7 @@ class BlogSeeder extends Seeder
 {
     public function run(): void
     {
-        $categoryByName = fn (string $en) => BlogCategory::whereJsonContains('name->en', $en)->first()?->id;
+        $categoryByName = fn(string $en) => BlogCategory::whereJsonContains('name->en', $en)->first()?->id;
 
         foreach ($this->posts($categoryByName) as $i => $post) {
             $slug = Str::slug($post['title']['en']);
@@ -20,7 +20,7 @@ class BlogSeeder extends Seeder
                 ['slug' => $slug],
                 array_merge($post, [
                     'slug'         => $slug,
-                    'author_name'  => 'Sitakund Modern Hospital',
+                    'author_name'  => 'Medicare Lab',
                     'status'       => 'published',
                     'published_at' => now()->subDays((count($this->posts($categoryByName)) - $i) * 5),
                     'sort_order'   => $i + 1,
@@ -40,7 +40,7 @@ class BlogSeeder extends Seeder
                     'bn' => 'সহজ কিছু অভ্যাস যা আপনার ও আপনার পরিবারের সারা বছর সুস্থ থাকতে সাহায্য করবে।',
                 ],
                 'content' => [
-                    'en' => "<p>Good health starts with small, consistent habits. Drink enough water every day, eat a balanced diet with plenty of vegetables, get at least 30 minutes of physical activity, sleep 7-8 hours a night, and schedule regular health checkups.</p><p>At Sitakund Modern Hospital Ltd., our specialist doctors are available every day for consultations to help you build a healthier routine.</p>",
+                    'en' => "<p>Good health starts with small, consistent habits. Drink enough water every day, eat a balanced diet with plenty of vegetables, get at least 30 minutes of physical activity, sleep 7-8 hours a night, and schedule regular health checkups.</p><p>At Medicare Lab Ltd., our specialist doctors are available every day for consultations to help you build a healthier routine.</p>",
                     'bn' => "<p>সুস্বাস্থ্যের শুরু হয় ছোট ছোট নিয়মিত অভ্যাস থেকে। প্রতিদিন পর্যাপ্ত পানি পান করুন, সুষম খাবার ও প্রচুর শাকসবজি খান, প্রতিদিন অন্তত ৩০ মিনিট শারীরিক পরিশ্রম করুন, রাতে ৭-৮ ঘন্টা ঘুমান এবং নিয়মিত স্বাস্থ্য পরীক্ষা করান।</p><p>সীতাকুণ্ড মডার্ণ হসপিটাল লিঃ এ আমাদের বিশেষজ্ঞ ডাক্তারগণ প্রতিদিন পরামর্শের জন্য উপস্থিত থাকেন, যা আপনাকে একটি স্বাস্থ্যকর রুটিন তৈরি করতে সাহায্য করবে।</p>",
                 ],
                 'tags' => ['health tips', 'wellness'],
@@ -76,13 +76,13 @@ class BlogSeeder extends Seeder
             ],
             [
                 'category_id' => $categoryByName('Hospital News'),
-                'title'   => ['en' => 'Sitakund Modern Hospital Marks 12 Years of Community Service', 'bn' => 'সীতাকুণ্ড মডার্ণ হসপিটালের ১২ বছরের কমিউনিটি সেবা'],
+                'title'   => ['en' => 'Medicare Lab Marks 12 Years of Community Service', 'bn' => 'সীতাকুণ্ড মডার্ণ হসপিটালের ১২ বছরের কমিউনিটি সেবা'],
                 'excerpt' => [
                     'en' => 'A look back at over a decade of serving the people of Sitakund with honest, affordable healthcare.',
                     'bn' => 'সততা ও সাশ্রয়ী মূল্যে সীতাকুণ্ডবাসীর সেবায় এক দশকেরও বেশি সময়ের পথচলা নিয়ে একটি ফিরে দেখা।',
                 ],
                 'content' => [
-                    'en' => "<p>Since opening in January 2013, Sitakund Modern Hospital Ltd. has provided indoor healthcare to over 24,000 patients and outdoor care to more than 1,87,200 patients, supported by a dedicated team of 64 staff working around the clock.</p><p>We remain committed to expanding our facilities, including a planned nursing college and a larger, modern hospital building, to better serve Sitakund and neighbouring upazilas.</p>",
+                    'en' => "<p>Since opening in January 2013, Medicare Lab Ltd. has provided indoor healthcare to over 24,000 patients and outdoor care to more than 1,87,200 patients, supported by a dedicated team of 64 staff working around the clock.</p><p>We remain committed to expanding our facilities, including a planned nursing college and a larger, modern hospital building, to better serve Sitakund and neighbouring upazilas.</p>",
                     'bn' => "<p>২০১৩ সালের জানুয়ারিতে যাত্রা শুরুর পর থেকে সীতাকুণ্ড মডার্ণ হসপিটাল লিঃ ২৪,২৯৩ জন রোগীকে ইনডোর স্বাস্থ্যসেবা এবং ১,৮৭,২০০ এরও বেশি রোগীকে আউটডোর সেবা প্রদান করেছে, যেখানে ৬৪ জন কর্মী ২৪ ঘন্টা নিরলসভাবে কাজ করে যাচ্ছেন।</p><p>আমরা সীতাকুণ্ড ও পার্শ্ববর্তী উপজেলার মানুষদের আরও ভালো সেবা দিতে একটি নার্সিং কলেজ ও একটি বড় পরিসরের আধুনিক হাসপাতাল ভবন নির্মাণের পরিকল্পনা নিয়ে এগিয়ে যাচ্ছি।</p>",
                 ],
                 'tags' => ['hospital news', 'community'],

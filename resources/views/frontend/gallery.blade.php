@@ -4,7 +4,7 @@
 $heroTitle = $gallery['gallery_hero_title'] ?? 'Our Gallery';
 $heroImage = !empty($gallery['gallery_hero_image']) ? asset('storage/' . $gallery['gallery_hero_image']) : asset('assets/img/breadcumb.webp');
 $seoTitle = $gallery['gallery_seo_title'] ?? ('Gallery | ' . config('app.name'));
-$seoDesc = $gallery['gallery_seo_description'] ?? "Browse photos of Sitakund Modern Hospital Ltd.'s treatment rooms, diagnostic facilities, and medical team.";
+$seoDesc = $gallery['gallery_seo_description'] ?? "Browse photos of Medicare Lab Ltd.'s treatment rooms, diagnostic facilities, and medical team.";
 @endphp
 
 @section('title', $seoTitle)
@@ -23,7 +23,7 @@ $seoDesc = $gallery['gallery_seo_description'] ?? "Browse photos of Sitakund Mod
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ $heroImage }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ $heroImage }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 
@@ -82,7 +82,7 @@ $seoDesc = $gallery['gallery_seo_description'] ?? "Browse photos of Sitakund Mod
 $aspectClasses = ['aspect-[4/3]', 'aspect-[3/4]', 'aspect-square', 'aspect-[4/5]', 'aspect-[16/11]', 'aspect-[3/4]', 'aspect-square', 'aspect-[4/3]', 'aspect-[4/5]'];
 $galleryCards = $images->values()->map(fn ($img, $i) => [
 'image' => asset('storage/' . $img->image),
-'alt' => $img->alt ?: $img->caption ?: 'Sitakund Modern Hospital Ltd. gallery photo',
+'alt' => $img->alt ?: $img->caption ?: 'Medicare Lab Ltd. gallery photo',
 'sub_title' => $img->sub_title,
 'title' => $img->caption,
 'aspect' => $aspectClasses[$i % count($aspectClasses)],
@@ -104,7 +104,7 @@ $galleryCards = $images->values()->map(fn ($img, $i) => [
       <h2 class="team__title">{{ $gallery['gallery_title'] ?? 'Inside Our Hospital' }}</h2>
     </div>
     <p class="gallery__desc">
-      {{ $gallery['gallery_subtitle'] ?? "From modern treatment rooms to advanced diagnostic facilities — take a look at the spaces and people behind Sitakund Modern Hospital Ltd.'s award-winning care." }}
+      {{ $gallery['gallery_subtitle'] ?? "From modern treatment rooms to advanced diagnostic facilities — take a look at the spaces and people behind Medicare Lab Ltd.'s award-winning care." }}
     </p>
 
     <div class="gallery__grid">

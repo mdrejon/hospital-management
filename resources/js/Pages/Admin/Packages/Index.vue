@@ -347,7 +347,7 @@
                                 @input="onMetaTitleInput"
                                 type="text"
                                 class="input"
-                                placeholder="Our Health Packages | Sitakund Modern Hospital Ltd."
+                                placeholder="Our Health Packages | Medicare Lab Ltd."
                                 maxlength="160"
                             />
                             <p class="text-xs text-gray-400 mt-1">

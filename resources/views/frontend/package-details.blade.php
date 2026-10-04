@@ -3,7 +3,7 @@
 @php
 $heroImage = !empty($pkg['pkg_page_hero_image']) ? asset('storage/' . $pkg['pkg_page_hero_image']) : asset('assets/img/breadcumb.webp');
 $seoTitle = $package->seo_title ?: ($pkg['pkg_seo_title'] ?? null) ?: ($package->title . ' | ' . config('app.name'));
-$seoDesc = $package->seo_description ?: ($pkg['pkg_seo_description'] ?? null) ?: $package->short_desc ?: 'Learn more about this health package at Sitakund Modern Hospital Ltd..';
+$seoDesc = $package->seo_description ?: ($pkg['pkg_seo_description'] ?? null) ?: $package->short_desc ?: 'Learn more about this health package at Medicare Lab Ltd..';
 @endphp
 
 @section('title', $seoTitle)
@@ -26,7 +26,7 @@ $seoDesc = $package->seo_description ?: ($pkg['pkg_seo_description'] ?? null) ?:
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ $heroImage }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ $heroImage }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 

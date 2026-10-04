@@ -34,9 +34,14 @@
           <a href="<?php echo e(route('login')); ?>" class="top-header__item" style=" color: #2563eb; font-weight: 700; text-decoration: none;" title="Agent Login Portal">
             Login
           </a>
-          <?php $__currentLoopData = $languages ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lang): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <a href="<?php echo e(route('language.switch', $lang->code)); ?>" class="top-header__lang <?php echo e(app()->getLocale() === $lang->code ? 'is-active' : ''); ?>"><?php echo e(strtoupper($lang->code)); ?></a>
-          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          <?php $__currentLoopData = $languages ?? [];
+          $__env->addLoop($__currentLoopData);
+          foreach ($__currentLoopData as $lang): $__env->incrementLoopIndices();
+            $loop = $__env->getLastLoop(); ?>
+            <a href="<?php echo e(route('language.switch', $lang->code)); ?>" class="top-header__lang <?php echo e(app()->getLocale() === $lang->code ? 'is-active' : ''); ?>"><?php echo e(strtoupper($lang->code)); ?></a>
+          <?php endforeach;
+          $__env->popLoop();
+          $loop = $__env->getLastLoop(); ?>
           <div class="top-header__socials">
             <a href="<?php echo e($headerSettings['header_facebook_url'] ?? '#'); ?>" class="top-header__social-link" aria-label="Facebook">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -63,7 +68,7 @@
       <div class="top-info-bar__inner">
         <span class="top-info-bar__item">
           <a href="<?php echo e(route('home')); ?>" class="site-logo text-navy">
-            <img src="<?php echo e(!empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png')); ?>" alt="<?php echo e($headerSettings['header_site_name'] ?? 'Sitakund Modern Hospital Ltd.'); ?>" height="100" style="height:100px;width:auto" />
+            <img src="<?php echo e(!empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png')); ?>" alt="<?php echo e($headerSettings['header_site_name'] ?? 'Medicare Lab Ltd.'); ?>" height="100" style="height:100px;width:auto" />
           </a>
         </span>
         <a href="mailto:<?php echo e($headerSettings['header_email'] ?? 'info@example.com'); ?>" class="top-info-bar__item">
@@ -116,14 +121,14 @@
     <div class="site-header__inner">
 
       <a href="<?php echo e(route('home')); ?>" class="site-logo site-logo--mobile">
-        <img src="<?php echo e(!empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png')); ?>" alt="<?php echo e($headerSettings['header_site_name'] ?? 'Sitakund Modern Hospital Ltd.'); ?>" height="42" style="height:42px;width:auto" />
+        <img src="<?php echo e(!empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png')); ?>" alt="<?php echo e($headerSettings['header_site_name'] ?? 'Medicare Lab Ltd.'); ?>" height="42" style="height:42px;width:auto" />
       </a>
 
       <nav class="main-nav">
         <a href="<?php echo e(route('home')); ?>" class="main-nav__link <?php echo e(request()->routeIs('home') ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.home')); ?></a>
 
         <div class="has-dropdown">
-          <button type="button" class="main-nav__link <?php echo e(request()->routeIs(['about','history','md-message','management','achievements','faq']) ? 'is-active' : ''); ?>">
+          <button type="button" class="main-nav__link <?php echo e(request()->routeIs(['about', 'history', 'md-message', 'management', 'achievements', 'faq']) ? 'is-active' : ''); ?>">
             <?php echo e(__('frontend.nav.about_us')); ?>
 
             <span class="main-nav__caret">+</span>
@@ -138,26 +143,34 @@
           </div>
         </div>
 
-        <a href="<?php echo e(route('services')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['services','service-details']) ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.our_service')); ?></a>
+        <a href="<?php echo e(route('services')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['services', 'service-details']) ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.our_service')); ?></a>
         <a href="<?php echo e(route('packages')); ?>" class="main-nav__link <?php echo e(request()->routeIs('packages') ? 'is-active' : ''); ?>">Packages</a>
 
         <div class="has-dropdown">
-          <a href="<?php echo e(route('doctors')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['doctors','doctor-details']) ? 'is-active' : ''); ?>">
+          <a href="<?php echo e(route('doctors')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['doctors', 'doctor-details']) ? 'is-active' : ''); ?>">
             <?php echo e(__('frontend.nav.doctors')); ?>
 
             <span class="main-nav__caret">+</span>
           </a>
           <div class="dropdown-menu">
-            <?php $__empty_1 = true; $__currentLoopData = $navDoctorSpecializations ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-            <a href="<?php echo e(route('doctor-details', $spec->slug)); ?>" class="dropdown-menu__link"><?php echo e($spec->name); ?></a>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-            <a href="<?php echo e(route('doctors')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.doctors_list')); ?></a>
+            <?php $__empty_1 = true;
+            $__currentLoopData = $navDoctorSpecializations ?? [];
+            $__env->addLoop($__currentLoopData);
+            foreach ($__currentLoopData as $spec): $__env->incrementLoopIndices();
+              $loop = $__env->getLastLoop();
+              $__empty_1 = false; ?>
+              <a href="<?php echo e(route('doctor-details', $spec->slug)); ?>" class="dropdown-menu__link"><?php echo e($spec->name); ?></a>
+            <?php endforeach;
+            $__env->popLoop();
+            $loop = $__env->getLastLoop();
+            if ($__empty_1): ?>
+              <a href="<?php echo e(route('doctors')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.doctors_list')); ?></a>
             <?php endif; ?>
           </div>
         </div>
 
         <div class="has-dropdown">
-          <button type="button" class="main-nav__link <?php echo e(request()->routeIs(['gallery','video-gallery']) ? 'is-active' : ''); ?>">
+          <button type="button" class="main-nav__link <?php echo e(request()->routeIs(['gallery', 'video-gallery']) ? 'is-active' : ''); ?>">
             <?php echo e(__('frontend.nav.gallery')); ?>
 
             <span class="main-nav__caret">+</span>
@@ -167,7 +180,7 @@
             <a href="<?php echo e(route('video-gallery')); ?>" class="dropdown-menu__link">Video Gallery</a>
           </div>
         </div>
-        <a href="<?php echo e(route('blog-list')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['blog-list','blog-details']) ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.blog')); ?></a>
+        <a href="<?php echo e(route('blog-list')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['blog-list', 'blog-details']) ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.blog')); ?></a>
         <a href="<?php echo e(route('contact')); ?>" class="main-nav__link <?php echo e(request()->routeIs('contact') ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.contact_us')); ?></a>
       </nav>
 
@@ -193,7 +206,7 @@
     </button>
 
     <a href="<?php echo e(route('home')); ?>" class="site-logo">
-      <img src="<?php echo e(!empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png')); ?>" alt="<?php echo e($headerSettings['header_site_name'] ?? 'Sitakund Modern Hospital Ltd.'); ?>" height="56" style="height:56px;width:auto" />
+      <img src="<?php echo e(!empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png')); ?>" alt="<?php echo e($headerSettings['header_site_name'] ?? 'Medicare Lab Ltd.'); ?>" height="56" style="height:56px;width:auto" />
     </a>
 
     <p class="side-panel__desc">
@@ -238,10 +251,18 @@
           </span>
         </button>
         <div class="side-panel__submenu">
-          <?php $__empty_1 = true; $__currentLoopData = $navDoctorSpecializations ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-          <a href="<?php echo e(route('doctor-details', $spec->slug)); ?>" class="side-panel__nav-sublink"><?php echo e($spec->name); ?></a>
-          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-          <a href="<?php echo e(route('doctors')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.doctors_list')); ?></a>
+          <?php $__empty_1 = true;
+          $__currentLoopData = $navDoctorSpecializations ?? [];
+          $__env->addLoop($__currentLoopData);
+          foreach ($__currentLoopData as $spec): $__env->incrementLoopIndices();
+            $loop = $__env->getLastLoop();
+            $__empty_1 = false; ?>
+            <a href="<?php echo e(route('doctor-details', $spec->slug)); ?>" class="side-panel__nav-sublink"><?php echo e($spec->name); ?></a>
+          <?php endforeach;
+          $__env->popLoop();
+          $loop = $__env->getLastLoop();
+          if ($__empty_1): ?>
+            <a href="<?php echo e(route('doctors')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.doctors_list')); ?></a>
           <?php endif; ?>
         </div>
       </div>
@@ -300,9 +321,14 @@
 
     <h3 class="side-panel__title"><?php echo e(__('frontend.common.language')); ?></h3>
     <div class="side-panel__lang-switch">
-      <?php $__currentLoopData = $languages ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lang): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-      <a href="<?php echo e(route('language.switch', $lang->code)); ?>" class="side-panel__lang-link <?php echo e(app()->getLocale() === $lang->code ? 'is-active' : ''); ?>"><?php echo e($lang->native_name); ?></a>
-      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+      <?php $__currentLoopData = $languages ?? [];
+      $__env->addLoop($__currentLoopData);
+      foreach ($__currentLoopData as $lang): $__env->incrementLoopIndices();
+        $loop = $__env->getLastLoop(); ?>
+        <a href="<?php echo e(route('language.switch', $lang->code)); ?>" class="side-panel__lang-link <?php echo e(app()->getLocale() === $lang->code ? 'is-active' : ''); ?>"><?php echo e($lang->native_name); ?></a>
+      <?php endforeach;
+      $__env->popLoop();
+      $loop = $__env->getLastLoop(); ?>
     </div>
 
     <h3 class="side-panel__title">Follow Us</h3>

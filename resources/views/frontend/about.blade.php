@@ -4,7 +4,7 @@
 $heroTitle = $about['about_hero_title'] ?? 'About Us';
 $heroImage = !empty($about['about_hero_image']) ? asset('storage/' . $about['about_hero_image']) : asset('assets/img/breadcumb.webp');
 $seoTitle = $about['about_seo_title'] ?? ('About Us | ' . config('app.name'));
-$seoDesc = $about['about_seo_description'] ?? "Learn about Sitakund Modern Hospital Ltd.'s mission, values, and leadership.";
+$seoDesc = $about['about_seo_description'] ?? "Learn about Medicare Lab Ltd.'s mission, values, and leadership.";
 @endphp
 
 @section('title', $seoTitle)
@@ -23,7 +23,7 @@ $seoDesc = $about['about_seo_description'] ?? "Learn about Sitakund Modern Hospi
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ $heroImage }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ $heroImage }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 
@@ -248,14 +248,14 @@ $ceoBadgeValue = $about['ceo_badge_value'] ?? '16+';
 $ceoBadgeLabel = $about['ceo_badge_label'] ?? 'Years Experienced';
 $ceoEyebrow = $about['ceo_eyebrow'] ?? 'Our CEO Message';
 $ceoTitle = $about['ceo_title'] ?? 'Meet Dr. Natali Jackson';
-$ceoMessage = $about['ceo_message'] ?? "As CEO of Sitakund Modern Hospital Ltd., I'm committed to building a hospital where compassionate care meets clinical excellence. Every decision we make, from staffing to technology, starts with what's best for the patients and families who trust us with their health.";
+$ceoMessage = $about['ceo_message'] ?? "As CEO of Medicare Lab Ltd., I'm committed to building a hospital where compassionate care meets clinical excellence. Every decision we make, from staffing to technology, starts with what's best for the patients and families who trust us with their health.";
 $ceoFocusLabel = $about['ceo_focus_label'] ?? 'Leadership Focus';
 $ceoFocusItems = !empty($about['ceo_focus_items']) ? $about['ceo_focus_items'] : [
 'Patient-Centered Care', 'Clinical Innovation', 'Operational Excellence', 'Community Outreach', 'Quality Assurance', 'Strategic Growth',
 ];
 $ceoAwards = !empty($about['ceo_awards']) ? $about['ceo_awards'] : [
-['year' => 'Sitakund Modern Hospital Ltd. 2024', 'org' => 'Quality and Accreditation Institute', 'label' => 'Healthcare Leadership Award'],
-['year' => 'Sitakund Modern Hospital Ltd. 2023', 'org' => 'National Hospital Federation', 'label' => 'Excellence in Patient Care'],
+['year' => 'Medicare Lab Ltd. 2024', 'org' => 'Quality and Accreditation Institute', 'label' => 'Healthcare Leadership Award'],
+['year' => 'Medicare Lab Ltd. 2023', 'org' => 'National Hospital Federation', 'label' => 'Excellence in Patient Care'],
 ];
 @endphp
 <section class="ceo-message">
@@ -318,7 +318,7 @@ $ceoAwards = !empty($about['ceo_awards']) ? $about['ceo_awards'] : [
 <!-- ===================== FAQ ===================== -->
 @php
 $aboutFaqTitle = $aboutFaq['title'] ?: 'Frequently Asked Questions';
-$aboutFaqDesc = $aboutFaq['description'] ?: 'Answers to the questions our patients ask us most about visiting Sitakund Modern Hospital Ltd..';
+$aboutFaqDesc = $aboutFaq['description'] ?: 'Answers to the questions our patients ask us most about visiting Medicare Lab Ltd..';
 $aboutFaqPhoto = $aboutFaq['image'] ?: asset('assets/img/faq.webp');
 $aboutFaqPhotoAlt = $aboutFaq['image_alt'] ?: 'Smiling doctor on a call, ready to answer your questions';
 $aboutFaqDefaults = [

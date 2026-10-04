@@ -373,7 +373,7 @@
                                 @input="onMetaTitleInput"
                                 type="text"
                                 class="input"
-                                placeholder="Our Services | Sitakund Modern Hospital Ltd."
+                                placeholder="Our Services | Medicare Lab Ltd."
                                 maxlength="160"
                             />
                             <p class="text-xs text-gray-400 mt-1">

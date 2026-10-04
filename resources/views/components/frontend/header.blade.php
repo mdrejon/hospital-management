@@ -63,7 +63,7 @@
       <div class="top-info-bar__inner">
         <span class="top-info-bar__item">
           <a href="{{ route('home') }}" class="site-logo text-navy">
-            <img src="{{ !empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png') }}" alt="{{ $headerSettings['header_site_name'] ?? 'Sitakund Modern Hospital Ltd.' }}" height="100" style="height:100px;width:auto" />
+            <img src="{{ !empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png') }}" alt="{{ $headerSettings['header_site_name'] ?? 'Medicare Lab Ltd.' }}" height="100" style="height:100px;width:auto" />
           </a>
         </span>
         <a href="mailto:{{ $headerSettings['header_email'] ?? 'info@example.com' }}" class="top-info-bar__item">
@@ -116,7 +116,7 @@
     <div class="site-header__inner">
 
       <a href="{{ route('home') }}" class="site-logo site-logo--mobile">
-        <img src="{{ !empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png') }}" alt="{{ $headerSettings['header_site_name'] ?? 'Sitakund Modern Hospital Ltd.' }}" height="42" style="height:42px;width:auto" />
+        <img src="{{ !empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png') }}" alt="{{ $headerSettings['header_site_name'] ?? 'Medicare Lab Ltd.' }}" height="42" style="height:42px;width:auto" />
       </a>
 
       <nav class="main-nav">
@@ -190,7 +190,7 @@
     </button>
 
     <a href="{{ route('home') }}" class="site-logo">
-      <img src="{{ !empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png') }}" alt="{{ $headerSettings['header_site_name'] ?? 'Sitakund Modern Hospital Ltd.' }}" height="56" style="height:56px;width:auto" />
+      <img src="{{ !empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png') }}" alt="{{ $headerSettings['header_site_name'] ?? 'Medicare Lab Ltd.' }}" height="56" style="height:56px;width:auto" />
     </a>
 
     <p class="side-panel__desc">

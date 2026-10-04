@@ -49,10 +49,10 @@
     <div class="footer-columns">
       <div class="footer-about">
         <a href="{{ route('home') }}" class="site-logo text-navy">
-          <img src="{{ !empty($footerSettings['footer_logo']) ? asset('storage/' . $footerSettings['footer_logo']) : asset('assets/img/logo.png') }}" alt="Sitakund Modern Hospital Ltd." height="70" style="height:70px;width:auto" />
+          <img src="{{ !empty($footerSettings['footer_logo']) ? asset('storage/' . $footerSettings['footer_logo']) : asset('assets/img/logo.png') }}" alt="Medicare Lab Ltd." height="70" style="height:70px;width:auto" />
         </a>
         <p class="footer-about__desc">
-          {{ $footerSettings['footer_brand_description'] ?? "Sitakund Modern Hospital Ltd. Ipsum Dolor Sit Amet, Consectuer Adipiscing Elit, Sed Diam Nonummy Nibh Euismod Tincidunt Ut Laoreet Dolore Agna Aliquam Erat. Wisi Enim Ad Minim Veniam, Quis Tation. Sit Amet, Consec Tetuer. Ipsum Dolor" }}
+          {{ $footerSettings['footer_brand_description'] ?? "Medicare Lab Ltd. Ipsum Dolor Sit Amet, Consectuer Adipiscing Elit, Sed Diam Nonummy Nibh Euismod Tincidunt Ut Laoreet Dolore Agna Aliquam Erat. Wisi Enim Ad Minim Veniam, Quis Tation. Sit Amet, Consec Tetuer. Ipsum Dolor" }}
         </p>
       </div>
 

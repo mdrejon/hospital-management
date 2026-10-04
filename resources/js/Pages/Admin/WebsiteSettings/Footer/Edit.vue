@@ -33,7 +33,7 @@
                             v-model="form.footer_brand_description[activeLang]"
                             rows="3"
                             class="input"
-                            placeholder="Sitakund Modern Hospital Ltd. Ipsum Dolor Sit Amet, Consectuer Adipiscing Elit..."
+                            placeholder="Medicare Lab Ltd. Ipsum Dolor Sit Amet, Consectuer Adipiscing Elit..."
                         ></textarea>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -401,7 +401,7 @@
                             v-model="form.footer_newsletter_title[activeLang]"
                             type="text"
                             class="input"
-                            placeholder="Stay Updated With Sitakund Modern Hospital Ltd...."
+                            placeholder="Stay Updated With Medicare Lab Ltd...."
                         />
                     </div>
                     <div>

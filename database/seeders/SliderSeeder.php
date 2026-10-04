@@ -21,7 +21,7 @@ class SliderSeeder extends Seeder
     {
         return [
             [
-                'label' => ['en' => 'Sitakund Modern Hospital Ltd.', 'bn' => 'সীতাকুণ্ড মডার্ণ হসপিটাল লিঃ'],
+                'label' => ['en' => 'Medicare Lab Ltd.', 'bn' => 'সীতাকুণ্ড মডার্ণ হসপিটাল লিঃ'],
                 'title' => ['en' => 'Human Life, Humane Care', 'bn' => 'মানব জীবন মানবিক হউক'],
                 'subtitle' => ['en' => 'Trusted Healthcare Since 2013', 'bn' => '২০১৩ সাল থেকে বিশ্বস্ত স্বাস্থ্যসেবা'],
                 'description' => [

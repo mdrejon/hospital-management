@@ -88,9 +88,9 @@ Route::get('/admin/clear-cache', function () {
 // Frontend / Public Routes
 Route::get('/manifest.json', function () {
     $headerSettings = \App\Models\GlobalSetting::getSettings('header');
-    $appName = config('app.name', 'Sitakund Modern Hospital Ltd.');
+    $appName = config('app.name', 'Medicare Lab Ltd.');
     $faviconPath = !empty($headerSettings['header_favicon']) ? asset('storage/' . $headerSettings['header_favicon']) : asset('favicon.ico');
-    
+
     return response()->json([
         'name' => $appName,
         'short_name' => 'Hospital App',

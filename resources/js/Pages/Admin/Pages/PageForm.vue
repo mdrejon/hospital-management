@@ -257,7 +257,7 @@ const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } =
     useSeoAutoFill(seoProxy, {
         titleSource: () => props.form.title[activeLang.value],
         descSource: () => props.form.breadcrumb_title[activeLang.value],
-        titleSuffix: " | Sitakund Modern Hospital Ltd.",
+        titleSuffix: " | Medicare Lab Ltd.",
         titleKey: "seo_title",
         descKey: "seo_description",
         keywordsKey: "seo_keywords",

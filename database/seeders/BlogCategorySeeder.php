@@ -40,7 +40,7 @@ class BlogCategorySeeder extends Seeder
             [
                 'name' => ['en' => 'Hospital News', 'bn' => 'হাসপাতালের খবর'],
                 'description' => [
-                    'en' => 'Updates, events and news from Sitakund Modern Hospital Ltd.',
+                    'en' => 'Updates, events and news from Medicare Lab Ltd.',
                     'bn' => 'সীতাকুণ্ড মডার্ণ হসপিটাল লিঃ এর সর্বশেষ খবর ও আপডেট।',
                 ],
             ],

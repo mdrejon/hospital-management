@@ -380,7 +380,7 @@
                                 rows="3"
                                 maxlength="320"
                                 class="input resize-none"
-                                placeholder="Read the latest health tips, medical insights, and hospital news from Sitakund Modern Hospital Ltd...."
+                                placeholder="Read the latest health tips, medical insights, and hospital news from Medicare Lab Ltd...."
                             ></textarea>
                             <p class="text-xs text-gray-400 mt-1">
                                 {{
@@ -412,7 +412,7 @@
                                 @input="onMetaKeywordsInput"
                                 type="text"
                                 class="input"
-                                placeholder="health blog, medical tips, Sitakund Modern Hospital Ltd. news"
+                                placeholder="health blog, medical tips, Medicare Lab Ltd. news"
                             />
                             <InputError
                                 :message="settingsForm.errors.blog_seo_keywords"
@@ -545,7 +545,7 @@ const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } =
         titleKey: "blog_seo_title",
         descKey: "blog_seo_description",
         keywordsKey: "blog_seo_keywords",
-        titleSuffix: " | Sitakund Modern Hospital Ltd.",
+        titleSuffix: " | Medicare Lab Ltd.",
     });
 
 function onImg(type, file) {

@@ -65,21 +65,21 @@ class FaqSeeder extends Seeder
                 'badge' => ['en' => 'FAQ', 'bn' => 'সাধারণ জিজ্ঞাসা'],
                 'title' => ['en' => 'About Us — FAQ', 'bn' => 'আমাদের সম্পর্কে — সাধারণ জিজ্ঞাসা'],
                 'description' => [
-                    'en' => 'Learn more about our history, mission and the team behind Sitakund Modern Hospital Ltd.',
+                    'en' => 'Learn more about our history, mission and the team behind Medicare Lab Ltd.',
                     'bn' => 'সীতাকুণ্ড মডার্ণ হসপিটাল লিঃ এর ইতিহাস, লক্ষ্য ও টিম সম্পর্কে আরও জানুন।',
                 ],
                 'items' => [
                     [
                         'question' => ['en' => 'When was the hospital established?', 'bn' => 'হাসপাতালটি কবে প্রতিষ্ঠিত হয়েছে?'],
                         'answer'   => [
-                            'en' => 'Sitakund Modern Hospital Ltd. was established in January 2013 to ensure modern healthcare for the people of Sitakund.',
+                            'en' => 'Medicare Lab Ltd. was established in January 2013 to ensure modern healthcare for the people of Sitakund.',
                             'bn' => 'সীতাকুণ্ড মডার্ণ হসপিটাল লিঃ ২০১৩ সালের জানুয়ারিতে সীতাকুণ্ডবাসীর জন্য আধুনিক স্বাস্থ্যসেবা নিশ্চিত করতে প্রতিষ্ঠিত হয়।',
                         ],
                     ],
                     [
                         'question' => ['en' => 'Is the hospital a registered company?', 'bn' => 'হাসপাতালটি কি একটি নিবন্ধিত প্রতিষ্ঠান?'],
                         'answer'   => [
-                            'en' => 'Yes, Sitakund Modern Hospital Ltd. is a registered joint-stock limited company with 12 directors.',
+                            'en' => 'Yes, Medicare Lab Ltd. is a registered joint-stock limited company with 12 directors.',
                             'bn' => 'হ্যাঁ, সীতাকুণ্ড মডার্ণ হসপিটাল লিঃ একটি জয়েন্টস্টক কোম্পানীর নিবন্ধিত লিমিটেড কোম্পানী, যাতে পরিচালক আছেন ১২ জন।',
                         ],
                     ],

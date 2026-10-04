@@ -2,7 +2,7 @@
   "name": "hospital-management",
   "version": "1.0.0",
   "private": true,
-  "description": "Sitakund Modern Hospital Ltd. hospital website - Tailwind CSS + SCSS + esbuild pipeline",
+  "description": "Medicare Lab Ltd. hospital website - Tailwind CSS + SCSS + esbuild pipeline",
   "scripts": {
     "sass:build": "sass src/scss/main.scss .tmp/main.css --no-source-map --style=expanded",
     "sass:watch": "sass src/scss/main.scss .tmp/main.css --watch --no-source-map --style=expanded",

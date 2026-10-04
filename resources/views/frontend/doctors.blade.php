@@ -4,7 +4,7 @@
 $heroTitle = $doc['doc_page_hero_title'] ?? 'Our Doctors';
 $heroImage = !empty($doc['doc_page_hero_image']) ? asset('storage/' . $doc['doc_page_hero_image']) : asset('assets/img/breadcumb.webp');
 $seoTitle = $doc['doc_seo_title'] ?? ('Our Doctors | ' . config('app.name'));
-$seoDesc = $doc['doc_seo_description'] ?? 'Meet the team of Sitakund Modern Hospital Ltd. doctors dedicated to compassionate, expert medical care.';
+$seoDesc = $doc['doc_seo_description'] ?? 'Meet the team of Medicare Lab Ltd. doctors dedicated to compassionate, expert medical care.';
 @endphp
 
 @section('title', $seoTitle)
@@ -23,7 +23,7 @@ $seoDesc = $doc['doc_seo_description'] ?? 'Meet the team of Sitakund Modern Hosp
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ $heroImage }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ $heroImage }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 

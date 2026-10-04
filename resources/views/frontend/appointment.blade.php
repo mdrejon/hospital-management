@@ -4,7 +4,7 @@
 $heroTitle = $appt['appt_page_hero_title'] ?? 'Book Appointment';
 $heroImage = !empty($appt['appt_page_hero_image']) ? asset('storage/' . $appt['appt_page_hero_image']) : asset('assets/img/breadcumb.webp');
 $seoTitle = $appt['appt_seo_title'] ?? ('Book Appointment | ' . config('app.name'));
-$seoDesc = $appt['appt_seo_description'] ?? 'Schedule your visit with Sitakund Modern Hospital Ltd. in just a few clicks — fast, easy appointment booking.';
+$seoDesc = $appt['appt_seo_description'] ?? 'Schedule your visit with Medicare Lab Ltd. in just a few clicks — fast, easy appointment booking.';
 @endphp
 
 @section('title', $seoTitle)
@@ -23,7 +23,7 @@ $seoDesc = $appt['appt_seo_description'] ?? 'Schedule your visit with Sitakund M
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ $heroImage }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ $heroImage }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 

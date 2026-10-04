@@ -4,7 +4,7 @@
 $heroTitle = $specialization->name;
 $heroImage = $specialization->image ? asset('storage/' . $specialization->image) : ( !empty($doc['doc_page_hero_image']) ? asset('storage/' . $doc['doc_page_hero_image']) : asset('assets/img/breadcumb.webp') );
 $seoTitle = $specialization->seo_title ?: ($specialization->name . ' | ' . config('app.name'));
-$seoDesc = $specialization->seo_description ?: ($specialization->description ?? 'Meet the ' . $specialization->name . ' team of Sitakund Modern Hospital Ltd. doctors dedicated to compassionate, expert medical care.');
+$seoDesc = $specialization->seo_description ?: ($specialization->description ?? 'Meet the ' . $specialization->name . ' team of Medicare Lab Ltd. doctors dedicated to compassionate, expert medical care.');
 @endphp
 
 @section('title', $seoTitle)

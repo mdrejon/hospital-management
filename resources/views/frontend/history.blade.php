@@ -4,7 +4,7 @@
 $heroTitle = $hist['hist_hero_title'] ?? 'Our History';
 $heroImage = !empty($hist['hist_hero_image']) ? asset('storage/' . $hist['hist_hero_image']) : asset('assets/img/breadcumb.webp');
 $seoTitle = $hist['hist_seo_title'] ?? ('Our History | ' . config('app.name'));
-$seoDesc = $hist['hist_seo_description'] ?? "From a humble clinic to the region's most trusted hospital — explore the milestones that shaped Sitakund Modern Hospital Ltd..";
+$seoDesc = $hist['hist_seo_description'] ?? "From a humble clinic to the region's most trusted hospital — explore the milestones that shaped Medicare Lab Ltd..";
 @endphp
 
 @section('title', $seoTitle)
@@ -50,7 +50,7 @@ $seoDesc = $hist['hist_seo_description'] ?? "From a humble clinic to the region'
   </div>
 
   <div class="page-header__media">
-    <img src="{{ $heroImage }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ $heroImage }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 
@@ -81,11 +81,11 @@ $seoDesc = $hist['hist_seo_description'] ?? "From a humble clinic to the region'
 @php
 $histFallbackImages = [asset('assets/img/slider-1.2.jpg'), asset('assets/img/sr-1-1.jpg'), asset('assets/img/sr-1-3.jpg'), asset('assets/img/projects-3.jpg'), asset('assets/img/slider-1.3.jpg')];
 $timeline = !empty($hist['hist_timeline']) ? $hist['hist_timeline'] : [
-['year' => '2013', 'tag' => 'Foundation', 'heading' => 'Grand Opening — Sitakund Modern Hospital Ltd. Is Born', 'content' => 'With a vision to redefine community healthcare, Sitakund Modern Hospital Ltd. opened its doors on 36D Street, Brooklyn in 2013 with a small team of dedicated physicians.', 'badges' => ['30 Beds Launched', '24/7 Emergency', 'Outpatient Care'], 'image' => null, 'reversed' => false],
-['year' => '2016', 'tag' => 'Diagnostics', 'heading' => 'Advanced Diagnostic & Imaging Center', 'content' => 'In 2016, Sitakund Modern Hospital Ltd. unveiled a full diagnostic wing — bringing MRI, CT scanning and a modern pathology laboratory together under one roof.', 'badges' => ['MRI & CT Scan', 'Digital X-Ray', 'Pathology Lab'], 'image' => null, 'reversed' => true],
+['year' => '2013', 'tag' => 'Foundation', 'heading' => 'Grand Opening — Medicare Lab Ltd. Is Born', 'content' => 'With a vision to redefine community healthcare, Medicare Lab Ltd. opened its doors on 36D Street, Brooklyn in 2013 with a small team of dedicated physicians.', 'badges' => ['30 Beds Launched', '24/7 Emergency', 'Outpatient Care'], 'image' => null, 'reversed' => false],
+['year' => '2016', 'tag' => 'Diagnostics', 'heading' => 'Advanced Diagnostic & Imaging Center', 'content' => 'In 2016, Medicare Lab Ltd. unveiled a full diagnostic wing — bringing MRI, CT scanning and a modern pathology laboratory together under one roof.', 'badges' => ['MRI & CT Scan', 'Digital X-Ray', 'Pathology Lab'], 'image' => null, 'reversed' => true],
 ['year' => '2019', 'tag' => 'Critical Care','heading' => 'Dedicated ICU & Cardiac Wing', 'content' => 'A 20-bed intensive care unit and a specialised cardiac wing opened in 2019, giving the community round-the-clock access to life-saving critical care.', 'badges' => ['20-Bed ICU', 'Cardiology Dept', '24/7 CCU'], 'image' => null, 'reversed' => false],
-['year' => '2022', 'tag' => 'Innovation', 'heading' => 'Telemedicine & Digital Care Launch', 'content' => "Sitakund Modern Hospital Ltd. went digital in 2022 — online appointment booking, video consultations and e-prescriptions brought expert care into patients' homes.", 'badges' => ['Video Consultations', 'Online Booking', 'E-Prescriptions'], 'image' => null, 'reversed' => true],
-['year' => '2025', 'tag' => 'Recognition', 'heading' => 'Award-Winning Patient Care', 'content' => 'Today Sitakund Modern Hospital Ltd. stands nationally accredited — a 150-bed hospital trusted by thousands of families and honoured for excellence in patient care.', 'badges' => ['150+ Beds', '75+ Specialists', 'National Accreditation'], 'image' => null, 'reversed' => false],
+['year' => '2022', 'tag' => 'Innovation', 'heading' => 'Telemedicine & Digital Care Launch', 'content' => "Medicare Lab Ltd. went digital in 2022 — online appointment booking, video consultations and e-prescriptions brought expert care into patients' homes.", 'badges' => ['Video Consultations', 'Online Booking', 'E-Prescriptions'], 'image' => null, 'reversed' => true],
+['year' => '2025', 'tag' => 'Recognition', 'heading' => 'Award-Winning Patient Care', 'content' => 'Today Medicare Lab Ltd. stands nationally accredited — a 150-bed hospital trusted by thousands of families and honoured for excellence in patient care.', 'badges' => ['150+ Beds', '75+ Specialists', 'National Accreditation'], 'image' => null, 'reversed' => false],
 ];
 @endphp
 <section class="history">
@@ -97,7 +97,7 @@ $timeline = !empty($hist['hist_timeline']) ? $hist['hist_timeline'] : [
     </p>
     <h2 class="history__title">{{ $hist['hist_title'] ?? 'A Decade of Care, Compassion & Excellence' }}</h2>
     <p class="history__desc">
-      {{ $hist['hist_desc'] ?? "From a humble clinic to the region's most trusted hospital — explore the milestones that shaped Sitakund Modern Hospital Ltd. into the award-winning healthcare destination it is today." }}
+      {{ $hist['hist_desc'] ?? "From a humble clinic to the region's most trusted hospital — explore the milestones that shaped Medicare Lab Ltd. into the award-winning healthcare destination it is today." }}
     </p>
 
     <div class="history__timeline">

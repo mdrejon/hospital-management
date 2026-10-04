@@ -2,7 +2,7 @@
 $heroTitle = $svc['svc_page_hero_title'] ?? 'Our Services';
 $heroImage = !empty($svc['svc_page_hero_image']) ? asset('storage/' . $svc['svc_page_hero_image']) : asset('assets/img/breadcumb.webp');
 $seoTitle  = $svc['svc_seo_title'] ?? ('Our Services | ' . config('app.name'));
-$seoDesc   = $svc['svc_seo_description'] ?? 'Explore the full range of medical and health care services offered by Sitakund Modern Hospital Ltd..';
+$seoDesc   = $svc['svc_seo_description'] ?? 'Explore the full range of medical and health care services offered by Medicare Lab Ltd..';
 ?>
 
 <?php $__env->startSection('title', $seoTitle); ?>
@@ -21,7 +21,7 @@ $seoDesc   = $svc['svc_seo_description'] ?? 'Explore the full range of medical a
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="<?php echo e($heroImage); ?>" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="<?php echo e($heroImage); ?>" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 

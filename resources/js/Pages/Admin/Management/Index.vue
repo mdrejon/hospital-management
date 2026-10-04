@@ -304,7 +304,7 @@
                                 @input="onMetaTitleInput"
                                 type="text"
                                 class="input"
-                                placeholder="Our Management | Sitakund Modern Hospital Ltd."
+                                placeholder="Our Management | Medicare Lab Ltd."
                                 maxlength="160"
                             />
                             <p class="text-xs text-gray-400 mt-1">
@@ -554,7 +554,7 @@ const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } =
         titleKey: "mgmt_seo_title",
         descKey: "mgmt_seo_description",
         keywordsKey: "mgmt_seo_keywords",
-        titleSuffix: " | Sitakund Modern Hospital Ltd.",
+        titleSuffix: " | Medicare Lab Ltd.",
     });
 
 function onImage(file, type) {

@@ -231,7 +231,7 @@
                     @input="onMetaTitleInput"
                     type="text"
                     class="input"
-                    placeholder="e.g. Full Body Checkup | Sitakund Modern Hospital Ltd."
+                    placeholder="e.g. Full Body Checkup | Medicare Lab Ltd."
                     maxlength="160"
                 />
                 <p class="text-xs text-gray-400 mt-1">
@@ -349,7 +349,7 @@ const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } =
     useSeoAutoFill(seoProxy, {
         titleSource: () => props.form.title[activeLang.value],
         descSource: () => props.form.short_desc[activeLang.value],
-        titleSuffix: " | Sitakund Modern Hospital Ltd.",
+        titleSuffix: " | Medicare Lab Ltd.",
         titleKey: "seo_title",
         descKey: "seo_description",
         keywordsKey: "seo_keywords",

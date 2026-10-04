@@ -602,7 +602,7 @@
                     @input="onMetaTitleInput"
                     type="text"
                     class="input"
-                    placeholder="e.g. Dr. Rihana Roy | Sitakund Modern Hospital Ltd."
+                    placeholder="e.g. Dr. Rihana Roy | Medicare Lab Ltd."
                     maxlength="160"
                 />
                 <p class="text-xs text-gray-400 mt-1">
@@ -747,7 +747,7 @@ const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } =
                 .map((entry) => entry[activeLang.value])
                 .filter(Boolean)
                 .join(", "),
-        titleSuffix: " | Sitakund Modern Hospital Ltd.",
+        titleSuffix: " | Medicare Lab Ltd.",
         titleKey: "seo_title",
         descKey: "seo_description",
         keywordsKey: "seo_keywords",

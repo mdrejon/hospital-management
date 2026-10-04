@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 class DoctorSeeder extends Seeder
 {
     /**
-     * Seed content sourced from the Sitakund Modern Hospital Ltd. print brochure.
+     * Seed content sourced from the Medicare Lab Ltd. print brochure.
      */
     public function run(): void
     {
@@ -72,7 +72,7 @@ class DoctorSeeder extends Seeder
                 ],
                 'address'    => 'Amirabad (Sitakund South Bypass) 07, Sitakund Municipality, Sitakund, Chattogram',
                 'phone'      => '01849-727858',
-                'email'      => 'sitakundmodernhospital@gmail.com',
+                'email'      => 'sitakundmedicarelab@gmail.com',
                 'is_featured' => true,
                 'sort_order' => 1,
                 'is_active'  => true,
@@ -108,7 +108,7 @@ class DoctorSeeder extends Seeder
                 ],
                 'address'    => 'Amirabad (Sitakund South Bypass) 07, Sitakund Municipality, Sitakund, Chattogram',
                 'phone'      => '01849-727858',
-                'email'      => 'sitakundmodernhospital@gmail.com',
+                'email'      => 'sitakundmedicarelab@gmail.com',
                 'is_featured' => true,
                 'sort_order' => 2,
                 'is_active'  => true,
@@ -144,7 +144,7 @@ class DoctorSeeder extends Seeder
                 ],
                 'address'    => 'Amirabad (Sitakund South Bypass) 07, Sitakund Municipality, Sitakund, Chattogram',
                 'phone'      => '01849-727858',
-                'email'      => 'sitakundmodernhospital@gmail.com',
+                'email'      => 'sitakundmedicarelab@gmail.com',
                 'is_featured' => false,
                 'sort_order' => 3,
                 'is_active'  => true,
@@ -180,7 +180,7 @@ class DoctorSeeder extends Seeder
                 ],
                 'address'    => 'Amirabad (Sitakund South Bypass) 07, Sitakund Municipality, Sitakund, Chattogram',
                 'phone'      => '01849-727858',
-                'email'      => 'sitakundmodernhospital@gmail.com',
+                'email'      => 'sitakundmedicarelab@gmail.com',
                 'is_featured' => false,
                 'sort_order' => 4,
                 'is_active'  => true,
@@ -217,7 +217,7 @@ class DoctorSeeder extends Seeder
                 ],
                 'address'    => 'Amirabad (Sitakund South Bypass) 07, Sitakund Municipality, Sitakund, Chattogram',
                 'phone'      => '01849-727858',
-                'email'      => 'sitakundmodernhospital@gmail.com',
+                'email'      => 'sitakundmedicarelab@gmail.com',
                 'is_featured' => false,
                 'sort_order' => 5,
                 'is_active'  => true,
@@ -252,7 +252,7 @@ class DoctorSeeder extends Seeder
                 ],
                 'address'    => 'Amirabad (Sitakund South Bypass) 07, Sitakund Municipality, Sitakund, Chattogram',
                 'phone'      => '01849-727858',
-                'email'      => 'sitakundmodernhospital@gmail.com',
+                'email'      => 'sitakundmedicarelab@gmail.com',
                 'is_featured' => false,
                 'sort_order' => 6,
                 'is_active'  => true,

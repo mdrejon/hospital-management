@@ -4,7 +4,7 @@
 $heroTitle = $pkg['pkg_page_hero_title'] ?? 'Our Health Packages';
 $heroImage = !empty($pkg['pkg_page_hero_image']) ? asset('storage/' . $pkg['pkg_page_hero_image']) : asset('assets/img/breadcumb.webp');
 $seoTitle = $pkg['pkg_seo_title'] ?? ('Our Health Packages | ' . config('app.name'));
-$seoDesc = $pkg['pkg_seo_description'] ?? 'Explore Sitakund Modern Hospital Ltd.\'s health packages designed for every stage of life.';
+$seoDesc = $pkg['pkg_seo_description'] ?? 'Explore Medicare Lab Ltd.\'s health packages designed for every stage of life.';
 @endphp
 
 @section('title', $seoTitle)
@@ -23,7 +23,7 @@ $seoDesc = $pkg['pkg_seo_description'] ?? 'Explore Sitakund Modern Hospital Ltd.
 <!-- ===================== Breadcrumb / Page header ===================== -->
 <section class="page-header">
   <div class="page-header__media">
-    <img src="{{ $heroImage }}" alt="Team of Sitakund Modern Hospital Ltd. doctors" class="page-header__bg" />
+    <img src="{{ $heroImage }}" alt="Team of Medicare Lab Ltd. doctors" class="page-header__bg" />
     <span class="page-header__overlay"></span>
   </div>
 
