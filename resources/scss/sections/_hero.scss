@@ -93,11 +93,11 @@
 
 .hero-slide__title {
   @apply mt-4 font-extrabold text-white;
-  font-size: 2rem;
+  font-size: 18px;
   line-height: 1.3;
 
   @media (min-width: 768px) {
-    font-size: 18px;
+    font-size: 3rem;
   }
 
   // Accent word gets an EKG-style pulse trace instead of a plain underline
