@@ -110,7 +110,64 @@ function initHeroSlider() {
   });
 
   hero.addEventListener("mouseenter", stopAutoplay);
-  hero.addEventListener("mouseleave", startAutoplay);
+  hero.addEventListener("mouseleave", () => {
+    if (!dragging) startAutoplay();
+  });
+
+  // Pointer dragging logic
+  let dragging = false;
+  let captured = false;
+  let dragPointerId = null;
+  let dragStartX = 0;
+  let dragDelta = 0;
+
+  track.style.touchAction = "pan-y";
+  track.style.cursor = "pointer";
+  track.addEventListener("dragstart", (e) => e.preventDefault());
+
+  track.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    captured = false;
+    dragPointerId = e.pointerId;
+    dragStartX = e.clientX;
+    dragDelta = 0;
+  });
+
+  track.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    dragDelta = e.clientX - dragStartX;
+    if (!captured) {
+      if (Math.abs(dragDelta) < 5) return;
+      captured = true;
+      stopAutoplay();
+      track.setPointerCapture(dragPointerId);
+      track.style.transition = "none";
+    }
+    track.style.transform = `translateX(calc(-${index * 100}% + ${dragDelta}px))`;
+  });
+
+  const endDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    if (!captured) return;
+    captured = false;
+    track.style.transition = "";
+    const threshold = Math.min(80, track.clientWidth / 4);
+    if (dragDelta <= -threshold) goTo(index + 1);
+    else if (dragDelta >= threshold) goTo(index - 1);
+    else render();
+    startAutoplay();
+  };
+
+  track.addEventListener("pointerup", endDrag);
+  track.addEventListener("pointercancel", endDrag);
+
+  track.addEventListener("click", (e) => {
+    if (Math.abs(dragDelta) > 8) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
 
   render();
   startAutoplay();
@@ -359,7 +416,64 @@ function initTestimonialsSlider() {
   });
 
   root.addEventListener("mouseenter", stopAutoplay);
-  root.addEventListener("mouseleave", startAutoplay);
+  root.addEventListener("mouseleave", () => {
+    if (!dragging) startAutoplay();
+  });
+
+  // Pointer dragging logic
+  let dragging = false;
+  let captured = false;
+  let dragPointerId = null;
+  let dragStartX = 0;
+  let dragDelta = 0;
+
+  track.style.touchAction = "pan-y";
+  track.style.cursor = "pointer";
+  track.addEventListener("dragstart", (e) => e.preventDefault());
+
+  track.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    captured = false;
+    dragPointerId = e.pointerId;
+    dragStartX = e.clientX;
+    dragDelta = 0;
+  });
+
+  track.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    dragDelta = e.clientX - dragStartX;
+    if (!captured) {
+      if (Math.abs(dragDelta) < 5) return;
+      captured = true;
+      stopAutoplay();
+      track.setPointerCapture(dragPointerId);
+      track.style.transition = "none";
+    }
+    track.style.transform = `translateX(calc(-${index * 100}% + ${dragDelta}px))`;
+  });
+
+  const endDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    if (!captured) return;
+    captured = false;
+    track.style.transition = "";
+    const threshold = Math.min(80, track.clientWidth / 4);
+    if (dragDelta <= -threshold) goTo(index + 1);
+    else if (dragDelta >= threshold) goTo(index - 1);
+    else render();
+    startAutoplay();
+  };
+
+  track.addEventListener("pointerup", endDrag);
+  track.addEventListener("pointercancel", endDrag);
+
+  track.addEventListener("click", (e) => {
+    if (Math.abs(dragDelta) > 8) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
 
   buildDots();
   render();

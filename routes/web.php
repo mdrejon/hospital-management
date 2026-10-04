@@ -100,8 +100,14 @@ Route::get('/manifest.json', function () {
         'theme_color' => '#0f172a',
         'icons' => [
             [
-                'src' => $faviconPath,
-                'sizes' => '192x192 512x512',
+                'src' => str_ends_with(strtolower($faviconPath), '.ico') ? asset('assets/img/logo.png') : $faviconPath,
+                'sizes' => '192x192',
+                'type' => 'image/png',
+                'purpose' => 'any maskable'
+            ],
+            [
+                'src' => str_ends_with(strtolower($faviconPath), '.ico') ? asset('assets/img/logo.png') : $faviconPath,
+                'sizes' => '512x512',
                 'type' => 'image/png',
                 'purpose' => 'any maskable'
             ]

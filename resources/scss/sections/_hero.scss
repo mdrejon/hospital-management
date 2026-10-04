@@ -38,6 +38,12 @@
 // Content aligns to the same container edges as the header rows above.
 .hero-slide__inner {
   @apply container relative z-10 mx-auto flex h-full items-center;
+
+  @media (min-width: 1024px) {
+    max-width: 1024px;
+    padding-right: 5rem;
+    padding-left: 5rem;
+  }
 }
 
 // Copy block — everything inside starts invisible and only animates in
@@ -86,7 +92,13 @@
 }
 
 .hero-slide__title {
-  @apply mt-4 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl;
+  @apply mt-4 font-extrabold text-white;
+  font-size: 2rem;
+  line-height: 1.3;
+
+  @media (min-width: 768px) {
+    font-size: 18px;
+  }
 
   // Accent word gets an EKG-style pulse trace instead of a plain underline
   // (see abstracts/_mixins.scss for the shared ::before/::after effect).
