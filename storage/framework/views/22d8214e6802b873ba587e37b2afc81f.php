@@ -70,10 +70,10 @@
             </div>
           </div>
 
-          <!-- <a href="<?php echo e($headerSettings['header_book_btn_url'] ?? route('appointment')); ?>" class="inline-flex items-center justify-center bg-brand-cyan text-white font-semibold py-[11px] px-8 rounded transition hover:bg-navy text-[15px]">
+          <a href="<?php echo e($headerSettings['header_book_btn_url'] ?? route('appointment')); ?>" class="inline-flex items-center justify-center bg-brand-cyan text-white font-semibold py-[11px] px-8 rounded transition hover:bg-navy text-[15px]">
             <?php echo e($headerSettings['header_book_btn_text'] ?? 'Appointment'); ?>
 
-          </a> -->
+          </a>
         </div>
       </div>
     </div>
