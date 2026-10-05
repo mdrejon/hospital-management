@@ -101,7 +101,11 @@ $doctorCards = $doctors->isNotEmpty()
 ['name' => 'Dr. Sara Owens', 'role' => 'Neurologist', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
 ]));
 @endphp
-<section class="doctors-page">
+<section class="doctors-page !py-24 bg-white relative overflow-hidden">
+  <!-- Animated Floating Element -->
+  <div class="absolute bottom-20 right-10 opacity-[0.08] animate-spin text-brand-cyan pointer-events-none z-0" style="animation-duration: 20s;">
+    <svg width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10" stroke-dasharray="4 4"/></svg>
+  </div>
   <div class="container mx-auto">
     <div class="team__head">
       <p class="team__eyebrow">
@@ -121,48 +125,35 @@ $doctorCards = $doctors->isNotEmpty()
     @if(isset($specialization) && $specialization && $doctorCards->isEmpty())
     <p class="text-center text-muted py-12">No doctors found under "{{ $specialization->name }}" yet. Please check back soon.</p>
     @else
-    <div class="doctors-page__grid">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 mt-12">
       @foreach($doctorCards as $card)
-      <article class="team-card">
-        <span class="team-card__corner" aria-hidden="true"></span>
-
-        <div class="team-card__photo-wrap">
-          <img src="{{ $card['photo'] }}" alt="{{ $card['name'] }}" class="team-card__photo" />
-          <span class="team-card__overlay">
-            <a href="{{ $card['url'] }}" class="team-card__view" aria-label="View {{ $card['name'] }} profile">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="m10 6 6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </a>
-          </span>
+      <article class="bg-white rounded-lg overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.1)] transition-shadow duration-300 group h-full border border-gray-100">
+        <!-- Image & Overlay -->
+        <div class="relative overflow-hidden aspect-[4/5] bg-gray-50 flex items-end justify-center">
+          <a href="{{ $card['url'] }}" class="absolute inset-0 z-0">
+             <img src="{{ $card['photo'] }}" alt="{{ $card['name'] }}" class="w-full h-full object-cover object-top" />
+          </a>
+          <!-- Hover Overlay with Social Icons -->
+          <div class="absolute inset-0 bg-white/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px] pointer-events-none">
+            <div class="flex items-center gap-3 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 pointer-events-auto">
+              <a href="{{ $card['facebook'] ?: '#' }}" class="w-10 h-10 rounded-full bg-white text-navy flex items-center justify-center hover:bg-brand-cyan hover:text-white shadow-lg transition-colors" aria-label="Facebook">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z"/></svg>
+              </a>
+              <a href="{{ $card['linkedin'] ?: '#' }}" class="w-10 h-10 rounded-full bg-white text-navy flex items-center justify-center hover:bg-brand-cyan hover:text-white shadow-lg transition-colors" aria-label="LinkedIn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z"/></svg>
+              </a>
+              <a href="{{ $card['url'] }}" class="w-10 h-10 rounded-full bg-brand-cyan text-white flex items-center justify-center hover:bg-navy shadow-lg transition-colors" aria-label="View Profile">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
         </div>
-
-        <div class="team-card__social">
-          <a href="{{ $card['facebook'] ?: '#' }}" class="team-card__social-link" aria-label="Facebook">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z" />
-            </svg>
+        <!-- Content -->
+        <div class="p-6 text-center border-t border-gray-100">
+          <p class="text-gray-500 text-[13px] mb-1.5">{{ $card['role'] }}</p>
+          <a href="{{ $card['url'] }}" class="inline-block hover:text-brand-cyan transition-colors">
+            <h3 class="text-navy text-[19px] font-bold">{{ $card['name'] }}</h3>
           </a>
-          <a href="#" class="team-card__social-link" aria-label="Pinterest">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.5 2 3 5.9 3 10.2c0 2.6 1.4 4.6 3.5 5.4.3.1.6 0 .7-.4l.3-1.1c.1-.3 0-.5-.2-.8-.5-.6-.9-1.5-.9-2.7 0-3.5 2.6-6.6 6.8-6.6 3.7 0 5.7 2.3 5.7 5.3 0 4-1.8 7.4-4.4 7.4-1.5 0-2.6-1.2-2.2-2.7.4-1.7 1.2-3.6 1.2-4.9 0-1.1-.6-2.1-1.9-2.1-1.5 0-2.7 1.6-2.7 3.6 0 1.3.4 2.2.4 2.2l-1.8 7.5c-.5 2.2-.1 4.9 0 5.2 0 .2.2.2.3.1.1-.2 1.7-2.1 2.3-4.1l.9-3.4c.4.8 1.7 1.5 3.1 1.5 4.1 0 6.9-3.7 6.9-8.7C21 5.8 17.3 2 12 2z" />
-            </svg>
-          </a>
-          <a href="{{ $card['youtube'] ?: '#' }}" class="team-card__social-link" aria-label="YouTube">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M23 12s0-3.6-.5-5.3c-.3-1-1-1.8-2-2C18.9 4.2 12 4.2 12 4.2s-6.9 0-8.5.5c-1 .3-1.7 1-2 2C1 8.4 1 12 1 12s0 3.6.5 5.3c.3 1 1 1.8 2 2 1.6.5 8.5.5 8.5.5s6.9 0 8.5-.5c1-.3 1.7-1 2-2 .5-1.7.5-5.3.5-5.3zM9.8 15.5V8.5l6.2 3.5-6.2 3.5z" />
-            </svg>
-          </a>
-          <a href="{{ $card['linkedin'] ?: '#' }}" class="team-card__social-link" aria-label="LinkedIn">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z" />
-            </svg>
-          </a>
-        </div>
-
-        <div class="team-card__body">
-          <h3 class="team-card__name">{{ $card['name'] }}</h3>
-          <p class="team-card__role">{{ $card['role'] }}</p>
         </div>
       </article>
       @endforeach
@@ -170,4 +161,34 @@ $doctorCards = $doctors->isNotEmpty()
     @endif
   </div>
 </section>
+<!-- ===================== Scroll Animation Script ===================== -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Add base classes for animation to all containers inside sections
+    const containers = document.querySelectorAll('section > .container');
+    containers.forEach(el => {
+      // Avoid hero section and testimonials since they have custom structure
+      if(!el.closest('.hero') && !el.closest('.page-header') && !el.closest('.testimonials')) {
+        el.classList.add('transition-all', 'duration-[1200ms]', 'ease-out', 'opacity-0', 'translate-y-12');
+      }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('opacity-0', 'translate-y-12');
+          entry.target.classList.add('opacity-100', 'translate-y-0');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+    containers.forEach(el => {
+      if(!el.closest('.hero') && !el.closest('.page-header') && !el.closest('.testimonials')) {
+        observer.observe(el);
+      }
+    });
+  });
+</script>
+
 @endsection

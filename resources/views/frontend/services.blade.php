@@ -100,32 +100,56 @@ $serviceCards = $services->isNotEmpty()
 ['title' => 'Surgery Care', 'desc' => 'Our Surgery Care services provide expert, compassionate treatment.', 'icon_svg' => null, 'image' => asset('assets/img/sr-1-1.jpg'), 'url' => '#'],
 ]);
 @endphp
-<section class="services">
-  <div class="container mx-auto">
-    <div class="services__head">
-      <p class="services__eyebrow">Explore Medical Department</p>
-      <h2 class="services__title">Complete Health Solutions — Because You Deserve the Best</h2>
+<section class="services py-24 bg-slate-50 relative overflow-hidden">
+  <!-- Animated Floating Element -->
+  <div class="absolute top-20 left-10 opacity-20 animate-bounce text-navy pointer-events-none z-0" style="animation-duration: 4s;">
+    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 8v8m-4-4h8"/></svg>
+  </div>
+  <div class="container mx-auto px-4">
+    <!-- Heading Area -->
+    <div class="text-center mb-16 max-w-2xl mx-auto">
+      <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-3">
+        Explore Medical Department
+      </p>
+      <h2 class="text-3xl lg:text-[40px] font-bold text-navy mb-6 leading-[1.2]">
+        Complete Health Solutions — Because You Deserve the Best
+      </h2>
     </div>
 
-    <div class="services__grid">
+    <!-- 3-Column Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       @foreach($serviceCards as $card)
-      <article class="service-card">
-        <div class="service-card__media">
-          <img src="{{ $card['image'] }}" alt="{{ $card['title'] }}" class="service-card__img" />
-          <span class="service-card__icon">
-            {!! $card['icon_svg'] ?: $defaultIcon !!}
-          </span>
+      <article class="group bg-white overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] transition-all duration-300 relative flex flex-col h-full border border-gray-50">
+        <!-- Image Area -->
+        <div class="h-[240px] w-full relative shrink-0 z-10">
+          <div class="w-full h-full overflow-hidden">
+            <img src="{{ $card['image'] }}" alt="{{ $card['title'] }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+          </div>
+
+          <!-- Icon Circle -->
+          <div class="absolute -bottom-7 left-1/2 -translate-x-1/2 z-20">
+            <div class="relative w-[56px] h-[56px] rounded-full bg-brand-cyan border-[4px] border-white flex items-center justify-center text-white shadow-sm">
+              <span class="w-6 h-6 flex items-center justify-center">
+                {!! $card['icon_svg'] ?: $defaultIcon !!}
+              </span>
+            </div>
+          </div>
         </div>
-        <div class="service-card__body">
-          <h3 class="service-card__title">{{ $card['title'] }}</h3>
-          <p class="service-card__desc">{{ $card['desc'] }}</p>
-          <a href="{{ $card['url'] }}" class="service-card__btn">
-            Read more
-            <span class="service-card__btn-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </span>
+
+        <!-- Content Area -->
+        <div class="pt-14 pb-8 px-6 text-center transition-colors duration-300 group-hover:bg-brand-cyan flex-grow flex flex-col items-center relative z-0 bg-white">
+          <h3 class="text-navy text-[20px] font-bold mb-3 transition-colors duration-300 group-hover:text-white">
+            {{ $card['title'] }}
+          </h3>
+          <p class="text-gray-500 text-[14px] leading-relaxed mb-6 transition-colors duration-300 group-hover:text-white/90 line-clamp-3">
+            {{ $card['desc'] }}
+          </p>
+
+          <a href="{{ $card['url'] }}" class="mt-auto inline-flex items-center gap-2 text-navy text-[14px] font-bold transition-colors duration-300 group-hover:text-white group-hover:opacity-90">
+            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+            Read More
           </a>
         </div>
       </article>
@@ -133,4 +157,34 @@ $serviceCards = $services->isNotEmpty()
     </div>
   </div>
 </section>
+<!-- ===================== Scroll Animation Script ===================== -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Add base classes for animation to all containers inside sections
+    const containers = document.querySelectorAll('section > .container');
+    containers.forEach(el => {
+      // Avoid hero section and testimonials since they have custom structure
+      if(!el.closest('.hero') && !el.closest('.page-header') && !el.closest('.testimonials')) {
+        el.classList.add('transition-all', 'duration-[1200ms]', 'ease-out', 'opacity-0', 'translate-y-12');
+      }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('opacity-0', 'translate-y-12');
+          entry.target.classList.add('opacity-100', 'translate-y-0');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+    containers.forEach(el => {
+      if(!el.closest('.hero') && !el.closest('.page-header') && !el.closest('.testimonials')) {
+        observer.observe(el);
+      }
+    });
+  });
+</script>
+
 @endsection

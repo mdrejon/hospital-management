@@ -5,18 +5,25 @@ namespace Database\Seeders;
 use App\Models\Doctor;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 
 class DoctorSeeder extends Seeder
 {
     /**
-     * Seed content sourced from the Medicare Lab Ltd. print brochure.
+     * Seed content sourced from the updated doctor images.
      */
     public function run(): void
     {
+        // Disable foreign key checks, truncate to remove existing records, and re-enable
+        Schema::disableForeignKeyConstraints();
+        Doctor::truncate();
+        Schema::enableForeignKeyConstraints();
+
         foreach ($this->doctors() as $doctor) {
-            Doctor::updateOrCreate(
-                ['slug' => Str::slug($doctor['name'])],
-                array_merge($this->normaliseLists($doctor), ['slug' => Str::slug($doctor['name'])])
+            $slugName = is_array($doctor['name']) ? ($doctor['name']['en'] ?? reset($doctor['name'])) : $doctor['name'];
+            
+            Doctor::create(
+                array_merge($this->normaliseLists($doctor), ['slug' => Str::slug($slugName)])
             );
         }
     }
@@ -41,220 +48,170 @@ class DoctorSeeder extends Seeder
     {
         return [
             [
-                'name'       => 'Dr. Afroza Talukder',
-                'role'       => [
-                    'en' => 'Gynecology & Obstetrics Surgeon',
-                    'bn' => 'স্ত্রীরোগ ও ধাত্রীবিদ্যায় অভিজ্ঞ সার্জন',
-                ],
-                'specialty'  => [
-                    'en' => 'Gynecology & Obstetrics',
-                    'bn' => 'স্ত্রীরোগ ও ধাত্রীবিদ্যা',
-                ],
+                'name'       => ['en' => 'Dr. Md. Tanjil Kaysar (Anik)', 'bn' => 'ডা: মো: তানজিল কায়সার (অনিক)'],
+                'role'       => ['en' => 'Cardiologist', 'bn' => 'হৃদরোগ বিশেষজ্ঞ'],
+                'specialty'  => ['en' => 'Cardiology', 'bn' => 'কার্ডিওলজি'],
                 'degrees'    => [
-                    'en' => 'MBBS, PGT (Obs & Gynae)',
-                    'bn' => 'এম.বি.বি.এস, পিজিটি (অবস্ এন্ড গাইনী)',
+                    ['en' => 'MBBS', 'bn' => 'এমবিবিএস'],
+                    ['en' => 'MD (Cardiology)', 'bn' => 'এমডি (কার্ডিওলজি)'],
                 ],
                 'experience' => [
-                    'en' => 'Ex-Medical Officer, Sarat Abida General Hospital, Saudi Arabia. Ex-Resident Doctor, Zahurul Islam Medical College Hospital, Bajitpur, Kishoreganj. BMDC Reg. No. A-28214',
-                    'bn' => 'এক্স মেডিকেল অফিসার, সারাত আবিদা জেনারেল হাসপাতাল, সৌদি আরব। এক্স রেসিডেন্ট ডক্টর, জহুরুল ইসলাম মেডিকেল কলেজ হাসপাতাল, বাজিতপুর, কিশোরগঞ্জ। বিএমডিসি রেজি: নং- এ ২৮২১৪',
+                    ['en' => 'Bangladesh Medical University (Ex PG Hospital)', 'bn' => 'বাংলাদেশ মেডিক্যাল বিশ্ববিদ্যালয় (এক্স পিজি হসপিটাল)'],
+                    ['en' => 'Apollo Imperial Hospital, Chattogram', 'bn' => 'অ্যাপোলো ইম্পেরিয়াল হসপিটাল, চট্টগ্রাম'],
                 ],
-                'bio'        => [
-                    'en' => 'Treatment of all gynecological diseases, antenatal care for pregnant women, irregular menstruation, lower abdominal pain, normal delivery, caesarean section, and infertility treatment & surgical care.',
-                    'bn' => 'সকল প্রকার গাইনী রোগের চিকিৎসা, গর্ভবতী নারীদের গর্ভকালীন চিকিৎসা, অনিয়মিত ঋতুস্রাব, তলপেটে ব্যাথা, নরমাল ডেলিভারী, সিজার, বন্ধ্যাত্বের চিকিৎসা ও অপারেশন সেবা।',
-                ],
+                'bio'        => ['en' => '', 'bn' => ''],
                 'skills'     => [
-                    ['en' => 'Normal Delivery', 'bn' => 'নরমাল ডেলিভারী'],
-                    ['en' => 'Caesarean Section', 'bn' => 'সিজার'],
-                    ['en' => 'Infertility Treatment', 'bn' => 'বন্ধ্যাত্বের চিকিৎসা'],
+                    ['en' => 'Heart Health Checkup', 'bn' => 'হার্টের নিয়মিত চেকআপ'],
+                    ['en' => 'High Blood Pressure & Heart Failure Treatment', 'bn' => 'উচ্চ রক্তচাপ, হৃদরোগ ও হার্ট ফেইলিউর চিকিৎসা'],
+                    ['en' => 'ECG & Echocardiography', 'bn' => 'ইসিজি ও ইকোকার্ডিওগ্রাফি'],
                 ],
                 'schedule'   => [
-                    ['day' => 'Friday - Wednesday', 'time' => '11:00 AM - 5:00 PM'],
+                    ['day' => ['en' => 'Saturday & Wednesday', 'bn' => 'শনিবার ও বুধবার'], 'time' => ['en' => '5:00 PM - 7:00 PM', 'bn' => 'বিকেল ৫টা থেকে ৭টা']],
                 ],
-                'address'    => 'Amirabad (Sitakund South Bypass) 07, Sitakund Municipality, Sitakund, Chattogram',
-                'phone'      => '01849-727858',
-                'email'      => 'sitakundmedicarelab@gmail.com',
+                'address'    => [
+                    'en' => 'Sitakunda Modern Hospital Ltd., Amirabad (Sitakunda South Bypass) 07, Sitakunda Municipality, Sitakunda, Chattogram',
+                    'bn' => 'সীতাকুণ্ড মডার্ন হাসপাতাল লিঃ, আমিরাবাদ (সীতাকুণ্ড দক্ষিণ বাইপাস) ০৭, সীতাকুণ্ড পৌরসভা, সীতাকুণ্ড, চট্টগ্রাম',
+                ],
+                'phone'      => [
+                    'en' => '01849-727858, 01974-300821',
+                    'bn' => '০১৮৪৯-৭২৭৮৫৮, ০১৯৭৪-৩০০৮২১',
+                ],
                 'is_featured' => true,
                 'sort_order' => 1,
                 'is_active'  => true,
             ],
             [
-                'name'       => 'Dr. Bijoy Talukder',
-                'role'       => [
-                    'en' => 'Neonatal & Pediatric Specialist',
-                    'bn' => 'নবজাতক ও শিশুরোগ বিশেষজ্ঞ',
-                ],
-                'specialty'  => [
-                    'en' => 'Neonatal & Pediatrics',
-                    'bn' => 'নবজাতক ও শিশুরোগ',
-                ],
+                'name'       => ['en' => 'Dr. Monir Uddin Rubel', 'bn' => 'ডা: মনির উদ্দীন রুবেল'],
+                'role'       => ['en' => 'Medicine & Surgery Trained Physician', 'bn' => 'মেডিসিন ও সার্জারিতে প্রশিক্ষণপ্রাপ্ত চিকিৎসক'],
+                'specialty'  => ['en' => 'Medicine', 'bn' => 'মেডিসিন'],
                 'degrees'    => [
-                    'en' => 'MBBS, MD (Child Health), Bangabandhu Sheikh Mujib Medical University',
-                    'bn' => 'এম.বি.বি.এস, এম.ডি (শিশু স্বাস্থ্য), বঙ্গবন্ধু শেখ মুজিব মেডিকেল বিশ্ববিদ্যালয়',
+                    ['en' => 'MBBS', 'bn' => 'এমবিবিএস'],
+                    ['en' => 'Medical Officer, BGC Trust Medical & College Hospital', 'bn' => 'মেডিকেল অফিসার, বিজিএমসি ট্রাস্ট মেডিকেল ও কলেজ হাসপাতাল'],
+                    ['en' => 'PGT (Medicine), CMU, DMU', 'bn' => 'পিজিটি (মেডিসিন), সিএমইউ, ডিএমইউ'],
                 ],
-                'experience' => [
-                    'en' => 'Consultant (NICU & PICU), Medical Centre Hospital, Chattogram. Ex-Consultant, Chattogram Mother & Child General Hospital, Chattogram. BMDC Reg. No. A-57188',
-                    'bn' => 'কনসালটেন্ট (এন.আই.সি.ইউ এবং পি.আই.সি.ইউ), মেডিকেল সেন্টার হাসপাতাল, চট্টগ্রাম। চট্টগ্রাম মা ও শিশু জেনারেল হাসপাতাল, চট্টগ্রাম (এক্স)। বিএমডিসি রেজি: নং- এ-৫৭১৮৮',
-                ],
-                'bio'        => [
-                    'en' => 'Fever & convulsion, loss of appetite, cold & cough, sore throat & tonsillitis, breathing difficulty, indigestion, vomiting, diarrhea, urinary problems, abdominal pain, measles & chicken pox, pneumonia, allergy and scabies.',
-                    'bn' => 'জ্বর ও খিঁচুনী, খাবারে অনিহা, সর্দি ও কাশি, গলা ব্যাথা ও টনসিল, শ্বাসকষ্ট, বদহজম, বমি, ডায়রিয়া, প্রস্রাবে সমস্যা, পেটে ব্যাথা, হাম চিকেন পক্স, নিউমোনিয়া, এলার্জি ও খোসপাঁচড়া।',
-                ],
+                'experience' => [],
+                'bio'        => ['en' => '', 'bn' => ''],
                 'skills'     => [
-                    ['en' => 'NICU & PICU Care', 'bn' => 'এন.আই.সি.ইউ ও পি.আই.সি.ইউ'],
-                    ['en' => 'Newborn Care', 'bn' => 'নবজাতকের যত্ন'],
+                    ['en' => 'All kinds of medicine related diseases', 'bn' => 'মেডিসিন বিষয়ক সকল রোগের চিকিৎসা'],
+                    ['en' => 'Surgery Consultation', 'bn' => 'সার্জারি বিষয়ক পরামর্শ ও চিকিৎসা'],
+                    ['en' => 'Fever, Cold, Cough, Asthma', 'bn' => 'জ্বর, সর্দি, কাশি, অ্যাজমা'],
                 ],
                 'schedule'   => [
-                    ['day' => 'Daily (Closed on Thursday)', 'time' => '4:00 PM - 6:00 PM'],
+                    ['day' => ['en' => 'Every Friday', 'bn' => 'প্রতি শুক্রবার'], 'time' => ['en' => 'Morning to afternoon', 'bn' => 'সকাল থেকে চেম্বারে রোগী দেখবেন']],
                 ],
-                'address'    => 'Amirabad (Sitakund South Bypass) 07, Sitakund Municipality, Sitakund, Chattogram',
-                'phone'      => '01849-727858',
-                'email'      => 'sitakundmedicarelab@gmail.com',
+                'address'    => [
+                    'en' => 'Medicare Lab, Sitakunda Bazar, Ali Market, Chattogram',
+                    'bn' => 'মেডিকেয়ার ল্যাব, সীতাকুণ্ড বাজার, আলী মার্কেট, চট্টগ্রাম',
+                ],
+                'phone'      => [
+                    'en' => '01711-307275',
+                    'bn' => '01711-307275',
+                ],
                 'is_featured' => true,
                 'sort_order' => 2,
                 'is_active'  => true,
             ],
             [
-                'name'       => 'Dr. Mohammad Omor Faruk Tuhin',
-                'role'       => [
-                    'en' => 'General Laparoscopic & Colorectal Surgeon',
-                    'bn' => 'জেনারেল ল্যাপারোস্কপিক ও কলোরেক্টাল সার্জন',
-                ],
-                'specialty'  => [
-                    'en' => 'Laparoscopic & Colorectal Surgery',
-                    'bn' => 'ল্যাপারোস্কপিক ও কলোরেক্টাল সার্জারী',
-                ],
+                'name'       => ['en' => 'Dr. Muhammad Shahnewaz Parvez Sohel', 'bn' => 'ডা: মুহাম্মদ শাহনেওয়াজ পারভেজ সোহেল'],
+                'role'       => ['en' => 'Specialist Doctor', 'bn' => 'বিশেষজ্ঞ চিকিৎসক'],
+                'specialty'  => ['en' => 'Medicine & Diabetology', 'bn' => 'মেডিসিন ও ডায়াবেটোলজি'],
                 'degrees'    => [
-                    'en' => 'MBBS, BCS (Health), FCPS (Surgery)',
-                    'bn' => 'এমবিবিএস, বিসিএস (স্বাস্থ্য), এফসিপিএস (সার্জারী)',
+                    ['en' => 'MBBS', 'bn' => 'এমবিবিএস'],
+                    ['en' => 'PGT (Medicine)', 'bn' => 'পিজিটি (মেডিসিন)'],
+                    ['en' => 'PGT (Skin & Venereal Disease)', 'bn' => 'পিজিটি (চর্ম ও যৌন রোগ)'],
+                    ['en' => 'CCD (Diabetology)', 'bn' => 'সিসিডি (ডায়াবেটোলজী)'],
                 ],
                 'experience' => [
-                    'en' => 'Assistant Professor, Chattogram Medical College Hospital.',
-                    'bn' => 'সহকারী অধ্যাপক, চট্টগ্রাম মেডিকেল কলেজ হাসপাতাল।',
+                    ['en' => 'Chattogram Medical College Hospital', 'bn' => 'চট্টগ্রাম মেডিকেল কলেজ হাসপাতাল']
                 ],
-                'bio'        => [
-                    'en' => 'Laparoscopic gallbladder stone removal, appendicitis, hernia, stomach perforation, colorectal surgery for intestinal obstruction, intestinal tumor/cancer surgery, laser surgery for piles, fistula/anal fissure/hemorrhoid surgery, breast tumor/cancer and other surgical care.',
-                    'bn' => 'ল্যাপারোস্কপিক মেশিনের মাধ্যমে পিত্তথলির পাথর অপারেশন, অ্যাপেন্ডিসাইটিস, হার্নিয়া, পাকস্থলীর ছিদ্র, কোলোরেক্টাল সার্জারী, ক্ষুদ্রান্ত/বৃহদান্তের প্রতিবন্ধকতার চিকিৎসা, ক্ষুদ্রান্ত/বৃহদন্ত্রের টিউমার বা ক্যান্সার অপারেশন, লেজার অপারেশন-পাইলস, ফিস্টুলা/এনাল ফিশার/হেমোরয়েড অপারেশন, স্তনের টিউমার/ক্যান্সারসহ অন্যান্য রোগের শল্য চিকিৎসা।',
-                ],
+                'bio'        => ['en' => '', 'bn' => ''],
                 'skills'     => [
-                    ['en' => 'Laparoscopic Surgery', 'bn' => 'ল্যাপারোস্কপিক সার্জারী'],
-                    ['en' => 'Colorectal Surgery', 'bn' => 'কোলোরেক্টাল সার্জারী'],
+                    ['en' => 'General Disease Treatment', 'bn' => 'সাধারণ রোগের চিকিৎসা'],
+                    ['en' => 'Diabetes, Pressure, Thyroid', 'bn' => 'ডায়াবেটিস, প্রেসার, থাইরয়েড'],
+                    ['en' => 'Skin, Hair & Venereal Disease Treatment', 'bn' => 'চর্ম, চুল ও যৌন রোগের চিকিৎসা'],
+                    ['en' => 'Hormonal Problems', 'bn' => 'হরমোনের সমস্যা'],
+                    ['en' => 'Digestion Problems', 'bn' => 'হজমজনিত সমস্যা'],
+                    ['en' => 'Health Consultation', 'bn' => 'স্বাস্থ্য পরামর্শ'],
                 ],
                 'schedule'   => [
-                    ['day' => 'Monday & Thursday', 'time' => '3:00 PM - 5:00 PM'],
+                    ['day' => ['en' => 'Every Monday & Thursday', 'bn' => 'প্রতি সোমবার ও বৃহস্পতিবার'], 'time' => ['en' => 'From 3:00 PM', 'bn' => 'বিকাল ৩টা থেকে']],
+                    ['day' => ['en' => 'Saturday', 'bn' => 'শনিবার'], 'time' => ['en' => '4:00 PM - 8:00 PM', 'bn' => 'বিকাল ৪টা - ৮টা']],
                 ],
-                'address'    => 'Amirabad (Sitakund South Bypass) 07, Sitakund Municipality, Sitakund, Chattogram',
-                'phone'      => '01849-727858',
-                'email'      => 'sitakundmedicarelab@gmail.com',
-                'is_featured' => false,
+                'address'    => [
+                    'en' => 'Medicare Lab, Sitakunda Bazar, Ali Market, Chattogram',
+                    'bn' => 'মেডিকেয়ার ল্যাব, সীতাকুন্ড বাজার, আলী মার্কেট, চট্টগ্রাম',
+                ],
+                'phone'      => [
+                    'en' => '01711307275',
+                    'bn' => '01711307275',
+                ],
+                'is_featured' => true,
                 'sort_order' => 3,
                 'is_active'  => true,
             ],
             [
-                'name'       => 'Dr. Md. S.S. Talukder',
-                'role'       => [
-                    'en' => 'Orthopedic Surgeon & Disability Specialist',
-                    'bn' => 'অর্থোপেডিক সার্জন ও বিকলাঙ্গ রোগে অভিজ্ঞ',
-                ],
-                'specialty'  => [
-                    'en' => 'Orthopedics',
-                    'bn' => 'অর্থোপেডিক্স',
-                ],
+                'name'       => ['en' => 'Soni Das', 'bn' => 'সনি দাস'],
+                'role'       => ['en' => 'Experienced Eye Specialist', 'bn' => 'অভিজ্ঞ দৃষ্টি বিশেষজ্ঞ'],
+                'specialty'  => ['en' => 'Optometry', 'bn' => 'অপটোমেট্রি'],
                 'degrees'    => [
-                    'en' => 'MBBS (RU), PGT (Ortho), MS (Orthopedics) Course, Bangabandhu Sheikh Mujib Medical University',
-                    'bn' => 'এমবিবিএস (আরইউ), পিজিটি (অর্থো), এমএস (অর্থোপেডিক্স) কোর্স, বঙ্গবন্ধু শেখ মুজিব মেডিকেল বিশ্ববিদ্যালয়',
+                    ['en' => 'B.Sc in Optometry (Chattogram Medical University)', 'bn' => 'বি.এস.সি ইন অপটোমেট্রি (চট্টগ্রাম মেডিকেল বিশ্ববিদ্যালয়)'],
+                    ['en' => 'Optometrist (Faculty)', 'bn' => 'অপটোমেট্রিস্ট (ফ্যাকাল্টি)'],
+                    ['en' => 'Trained OR.B.S (America)', 'bn' => 'ট্রেইনড অর.বি.এস (আমেরিকা)'],
                 ],
                 'experience' => [
-                    'en' => 'BMDC Reg. No. A-96352',
-                    'bn' => 'বিএমডিসি রেজি: নং এ-৯৬৩৫২',
+                    ['en' => 'Institute of Community Ophthalmology, Pahartali Eye Hospital, Chattogram', 'bn' => 'ইন ইন্সটিটিউট অব কমিউনিটি অফথালমোলজি, পাহাড়তলী চক্ষু হাসপাতাল, চট্টগ্রাম'],
                 ],
-                'bio'        => [
-                    'en' => 'Fracture (bone joint break), trauma (accident) management, total hip replacement, total knee replacement, ligament repair/reconstruction, spine injury treatment, paralysis treatment, and nerve related disease treatment.',
-                    'bn' => 'ফ্র্যাকচার (হাড় জোড় ভাঙ্গা), ট্রমা (এক্সিডেন্ট)-ম্যানেজমেন্ট, টোটাল হিপ রিপ্লেসমেন্ট, টোটাল নী (হাঁটু) রিপ্লেসমেন্ট, লিগামেন্ট (রগ) রিপেয়ার/রিকনস্ট্রাকশন, স্পাইন ইনজুরীর চিকিৎসা, পঙ্গু ও পক্ষাঘাত চিকিৎসা, নার্ভ ও স্নায়ু রোগের চিকিৎসা।',
-                ],
+                'bio'        => ['en' => '', 'bn' => ''],
                 'skills'     => [
-                    ['en' => 'Total Hip Replacement', 'bn' => 'টোটাল হিপ রিপ্লেসমেন্ট'],
-                    ['en' => 'Total Knee Replacement', 'bn' => 'টোটাল নী রিপ্লেসমেন্ট'],
+                    ['en' => 'Eye Checkup', 'bn' => 'চোখের পরীক্ষা'],
+                    ['en' => 'Spectacles Power determination', 'bn' => 'চশমার পাওয়ার নির্ণয়'],
+                    ['en' => 'Contact Lens Consultation', 'bn' => 'কন্ট্যাক্ট লেন্স পরামর্শ'],
                 ],
                 'schedule'   => [
-                    ['day' => 'Every Saturday & Tuesday', 'time' => '3:00 PM - 6:00 PM'],
+                    ['day' => ['en' => 'Every Saturday', 'bn' => 'প্রতি শনিবার'], 'time' => ['en' => '3:00 PM - 6:00 PM', 'bn' => 'বিকাল ৩টা থেকে সন্ধ্যা ৬টা পর্যন্ত']],
                 ],
-                'address'    => 'Amirabad (Sitakund South Bypass) 07, Sitakund Municipality, Sitakund, Chattogram',
-                'phone'      => '01849-727858',
-                'email'      => 'sitakundmedicarelab@gmail.com',
-                'is_featured' => false,
+                'address'    => [
+                    'en' => 'Medicare Lab & Faruk Medical Hall, Ali Market, Sitakunda Bazar, Chattogram',
+                    'bn' => 'মেডিকেয়ার ল্যাব ও ফারুক মেডিকেল হল, আলী মার্কেট, সীতাকুণ্ড বাজার, চট্টগ্রাম',
+                ],
+                'phone'      => [
+                    'en' => '01711-307275',
+                    'bn' => '01711-307275',
+                ],
+                'is_featured' => true,
                 'sort_order' => 4,
                 'is_active'  => true,
             ],
             [
-                'name'       => 'Dr. Shuvo Das Gupta',
-                'role'       => [
-                    'en' => 'Medicine Specialist',
-                    'bn' => 'মেডিসিন বিশেষজ্ঞ',
-                ],
-                'specialty'  => [
-                    'en' => 'Medicine',
-                    'bn' => 'মেডিসিন',
-                ],
+                'name'       => ['en' => 'Dr. Dhiman Chowdhury', 'bn' => 'ডা: ধীমান চৌধুরী'],
+                'role'       => ['en' => 'Newborn, Child & Adolescent Disease Specialist', 'bn' => 'নবজাত শিশু ও কিশোর রোগ বিশেষজ্ঞ'],
+                'specialty'  => ['en' => 'Pediatrics', 'bn' => 'শিশুরোগ'],
                 'degrees'    => [
-                    'en' => 'MBBS; CCD (BIRDEM), PGT (Medicine), PGT (Surgery), Chattogram Medical College Hospital',
-                    'bn' => 'এমবিবিএস; সি.সি.ডি (বারডেম), পি.জি.টি (মেডিসিন), পি.জি.টি (সার্জারি), চট্টগ্রাম মেডিকেল কলেজ হাসপাতাল',
+                    ['en' => 'MBBS, BCS (Health)', 'bn' => 'এমবিবিএস, বিসিএস (স্বাস্থ্য)'],
+                    ['en' => 'FCPS (Newborn, Child and Adolescent Disease Specialist)', 'bn' => 'এফসিপিএস (নবজাত শিশু ও কিশোর রোগ বিশেষজ্ঞ)'],
                 ],
                 'experience' => [
-                    'en' => 'BMDC Reg. No. A-116475',
-                    'bn' => 'বি.এম.ডি.সি. রেজি: এ-১১৬৪৭৫',
+                    ['en' => 'Chattogram Medical College Hospital', 'bn' => 'চট্টগ্রাম মেডিকেল কলেজ হাসপাতাল'],
                 ],
-                'bio'        => [
-                    'en' => 'Medicine, dermatology, pediatric diseases, bone fractures, arthritis pain, asthma, diabetes and heart disease.',
-                    'bn' => 'মেডিসিন, চর্মরোগ, শিশুরোগ, হাড়ভাঙ্গা জোড়া, বাত ব্যাথা, এ্যাজমা, ডায়াবেটিস ও হৃদরোগে অভিজ্ঞ।',
-                ],
+                'bio'        => ['en' => '', 'bn' => ''],
                 'skills'     => [
-                    ['en' => 'Diabetes Management', 'bn' => 'ডায়াবেটিস ব্যবস্থাপনা'],
-                    ['en' => 'General Medicine', 'bn' => 'জেনারেল মেডিসিন'],
+                    ['en' => 'Newborn Care & Treatment', 'bn' => 'নবজাত শিশুর যত্ন ও চিকিৎসা'],
+                    ['en' => 'Child & Adolescent Diseases', 'bn' => 'শিশু ও কিশোর রোগের চিকিৎসা'],
+                    ['en' => 'Asthma, Pneumonia Treatment', 'bn' => 'শ্বাসকষ্ট, নিউমোনিয়া, অ্যাজমা চিকিৎসা'],
                 ],
                 'schedule'   => [
-                    ['day' => 'Wednesday - Sunday', 'time' => '9:00 AM - 2:00 PM & 4:00 PM - 9:00 PM'],
-                    ['day' => 'Emergency', 'time' => 'Available 24/7'],
+                    ['day' => ['en' => 'Sun, Tue, Thu & Fri', 'bn' => 'রবিবার, মঙ্গলবার, বৃহস্পতিবার ও শুক্রবার'], 'time' => ['en' => 'From 3:00 PM', 'bn' => 'বিকাল ৩টা থেকে']],
                 ],
-                'address'    => 'Amirabad (Sitakund South Bypass) 07, Sitakund Municipality, Sitakund, Chattogram',
-                'phone'      => '01849-727858',
-                'email'      => 'sitakundmedicarelab@gmail.com',
-                'is_featured' => false,
+                'address'    => [
+                    'en' => 'Medicare Lab, Sitakunda Bazar, Ali Market, Chattogram',
+                    'bn' => 'মেডিকেয়ার ল্যাব, সীতাকুণ্ড বাজার, আলী মার্কেট, চট্টগ্রাম',
+                ],
+                'phone'      => [
+                    'en' => '01711-307275',
+                    'bn' => '01711307275',
+                ],
+                'is_featured' => true,
                 'sort_order' => 5,
-                'is_active'  => true,
-            ],
-            [
-                'name'       => 'Dr. Md. Jobayer Hossen Tarek',
-                'role'       => [
-                    'en' => 'Medicine Specialist',
-                    'bn' => 'মেডিসিন বিশেষজ্ঞ',
-                ],
-                'specialty'  => [
-                    'en' => 'Medicine',
-                    'bn' => 'মেডিসিন',
-                ],
-                'degrees'    => [
-                    'en' => 'MBBS, BCS (Health), MD (Medicine), Bangladesh Medical University (Ex-PG Hospital), Dhaka. Certified Diabetologist (BIRDEM)',
-                    'bn' => 'এমবিবিএস, বিসিএস (স্বাস্থ্য), এমডি (মেডিসিন), বাংলাদেশ মেডিকেল বিশ্ববিদ্যালয় (এক্স-পিজি হাসপাতাল), ঢাকা। সার্টিফাইড ডায়াবেটোলজিস্ট (বারডেম)',
-                ],
-                'experience' => [
-                    'en' => 'BMDC Reg. No. A-67602',
-                    'bn' => 'বি এম ডি সি রেজি. নং- এ-৬৭৬০২',
-                ],
-                'bio'        => [
-                    'en' => 'General medicine and certified diabetes care.',
-                    'bn' => 'জেনারেল মেডিসিন ও সার্টিফাইড ডায়াবেটিস চিকিৎসা।',
-                ],
-                'skills'     => [
-                    ['en' => 'Diabetology', 'bn' => 'ডায়াবেটোলজি'],
-                ],
-                'schedule'   => [
-                    ['day' => 'Every Friday', 'time' => '10:00 AM - 1:00 PM'],
-                ],
-                'address'    => 'Amirabad (Sitakund South Bypass) 07, Sitakund Municipality, Sitakund, Chattogram',
-                'phone'      => '01849-727858',
-                'email'      => 'sitakundmedicarelab@gmail.com',
-                'is_featured' => false,
-                'sort_order' => 6,
                 'is_active'  => true,
             ],
         ];

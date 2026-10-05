@@ -12,9 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('medical_test_bookings', function (Blueprint $table) {
-            $table->decimal('agent_discount_amount', 10, 2)->default(0.00)->after('discount_amount');
-            $table->enum('agent_discount_type', ['none', 'percentage', 'fixed'])->default('none')->after('agent_discount_amount');
-            $table->decimal('agent_discount_value', 8, 2)->default(0.00)->after('agent_discount_type');
+            if (!Schema::hasColumn('medical_test_bookings', 'agent_discount_amount')) {
+                $table->decimal('agent_discount_amount', 10, 2)->default(0.00)->after('discount_amount');
+            }
+            if (!Schema::hasColumn('medical_test_bookings', 'agent_discount_type')) {
+                $table->enum('agent_discount_type', ['none', 'percentage', 'fixed'])->default('none')->after('agent_discount_amount');
+            }
+            if (!Schema::hasColumn('medical_test_bookings', 'agent_discount_value')) {
+                $table->decimal('agent_discount_value', 8, 2)->default(0.00)->after('agent_discount_type');
+            }
         });
     }
 

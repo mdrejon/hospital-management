@@ -21,63 +21,65 @@ $heroSlides = $sliders->isNotEmpty()
 [
 'image' => asset('assets/img/slider-1.2.jpg'),
 'image_alt' => 'Doctor examining a baby patient',
-'eyebrow' => 'Wellcome To Medical!',
-'title' => 'Best of Practice Place Medical',
-'accent' => 'Doctor',
-'desc' => "Today, Barry's is on the cusp of continued global expansion with over 100,000 members working out weekly in studios",
-'button_text' => 'Make Appointment',
-'button_url' => route('appointment'),
+'eyebrow' => 'Our people and society',
+'title' => 'Best Medics, Doctors',
+'accent' => 'and physicians',
+'desc' => "Conveniently drive go forward architectures with future-proof growth strategies. Energistically supply low-risk high-yield process improvements for mission-critical testing procedures",
+'button_text' => 'View All Services',
+'button_url' => route('services'),
 ],
 [
 'image' => asset('assets/img/slider-1.3.jpg'),
 'image_alt' => 'Medical team performing a procedure on a patient',
 'eyebrow' => 'We Care For You',
-'title' => 'Compassionate Care, Trusted',
-'accent' => 'Doctors',
+'title' => 'Compassionate Care,',
+'accent' => 'Trusted Doctors',
 'desc' => 'Our specialists combine advanced technology with genuine compassion to give every patient the care they deserve.',
 'button_text' => 'Make Appointment',
 'button_url' => route('appointment'),
 ],
 ]);
 ?>
-<section class="hero" data-hero>
-  <div class="hero__viewport">
-    <div class="hero__track" data-hero-track>
+<section class="hero !bg-gray-50" data-hero>
+  <div class="hero__viewport h-full w-full relative">
+    <div class="hero__track flex h-full transition-transform duration-700 ease-out" data-hero-track>
 
       <?php $__currentLoopData = $heroSlides; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slide): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-      <div class="hero-slide">
-        <img src="<?php echo e($slide['image']); ?>" alt="<?php echo e($slide['image_alt']); ?>" class="hero-slide__bg" />
-        <span class="hero-slide__overlay"></span>
+      <div class="hero-slide w-full flex-shrink-0 relative">
+        <img src="<?php echo e($slide['image']); ?>" alt="<?php echo e($slide['image_alt']); ?>" class="hero-slide__bg !object-top" />
 
-        <div class="hero-slide__inner">
-          <div class="hero-slide__content" data-hero-content>
+        <!-- Gradient overlay -->
+        <span class="hero-slide__overlay !bg-gradient-to-r !from-white/95 !via-white/70 !to-transparent !opacity-100"></span>
+
+        <div class="hero-slide__inner !max-w-none w-full !px-4 lg:!px-16 flex items-center h-full relative z-10">
+          <div class="hero-slide__content pl-8 lg:pl-16 !max-w-2xl" data-hero-content>
             <?php if($slide['eyebrow']): ?>
-            <p class="hero-slide__eyebrow">
-              <span class="hero-slide__eyebrow-dot"></span>
+            <p class="hero-slide__eyebrow !block !text-brand-cyan !italic !text-2xl lg:!text-[28px] !mb-4" style="font-family: 'Georgia', serif;">
               <?php echo e($slide['eyebrow']); ?>
 
-              <span class="hero-slide__eyebrow-dot"></span>
             </p>
             <?php endif; ?>
-            <h1 class="hero-slide__title">
+            <h1 class="hero-slide__title !text-navy !text-4xl !font-bold !mb-5">
               <?php echo e($slide['title']); ?>
 
-              <?php if($slide['accent']): ?><span class="accent"><?php echo e($slide['accent']); ?></span><?php endif; ?>
+              <?php if($slide['accent']): ?>
+              <br>
+              <span class="accent !text-brand-cyan"><?php echo e($slide['accent']); ?></span>
+              <?php endif; ?>
             </h1>
             <?php if($slide['desc']): ?>
-            <p class="hero-slide__desc">
+            <p class="hero-slide__desc !text-gray-500 !text-sm lg:!text-[15px] !max-w-[480px]">
               <?php echo e($slide['desc']); ?>
 
             </p>
             <?php endif; ?>
-            <a href="<?php echo e($slide['button_url'] ?: route('appointment')); ?>" class="hero-slide__cta">
-              <?php echo e($slide['button_text'] ?: __('frontend.home.make_appointment')); ?>
-
-              <span class="hero-slide__cta-icon">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+            <a href="<?php echo e($slide['button_url'] ?: route('appointment')); ?>" class="hero-slide__cta !bg-brand-cyan !text-white !rounded-full !pr-7 !pl-2 !py-2 hover:!bg-navy !transition !duration-300 shadow-lg shadow-brand-cyan/30">
+              <span class="w-8 h-8 rounded-full bg-white text-brand-cyan flex items-center justify-center mr-3 shrink-0">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M13 2L3 14h8v8l10-12h-8V2z" />
                 </svg>
               </span>
+              <span class="!font-bold !text-[14px] !normal-case !tracking-normal !text-white"><?php echo e($slide['button_text'] ?: 'View All Services'); ?></span>
             </a>
           </div>
         </div>
@@ -85,35 +87,10 @@ $heroSlides = $sliders->isNotEmpty()
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
-    <!-- Follow-social rail -->
-    <div class="hero__social">
-      <div class="hero__social-icons">
-        <a href="#" class="hero__social-link" aria-label="Instagram">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-            <circle cx="12" cy="12" r="4" />
-            <circle cx="17.2" cy="6.8" r="1" />
-          </svg>
-        </a>
-        <a href="#" class="hero__social-link" aria-label="Twitter">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1c.5 1.7 2.1 2.9 4 2.9A8.2 8.2 0 0 1 2 18.6a11.6 11.6 0 0 0 6.3 1.8c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.1z" />
-          </svg>
-        </a>
-        <a href="#" class="hero__social-link" aria-label="Facebook">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z" />
-          </svg>
-        </a>
-      </div>
-      <span class="hero__social-label"><?php echo e(__('frontend.home.follow_social')); ?></span>
-    </div>
-
-    <!-- Vertical dot nav -->
-    <div class="hero__dots">
-      <span class="hero__dot-tick"></span>
+    <!-- Vertical dot nav (moved to left edge using tailwind overrides) -->
+    <div class="hero__dots !right-auto !left-6 lg:!left-12 !items-start">
       <?php $__currentLoopData = $heroSlides; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $slide): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-      <button type="button" class="hero__dot" data-hero-dot aria-label="Go to slide <?php echo e($i + 1); ?>"></button>
+      <button type="button" class="hero__dot !h-2.5 !w-2.5 !border-none !bg-navy transition-all duration-300 [&.is-active]:!bg-brand-cyan [&.is-active]:scale-125" data-hero-dot aria-label="Go to slide <?php echo e($i + 1); ?>"></button>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
   </div>
@@ -142,7 +119,13 @@ $aboutBtnText = $about['about_more_btn_text'] ?? __('frontend.common.read_more')
 $aboutBtnUrl = ($about['about_more_btn_url'] ?? null) ?: route('about');
 $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
 ?>
-<section class="about">
+<section class="about bg-blue-50/40 relative overflow-hidden">
+  <!-- Animated Floating Medical Cross -->
+  <div class="absolute top-10 right-10 opacity-30 animate-pulse text-brand-cyan pointer-events-none z-0">
+    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+    </svg>
+  </div>
   <svg class="about__decor" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <pattern id="about-dots" width="10" height="10" patternUnits="userSpaceOnUse">
       <circle cx="2" cy="2" r="2" fill="currentColor" />
@@ -230,6 +213,90 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
   </div>
 </section>
 
+
+<!-- ===================== Why Choose Us ===================== -->
+<?php
+$whyBadge = $about['why_badge'] ?? '7 Star Care & Protection';
+$whyTitle = $about['why_title'] ?? 'We love your loved ones';
+$whyDesc = $about['why_desc'] ?? "Proactively revolutionize granular customer service after pandemic internal or 'organic' sources. Distinctively impact proactive human capital rather than client-centered benefits.";
+$whyPhoto = !empty($about['why_photo']) ? asset('storage/' . $about['why_photo']) : asset('assets/img/choose-us-image.webp');
+$whyBgPhoto = !empty($about['why_bg_photo']) ? asset('storage/' . $about['why_bg_photo']) : null;
+$whyFeatures = !empty($about['why_features']) ? $about['why_features'] : [
+['title' => '100% Safe & Trusted', 'description' => 'Professional web-readiness via ubiquitous human capital.'],
+['title' => 'Specialist Surgery', 'description' => 'Professional web-readiness via ubiquitous human capital.'],
+['title' => '24/7 take care staff', 'description' => 'Professional web-readiness via ubiquitous human capital.'],
+['title' => 'Medicine service','description' => 'Professional web-readiness via ubiquitous human capital.'],
+];
+?>
+<section class="relative py-24 bg-white overflow-hidden">
+  <!-- Background Pattern (Left) -->
+  <div class="absolute left-0 top-0 w-64 h-full bg-[radial-gradient(#0ea5e9_2px,transparent_2px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div>
+  <!-- Background Pattern (Right) -->
+  <div class="absolute right-0 top-0 w-64 h-full bg-[radial-gradient(#9ca3af_2px,transparent_2px)] [background-size:24px_24px] opacity-20 pointer-events-none"></div>
+
+  <div class="container mx-auto px-4 lg:px-16 relative z-10">
+    <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-20">
+
+      <!-- Left Content -->
+      <div class="lg:w-1/2">
+        <p class="text-brand-cyan italic text-2xl lg:text-[28px] mb-3" style="font-family: 'Georgia', serif;">
+          <?php echo e($whyBadge); ?>
+
+        </p>
+        <h2 class="text-3xl lg:text-[44px] font-bold text-navy mb-6 leading-[1.2]">
+          <?php echo e($whyTitle); ?>
+
+        </h2>
+        <p class="text-gray-500 text-[15px] leading-relaxed mb-12 max-w-[500px]">
+          <?php echo e($whyDesc); ?>
+
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10">
+          <?php $__currentLoopData = $whyFeatures; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php
+          // Simple icons based on index to mimic the screenshot
+          $icons = [
+          '<svg class="w-9 h-9 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>', // Shield
+          '<svg class="w-9 h-9 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
+          </svg>', // Mouse/Click
+          '<svg class="w-9 h-9 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+          </svg>', // Heart
+          '<svg class="w-9 h-9 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+          </svg>' // Flask
+          ];
+          $icon = $icons[$i % count($icons)];
+          ?>
+          <div class="flex gap-4">
+            <div class="shrink-0 mt-1">
+              <?php echo $icon; ?>
+
+            </div>
+            <div>
+              <h3 class="text-navy font-bold text-[16px] mb-2"><?php echo e($feature['title']); ?></h3>
+              <p class="text-gray-400 text-[13px] leading-relaxed"><?php echo e($feature['description']); ?></p>
+            </div>
+          </div>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
+      </div>
+
+      <!-- Right Image -->
+      <div class="lg:w-1/2 relative flex justify-center mt-12 lg:mt-0">
+        <!-- Cyan circular arc decoration -->
+        <div class="absolute right-0 bottom-0 w-[450px] h-[450px] rounded-full border border-brand-cyan/50 -z-10 translate-x-12 translate-y-12"></div>
+        <img src="<?php echo e($whyPhoto); ?>" alt="<?php echo e($whyTitle); ?>" class="max-w-full h-auto relative z-10" />
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ===================== Departments ===================== -->
 <?php
 $deptDefaultIcon = '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -254,81 +321,81 @@ $deptCards = $featuredServices->isNotEmpty()
 </svg>', 'image' => asset('assets/img/about-image.webp'), 'url' => route('services')],
 ]);
 ?>
-<section class="departments">
-  <svg class="departments__decor" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <pattern id="departments-dots" width="10" height="10" patternUnits="userSpaceOnUse">
-      <circle cx="2" cy="2" r="2" fill="currentColor" />
-    </pattern>
-    <rect width="100" height="100" fill="url(#departments-dots)" />
-  </svg>
+<section class="departments py-24 bg-slate-50 relative overflow-hidden">
+  <!-- Animated Floating Element -->
+  <div class="absolute top-20 left-10 opacity-20 animate-bounce text-navy pointer-events-none z-0" style="animation-duration: 4s;">
+    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="12" r="10" />
+      <path stroke-linecap="round" d="M12 8v8m-4-4h8" />
+    </svg>
+  </div>
+  <div class="container mx-auto px-4">
+    <!-- Heading Area -->
+    <div class="text-center mb-16 max-w-2xl mx-auto">
+      <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-3">
+        <?php echo e($svc['svc_badge'] ?? __('frontend.home.services_badge')); ?>
 
-  <div class="departments__banner">
-    <img src="<?php echo e(asset('assets/img/slider-1.3.jpg')); ?>" alt="" class="departments__banner-bg" />
-    <span class="departments__banner-overlay"></span>
+      </p>
+      <h2 class="text-3xl lg:text-[40px] font-bold text-navy mb-6 leading-[1.2]">
+        <?php echo e($svc['svc_title'] ?? __('frontend.home.services_title')); ?>
 
-    <div class="departments__head">
-      <p class="departments__eyebrow"><?php echo e($svc['svc_badge'] ?? __('frontend.home.services_badge')); ?></p>
-      <h2 class="departments__title"><?php echo e($svc['svc_title'] ?? __('frontend.home.services_title')); ?></h2>
-      <p class="departments__desc">
+      </h2>
+      <p class="text-gray-500 text-[15px] mb-8 leading-relaxed">
         <?php echo e($svc['svc_desc'] ?? __('frontend.home.services_desc')); ?>
 
       </p>
-      <a href="<?php echo e(($svc['svc_btn_url'] ?? null) ?: route('services')); ?>" class="btn-services-all" style="margin-top:14px;display:inline-flex;">
+      <?php if(!empty($svc['svc_btn_url'])): ?>
+      <a href="<?php echo e($svc['svc_btn_url']); ?>" class="inline-flex items-center justify-center bg-brand-cyan hover:bg-navy text-white font-bold py-3 px-8 rounded-full transition-colors duration-300">
         <?php echo e($svc['svc_btn_text'] ?? __('frontend.home.view_all_services')); ?>
 
       </a>
+      <?php endif; ?>
     </div>
-  </div>
 
-  <div class="departments__body">
-    <div class="departments__slider" data-departments-slider>
-      <div class="departments__viewport">
-        <div class="departments__track" data-departments-track>
+    <!-- 3-Column Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <?php $__currentLoopData = $deptCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+      <article class="group bg-white overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] transition-all duration-300 relative flex flex-col h-full border border-gray-50">
 
-          <?php $__currentLoopData = $deptCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <div class="departments__slide">
-            <article class="department-card <?php echo e($i === 1 ? 'is-alt' : ''); ?>">
-              <div class="department-card__body">
-                <h3 class="department-card__title"><?php echo e($card['title']); ?></h3>
-                <p class="department-card__desc">
-                  <?php echo e($card['desc']); ?>
-
-                </p>
-              </div>
-              <div class="department-card__media">
-                <div class="department-card__badge">
-                  <span class="department-card__icon">
-                    <?php echo $card['icon_svg'] ?: $deptDefaultIcon; ?>
-
-                  </span>
-                  <a href="<?php echo e($card['url']); ?>" class="department-card__arrow" aria-label="View <?php echo e($card['title']); ?>">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                  </a>
-                </div>
-                <img src="<?php echo e($card['image']); ?>" alt="<?php echo e($card['title']); ?>" class="department-card__img" />
-              </div>
-            </article>
+        <!-- Image Area -->
+        <div class="h-[240px] w-full relative shrink-0 z-10">
+          <div class="w-full h-full overflow-hidden">
+            <img src="<?php echo e($card['image']); ?>" alt="<?php echo e($card['title']); ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
           </div>
-          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+          <!-- Icon Circle -->
+          <div class="absolute -bottom-7 left-1/2 -translate-x-1/2 z-20">
+            <div class="relative w-[56px] h-[56px] rounded-full bg-brand-cyan border-[4px] border-white flex items-center justify-center text-white shadow-sm">
+              <span class="w-6 h-6 flex items-center justify-center">
+                <?php echo $card['icon_svg'] ?: $deptDefaultIcon; ?>
+
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <button type="button" class="departments__nav is-prev" data-departments-prev aria-label="Previous departments">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="m14 6-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </button>
-      <button type="button" class="departments__nav is-next" data-departments-next aria-label="Next departments">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="m10 6 6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </button>
+        <!-- Content Area -->
+        <div class="pt-14 pb-8 px-6 text-center transition-colors duration-300 group-hover:bg-brand-cyan flex-grow flex flex-col items-center relative z-0 bg-white">
+          <h3 class="text-navy text-[20px] font-bold mb-3 transition-colors duration-300 group-hover:text-white">
+            <?php echo e($card['title']); ?>
+
+          </h3>
+          <p class="text-gray-500 text-[14px] leading-relaxed mb-6 transition-colors duration-300 group-hover:text-white/90 line-clamp-3">
+            <?php echo e($card['desc']); ?>
+
+          </p>
+
+          <a href="<?php echo e($card['url']); ?>" class="mt-auto inline-flex items-center gap-2 text-navy text-[14px] font-bold transition-colors duration-300 group-hover:text-white group-hover:opacity-90">
+            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+            Read More
+          </a>
+        </div>
+
+      </article>
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
-
-    <div class="departments__dots" data-departments-dots></div>
-
   </div>
 </section>
 
@@ -345,168 +412,101 @@ $teamCards = $featuredDoctors->isNotEmpty()
 'linkedin' => $d->linkedin_url,
 ])
 : collect([
-['name' => 'Dr. Laron Metar', 'role' => 'Practice Service', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
-['name' => 'Dr. Smith Karo', 'role' => 'Founder', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
-['name' => 'Dr. Merata Baron', 'role' => 'Emergency Services', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
-['name' => 'Dr. Elena Cross', 'role' => 'Cardiologist', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
-['name' => 'Dr. Michael Reyes', 'role' => 'Pediatrician', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
-['name' => 'Dr. Sara Owens', 'role' => 'Neurologist', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
+['name' => 'Collis Molate', 'role' => 'Neurosurgeon', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
+['name' => 'Domani Plavon', 'role' => 'Neurosurgeon', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
+['name' => 'John Mard', 'role' => 'Dental Surgeon', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
+['name' => 'Amanal Frond', 'role' => 'Neurosurgeon', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
+['name' => 'Michael Reyes', 'role' => 'Pediatrician', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
+['name' => 'Sara Owens', 'role' => 'Neurologist', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
 ]);
 ?>
-<section class="team">
-  <div class="container mx-auto">
-    <div class="team__head">
-      <p class="team__eyebrow">
-        <span class="team__eyebrow-dot"></span>
-        <?php echo e($doc['doc_home_badge'] ?? __('frontend.home.doctors_badge')); ?>
+<section class="team !py-24 bg-white relative overflow-hidden">
+  <!-- Animated Floating Element -->
+  <div class="absolute bottom-20 right-10 opacity-[0.08] animate-spin text-brand-cyan pointer-events-none z-0" style="animation-duration: 20s;">
+    <svg width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+      <circle cx="12" cy="12" r="10" stroke-dasharray="4 4" />
+    </svg>
+  </div>
+  <div class="container mx-auto px-4">
+    <!-- Centered Heading Area -->
+    <div class="text-center mb-14 max-w-2xl mx-auto">
+      <h2 class="text-3xl lg:text-[40px] font-bold text-navy mb-4 leading-[1.2]">
+        <?php echo e($doc['doc_home_title'] ?? 'We Have Specialist Doctors To Solve Your Problems'); ?>
 
-        <span class="team__eyebrow-dot"></span>
+      </h2>
+      <div class="flex justify-center items-center gap-1.5 mb-4 text-brand-cyan">
+        <!-- Heartbeat Line -->
+        <span class="text-lg font-bold tracking-tighter">--</span>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h3l2.5-4.5 3 9 2.5-4.5h4" />
+        </svg>
+        <span class="text-lg font-bold tracking-tighter">--</span>
+      </div>
+      <p class="text-gray-500 text-[15px]">
+        <?php echo e($doc['doc_home_desc'] ?? 'Lorem ipsum dolor sit amet consectetur adipiscing elit praesent aliquet. pretiumts'); ?>
+
       </p>
-      <h2 class="team__title"><?php echo e($doc['doc_home_title'] ?? __('frontend.home.doctors_title')); ?></h2>
     </div>
 
-    <div class="team__slider" data-team-slider>
-      <div class="team__viewport">
-        <div class="team__track" data-team-track>
+    <!-- Slider -->
+    <div class="team__slider relative" data-team-slider>
+      <div class="team__viewport overflow-hidden pb-4">
+        <div class="team__track flex" data-team-track>
 
           <?php $__currentLoopData = $teamCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <div class="team__slide">
-            <article class="team-card">
-              <span class="team-card__corner" aria-hidden="true"></span>
-
-              <div class="team-card__photo-wrap">
-                <img src="<?php echo e($card['photo']); ?>" alt="<?php echo e($card['name']); ?>" class="team-card__photo" />
-                <span class="team-card__overlay">
-                  <a href="<?php echo e($card['url']); ?>" class="team-card__view" aria-label="View <?php echo e($card['name']); ?> profile">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="m10 6 6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                  </a>
-                </span>
+          <div class="team__slide px-4 w-full md:w-1/2 lg:w-1/4 shrink-0">
+            <article class="bg-white rounded-lg overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.1)] transition-shadow duration-300 group h-full border border-gray-100">
+              <!-- Image & Overlay -->
+              <div class="relative overflow-hidden aspect-[4/5] bg-gray-50 flex items-end justify-center">
+                <img src="<?php echo e($card['photo']); ?>" alt="<?php echo e($card['name']); ?>" class="w-full h-full object-cover object-top" />
+                <!-- Hover Overlay with Social Icons -->
+                <div class="absolute inset-0 bg-white/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                  <div class="flex items-center gap-3 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <a href="<?php echo e($card['facebook'] ?: '#'); ?>" class="w-10 h-10 rounded-full bg-white text-navy flex items-center justify-center hover:bg-brand-cyan hover:text-white shadow-lg transition-colors" aria-label="Facebook">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z" />
+                      </svg>
+                    </a>
+                    <a href="<?php echo e($card['linkedin'] ?: '#'); ?>" class="w-10 h-10 rounded-full bg-white text-navy flex items-center justify-center hover:bg-brand-cyan hover:text-white shadow-lg transition-colors" aria-label="LinkedIn">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z" />
+                      </svg>
+                    </a>
+                    <a href="<?php echo e($card['youtube'] ?: '#'); ?>" class="w-10 h-10 rounded-full bg-white text-navy flex items-center justify-center hover:bg-brand-cyan hover:text-white shadow-lg transition-colors" aria-label="YouTube">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23 12s0-3.6-.5-5.3c-.3-1-1-1.8-2-2C18.9 4.2 12 4.2 12 4.2s-6.9 0-8.5.5c-1 .3-1.7 1-2 2C1 8.4 1 12 1 12s0 3.6.5 5.3c.3 1 1 1.8 2 2 1.6.5 8.5.5 8.5.5s6.9 0 8.5-.5c1-.3 1.7-1 2-2 .5-1.7.5-5.3.5-5.3zM9.8 15.5V8.5l6.2 3.5-6.2 3.5z" />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
               </div>
-
-              <div class="team-card__social">
-                <a href="<?php echo e($card['facebook'] ?: '#'); ?>" class="team-card__social-link" aria-label="Facebook">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z" />
-                  </svg>
-                </a>
-                <a href="#" class="team-card__social-link" aria-label="Pinterest">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C6.5 2 3 5.9 3 10.2c0 2.6 1.4 4.6 3.5 5.4.3.1.6 0 .7-.4l.3-1.1c.1-.3 0-.5-.2-.8-.5-.6-.9-1.5-.9-2.7 0-3.5 2.6-6.6 6.8-6.6 3.7 0 5.7 2.3 5.7 5.3 0 4-1.8 7.4-4.4 7.4-1.5 0-2.6-1.2-2.2-2.7.4-1.7 1.2-3.6 1.2-4.9 0-1.1-.6-2.1-1.9-2.1-1.5 0-2.7 1.6-2.7 3.6 0 1.3.4 2.2.4 2.2l-1.8 7.5c-.5 2.2-.1 4.9 0 5.2 0 .2.2.2.3.1.1-.2 1.7-2.1 2.3-4.1l.9-3.4c.4.8 1.7 1.5 3.1 1.5 4.1 0 6.9-3.7 6.9-8.7C21 5.8 17.3 2 12 2z" />
-                  </svg>
-                </a>
-                <a href="<?php echo e($card['youtube'] ?: '#'); ?>" class="team-card__social-link" aria-label="YouTube">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M23 12s0-3.6-.5-5.3c-.3-1-1-1.8-2-2C18.9 4.2 12 4.2 12 4.2s-6.9 0-8.5.5c-1 .3-1.7 1-2 2C1 8.4 1 12 1 12s0 3.6.5 5.3c.3 1 1 1.8 2 2 1.6.5 8.5.5 8.5.5s6.9 0 8.5-.5c1-.3 1.7-1 2-2 .5-1.7.5-5.3.5-5.3zM9.8 15.5V8.5l6.2 3.5-6.2 3.5z" />
-                  </svg>
-                </a>
-                <a href="<?php echo e($card['linkedin'] ?: '#'); ?>" class="team-card__social-link" aria-label="LinkedIn">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z" />
-                  </svg>
-                </a>
-              </div>
-
-              <div class="team-card__body">
-                <h3 class="team-card__name"><?php echo e($card['name']); ?></h3>
-                <p class="team-card__role"><?php echo e($card['role']); ?></p>
+              <!-- Content -->
+              <div class="p-6 text-center border-t border-gray-100">
+                <p class="text-gray-500 text-[13px] mb-1.5"><?php echo e($card['role']); ?></p>
+                <h3 class="text-navy text-[19px] font-bold"><?php echo e($card['name']); ?></h3>
               </div>
             </article>
           </div>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
         </div>
       </div>
 
-      <button type="button" class="team__nav is-prev" data-team-prev aria-label="Previous doctors">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="m14 6-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+      <!-- Navigation Arrows (overridden to look cleaner) -->
+      <button type="button" class="team__nav is-prev !absolute !top-1/2 !-left-4 lg:!-left-6 !-translate-y-1/2 !w-12 !h-12 !rounded-full !bg-white shadow-[0_4px_15px_rgba(0,0,0,0.1)] flex items-center justify-center text-navy hover:!bg-brand-cyan hover:!text-white transition z-10" data-team-prev aria-label="Previous doctors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
         </svg>
       </button>
-      <button type="button" class="team__nav is-next" data-team-next aria-label="Next doctors">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="m10 6 6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+      <button type="button" class="team__nav is-next !absolute !top-1/2 !-right-4 lg:!-right-6 !-translate-y-1/2 !w-12 !h-12 !rounded-full !bg-white shadow-[0_4px_15px_rgba(0,0,0,0.1)] flex items-center justify-center text-navy hover:!bg-brand-cyan hover:!text-white transition z-10" data-team-next aria-label="Next doctors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
         </svg>
       </button>
     </div>
 
-    <div class="team__dots" data-team-dots></div>
-  </div>
-</section>
-
-<!-- ===================== Why Choose Us ===================== -->
-<?php
-$whyBadge = $about['why_badge'] ?? null;
-$whyTitle = $about['why_title'] ?? __('frontend.home.why_choose_us_title');
-$whyDesc = $about['why_desc'] ?? null;
-$whyPhoto = !empty($about['why_photo']) ? asset('storage/' . $about['why_photo']) : asset('assets/img/choose-us-image.webp');
-$whyBgPhoto = !empty($about['why_bg_photo']) ? asset('storage/' . $about['why_bg_photo']) : null;
-$whyBadgeNumber = $about['why_badge_number'] ?? '20+';
-$whyBadgeLabel = $about['why_badge_label'] ?? 'Years Experienced';
-$whyFeatures = !empty($about['why_features']) ? $about['why_features'] : [
-['title' => 'More Experience', 'description' => 'Our team of highly qualified specialists delivers exceptional care with years of experience.'],
-['title' => 'Seamless Care', 'description' => 'State-of-the-art medical equipment and cutting-edge technology for accurate diagnosis.'],
-['title' => 'The Right Answers', 'description' => 'Round-the-clock emergency services with rapid response teams always on standby.'],
-['title' => 'Unparalleled Expertise','description' => 'Quality healthcare at competitive prices with transparent billing and insurance support.'],
-];
-// Fixed by the design — feature cards are title + description only.
-$whyCheckIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-  <polyline points="20 6 9 17 4 12" />
-</svg>';
-?>
-<section class="why-choose <?php echo e($whyBgPhoto ? 'why-choose--custom-bg' : ''); ?>"
-  <?php if($whyBgPhoto): ?> style="background-image: url('<?php echo e($whyBgPhoto); ?>');" <?php endif; ?>>
-  <div class="container mx-auto">
-    <div class="why-choose__grid">
-
-      <!-- Media -->
-      <div class="why-choose__media">
-        <div class="why-choose__photo">
-          <img src="<?php echo e($whyPhoto); ?>" alt="<?php echo e($whyTitle); ?>" class="why-choose__photo-img" />
-        </div>
-        <?php if($whyBadgeNumber || $whyBadgeLabel): ?>
-        <div class="why-choose__badge">
-          <span class="why-choose__badge-number"><?php echo e($whyBadgeNumber); ?></span>
-          <span class="why-choose__badge-label"><?php echo e($whyBadgeLabel); ?></span>
-        </div>
-        <?php endif; ?>
-      </div>
-
-      <!-- Content -->
-      <div class="why-choose__content">
-        <?php if($whyBadge): ?>
-        <span class="why-choose__eyebrow"><?php echo e($whyBadge); ?></span>
-        <?php endif; ?>
-
-        <h2 class="why-choose__title">
-          <?php echo e($whyTitle); ?>
-
-        </h2>
-
-        <?php if($whyDesc): ?>
-        <p class="why-choose__desc"><?php echo e($whyDesc); ?></p>
-        <?php endif; ?>
-
-        <div class="why-choose__features">
-          <?php $__currentLoopData = $whyFeatures; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <div class="why-choose__feature">
-            <span class="why-choose__feature-icon">
-              <?php echo $whyCheckIcon; ?>
-
-            </span>
-            <div class="why-choose__feature-text">
-              <h3 class="why-choose__feature-title"><?php echo e($feature['title']); ?></h3>
-              <p class="why-choose__feature-desc">
-                <?php echo e($feature['description']); ?>
-
-              </p>
-            </div>
-          </div>
-          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </div>
-      </div>
-
-    </div>
+    <!-- Dots -->
+    <div class="team__dots mt-10 flex justify-center gap-2" data-team-dots></div>
   </div>
 </section>
 
@@ -528,110 +528,160 @@ $packageCards = $featuredPackages->isNotEmpty()
 ['title' => 'Emergency Response Package', 'desc' => 'Round-the-clock critical care when it matters most.', 'image' => asset('assets/img/slider-1.3.jpg'), 'url' => route('packages')],
 ]);
 ?>
-<section class="packages">
-  <div class="packages__head">
-    <p class="packages__eyebrow">
-      <span class="packages__eyebrow-dot"></span>
-      <?php echo e($pkg['pkg_badge'] ?? __('frontend.home.packages_badge')); ?>
-
-      <span class="packages__eyebrow-dot"></span>
-    </p>
-    <h2 class="packages__title">
-      <?php echo e($pkg['pkg_title'] ?? __('frontend.home.packages_title')); ?>
-
-    </h2>
+<section class="packages py-24 bg-cyan-50/40 relative overflow-hidden">
+  <!-- Animated Floating Element -->
+  <div class="absolute top-1/2 left-10 opacity-10 animate-pulse text-navy pointer-events-none z-0" style="animation-duration: 5s;">
+    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+    </svg>
   </div>
+  <div class="container mx-auto px-4 lg:px-0">
+    <!-- Centered Heading Area -->
+    <div class="text-center mb-14 max-w-2xl mx-auto">
+      <h2 class="text-3xl lg:text-[40px] font-bold text-navy mb-4 leading-[1.2]">
+        <?php echo e($pkg['pkg_title'] ?? 'We Maintain Cleanliness Rules Inside Our Hospital'); ?>
 
-  <div class="packages__slider" data-packages-slider>
-    <div class="packages__viewport">
-      <div class="packages__track" data-packages-track>
-
-        <?php $__currentLoopData = $packageCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <div class="packages__slide">
-          <article class="package-card group">
-            <img src="<?php echo e($card['image']); ?>" alt="<?php echo e($card['title']); ?>" class="package-card__img" />
-            <span class="package-card__overlay"></span>
-            <a href="<?php echo e($card['url']); ?>" class="package-card__plus" aria-label="View <?php echo e($card['title']); ?> package">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
-              </svg>
-            </a>
-            <div class="package-card__caption">
-              <h3 class="package-card__title"><?php echo e($card['title']); ?></h3>
-              <p class="package-card__desc"><?php echo e($card['desc']); ?></p>
-            </div>
-          </article>
-        </div>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+      </h2>
+      <div class="flex justify-center items-center gap-1.5 mb-4 text-brand-cyan">
+        <!-- Heartbeat Line -->
+        <span class="text-lg font-bold tracking-tighter">--</span>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h3l2.5-4.5 3 9 2.5-4.5h4" />
+        </svg>
+        <span class="text-lg font-bold tracking-tighter">--</span>
       </div>
+      <p class="text-gray-400 text-[15px]">
+        <?php echo e($pkg['pkg_desc'] ?? 'Lorem ipsum dolor sit amet consectetur adipiscing elit praesent aliquet. pretiumts'); ?>
+
+      </p>
     </div>
 
-    <button type="button" class="packages__nav is-prev" data-packages-prev aria-label="Previous packages">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="m14 6-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-    </button>
-    <button type="button" class="packages__nav is-next" data-packages-next aria-label="Next packages">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="m10 6 6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-    </button>
-  </div>
+    <!-- Packages Slider -->
+    <div class="packages__slider relative px-0" data-packages-slider>
+      <div class="packages__viewport overflow-hidden">
+        <div class="packages__track flex" data-packages-track>
+          <?php $__currentLoopData = $packageCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <div class="packages__slide w-full md:w-1/2 lg:w-1/3 2xl:w-1/4 shrink-0">
+            <div class="group relative overflow-hidden aspect-square lg:aspect-auto lg:h-[350px] w-full border-r-[2px] border-white">
+              <!-- Background Image -->
+              <img src="<?php echo e($card['image']); ?>" alt="<?php echo e($card['title']); ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
 
-  <div class="packages__dots" data-packages-dots></div>
-</section>
+              <!-- Hover Overlay -->
+              <div class="absolute inset-0 bg-[#2b88f3]/85 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center backdrop-blur-[1px]">
+                <!-- Hidden Title that appears on hover for context -->
+                <h3 class="text-white font-bold text-xl mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 group-hover:opacity-100 text-center px-4">
+                  <?php echo e($card['title']); ?>
 
-<!-- ===================== FAQ ===================== -->
-<section class="faq">
-  <img src="<?php echo e(asset('assets/img/faq-bg.png')); ?>" alt="" class="faq__bg" aria-hidden="true" />
-
-  <div class="container relative mx-auto">
-    <div class="faq__grid">
-      <div class="faq__copy">
-        <?php
-        $homeFaqTitle = $homeFaq['title'] ?: __('frontend.home.faq_title');
-        $homeFaqDesc = $homeFaq['description'] ?: __('frontend.home.faq_desc');
-        ?>
-        <h2 class="faq__title"><?php echo e($homeFaqTitle); ?></h2>
-        <p class="faq__desc">
-          <?php echo e($homeFaqDesc); ?>
-
-        </p>
-
-        <div class="faq__list">
-          <?php
-          $homeFaqDefaults = [
-          ['question' => 'What types of treatments do you offer?', 'answer' => "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution"],
-          ['question' => 'How do i book my appointment ?', 'answer' => "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution"],
-          ['question' => 'Can i cancel my appointment', 'answer' => "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution"],
-          ['question' => 'How much do you charge for pedicure ?', 'answer' => "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution"],
-          ];
-          $homeFaqCards = (!empty($homeFaq['items']) && $homeFaq['items']->isNotEmpty()) ? $homeFaq['items'] : collect($homeFaqDefaults);
-          ?>
-          <?php $__currentLoopData = $homeFaqCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $faqIndex => $faqCard): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <div class="faq-item <?php if($faqIndex === 0): ?> is-open <?php endif; ?>">
-            <button type="button" class="faq-item__question" data-faq-toggle>
-              <?php echo e($faqCard['question'] ?? ''); ?>
-
-              <span class="faq-item__icon">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </span>
-            </button>
-            <div class="faq-item__answer">
-              <p><?php echo e($faqCard['answer'] ?? ''); ?></p>
+                </h3>
+                <!-- View Details Button -->
+                <a href="<?php echo e($card['url']); ?>" class="bg-white text-[#2b88f3] text-[14px] font-bold py-2.5 px-6 rounded transition-colors duration-300 hover:bg-navy hover:text-white shadow-lg shadow-black/10 translate-y-4 group-hover:translate-y-0 transform">
+                  View Details
+                </a>
+              </div>
             </div>
           </div>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
       </div>
 
-      <div class="faq__media">
-        <img src="<?php echo e($homeFaq['image'] ?: asset('assets/img/faq.webp')); ?>" alt="<?php echo e($homeFaq['image_alt'] ?: 'Smiling doctor on a call, ready to answer your questions'); ?>" class="faq__photo" />
+      <!-- Navigation Arrows -->
+      <button type="button" class="packages__nav is-prev !absolute !top-1/2 !left-4 !-translate-y-1/2 !w-12 !h-12 !rounded-full !bg-white shadow-[0_4px_15px_rgba(0,0,0,0.1)] flex items-center justify-center text-navy hover:!bg-brand-cyan hover:!text-white transition z-10" data-packages-prev aria-label="Previous packages">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <button type="button" class="packages__nav is-next !absolute !top-1/2 !right-4 !-translate-y-1/2 !w-12 !h-12 !rounded-full !bg-white shadow-[0_4px_15px_rgba(0,0,0,0.1)] flex items-center justify-center text-navy hover:!bg-brand-cyan hover:!text-white transition z-10" data-packages-next aria-label="Next packages">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
 
-        <?php echo $__env->make('frontend.partials.faq-contact-card', ['phone' => $aboutPhone], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <!-- Dots -->
+    <div class="packages__dots mt-10 flex justify-center gap-2" data-packages-dots></div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="faq !py-24 bg-white relative overflow-hidden">
+  <!-- Subtle circular lines background decoration (bottom left) -->
+  <svg class="absolute -bottom-20 -left-20 w-[400px] h-[400px] text-brand-cyan/5 pointer-events-none" viewBox="0 0 100 100" fill="none">
+    <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="1.5" />
+    <circle cx="50" cy="50" r="30" stroke="currentColor" stroke-width="1.5" />
+    <circle cx="50" cy="50" r="20" stroke="currentColor" stroke-width="1.5" />
+  </svg>
+
+  <div class="container relative mx-auto px-4 lg:px-0 z-10">
+    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+
+      <!-- Left: Image -->
+      <div class="lg:w-[45%] w-full shrink-0 flex justify-center lg:justify-start">
+        <?php
+        $faqImage = $homeFaq['image'] ?: asset('assets/img/faq.webp');
+        $faqImageAlt = $homeFaq['image_alt'] ?: 'Smiling doctor';
+        ?>
+        <img src="<?php echo e($faqImage); ?>" alt="<?php echo e($faqImageAlt); ?>" class="w-full h-auto rounded-[24px] shadow-lg object-cover" />
       </div>
+
+      <!-- Right: Accordion -->
+      <div class="lg:w-[55%] w-full flex flex-col gap-5">
+        <?php
+        $homeFaqDefaults = [
+        ['question' => 'Medical Eye facilisis erat id odio', 'answer' => "If you are diagnosed with high blood pressure, it's a good idea to have an eye examination. Hypertension can cause changes to the blood vessels in the retina (the back of the eye). These changes can be detected and monitored by eye examinations."],
+        ['question' => 'Medical Eye facilisis erat id odio', 'answer' => "If you are diagnosed with high blood pressure, it's a good idea to have an eye examination. Hypertension can cause changes to the blood vessels in the retina (the back of the eye). These changes can be detected and monitored by eye examinations."],
+        ['question' => 'Medical Eye facilisis erat id odio', 'answer' => "If you are diagnosed with high blood pressure, it's a good idea to have an eye examination. Hypertension can cause changes to the blood vessels in the retina (the back of the eye). These changes can be detected and monitored by eye examinations."],
+        ['question' => 'Medical Eye facilisis erat id odio', 'answer' => "If you are diagnosed with high blood pressure, it's a good idea to have an eye examination. Hypertension can cause changes to the blood vessels in the retina (the back of the eye). These changes can be detected and monitored by eye examinations."],
+        ];
+        $homeFaqCards = (!empty($homeFaq['items']) && $homeFaq['items']->isNotEmpty()) ? $homeFaq['items'] : collect($homeFaqDefaults);
+        ?>
+
+        <?php $__currentLoopData = $homeFaqCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $faqIndex => $faqCard): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="faq-item group <?php if($faqIndex === 0): ?> is-open <?php endif; ?> !bg-white border border-gray-100 !rounded-[20px] overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.02)] transition-all duration-300 [&.is-open]:border-brand-cyan/20">
+
+          <button type="button" class="faq-item__question !flex !w-full !items-center !justify-between !px-6 !py-5 transition-colors duration-300 group-[.is-open]:!bg-brand-cyan" data-faq-toggle>
+
+            <div class="flex items-center gap-4">
+              <!-- Unopened Icon: Number -->
+              <span class="flex items-center justify-center w-8 h-8 shrink-0 rounded-full bg-brand-cyan text-white text-[14px] font-bold group-[.is-open]:hidden">
+                <?php echo e(str_pad($faqIndex + 1, 2, '0', STR_PAD_LEFT)); ?>
+
+              </span>
+              <!-- Opened Icon: Checkmark -->
+              <span class="items-center justify-center w-8 h-8 shrink-0 rounded-full bg-white text-brand-cyan hidden group-[.is-open]:flex shadow-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7" />
+                </svg>
+              </span>
+
+              <!-- Title -->
+              <span class="text-[17px] font-bold text-navy group-[.is-open]:!text-white text-left leading-snug transition-colors">
+                <?php echo e($faqCard['question'] ?? ''); ?>
+
+              </span>
+            </div>
+
+            <!-- Chevron -->
+            <span class="!flex !w-6 !h-6 !items-center !justify-center shrink-0 text-brand-cyan group-[.is-open]:!text-white transition-transform duration-300 group-[.is-open]:!rotate-180 group-[.is-open]:!-rotate-180">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+          </button>
+
+          <!-- Answer Wrapper -->
+          <div class="faq-item__answer !px-0 !pb-0 !bg-white">
+            <div class="overflow-hidden">
+              <div class="px-6 pb-6 pt-4 text-gray-500 text-[14px] lg:text-[15px] leading-relaxed border-t border-gray-100">
+                <p><?php echo e($faqCard['answer'] ?? ''); ?></p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+      </div>
+
     </div>
   </div>
 </section>
@@ -871,8 +921,41 @@ $blogCards = $latestBlogs->isNotEmpty()
   </div>
 </section>
 
+<!-- ===================== Scroll Animation Script ===================== -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Add base classes for animation to all containers inside sections
+    const containers = document.querySelectorAll('section > .container');
+    containers.forEach(el => {
+      // Avoid hero section and testimonials since they have custom structure
+      if (!el.closest('.hero') && !el.closest('.testimonials')) {
+        el.classList.add('transition-all', 'duration-[1200ms]', 'ease-out', 'opacity-0', 'translate-y-12');
+      }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('opacity-0', 'translate-y-12');
+          entry.target.classList.add('opacity-100', 'translate-y-0');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px"
+    });
+
+    containers.forEach(el => {
+      if (!el.closest('.hero') && !el.closest('.testimonials')) {
+        observer.observe(el);
+      }
+    });
+  });
+</script>
+
 <!-- ===================== Make an Appointment ===================== -->
-<?php if (isset($component)) { $__componentOriginald60bc4ce403b880ef3c1cf57c71fbc24 = $component; } ?>
+<!-- <?php if (isset($component)) { $__componentOriginald60bc4ce403b880ef3c1cf57c71fbc24 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginald60bc4ce403b880ef3c1cf57c71fbc24 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.book-appointment','data' => ['settings' => $appt,'doctors' => $appointmentDoctors,'specializations' => $appointmentSpecializations,'source' => 'home']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
 <?php $component->withName('frontend.book-appointment'); ?>
@@ -891,6 +974,6 @@ $blogCards = $latestBlogs->isNotEmpty()
 <?php if (isset($__componentOriginald60bc4ce403b880ef3c1cf57c71fbc24)): ?>
 <?php $component = $__componentOriginald60bc4ce403b880ef3c1cf57c71fbc24; ?>
 <?php unset($__componentOriginald60bc4ce403b880ef3c1cf57c71fbc24); ?>
-<?php endif; ?>
+<?php endif; ?> -->
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.frontend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laragon-new\laragon\www\hospital-management\resources\views/frontend/home.blade.php ENDPATH**/ ?>

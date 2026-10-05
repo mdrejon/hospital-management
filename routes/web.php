@@ -79,9 +79,12 @@ use Inertia\Inertia;
 */
 
 Route::get('/admin/clear-cache', function () {
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     \Illuminate\Support\Facades\Artisan::call('view:clear');
     \Illuminate\Support\Facades\Artisan::call('cache:clear');
-    return 'Cache cleared successfully!';
+    \Illuminate\Support\Facades\Artisan::call('route:clear');
+    \Illuminate\Support\Facades\Artisan::call('config:clear');
+    return 'All Cache cleared successfully!';
 });
 
 
@@ -90,6 +93,8 @@ Route::get('/manifest.json', function () {
     $headerSettings = \App\Models\GlobalSetting::getSettings('header');
     $appName = config('app.name', 'Medicare Lab Ltd.');
     $faviconPath = !empty($headerSettings['header_favicon']) ? asset('storage/' . $headerSettings['header_favicon']) : asset('favicon.ico');
+    $faviconExt  = strtolower(pathinfo($headerSettings['header_favicon'] ?? 'favicon.ico', PATHINFO_EXTENSION));
+    $faviconType = ['png' => 'image/png', 'svg' => 'image/svg+xml', 'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'webp' => 'image/webp'][$faviconExt] ?? 'image/x-icon';
 
     return response()->json([
         'name' => $appName,
@@ -102,13 +107,13 @@ Route::get('/manifest.json', function () {
             [
                 'src' => str_ends_with(strtolower($faviconPath), '.ico') ? asset('assets/img/logo.png') : $faviconPath,
                 'sizes' => '192x192',
-                'type' => 'image/png',
+                'type' => str_ends_with(strtolower($faviconPath), '.ico') ? 'image/png' : $faviconType,
                 'purpose' => 'any maskable'
             ],
             [
                 'src' => str_ends_with(strtolower($faviconPath), '.ico') ? asset('assets/img/logo.png') : $faviconPath,
                 'sizes' => '512x512',
-                'type' => 'image/png',
+                'type' => str_ends_with(strtolower($faviconPath), '.ico') ? 'image/png' : $faviconType,
                 'purpose' => 'any maskable'
             ]
         ]

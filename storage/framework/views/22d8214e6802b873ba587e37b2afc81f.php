@@ -1,138 +1,105 @@
   <!-- ===================== Header ===================== -->
   <header class="site-header">
-    <!-- Top info bar (original) -->
-    <div class="top-header">
-      <div class="top-header__inner">
-        <div class="top-header__left">
-          <span class="top-header__item">
-
-            <span class="top-header__value"><?php echo e($headerSettings['header_tagline'] ?? 'Need professional medical & health Care?'); ?></span>
-          </span>
-          <span class="top-header__item">
-            <span class="top-header__icon top-header__icon--emergency">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6" />
-              </svg>
-            </span>
-            <span class="top-header__value">Call : <a href="tel:<?php echo e($headerSettings['header_phone'] ?? '+1 (234) 5688 9990'); ?>" style="color: #2563eb; text-decoration: none;"><?php echo e($headerSettings['header_phone'] ?? '+1 (234) 5688 9990'); ?></a></span>
-          </span>
-
-
+    <!-- Top info bar -->
+    <div class="border-b border-gray-100 hidden lg:block py-2">
+      <div class="container mx-auto flex justify-between items-center text-sm font-medium text-navy">
+        <div class="flex items-center gap-6">
+          <a href="<?php echo e(route('about')); ?>" class="hover:text-brand-cyan transition">About</a>
+          <a href="<?php echo e(route('doctors')); ?>" class="hover:text-brand-cyan transition">Doctors</a>
+          <a href="<?php echo e(route('contact')); ?>" class="hover:text-brand-cyan transition">Contact</a>
+          <a href="<?php echo e(route('faq')); ?>" class="hover:text-brand-cyan transition">FAQ</a>
         </div>
+        <div class="flex items-center gap-6">
+          <a href="tel:<?php echo e($headerSettings['header_phone'] ?? '+880 1234 56789'); ?>" class="flex items-center gap-2 hover:text-brand-cyan transition">
+            <svg class="w-4 h-4 text-brand-cyan" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.489-1.761-1.663-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
+            </svg>
+            <?php echo e($headerSettings['header_phone'] ?? '+880 1234 56789'); ?>
 
-        <div class="top-header__right">
-          <span class="top-header__item">
-            <span class="top-header__icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" />
-                <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-              </svg>
-            </span>
-            <span class="top-header__value"><?php echo e($headerSettings['header_hours'] ?? 'Mon - Fri: 8:00 am - 7:00 pm'); ?></span>
-          </span>
-          <div class="top-header__divider"></div>
-          <a href="<?php echo e(route('login')); ?>" class="top-header__item" style=" color: #2563eb; font-weight: 700; text-decoration: none;" title="Agent Login Portal">
-            Login
           </a>
-          <?php $__currentLoopData = $languages ?? [];
-          $__env->addLoop($__currentLoopData);
-          foreach ($__currentLoopData as $lang): $__env->incrementLoopIndices();
-            $loop = $__env->getLastLoop(); ?>
-            <a href="<?php echo e(route('language.switch', $lang->code)); ?>" class="top-header__lang <?php echo e(app()->getLocale() === $lang->code ? 'is-active' : ''); ?>"><?php echo e(strtoupper($lang->code)); ?></a>
-          <?php endforeach;
-          $__env->popLoop();
-          $loop = $__env->getLastLoop(); ?>
-          <div class="top-header__socials">
-            <a href="<?php echo e($headerSettings['header_facebook_url'] ?? '#'); ?>" class="top-header__social-link" aria-label="Facebook">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z" />
-              </svg>
-            </a>
-            <a href="<?php echo e($headerSettings['header_twitter_url'] ?? '#'); ?>" class="top-header__social-link" aria-label="Twitter">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1c.5 1.7 2.1 2.9 4 2.9A8.2 8.2 0 0 1 2 18.6a11.6 11.6 0 0 0 6.3 1.8c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.1z" />
-              </svg>
-            </a>
-            <a href="<?php echo e($headerSettings['header_linkedin_url'] ?? '#'); ?>" class="top-header__social-link" aria-label="LinkedIn">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z" />
-              </svg>
-            </a>
+          <a href="mailto:<?php echo e($headerSettings['header_email'] ?? 'support@yourmail.com'); ?>" class="flex items-center gap-2 hover:text-brand-cyan transition">
+            <svg class="w-4 h-4 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <?php echo e($headerSettings['header_email'] ?? 'support@yourmail.com'); ?>
+
+          </a>
+          <!-- Language Switcher -->
+          <?php if(isset($languages) && count($languages) > 0): ?>
+          <div class="flex items-center gap-2 border-l border-gray-300 pl-4">
+            <?php $__currentLoopData = $languages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lang): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <a href="<?php echo e(route('language.switch', $lang->code)); ?>" class="<?php echo e(app()->getLocale() === $lang->code ? 'text-brand-cyan font-bold' : 'text-navy hover:text-brand-cyan transition'); ?> uppercase"><?php echo e($lang->code); ?></a>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </div>
+          <?php endif; ?>
         </div>
       </div>
     </div>
 
-    <!-- Top info bar (new 5-icon style) -->
-    <div class="top-info-bar">
-      <div class="top-info-bar__inner">
-        <span class="top-info-bar__item">
-          <a href="<?php echo e(route('home')); ?>" class="site-logo text-navy">
-            <img src="<?php echo e(!empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png')); ?>" alt="<?php echo e($headerSettings['header_site_name'] ?? 'Medicare Lab Ltd.'); ?>" height="100" style="height:100px;width:auto" />
-          </a>
-        </span>
-        <a href="mailto:<?php echo e($headerSettings['header_email'] ?? 'info@example.com'); ?>" class="top-info-bar__item">
-          <span class="top-info-bar__icon">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
-              <path d="M3.5 6.5 12 13l8.5-6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M9 3.5h6M8 1.5h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
-            </svg>
-          </span>
-          <span class="top-info-bar__text">
-            <span class="top-info-bar__label"><?php echo e(__('frontend.header.email_supports')); ?></span>
-            <span class="top-info-bar__value"><?php echo e($headerSettings['header_email'] ?? 'info@example.com'); ?></span>
-          </span>
+    <!-- Middle bar -->
+    <div class="hidden lg:block py-2 bg-white">
+      <div class="container mx-auto flex justify-between items-center">
+        <!-- Logo -->
+        <a href="<?php echo e(route('home')); ?>" class="site-logo">
+          <img src="<?php echo e(!empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png')); ?>" alt="<?php echo e($headerSettings['header_site_name'] ?? 'Medicare Lab Ltd.'); ?>" height="42" style="height:95px;width:auto" />
         </a>
 
-
-        <span class="top-info-bar__item">
-          <span class="top-info-bar__icon">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="m4 3 2.2 2.2M20 3l-2.2 2.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-              <circle cx="12" cy="13.5" r="8" stroke="currentColor" stroke-width="1.5" />
-              <path d="M12 9.3v4.2l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M9.5 3.2h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            </svg>
-          </span>
-          <span class="top-info-bar__text">
-            <span class="top-info-bar__label"><?php echo e(__('frontend.header.supports')); ?></span>
-            <span class="top-info-bar__value"><?php echo e($headerSettings['header_support_text'] ?? '24x7 Supports'); ?></span>
-          </span>
-        </span>
-
-        <div class="top-info-bar__item top-info-bar__search">
-          <form action="<?php echo e(route('search')); ?>" method="GET" class="header-search" role="search">
-            <input type="search" name="q" value="<?php echo e(request('q')); ?>" class="header-search__input" placeholder="<?php echo e(__('frontend.header.search_placeholder')); ?>" aria-label="Search" required />
-            <button type="submit" class="header-search__submit" aria-label="Search">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" />
-                <path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        <!-- Info & CTA -->
+        <div class="flex items-center gap-8">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 bg-brand-cyan rounded flex items-center justify-center text-white shrink-0">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.489-1.761-1.663-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
               </svg>
-            </button>
-          </form>
+            </div>
+            <div>
+              <div class="text-[13px] text-gray-500">Call Us Anytime</div>
+              <div class="font-bold text-[15px] text-navy"><?php echo e($headerSettings['header_phone'] ?? '+880123-467-789'); ?></div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 bg-brand-cyan rounded flex items-center justify-center text-white shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <div class="text-[13px] text-gray-500">Opening Time</div>
+              <div class="font-bold text-[15px] text-navy"><?php echo e($headerSettings['header_hours'] ?? 'Mon-Sat: 9.00-18.00'); ?></div>
+            </div>
+          </div>
+
+          <!-- <a href="<?php echo e($headerSettings['header_book_btn_url'] ?? route('appointment')); ?>" class="inline-flex items-center justify-center bg-brand-cyan text-white font-semibold py-[11px] px-8 rounded transition hover:bg-navy text-[15px]">
+            <?php echo e($headerSettings['header_book_btn_text'] ?? 'Appointment'); ?>
+
+          </a> -->
         </div>
       </div>
     </div>
   </header>
 
-  <!-- Main nav (own stacking context, sibling of <header> so it can stay sticky for the full page) -->
+  <!-- Main nav row -->
   <div class="site-header__nav">
     <div class="site-header__inner">
 
+      <!-- Mobile logo -->
       <a href="<?php echo e(route('home')); ?>" class="site-logo site-logo--mobile">
         <img src="<?php echo e(!empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png')); ?>" alt="<?php echo e($headerSettings['header_site_name'] ?? 'Medicare Lab Ltd.'); ?>" height="42" style="height:42px;width:auto" />
       </a>
 
+      <!-- Desktop Nav -->
       <nav class="main-nav">
         <a href="<?php echo e(route('home')); ?>" class="main-nav__link <?php echo e(request()->routeIs('home') ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.home')); ?></a>
 
         <div class="has-dropdown">
-          <button type="button" class="main-nav__link <?php echo e(request()->routeIs(['about', 'history', 'md-message', 'management', 'achievements', 'faq']) ? 'is-active' : ''); ?>">
+          <a href="<?php echo e(route('about')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['about','history','md-message','management','achievements','faq']) ? 'is-active' : ''); ?>">
             <?php echo e(__('frontend.nav.about_us')); ?>
 
-            <span class="main-nav__caret">+</span>
-          </button>
+            <span class="main-nav__caret"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+              </svg></span>
+          </a>
           <div class="dropdown-menu">
             <a href="<?php echo e(route('about')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.company_profile')); ?></a>
             <a href="<?php echo e(route('history')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.our_history')); ?></a>
@@ -143,54 +110,73 @@
           </div>
         </div>
 
-        <a href="<?php echo e(route('services')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['services', 'service-details']) ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.our_service')); ?></a>
-        <a href="<?php echo e(route('packages')); ?>" class="main-nav__link <?php echo e(request()->routeIs('packages') ? 'is-active' : ''); ?>">Packages</a>
+        <a href="<?php echo e(route('services')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['services','service-details']) ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.our_service')); ?></a>
+
+        <a href="<?php echo e(route('packages')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['packages','package-details']) ? 'is-active' : ''); ?>"><?php echo e(__('frontend.breadcrumb.packages')); ?></a>
 
         <div class="has-dropdown">
-          <a href="<?php echo e(route('doctors')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['doctors', 'doctor-details']) ? 'is-active' : ''); ?>">
+          <a href="<?php echo e(route('doctors')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['doctors','doctor-details']) ? 'is-active' : ''); ?>">
             <?php echo e(__('frontend.nav.doctors')); ?>
 
-            <span class="main-nav__caret">+</span>
+            <span class="main-nav__caret"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+              </svg></span>
           </a>
           <div class="dropdown-menu">
-            <?php $__empty_1 = true;
-            $__currentLoopData = $navDoctorSpecializations ?? [];
-            $__env->addLoop($__currentLoopData);
-            foreach ($__currentLoopData as $spec): $__env->incrementLoopIndices();
-              $loop = $__env->getLastLoop();
-              $__empty_1 = false; ?>
-              <a href="<?php echo e(route('doctor-details', $spec->slug)); ?>" class="dropdown-menu__link"><?php echo e($spec->name); ?></a>
-            <?php endforeach;
-            $__env->popLoop();
-            $loop = $__env->getLastLoop();
-            if ($__empty_1): ?>
-              <a href="<?php echo e(route('doctors')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.doctors_list')); ?></a>
+            <?php $__empty_1 = true; $__currentLoopData = $navDoctorSpecializations ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <a href="<?php echo e(route('doctor-details', $spec->slug)); ?>" class="dropdown-menu__link"><?php echo e($spec->name); ?></a>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <a href="<?php echo e(route('doctors')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.doctors_list')); ?></a>
             <?php endif; ?>
           </div>
         </div>
 
         <div class="has-dropdown">
-          <button type="button" class="main-nav__link <?php echo e(request()->routeIs(['gallery', 'video-gallery']) ? 'is-active' : ''); ?>">
+          <button type="button" class="main-nav__link <?php echo e(request()->routeIs(['gallery','video-gallery']) ? 'is-active' : ''); ?>">
             <?php echo e(__('frontend.nav.gallery')); ?>
 
-            <span class="main-nav__caret">+</span>
+            <span class="main-nav__caret"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+              </svg></span>
           </button>
           <div class="dropdown-menu">
             <a href="<?php echo e(route('gallery')); ?>" class="dropdown-menu__link">Photo Gallery</a>
             <a href="<?php echo e(route('video-gallery')); ?>" class="dropdown-menu__link">Video Gallery</a>
           </div>
         </div>
-        <a href="<?php echo e(route('blog-list')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['blog-list', 'blog-details']) ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.blog')); ?></a>
+
+        <a href="<?php echo e(route('blog-list')); ?>" class="main-nav__link <?php echo e(request()->routeIs(['blog-list','blog-details']) ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.blog')); ?></a>
+
         <a href="<?php echo e(route('contact')); ?>" class="main-nav__link <?php echo e(request()->routeIs('contact') ? 'is-active' : ''); ?>"><?php echo e(__('frontend.nav.contact_us')); ?></a>
       </nav>
 
       <div class="site-header__actions">
-        <a href="<?php echo e($headerSettings['header_book_btn_url'] ?? route('appointment')); ?>" class="btn-appointment"><?php echo e($headerSettings['header_book_btn_text'] ?? __('frontend.header.appointment')); ?></a>
-        <button type="button" class="menu-toggle" data-menu-toggle aria-label="Open menu">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Inline Search Form (desktop) -->
+        <form action="<?php echo e(route('search')); ?>" method="GET" class="hidden lg:flex items-center h-10 shadow-sm rounded">
+          <input type="search" name="q" value="<?php echo e(request('q')); ?>" class="h-full border border-gray-200 border-r-0 px-4 py-2 text-[14px] text-gray-700 focus:outline-none w-56 rounded-l placeholder-gray-400" placeholder="search" required />
+          <button type="submit" class="w-12 h-full bg-brand-cyan text-white rounded-r flex items-center justify-center hover:bg-navy transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </form>
+
+        <!-- Mobile Menu Toggle -->
+        <button type="button" class="menu-toggle ml-2" data-menu-toggle aria-label="Open menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
           </svg>
         </button>
+      </div>
+    </div>
+
+    <!-- Collapsible Search Bar (mobile only) -->
+    <div class="header-search-bar hidden lg:hidden border-t border-gray-100 bg-white py-4 px-4 absolute w-full left-0 top-full shadow-md z-40">
+      <div class="container mx-auto">
+        <form action="<?php echo e(route('search')); ?>" method="GET" class="flex items-center gap-2 max-w-xl mx-auto">
+          <input type="search" name="q" value="<?php echo e(request('q')); ?>" class="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-brand-cyan" placeholder="Search..." required />
+          <button type="submit" class="bg-brand-cyan text-white px-6 py-2 rounded hover:bg-navy transition">Search</button>
+        </form>
       </div>
     </div>
   </div>
@@ -251,18 +237,10 @@
           </span>
         </button>
         <div class="side-panel__submenu">
-          <?php $__empty_1 = true;
-          $__currentLoopData = $navDoctorSpecializations ?? [];
-          $__env->addLoop($__currentLoopData);
-          foreach ($__currentLoopData as $spec): $__env->incrementLoopIndices();
-            $loop = $__env->getLastLoop();
-            $__empty_1 = false; ?>
-            <a href="<?php echo e(route('doctor-details', $spec->slug)); ?>" class="side-panel__nav-sublink"><?php echo e($spec->name); ?></a>
-          <?php endforeach;
-          $__env->popLoop();
-          $loop = $__env->getLastLoop();
-          if ($__empty_1): ?>
-            <a href="<?php echo e(route('doctors')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.doctors_list')); ?></a>
+          <?php $__empty_1 = true; $__currentLoopData = $navDoctorSpecializations ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+          <a href="<?php echo e(route('doctor-details', $spec->slug)); ?>" class="side-panel__nav-sublink"><?php echo e($spec->name); ?></a>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+          <a href="<?php echo e(route('doctors')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.doctors_list')); ?></a>
           <?php endif; ?>
         </div>
       </div>
@@ -321,14 +299,9 @@
 
     <h3 class="side-panel__title"><?php echo e(__('frontend.common.language')); ?></h3>
     <div class="side-panel__lang-switch">
-      <?php $__currentLoopData = $languages ?? [];
-      $__env->addLoop($__currentLoopData);
-      foreach ($__currentLoopData as $lang): $__env->incrementLoopIndices();
-        $loop = $__env->getLastLoop(); ?>
-        <a href="<?php echo e(route('language.switch', $lang->code)); ?>" class="side-panel__lang-link <?php echo e(app()->getLocale() === $lang->code ? 'is-active' : ''); ?>"><?php echo e($lang->native_name); ?></a>
-      <?php endforeach;
-      $__env->popLoop();
-      $loop = $__env->getLastLoop(); ?>
+      <?php $__currentLoopData = $languages ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lang): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+      <a href="<?php echo e(route('language.switch', $lang->code)); ?>" class="side-panel__lang-link <?php echo e(app()->getLocale() === $lang->code ? 'is-active' : ''); ?>"><?php echo e($lang->native_name); ?></a>
+      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
     <h3 class="side-panel__title">Follow Us</h3>

@@ -98,8 +98,7 @@ $mgmtSocialIcons = [
   <path d="M23 12s0-3.6-.5-5.3c-.3-1-1-1.8-2-2C18.9 4.2 12 4.2 12 4.2s-6.9 0-8.5.5c-1 .3-1.7 1-2 2C1 8.4 1 12 1 12s0 3.6.5 5.3c.3 1 1 1.8 2 2 1.6.5 8.5.5 8.5.5s6.9 0 8.5-.5c1-.3 1.7-1 2-2 .5-1.7.5-5.3.5-5.3zM9.8 15.5V8.5l6.2 3.5-6.2 3.5z" />
 </svg>',
 ];
-$mgmtCards = $members->isNotEmpty()
-? $members->map(fn ($m) => [
+$mgmtCards = $members->map(fn ($m) => [
 'name' => $m->name,
 'role' => $m->role,
 'photo' => $m->photo ? asset('storage/' . $m->photo) : asset('assets/img/team-3.png'),
@@ -108,20 +107,7 @@ $mgmtCards = $members->isNotEmpty()
 'twitter' => $m->twitter_url,
 'instagram' => $m->instagram_url,
 'youtube' => $m->youtube_url,
-])
-: collect([
-['name' => 'Nashid Martines', 'role' => 'Chairman & Founder'],
-['name' => 'Dr. Natali Jackson','role' => 'Chief Executive Officer'],
-['name' => 'Kenneth Fong', 'role' => 'Managing Director'],
-['name' => 'Rihana Roy', 'role' => 'Chief Medical Officer'],
-['name' => 'Danial Frankie', 'role' => 'Chief of Cardiac Surgery'],
-['name' => 'Marcus Bennett', 'role' => 'Chief Financial Officer'],
-['name' => 'Sofia Almeida', 'role' => 'Director of Nursing'],
-['name' => 'Adrian Cole', 'role' => 'Director of Operations'],
-])->map(fn ($m) => array_merge($m, [
-'photo' => asset('assets/img/team-3.png'),
-'linkedin' => null, 'facebook' => null, 'twitter' => null, 'instagram' => null, 'youtube' => null,
-]));
+]);
 @endphp
 <section class="management">
   <div class="container mx-auto">
@@ -134,6 +120,15 @@ $mgmtCards = $members->isNotEmpty()
       <h2 class="team__title">{{ $mgmt['mgmt_title'] ?? 'Meet Our Management Team' }}</h2>
     </div>
 
+    @if($mgmtCards->isEmpty())
+    <div class="flex flex-col items-center justify-center py-20 text-center">
+      <svg class="w-24 h-24 text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+      </svg>
+      <h3 class="text-2xl font-bold text-navy mb-2">No Management Team Found</h3>
+      <p class="text-gray-500 max-w-md mx-auto">It looks like no management team members have been added yet. Please check back later.</p>
+    </div>
+    @else
     <div class="management__grid">
       @foreach($mgmtCards as $card)
       <article class="mgmt-card">
@@ -162,8 +157,8 @@ $mgmtCards = $members->isNotEmpty()
         </div>
       </article>
       @endforeach
-
     </div>
+    @endif
   </div>
 </section>
 @endsection

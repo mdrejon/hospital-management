@@ -14,6 +14,7 @@ class FooterSettingController extends Controller
 {
     private array $footerKeys = [
         'footer_logo',
+        'footer_bg_image',
         'footer_brand_description',
         'footer_facebook_url',
         'footer_twitter_url',
@@ -95,6 +96,7 @@ class FooterSettingController extends Controller
 
         $rules = [
             'footer_logo'              => 'nullable|image|mimes:jpeg,jpg,png,webp,svg',
+            'footer_bg_image'          => 'nullable|image|mimes:jpeg,jpg,png,webp',
             'footer_facebook_url'      => 'nullable|string',
             'footer_twitter_url'       => 'nullable|string',
             'footer_instagram_url'     => 'nullable|string',
@@ -125,6 +127,17 @@ class FooterSettingController extends Controller
                 ->store('settings', 'public');
         } else {
             unset($data['footer_logo']);
+        }
+
+        if ($request->hasFile('footer_bg_image')) {
+            $existing = GlobalSetting::get('footer_bg_image');
+            if ($existing) {
+                Storage::disk('public')->delete($existing);
+            }
+            $data['footer_bg_image'] = $request->file('footer_bg_image')
+                ->store('settings', 'public');
+        } else {
+            unset($data['footer_bg_image']);
         }
 
         foreach ($this->translatableKeys as $key) {

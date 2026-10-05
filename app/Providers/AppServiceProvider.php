@@ -116,7 +116,7 @@ class AppServiceProvider extends ServiceProvider
     {
         try {
             $settings = GlobalSetting::whereIn('key', [
-                'footer_logo', 'footer_brand_description',
+                'footer_bg_image', 'footer_logo', 'footer_brand_description',
                 'footer_facebook_url', 'footer_twitter_url', 'footer_instagram_url', 'footer_youtube_url',
                 'footer_quick_links', 'footer_service_links', 'footer_store_links', 'footer_useful_links',
                 'footer_phone_1', 'footer_phone_2', 'footer_phone_3',

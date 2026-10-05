@@ -26,6 +26,19 @@
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1"
+                            >Footer Background Image</label
+                        >
+                        <DropZone
+                            @change="onBgImageChange"
+                            hint="JPEG / PNG / WebP — max 5 MB. Optional."
+                            preview-class="w-full h-28 object-cover p-2 bg-gray-50"
+                            :existing-preview="
+                                currentBgImage ? '/storage/' + currentBgImage : null
+                            "
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1"
                             >Brand Description</label
                         >
                         <LanguageTabs v-model="activeLang" />
@@ -605,6 +618,7 @@ const activeLang = ref(defaultLangCode(languages.value));
 
 const currentYear = new Date().getFullYear();
 const currentLogo = ref(props.settings.footer_logo);
+const currentBgImage = ref(props.settings.footer_bg_image);
 
 const seed = (key) => ({
     ...emptyTranslatable(languages.value),
@@ -618,6 +632,7 @@ const seedLinks = (key) =>
 
 const form = useForm({
     footer_logo: null,
+    footer_bg_image: null,
     footer_brand_description: seed("footer_brand_description"),
     footer_facebook_url: props.settings.footer_facebook_url ?? "",
     footer_twitter_url: props.settings.footer_twitter_url ?? "",
@@ -649,6 +664,10 @@ const form = useForm({
 function onLogoChange(file) {
     if (!file) return;
     form.footer_logo = file;
+}
+function onBgImageChange(file) {
+    if (!file) return;
+    form.footer_bg_image = file;
 }
 
 function addLink(field) {

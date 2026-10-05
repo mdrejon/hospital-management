@@ -101,7 +101,11 @@ $aboutFeatures = !empty($about['about_features']) ? $about['about_features'] : [
 $aboutFeatureCols = collect($aboutFeatures)->chunk((int) ceil(count($aboutFeatures) / 2));
 $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
 @endphp
-<section class="about">
+<section class="about bg-blue-50/40 relative overflow-hidden">
+  <!-- Animated Floating Medical Cross -->
+  <div class="absolute top-10 right-10 opacity-30 animate-pulse text-brand-cyan pointer-events-none z-0">
+    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+  </div>
   <svg class="about__decor" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <pattern id="about-dots" width="10" height="10" patternUnits="userSpaceOnUse">
       <circle cx="2" cy="2" r="2" fill="currentColor" />
@@ -367,4 +371,34 @@ $aboutFaqCards = (!empty($aboutFaq['items']) && $aboutFaq['items']->isNotEmpty()
     </div>
   </div>
 </section>
+<!-- ===================== Scroll Animation Script ===================== -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Add base classes for animation to all containers inside sections
+    const containers = document.querySelectorAll('section > .container');
+    containers.forEach(el => {
+      // Avoid hero section and testimonials since they have custom structure
+      if(!el.closest('.hero') && !el.closest('.page-header') && !el.closest('.testimonials')) {
+        el.classList.add('transition-all', 'duration-[1200ms]', 'ease-out', 'opacity-0', 'translate-y-12');
+      }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('opacity-0', 'translate-y-12');
+          entry.target.classList.add('opacity-100', 'translate-y-0');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+    containers.forEach(el => {
+      if(!el.closest('.hero') && !el.closest('.page-header') && !el.closest('.testimonials')) {
+        observer.observe(el);
+      }
+    });
+  });
+</script>
+
 @endsection

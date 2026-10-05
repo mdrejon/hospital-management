@@ -12,10 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('medical_test_booking_items', function (Blueprint $table) {
-            $table->decimal('agent_discount_amount', 10, 2)->default(0.00)->after('discount_amount');
-            $table->decimal('commission_rate', 8, 2)->default(0.00)->after('agent_discount_amount');
-            $table->decimal('commission_amount', 10, 2)->default(0.00)->after('commission_rate');
-            $table->decimal('commission_base_price', 10, 2)->default(0.00)->after('commission_amount');
+            if (!Schema::hasColumn('medical_test_booking_items', 'agent_discount_amount')) {
+                $table->decimal('agent_discount_amount', 10, 2)->default(0.00)->after('discount_amount');
+            }
+            if (!Schema::hasColumn('medical_test_booking_items', 'commission_rate')) {
+                $table->decimal('commission_rate', 8, 2)->default(0.00)->after('agent_discount_amount');
+            }
+            if (!Schema::hasColumn('medical_test_booking_items', 'commission_amount')) {
+                $table->decimal('commission_amount', 10, 2)->default(0.00)->after('commission_rate');
+            }
+            if (!Schema::hasColumn('medical_test_booking_items', 'commission_base_price')) {
+                $table->decimal('commission_base_price', 10, 2)->default(0.00)->after('commission_amount');
+            }
         });
     }
 

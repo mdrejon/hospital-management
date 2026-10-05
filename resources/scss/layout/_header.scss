@@ -136,9 +136,8 @@
 }
 
 // Main nav row ------------------------------------------------------------
-// Sibling of <header>, not nested, so it can stay sticky for the full page.
 .site-header__nav {
-  @apply sticky top-0 z-50 bg-navy;
+  @apply sticky top-0 z-50 bg-white border-t border-gray-100 shadow-sm;
   transition: box-shadow 200ms ease;
 
   &.is-stuck {
@@ -147,22 +146,21 @@
 }
 
 .site-header__inner {
-  @apply container mx-auto flex items-center justify-between gap-4 py-4;
+  @apply container mx-auto flex items-center justify-between gap-4;
 }
 
 // Logo -----------------------------------------------------------------
 .site-logo {
-  @apply flex items-center gap-2 text-2xl font-bold text-white whitespace-nowrap;
+  @apply flex items-center gap-2 text-2xl font-bold text-navy whitespace-nowrap;
 
   &__accent {
     @apply text-brand-cyan;
   }
 }
 
-// Mobile-only logo in the navy nav row — sits on a white chip so the
-// dark logo text stays readable; the desktop logo lives in the info bar.
+// Mobile-only logo
 .site-logo--mobile {
-  @apply rounded-lg bg-white px-2.5 py-1 lg:hidden;
+  @apply rounded-lg bg-transparent py-2 lg:hidden;
 }
 
 // Primary nav ------------------------------------------------------------
@@ -171,16 +169,16 @@
 }
 
 .main-nav__link {
-  @apply flex items-center gap-[0.3rem] text-[18px] font-bold text-white transition-colors duration-200 hover:text-brand-cyan;
+  @apply flex items-center gap-[0.3rem] text-[15px] font-bold text-navy py-4 border-b-2 border-transparent transition-colors duration-200 hover:text-brand-cyan;
 
-  // Current page — logo green (#87C540) so it stands apart from the cyan hover.
+  // Current page
   &.is-active {
-    @apply text-brand-green;
+    @apply text-brand-cyan border-brand-cyan;
   }
 }
 
 .main-nav__caret {
-  @apply text-[16px] font-medium leading-none text-white/70;
+  @apply text-[12px] font-bold leading-none text-navy/70;
 }
 
 // Dropdown ------------------------------------------------------------
@@ -188,27 +186,23 @@
   @apply relative;
 
   .dropdown-menu {
-    @apply invisible absolute left-0 top-full z-20 mt-3 w-56 rounded-md bg-white py-2 opacity-0 shadow-xl transition-all duration-200;
+    @apply invisible absolute left-0 top-full z-20 w-56 rounded-md bg-white py-2 opacity-0 shadow-xl transition-all duration-200;
   }
 
   &:hover .dropdown-menu {
-    @apply visible mt-2 opacity-100;
+    @apply visible opacity-100;
   }
 
   .dropdown-menu__link {
-    @apply block px-5 py-2 text-[18px] font-medium text-navy transition-colors duration-150 hover:bg-footer-bg hover:text-brand-cyan;
+    @apply block px-5 py-2 text-[15px] font-medium text-navy transition-colors duration-150 hover:bg-gray-50 hover:text-brand-cyan;
   }
 }
 
 // Right-hand actions -----------------------------------------------------
 .site-header__actions {
-  @apply flex items-center gap-3;
-}
-
-.btn-appointment {
-  @apply hidden items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-semibold text-navy transition-transform duration-200 hover:scale-105 sm:inline-flex;
+  @apply flex items-center gap-3 py-2;
 }
 
 .menu-toggle {
-  @apply flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-footer-bg text-navy shadow-sm ring-1 ring-navy/5 transition-colors duration-200 hover:bg-brand-cyan hover:text-white hover:ring-brand-cyan;
+  @apply flex h-10 w-10 shrink-0 items-center justify-center rounded bg-gray-100 text-navy shadow-sm transition-colors duration-200 hover:bg-brand-cyan hover:text-white lg:hidden;
 }
