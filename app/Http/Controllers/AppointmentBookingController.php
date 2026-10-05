@@ -55,8 +55,11 @@ class AppointmentBookingController extends Controller
         $doctor = Doctor::findOrFail($request->integer('doctor_id'));
         $date   = Carbon::parse($request->string('date'));
 
+        $avail = $this->availability->availabilityFor($doctor, $date);
+
         return response()->json([
-            'slots' => $this->availability->availableSlots($doctor, $date),
+            'start_time' => $avail && $avail->start_time ? Carbon::parse($avail->start_time)->format('h:i A') : null,
+            'end_time'   => $avail && $avail->end_time ? Carbon::parse($avail->end_time)->format('h:i A') : null,
         ]);
     }
 
@@ -73,7 +76,7 @@ class AppointmentBookingController extends Controller
             'appointment_type'    => 'required|in:opd,follow_up',
             'doctor_id'           => 'required|exists:doctors,id',
             'appointment_date'    => 'required|date|after_or_equal:today',
-            'time_slot'           => 'required|string',
+            'time_slot'           => 'nullable|string',
             'symptoms'            => 'nullable|string',
             'medical_documents'   => 'nullable|array|max:5',
             'medical_documents.*' => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
@@ -84,10 +87,6 @@ class AppointmentBookingController extends Controller
 
         $doctor = Doctor::findOrFail($data['doctor_id']);
         $date   = Carbon::parse($data['appointment_date']);
-
-        if (!$this->availability->isSlotAvailable($doctor, $date, $data['time_slot'])) {
-            return back()->withErrors(['time_slot' => 'Sorry, that time slot was just taken. Please choose another.'])->withInput();
-        }
 
         $documentPaths = collect($request->file('medical_documents', []))
             ->filter()
@@ -108,11 +107,6 @@ class AppointmentBookingController extends Controller
                 'address'       => $data['address'] ?? $patient->address,
             ])->save();
 
-            // Re-check availability inside the transaction to close the race window.
-            if (!$this->availability->isSlotAvailable($doctor, $date, $data['time_slot'])) {
-                throw new \RuntimeException('slot_taken');
-            }
-
             return Appointment::create([
                 'patient_id'        => $patient->id,
                 'doctor_id'         => $doctor->id,
@@ -122,7 +116,7 @@ class AppointmentBookingController extends Controller
                 'appointment_type'  => $data['appointment_type'],
                 'preferred_doctor'  => $doctor->name,
                 'appointment_date'  => $date->toDateString(),
-                'time_slot'         => $data['time_slot'],
+                'time_slot'         => $data['time_slot'] ?? null,
                 'serial_number'     => $this->availability->nextSerialNumber($doctor, $date),
                 'fee'               => $doctor->consultation_fee,
                 'payment_status'    => 'unpaid',

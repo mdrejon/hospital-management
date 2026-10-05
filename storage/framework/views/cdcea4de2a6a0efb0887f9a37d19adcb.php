@@ -65,7 +65,7 @@
         <form class="book-appointment__form" action="<?php echo e(route('appointment.submit')); ?>" method="POST" enctype="multipart/form-data" data-booking-form>
           <?php echo csrf_field(); ?>
           <input type="hidden" name="source" value="<?php echo e($source); ?>" />
-          <input type="hidden" name="time_slot" data-field="time_slot" required />
+          <input type="hidden" name="time_slot" data-field="time_slot" />
 
           <p class="book-appointment__section-label"><?php echo e(__('frontend.appointment_form.patient_info')); ?></p>
 
@@ -359,7 +359,7 @@
     }
 
     function updateSubmitState() {
-      submitBtn.disabled = !(doctorSelect.value && dateInput.value && slotInput.value);
+      submitBtn.disabled = !(doctorSelect.value && dateInput.value);
     }
 
     if (specSelect) {
@@ -429,24 +429,13 @@
         .then(function (r) { return r.json(); })
         .then(function (data) {
           slotsWrap.innerHTML = '';
-          var slots = data.slots || [];
-          if (!slots.length) {
+          if (!data.start_time || !data.end_time) {
             slotsWrap.innerHTML = '<span class="book-appointment__hint is-error"><?php echo e(__('frontend.appointment_form.err_no_slots')); ?></span>';
             return;
           }
-          slots.forEach(function (time) {
-            var btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'book-appointment__slot';
-            btn.textContent = time;
-            btn.addEventListener('click', function () {
-              slotsWrap.querySelectorAll('.book-appointment__slot').forEach(function (b) { b.classList.remove('is-selected'); });
-              btn.classList.add('is-selected');
-              slotInput.value = time;
-              updateSubmitState();
-            });
-            slotsWrap.appendChild(btn);
-          });
+          slotInput.value = data.start_time;
+          slotsWrap.innerHTML = '<span class="book-appointment__hint" style="color: #059669;">Doctor is available from ' + data.start_time + ' to ' + data.end_time + ' on this date.</span>';
+          updateSubmitState();
         })
         .catch(function () {
           slotsWrap.innerHTML = '<span class="book-appointment__hint is-error"><?php echo e(__('frontend.appointment_form.err_load_slots')); ?></span>';
