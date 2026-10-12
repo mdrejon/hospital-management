@@ -102,6 +102,11 @@ $packageCards = $packages->isNotEmpty()
   </div>
   <div class="container mx-auto px-4 lg:px-0">
     <div class="text-center mb-14 max-w-2xl mx-auto">
+      @if(!empty($pkg['pkg_badge']))
+      <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-3">
+        {{ $pkg['pkg_badge'] }}
+      </p>
+      @endif
       <h2 class="text-3xl lg:text-[40px] font-bold text-navy mb-4 leading-[1.2]">
         {{ $pkg['pkg_desc'] ?? 'Complete Health Solutions — Because You Deserve the Best' }}
       </h2>

@@ -40,17 +40,50 @@ export default {
                 },
                 muted: 'rgb(var(--color-text-muted) / <alpha-value>)',
             },
+            screens: {
+                // Precise mapping aligned with responsive breakdown table:
+                // Mobile: 320px - 575px
+                // Small Tablet: 576px - 767px
+                // Tablet: 768px - 991px
+                // Laptop: 992px - 1199px
+                // Desktop: 1200px - 1399px
+                // Large Desktop: 1400px - 1919px
+                // Big Screen / 2K+: 1920px - Unlimited (2K: 2560px, 4K: 3840px)
+                'xs': '480px',
+                'sm': '576px',
+                'md': '768px',
+                'lg': '992px',
+                'xl': '1200px',
+                '2xl': '1400px',
+                '3xl': '1600px',
+                '2k': '1920px',
+                'qhd': '2560px',
+                '4k': '3840px',
+            },
             container: {
                 center: true,
                 padding: {
                     DEFAULT: '1rem',
-                    lg: '1rem',
+                    sm: '1.25rem',
+                    md: '1.5rem',
+                    lg: '2rem',
+                    xl: '2rem',
+                    '2xl': '2.5rem',
+                    '3xl': '2.5rem',
+                    '2k': '2.5rem',
+                    'qhd': '3rem',
+                    '4k': '3.5rem',
                 },
                 screens: {
-                    sm: '640px',
-                    md: '768px',
-                    lg: '1024px',
+                    sm: '540px',
+                    md: '720px',
+                    lg: '960px',
                     xl: '1140px',
+                    '2xl': '1340px',
+                    '3xl': '1520px',
+                    '2k': '1720px',
+                    'qhd': '2160px',
+                    '4k': '2560px',
                 },
             },
         },

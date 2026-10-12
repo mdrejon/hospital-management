@@ -78,56 +78,5 @@ $seoDesc = $faqPage['faq_seo_description'] ?? "Answers to the questions patients
 </section>
 
 <!-- ===================== FAQ ===================== -->
-@php
-$faqTitle = ($faqPage['faq_page_title'] ?? null) ?: ($faqData['title'] ?: 'Frequently Asked Questions');
-$faqDesc = ($faqPage['faq_page_desc'] ?? null) ?: ($faqData['description'] ?: "Answers to the questions patients ask us most often. Can't find what you're looking for? Reach out and our team will be glad to help.");
-$faqPhoto = !empty($faqPage['faq_page_image']) ? asset('storage/' . $faqPage['faq_page_image']) : ($faqData['image'] ?: asset('assets/img/about-image.webp'));
-$faqPhotoAlt = $faqData['image_alt'] ?: 'Smiling doctor ready to answer your questions';
-$faqList = (!empty($faqData['items']) && $faqData['items']->isNotEmpty()) ? $faqData['items'] : collect([
-['question' => 'What types of treatments do you offer?', 'answer' => 'Medicare Lab Ltd. offers a full range of services, from routine check-ups and diagnostics to specialist care in cardiology, pediatrics, dental, maternity, surgery, and emergency medicine. Visit our Services page for the complete list.'],
-['question' => 'How do I book my appointment?', 'answer' => "You can book online through our Appointment page by choosing a department, preferred doctor, and time slot, or call us directly at 1 123 456 7890. You'll receive a confirmation once your visit is scheduled."],
-['question' => 'Can I cancel or reschedule my appointment?', 'answer' => 'Yes. Appointments can be rescheduled or cancelled free of charge up to 24 hours in advance by calling our front desk or emailing support@hospital.com.'],
-['question' => 'Do you accept health insurance?', 'answer' => 'We work with most major insurance providers. Bring your insurance card to your first visit, or contact our billing team beforehand to confirm your coverage and any out-of-pocket costs.'],
-['question' => 'Is emergency care available 24/7?', 'answer' => 'Yes, our Emergency & Urgent Care department is staffed around the clock, every day of the year, with a dedicated ambulance and trauma team on standby.'],
-['question' => 'Can I get a telemedicine consultation?', 'answer' => 'Absolutely. Many of our specialists offer video consultations for follow-ups and non-emergency concerns. Select "Telemedicine" when booking your appointment online.'],
-]);
-@endphp
-<section class="faq">
-  <div class="container mx-auto">
-    <div class="faq__grid">
-      <div>
-        <h2 class="faq__title">{{ $faqTitle }}</h2>
-        <p class="faq__desc">
-          {{ $faqDesc }}
-        </p>
-
-        <div class="faq__list">
-          @foreach($faqList as $i => $qa)
-          <div class="faq-item {{ $i === 0 ? 'is-open' : '' }}">
-            <button type="button" class="faq-item__question" data-faq-toggle>
-              {{ $qa['question'] ?? '' }}
-              <span class="faq-item__icon">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </span>
-            </button>
-            <div class="faq-item__answer">
-              <p>
-                {{ $qa['answer'] ?? '' }}
-              </p>
-            </div>
-          </div>
-          @endforeach
-        </div>
-      </div>
-
-      <div class="faq__media">
-        <img src="{{ $faqPhoto }}" alt="{{ $faqPhotoAlt }}" class="faq__photo" />
-
-        @include('frontend.partials.faq-contact-card', ['phone' => $footerSettings['footer_phone_1'] ?? '1 123 456 7890'])
-      </div>
-    </div>
-  </div>
-</section>
+<x-frontend.faq-v1 :faq-data="$faqData" :faq-page="$faqPage ?? []" :footer-settings="$footerSettings ?? []" />
 @endsection

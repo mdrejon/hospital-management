@@ -490,8 +490,10 @@ function initTeamSlider() {
     dotClass: "team__dot",
     base: 1,
     breakpoints: [
-      { width: 1024, count: 3 },
-      { width: 640, count: 2 },
+      { width: 2560, count: 5 },
+      { width: 1600, count: 4 },
+      { width: 992, count: 3 },
+      { width: 576, count: 2 },
     ],
   });
 }
@@ -507,9 +509,9 @@ function initPackagesSlider() {
     base: 1,
     autoplay: 2000,
     breakpoints: [
-      { width: 1536, count: 4 },
+      { width: 1400, count: 4 },
       { width: 768, count: 3 },
-      { width: 640, count: 2 },
+      { width: 576, count: 2 },
     ],
   });
 }
@@ -524,8 +526,10 @@ function initDepartmentsSlider() {
     dotClass: "departments__dot",
     base: 1,
     breakpoints: [
-      { width: 1024, count: 3 },
-      { width: 640, count: 2 },
+      { width: 2560, count: 5 },
+      { width: 1600, count: 4 },
+      { width: 992, count: 3 },
+      { width: 576, count: 2 },
     ],
   });
 }

@@ -1,0 +1,179 @@
+@props([
+    'latestBlogs' => collect(),
+    'blog' => [],
+])
+
+@php
+$blogEyebrow = $blog['blog_badge'] ?? 'Blog & News';
+$blogTitle = !empty($blog['blog_home_title'])
+    ? $blog['blog_home_title']
+    : (__('frontend.home.blog_title') !== 'frontend.home.blog_title'
+        ? __('frontend.home.blog_title')
+        : 'Stay Informed The Latest in<br>Medical Care & Wellness');
+
+$blogFallbackImages = [
+    asset('assets/img/blog-one.png'),
+    asset('assets/img/blog-2.png'),
+    asset('assets/img/blog-4.jpg'),
+    asset('assets/img/sr-1-1.jpg'),
+];
+
+$blogCards = $latestBlogs->isNotEmpty()
+    ? $latestBlogs->values()->map(function ($b, $i) use ($blogFallbackImages) {
+        return [
+            'title'          => $b->title,
+            'date'           => ($b->published_at ?: $b->created_at)->format('d M Y'),
+            'image'          => $b->feature_image ? asset('storage/' . $b->feature_image) : ($blogFallbackImages[$i % 4] ?? asset('assets/img/blog-2.png')),
+            'url'            => route('blog-details', $b->slug),
+            'category'       => $b->category?->name ?? 'Medical Care',
+            'comments_count' => $b->approved_comments_count ?? 0,
+        ];
+    })
+    : collect([
+        [
+            'title'          => 'Understanding Telemedicine The New Era of Virtual Care',
+            'date'           => '10 February 2025',
+            'image'          => asset('assets/img/blog-one.png'),
+            'url'            => route('blog-list'),
+            'category'       => 'Medical Care',
+            'comments_count' => 0,
+        ],
+        [
+            'title'          => 'The Future of Healthcare Innovations in Medical Care',
+            'date'           => '05 Feb 2025',
+            'image'          => asset('assets/img/blog-2.png'),
+            'url'            => route('blog-list'),
+            'category'       => 'Innovations',
+            'comments_count' => 0,
+        ],
+        [
+            'title'          => 'Emergency Care You Need to Know Before a Crisis',
+            'date'           => '05 Feb 2025',
+            'image'          => asset('assets/img/blog-4.jpg'),
+            'url'            => route('blog-list'),
+            'category'       => 'Emergency',
+            'comments_count' => 0,
+        ],
+        [
+            'title'          => 'Best Role of Mental Health in Overall Well-Being',
+            'date'           => '05 Feb 2025',
+            'image'          => asset('assets/img/sr-1-1.jpg'),
+            'url'            => route('blog-list'),
+            'category'       => 'Mental Health',
+            'comments_count' => 0,
+        ],
+    ]);
+
+$primaryCard = $blogCards->first();
+$secondaryCards = $blogCards->slice(1, 3);
+@endphp
+
+<section class="blog-v2 py-20 lg:py-28 bg-white relative overflow-hidden" data-blog-v2>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl 2xl:max-w-7xl 2k:max-w-[1720px] 4k:max-w-[2160px] relative z-10">
+    
+    <!-- Section Header (Centered) -->
+    <div class="text-center max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto mb-12 sm:mb-16">
+      <p class="text-xs sm:text-sm font-bold tracking-wider text-[#ef4444] uppercase mb-2 inline-block">
+        {{ $blogEyebrow }}
+      </p>
+      <h2 class="text-3xl sm:text-4xl lg:text-[42px] 2k:text-5xl font-extrabold text-navy leading-[1.25] tracking-tight">
+        {!! $blogTitle !!}
+      </h2>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+      
+      <!-- Left Column: Featured Large Card -->
+      @if($primaryCard)
+      <div class="lg:col-span-6 flex flex-col">
+        <article class="group relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.12)] transition-all duration-300 flex-1 min-h-[440px] sm:min-h-[500px] lg:min-h-[540px] flex flex-col justify-end">
+          <!-- Background Image -->
+          <img 
+            src="{{ $primaryCard['image'] }}" 
+            alt="{{ $primaryCard['title'] }}" 
+            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+          />
+          
+          <!-- Gradient Overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none"></div>
+
+          <!-- Bottom Card Content -->
+          <div class="relative z-10 p-6 sm:p-8 lg:p-10 flex flex-col">
+            <h3 class="mb-4">
+              <a 
+                href="{{ $primaryCard['url'] }}" 
+                class="text-white font-bold text-xl sm:text-2xl lg:text-[26px] 2k:text-3xl leading-snug hover:text-brand-cyan transition-colors line-clamp-2 drop-shadow-sm"
+              >
+                {{ $primaryCard['title'] }}
+              </a>
+            </h3>
+
+            <!-- Divider -->
+            <div class="w-full h-px bg-white/20 mb-3.5"></div>
+
+            <!-- Meta Row -->
+            <div class="text-white/85 text-xs sm:text-sm font-medium flex flex-wrap items-center gap-2.5 sm:gap-3">
+              <span>{{ $primaryCard['category'] }}</span>
+              <span class="inline-block w-1 h-1 rounded-full bg-white/60"></span>
+              <span>{{ $primaryCard['date'] }}</span>
+              <span class="inline-block w-1 h-1 rounded-full bg-white/60"></span>
+              <span class="inline-flex items-center gap-1.5">
+                Comments {{ $primaryCard['comments_count'] }}
+                <svg class="w-3.5 h-3.5 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </article>
+      </div>
+      @endif
+
+      <!-- Right Column: 3 Horizontal Cards -->
+      <div class="lg:col-span-6 flex flex-col justify-between gap-4 sm:gap-5 lg:gap-6">
+        @foreach($secondaryCards as $secCard)
+        <article class="group flex flex-col sm:flex-row items-stretch gap-3.5 sm:gap-4 lg:gap-5 flex-1">
+          <!-- Thumbnail Image -->
+          <a 
+            href="{{ $secCard['url'] }}" 
+            class="w-full sm:w-44 md:w-52 lg:w-44 xl:w-52 aspect-[16/10] sm:aspect-[4/3] rounded-2xl overflow-hidden shrink-0 relative shadow-sm block"
+          >
+            <img 
+              src="{{ $secCard['image'] }}" 
+              alt="{{ $secCard['title'] }}" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" 
+            />
+          </a>
+
+          <!-- Pastel Content Box -->
+          <div class="flex-1 bg-[#eaf4f7] rounded-2xl p-4 sm:p-5 lg:p-6 flex flex-col justify-between transition-all duration-300 hover:bg-[#e0eff3] hover:shadow-sm">
+            <h3 class="mb-2.5">
+              <a 
+                href="{{ $secCard['url'] }}" 
+                class="text-navy font-bold text-[15px] sm:text-base lg:text-[17px] 2k:text-lg leading-snug line-clamp-2 hover:text-brand-cyan transition-colors"
+              >
+                {{ $secCard['title'] }}
+              </a>
+            </h3>
+
+            <!-- Bottom Meta Row -->
+            <div class="flex items-center gap-2 text-xs sm:text-[13px] text-gray-500 font-medium pt-2 border-t border-cyan-900/5">
+              <span>{{ $secCard['date'] }}</span>
+              <span class="inline-block w-1 h-1 rounded-full bg-gray-400"></span>
+              <span class="inline-flex items-center gap-1">
+                Comments {{ $secCard['comments_count'] }}
+                <svg class="w-3.5 h-3.5 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </article>
+        @endforeach
+      </div>
+
+    </div>
+
+  </div>
+</section>

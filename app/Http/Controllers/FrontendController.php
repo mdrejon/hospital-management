@@ -374,7 +374,7 @@ class FrontendController extends Controller
     private function latestBlogs(int $count): Collection
     {
         try {
-            return Blog::published()->orderByDesc('published_at')->take($count)->get();
+            return Blog::published()->with(['category'])->withCount('approvedComments')->orderByDesc('published_at')->take($count)->get();
         } catch (\Throwable) {
             return collect();
         }

@@ -23,6 +23,18 @@
 // Slide ---------------------------------------------------------------
 .hero-slide {
   @apply relative h-[430px] w-full shrink-0 grow-0 overflow-hidden sm:h-[520px] lg:h-[530px];
+
+  @media (min-width: 1920px) {
+    height: 560px;
+  }
+
+  @media (min-width: 2560px) {
+    height: 620px;
+  }
+
+  @media (min-width: 3840px) {
+    height: 680px;
+  }
 }
 
 .hero-slide__bg {
@@ -40,9 +52,8 @@
   @apply container relative z-10 mx-auto flex h-full items-center;
 
   @media (min-width: 1024px) {
-    max-width: 1024px;
-    padding-right: 5rem;
-    padding-left: 5rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
   }
 }
 
@@ -50,7 +61,7 @@
 // while its slide is `.is-active`; JS re-toggles that class (with a
 // forced reflow) on every slide change so the entrance replays each time.
 .hero-slide__content {
-  @apply max-w-2xl;
+  @apply max-w-2xl 2k:max-w-3xl 4k:max-w-5xl;
 
   > * {
     opacity: 0;
@@ -100,6 +111,21 @@
     font-size: 3rem;
   }
 
+  @media (min-width: 1920px) {
+    font-size: 2.75rem;
+    line-height: 1.22;
+  }
+
+  @media (min-width: 2560px) {
+    font-size: 3.1rem;
+    line-height: 1.2;
+  }
+
+  @media (min-width: 3840px) {
+    font-size: 3.5rem;
+    line-height: 1.18;
+  }
+
   // Accent word gets an EKG-style pulse trace instead of a plain underline
   // (see abstracts/_mixins.scss for the shared ::before/::after effect).
   .accent {
@@ -109,7 +135,7 @@
 }
 
 .hero-slide__desc {
-  @apply mt-6 max-w-lg text-base leading-relaxed text-white/75;
+  @apply mt-6 max-w-lg 2k:max-w-2xl 4k:max-w-3xl text-base leading-relaxed text-white/75;
 }
 
 .hero-slide__cta {

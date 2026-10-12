@@ -52,14 +52,14 @@ $heroSlides = $sliders->isNotEmpty()
         <span class="hero-slide__overlay !bg-gradient-to-r !from-white/95 !via-white/70 !to-transparent !opacity-100"></span>
 
         <div class="hero-slide__inner !max-w-none w-full !px-4 lg:!px-16 flex items-center h-full relative z-10">
-          <div class="hero-slide__content pl-8 lg:pl-16 !max-w-2xl" data-hero-content>
+          <div class="hero-slide__content pl-8 lg:pl-16 !max-w-2xl 2k:!max-w-3xl 4k:!max-w-4xl" data-hero-content>
             <?php if($slide['eyebrow']): ?>
             <p class="hero-slide__eyebrow !block !text-brand-cyan !italic !text-2xl lg:!text-[28px] !mb-4" style="font-family: 'Georgia', serif;">
               <?php echo e($slide['eyebrow']); ?>
 
             </p>
             <?php endif; ?>
-            <h1 class="hero-slide__title !text-navy !text-4xl !font-bold !mb-5">
+            <h1 class="hero-slide__title !text-navy !font-bold !mb-5">
               <?php echo e($slide['title']); ?>
 
               <?php if($slide['accent']): ?>
@@ -68,7 +68,7 @@ $heroSlides = $sliders->isNotEmpty()
               <?php endif; ?>
             </h1>
             <?php if($slide['desc']): ?>
-            <p class="hero-slide__desc !text-gray-500 !text-sm lg:!text-[15px] !max-w-[480px]">
+            <p class="hero-slide__desc !text-gray-500 !text-sm lg:!text-base !max-w-[480px] 2k:!max-w-[680px] 4k:!max-w-[900px]">
               <?php echo e($slide['desc']); ?>
 
             </p>
@@ -79,7 +79,7 @@ $heroSlides = $sliders->isNotEmpty()
                   <path d="M13 2L3 14h8v8l10-12h-8V2z" />
                 </svg>
               </span>
-              <span class="!font-bold !text-[14px] !normal-case !tracking-normal !text-white"><?php echo e($slide['button_text'] ?: 'View All Services'); ?></span>
+              <span class="!font-bold !text-sm lg:!text-base !normal-case !tracking-normal !text-white"><?php echo e($slide['button_text'] ?: 'View All Services'); ?></span>
             </a>
           </div>
         </div>
@@ -97,205 +97,49 @@ $heroSlides = $sliders->isNotEmpty()
 </section>
 
 <!-- ===================== About Us ===================== -->
-<?php
-$aboutPhoto = !empty($about['about_photo']) ? asset('storage/' . $about['about_photo']) : asset('assets/img/about-image.webp');
-$aboutHoursTitle = $about['about_hours_title'] ?? 'Open Hours';
-$aboutHours = !empty($about['about_hours']) ? $about['about_hours'] : [
-['day' => 'Monday', 'time' => '09:30 - 07:30'],
-['day' => 'Tuesday', 'time' => '09:30 - 07:30'],
-['day' => 'Wednesday', 'time' => '09:30 - 07:30'],
-['day' => 'Thursday', 'time' => '09:30 - 07:30'],
-['day' => 'Friday', 'time' => '09:30 - 07:30'],
-['day' => 'Saturday', 'time' => '09:30 - 07:30'],
-];
-$aboutTitle = $about['about_title'] ?? __('frontend.home.about_title');
-$aboutDesc = $about['about_desc'] ?? __('frontend.home.about_desc');
-$aboutFeatures = !empty($about['about_features']) ? $about['about_features'] : [
-'Comprehensive Specialties', 'Emergency Services', 'Intensive Care Units (ICUs)', 'Telemedicine Facilities', 'Multidisciplinary Team',
-'Research and Development', 'Advanced Imaging Services', 'Rehabilitation Services', 'Patient-Centric Approach', 'Health Information Technology',
-];
-$aboutFeatureCols = collect($aboutFeatures)->chunk((int) ceil(count($aboutFeatures) / 2));
-$aboutBtnText = $about['about_more_btn_text'] ?? __('frontend.common.read_more');
-$aboutBtnUrl = ($about['about_more_btn_url'] ?? null) ?: route('about');
-$aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
-?>
-<section class="about bg-blue-50/40 relative overflow-hidden">
-  <!-- Animated Floating Medical Cross -->
-  <div class="absolute top-10 right-10 opacity-30 animate-pulse text-brand-cyan pointer-events-none z-0">
-    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-    </svg>
-  </div>
-  <svg class="about__decor" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <pattern id="about-dots" width="10" height="10" patternUnits="userSpaceOnUse">
-      <circle cx="2" cy="2" r="2" fill="currentColor" />
-    </pattern>
-    <rect width="100" height="100" fill="url(#about-dots)" />
-  </svg>
-
-  <div class="container mx-auto">
-    <div class="about__grid">
-      <div class="about__media">
-        <div class="about__photo-wrap">
-          <img src="<?php echo e($aboutPhoto); ?>" alt="Smiling male doctor with arms crossed" class="about__photo" />
-
-
-          <div class="about__hours-card">
-            <span class="about__hours-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" />
-                <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-              </svg>
-            </span>
-            <h3 class="about__hours-title"><?php echo e($aboutHoursTitle); ?></h3>
-            <div class="about__hours-list">
-              <?php $__currentLoopData = $aboutHours; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-              <div class="about__hours-row">
-                <span class="about__hours-day"><?php echo e($row['day']); ?></span>
-                <span class="about__hours-time"><?php echo e($row['time']); ?></span>
-              </div>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="about__content">
-        <h2 class="about__title"><?php echo e($aboutTitle); ?></h2>
-        <p class="about__desc">
-          <?php echo e($aboutDesc); ?>
-
-        </p>
-
-        <div class="about__features">
-          <?php $__currentLoopData = $aboutFeatureCols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <div>
-            <?php $__currentLoopData = $col; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="about__feature">
-              <span class="about__feature-check">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </span>
-              <?php echo e($feature); ?>
-
-            </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </div>
-          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </div>
-
-        <div class="about__cta-row">
-          <a href="<?php echo e($aboutBtnUrl); ?>" class="about__btn">
-            <?php echo e($aboutBtnText); ?>
-
-            <span class="about__btn-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </span>
-          </a>
-
-          <a href="tel:<?php echo e($aboutPhone); ?>" class="about__contact">
-            <span class="about__contact-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6" />
-              </svg>
-            </span>
-            <span class="about__contact-text">
-              <span class="about__contact-label"><?php echo e(__('frontend.faq.contact_label')); ?></span>
-              <span class="about__contact-value"><?php echo e($aboutPhone); ?></span>
-            </span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<?php if (isset($component)) { $__componentOriginal0f234929f7e3340f2923b6289b773af9 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal0f234929f7e3340f2923b6289b773af9 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.about-v2','data' => ['about' => $about,'headerSettings' => $headerSettings]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('frontend.about-v2'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['about' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($about),'header-settings' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($headerSettings)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal0f234929f7e3340f2923b6289b773af9)): ?>
+<?php $attributes = $__attributesOriginal0f234929f7e3340f2923b6289b773af9; ?>
+<?php unset($__attributesOriginal0f234929f7e3340f2923b6289b773af9); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal0f234929f7e3340f2923b6289b773af9)): ?>
+<?php $component = $__componentOriginal0f234929f7e3340f2923b6289b773af9; ?>
+<?php unset($__componentOriginal0f234929f7e3340f2923b6289b773af9); ?>
+<?php endif; ?>
 
 
 <!-- ===================== Why Choose Us ===================== -->
-<?php
-$whyBadge = $about['why_badge'] ?? '7 Star Care & Protection';
-$whyTitle = $about['why_title'] ?? 'We love your loved ones';
-$whyDesc = $about['why_desc'] ?? "Proactively revolutionize granular customer service after pandemic internal or 'organic' sources. Distinctively impact proactive human capital rather than client-centered benefits.";
-$whyPhoto = !empty($about['why_photo']) ? asset('storage/' . $about['why_photo']) : asset('assets/img/choose-us-image.webp');
-$whyBgPhoto = !empty($about['why_bg_photo']) ? asset('storage/' . $about['why_bg_photo']) : null;
-$whyFeatures = !empty($about['why_features']) ? $about['why_features'] : [
-['title' => '100% Safe & Trusted', 'description' => 'Professional web-readiness via ubiquitous human capital.'],
-['title' => 'Specialist Surgery', 'description' => 'Professional web-readiness via ubiquitous human capital.'],
-['title' => '24/7 take care staff', 'description' => 'Professional web-readiness via ubiquitous human capital.'],
-['title' => 'Medicine service','description' => 'Professional web-readiness via ubiquitous human capital.'],
-];
-?>
-<section class="relative py-24 bg-white overflow-hidden">
-  <!-- Background Pattern (Left) -->
-  <div class="absolute left-0 top-0 w-64 h-full bg-[radial-gradient(#0ea5e9_2px,transparent_2px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div>
-  <!-- Background Pattern (Right) -->
-  <div class="absolute right-0 top-0 w-64 h-full bg-[radial-gradient(#9ca3af_2px,transparent_2px)] [background-size:24px_24px] opacity-20 pointer-events-none"></div>
-
-  <div class="container mx-auto px-4 lg:px-16 relative z-10">
-    <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-20">
-
-      <!-- Left Content -->
-      <div class="lg:w-1/2">
-        <p class="text-brand-cyan italic text-2xl lg:text-[28px] mb-3" style="font-family: 'Georgia', serif;">
-          <?php echo e($whyBadge); ?>
-
-        </p>
-        <h2 class="text-3xl lg:text-[44px] font-bold text-navy mb-6 leading-[1.2]">
-          <?php echo e($whyTitle); ?>
-
-        </h2>
-        <p class="text-gray-500 text-[15px] leading-relaxed mb-12 max-w-[500px]">
-          <?php echo e($whyDesc); ?>
-
-        </p>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10">
-          <?php $__currentLoopData = $whyFeatures; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <?php
-          // Simple icons based on index to mimic the screenshot
-          $icons = [
-          '<svg class="w-9 h-9 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-          </svg>', // Shield
-          '<svg class="w-9 h-9 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
-          </svg>', // Mouse/Click
-          '<svg class="w-9 h-9 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-          </svg>', // Heart
-          '<svg class="w-9 h-9 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
-          </svg>' // Flask
-          ];
-          $icon = $icons[$i % count($icons)];
-          ?>
-          <div class="flex gap-4">
-            <div class="shrink-0 mt-1">
-              <?php echo $icon; ?>
-
-            </div>
-            <div>
-              <h3 class="text-navy font-bold text-[16px] mb-2"><?php echo e($feature['title']); ?></h3>
-              <p class="text-gray-400 text-[13px] leading-relaxed"><?php echo e($feature['description']); ?></p>
-            </div>
-          </div>
-          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </div>
-      </div>
-
-      <!-- Right Image -->
-      <div class="lg:w-1/2 relative flex justify-center mt-12 lg:mt-0">
-        <!-- Cyan circular arc decoration -->
-        <div class="absolute right-0 bottom-0 w-[450px] h-[450px] rounded-full border border-brand-cyan/50 -z-10 translate-x-12 translate-y-12"></div>
-        <img src="<?php echo e($whyPhoto); ?>" alt="<?php echo e($whyTitle); ?>" class="max-w-full h-auto relative z-10" />
-      </div>
-
-    </div>
-  </div>
-</section>
+<?php if (isset($component)) { $__componentOriginal0adc9be9e6cf3477a5097b60ebbe062f = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal0adc9be9e6cf3477a5097b60ebbe062f = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.why-choose-us','data' => ['about' => $about]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('frontend.why-choose-us'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['about' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($about)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal0adc9be9e6cf3477a5097b60ebbe062f)): ?>
+<?php $attributes = $__attributesOriginal0adc9be9e6cf3477a5097b60ebbe062f; ?>
+<?php unset($__attributesOriginal0adc9be9e6cf3477a5097b60ebbe062f); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal0adc9be9e6cf3477a5097b60ebbe062f)): ?>
+<?php $component = $__componentOriginal0adc9be9e6cf3477a5097b60ebbe062f; ?>
+<?php unset($__componentOriginal0adc9be9e6cf3477a5097b60ebbe062f); ?>
+<?php endif; ?>
 
 <!-- ===================== Departments ===================== -->
 <?php
@@ -331,7 +175,7 @@ $deptCards = $featuredServices->isNotEmpty()
   </div>
   <div class="container mx-auto px-4">
     <!-- Heading Area -->
-    <div class="text-center mb-16 max-w-2xl mx-auto">
+    <div class="text-center mb-16 max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto">
       <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-3">
         <?php echo e($svc['svc_badge'] ?? __('frontend.home.services_badge')); ?>
 
@@ -429,7 +273,13 @@ $teamCards = $featuredDoctors->isNotEmpty()
   </div>
   <div class="container mx-auto px-4">
     <!-- Centered Heading Area -->
-    <div class="text-center mb-14 max-w-2xl mx-auto">
+    <div class="text-center mb-14 max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto">
+      <?php if(!empty($doc['doc_home_badge'])): ?>
+      <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-3">
+        <?php echo e($doc['doc_home_badge']); ?>
+
+      </p>
+      <?php endif; ?>
       <h2 class="text-3xl lg:text-[40px] font-bold text-navy mb-4 leading-[1.2]">
         <?php echo e($doc['doc_home_title'] ?? 'We Have Specialist Doctors To Solve Your Problems'); ?>
 
@@ -538,7 +388,13 @@ $packageCards = $featuredPackages->isNotEmpty()
   </div>
   <div class="container mx-auto px-4 lg:px-0">
     <!-- Centered Heading Area -->
-    <div class="text-center mb-14 max-w-2xl mx-auto">
+    <div class="text-center mb-14 max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto">
+      <?php if(!empty($pkg['pkg_badge'])): ?>
+      <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-3">
+        <?php echo e($pkg['pkg_badge']); ?>
+
+      </p>
+      <?php endif; ?>
       <h2 class="text-3xl lg:text-[40px] font-bold text-navy mb-4 leading-[1.2]">
         <?php echo e($pkg['pkg_title'] ?? 'We Maintain Cleanliness Rules Inside Our Hospital'); ?>
 
@@ -562,7 +418,7 @@ $packageCards = $featuredPackages->isNotEmpty()
       <div class="packages__viewport overflow-hidden">
         <div class="packages__track flex" data-packages-track>
           <?php $__currentLoopData = $packageCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <div class="packages__slide w-full md:w-1/2 lg:w-1/3 2xl:w-1/4 shrink-0">
+          <div class="packages__slide w-full sm:w-1/2 md:w-1/3 2xl:w-1/4 shrink-0">
             <div class="group relative overflow-hidden aspect-square lg:aspect-auto lg:h-[350px] w-full border-r-[2px] border-white">
               <!-- Background Image -->
               <img src="<?php echo e($card['image']); ?>" alt="<?php echo e($card['title']); ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -604,183 +460,52 @@ $packageCards = $featuredPackages->isNotEmpty()
 </section>
 
 <!-- ===================== FAQ ===================== -->
-<section class="faq !py-24 bg-white relative overflow-hidden">
-  <!-- Subtle circular lines background decoration (bottom left) -->
-  <svg class="absolute -bottom-20 -left-20 w-[400px] h-[400px] text-brand-cyan/5 pointer-events-none" viewBox="0 0 100 100" fill="none">
-    <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="1.5" />
-    <circle cx="50" cy="50" r="30" stroke="currentColor" stroke-width="1.5" />
-    <circle cx="50" cy="50" r="20" stroke="currentColor" stroke-width="1.5" />
-  </svg>
 
-  <div class="container relative mx-auto px-4 lg:px-0 z-10">
-    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+<?php if (isset($component)) { $__componentOriginale5f2f093838a70aa50c235dffacab75b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginale5f2f093838a70aa50c235dffacab75b = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.faq-v1','data' => ['homeFaq' => $homeFaq,'footerSettings' => $footerSettings]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('frontend.faq-v1'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['home-faq' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($homeFaq),'footer-settings' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($footerSettings)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginale5f2f093838a70aa50c235dffacab75b)): ?>
+<?php $attributes = $__attributesOriginale5f2f093838a70aa50c235dffacab75b; ?>
+<?php unset($__attributesOriginale5f2f093838a70aa50c235dffacab75b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale5f2f093838a70aa50c235dffacab75b)): ?>
+<?php $component = $__componentOriginale5f2f093838a70aa50c235dffacab75b; ?>
+<?php unset($__componentOriginale5f2f093838a70aa50c235dffacab75b); ?>
+<?php endif; ?>
 
-      <!-- Left: Image -->
-      <div class="lg:w-[45%] w-full shrink-0 flex justify-center lg:justify-start">
-        <?php
-        $faqImage = $homeFaq['image'] ?: asset('assets/img/faq.webp');
-        $faqImageAlt = $homeFaq['image_alt'] ?: 'Smiling doctor';
-        ?>
-        <img src="<?php echo e($faqImage); ?>" alt="<?php echo e($faqImageAlt); ?>" class="w-full h-auto rounded-[24px] shadow-lg object-cover" />
-      </div>
 
-      <!-- Right: Accordion -->
-      <div class="lg:w-[55%] w-full flex flex-col gap-5">
-        <?php
-        $homeFaqDefaults = [
-        ['question' => 'Medical Eye facilisis erat id odio', 'answer' => "If you are diagnosed with high blood pressure, it's a good idea to have an eye examination. Hypertension can cause changes to the blood vessels in the retina (the back of the eye). These changes can be detected and monitored by eye examinations."],
-        ['question' => 'Medical Eye facilisis erat id odio', 'answer' => "If you are diagnosed with high blood pressure, it's a good idea to have an eye examination. Hypertension can cause changes to the blood vessels in the retina (the back of the eye). These changes can be detected and monitored by eye examinations."],
-        ['question' => 'Medical Eye facilisis erat id odio', 'answer' => "If you are diagnosed with high blood pressure, it's a good idea to have an eye examination. Hypertension can cause changes to the blood vessels in the retina (the back of the eye). These changes can be detected and monitored by eye examinations."],
-        ['question' => 'Medical Eye facilisis erat id odio', 'answer' => "If you are diagnosed with high blood pressure, it's a good idea to have an eye examination. Hypertension can cause changes to the blood vessels in the retina (the back of the eye). These changes can be detected and monitored by eye examinations."],
-        ];
-        $homeFaqCards = (!empty($homeFaq['items']) && $homeFaq['items']->isNotEmpty()) ? $homeFaq['items'] : collect($homeFaqDefaults);
-        ?>
-
-        <?php $__currentLoopData = $homeFaqCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $faqIndex => $faqCard): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <div class="faq-item group <?php if($faqIndex === 0): ?> is-open <?php endif; ?> !bg-white border border-gray-100 !rounded-[20px] overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.02)] transition-all duration-300 [&.is-open]:border-brand-cyan/20">
-
-          <button type="button" class="faq-item__question !flex !w-full !items-center !justify-between !px-6 !py-5 transition-colors duration-300 group-[.is-open]:!bg-brand-cyan" data-faq-toggle>
-
-            <div class="flex items-center gap-4">
-              <!-- Unopened Icon: Number -->
-              <span class="flex items-center justify-center w-8 h-8 shrink-0 rounded-full bg-brand-cyan text-white text-[14px] font-bold group-[.is-open]:hidden">
-                <?php echo e(str_pad($faqIndex + 1, 2, '0', STR_PAD_LEFT)); ?>
-
-              </span>
-              <!-- Opened Icon: Checkmark -->
-              <span class="items-center justify-center w-8 h-8 shrink-0 rounded-full bg-white text-brand-cyan hidden group-[.is-open]:flex shadow-sm">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7" />
-                </svg>
-              </span>
-
-              <!-- Title -->
-              <span class="text-[17px] font-bold text-navy group-[.is-open]:!text-white text-left leading-snug transition-colors">
-                <?php echo e($faqCard['question'] ?? ''); ?>
-
-              </span>
-            </div>
-
-            <!-- Chevron -->
-            <span class="!flex !w-6 !h-6 !items-center !justify-center shrink-0 text-brand-cyan group-[.is-open]:!text-white transition-transform duration-300 group-[.is-open]:!rotate-180 group-[.is-open]:!-rotate-180">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </span>
-          </button>
-
-          <!-- Answer Wrapper -->
-          <div class="faq-item__answer !px-0 !pb-0 !bg-white">
-            <div class="overflow-hidden">
-              <div class="px-6 pb-6 pt-4 text-gray-500 text-[14px] lg:text-[15px] leading-relaxed border-t border-gray-100">
-                <p><?php echo e($faqCard['answer'] ?? ''); ?></p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-      </div>
-
-    </div>
-  </div>
-</section>
 
 
 <!-- ===================== Testimonials ===================== -->
-<section class="testimonials">
-  <img src="<?php echo e(asset('assets/img/bg-testimonial.webp')); ?>" alt="" class="testimonials__bg" aria-hidden="true" />
-  <span class="testimonials__overlay" aria-hidden="true"></span>
-
-  <div class="container relative mx-auto">
-    <div class="testimonials__grid">
-      <div class="testimonials__media">
-        <span class="testimonials__ring"></span>
-        <span class="testimonials__ring is-inner"></span>
-        <span class="testimonials__orbit" aria-hidden="true"><span class="testimonials__ping"></span></span>
-        <span class="testimonials__orbit is-slow" aria-hidden="true"><span class="testimonials__ping"></span></span>
-        <span class="testimonials__orbit is-reverse" aria-hidden="true"><span class="testimonials__ping"></span></span>
-        <?php
-        $testiImage = !empty($testi['testi_image']) ? asset('storage/' . $testi['testi_image']) : asset('assets/img/1752043437.img2.png');
-        $testiImageAlt = ($testi['testi_image_alt'] ?? null) ?: 'Doctor smiling with arms crossed';
-        ?>
-        <img
-          src="<?php echo e($testiImage); ?>"
-          alt="<?php echo e($testiImageAlt); ?>"
-          class="testimonials__photo" />
-      </div>
-
-      <div class="testimonials__content">
-        <h2 class="testimonials__title"><?php echo e(($testi['testi_title'] ?? null) ?: __('frontend.home.testimonials_title')); ?></h2>
-
-        <div class="testimonial-slider" data-testimonials-slider>
-          <button type="button" class="testimonials__nav is-prev" data-testimonials-prev aria-label="Previous testimonial">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-          <button type="button" class="testimonials__nav is-next" data-testimonials-next aria-label="Next testimonial">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-
-          <div class="testimonial-slider__viewport">
-            <div class="testimonial-slider__track" data-testimonials-track>
-              <?php
-              $homeTestimonialDefaults = [
-              ['name' => 'Emma Carter', 'role' => 'Patient', 'avatar' => asset('assets/img/sr-1-2.jpg'), 'title' => 'Best Treatment', 'review' => "From the first visit, I felt completely at ease. The staff was warm, patient, and incredibly supportive. They took time to listen and explain everything clearly. Their kindness made a real difference in my recovery. I'm thankful for such a caring team."],
-              ['name' => 'Rihana Roy', 'role' => 'Patient', 'avatar' => asset('assets/img/sr-1-3.jpg'), 'title' => 'Caring Staff', 'review' => "My experience here was nothing short of amazing. The team treated me with kindness and genuine care. Every step of my treatment was handled with professionalism. I felt heard, supported, and completely at ease. I'm truly grateful for the care I received."],
-              ['name' => 'Daniel Cruz', 'role' => 'Patient', 'avatar' => asset('assets/img/projects-2.jpg'), 'title' => 'Compassionate Care', 'review' => "The team walked me through every step before they even touched an instrument. What could have been stressful turned into the calmest checkup I've ever had. I finally look forward to my visits."],
-              ];
-              $homeTestimonialCards = (isset($testimonials) && $testimonials->isNotEmpty())
-              ? $testimonials->map(fn($t) => ['name' => $t->name, 'role' => $t->role, 'avatar' => $t->avatar ? asset('storage/' . $t->avatar) : asset('assets/img/sr-1-2.jpg'), 'title' => null, 'review' => $t->review])
-              : collect($homeTestimonialDefaults);
-              ?>
-              <?php $__currentLoopData = $homeTestimonialCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tCard): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-              <div class="testimonial-card">
-                <div class="testimonial-card__media">
-                  <div class="testimonial-card__photo-wrap">
-                    <img src="<?php echo e($tCard['avatar']); ?>" alt="<?php echo e($tCard['name']); ?>" class="testimonial-card__photo" />
-                    <button type="button" class="testimonial-card__play">
-                      <span class="testimonial-card__play-icon">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </span>
-                      <?php echo e(__('frontend.home.watch_video')); ?>
-
-                    </button>
-                  </div>
-                  <p class="testimonial-card__name"><?php echo e($tCard['name']); ?></p>
-                  <p class="testimonial-card__role"><?php echo e($tCard['role']); ?></p>
-                </div>
-
-                <div class="testimonial-card__body">
-                  <?php if($tCard['title']): ?>
-                  <h3 class="testimonial-card__title"><?php echo e($tCard['title']); ?></h3>
-                  <?php endif; ?>
-                  <p class="testimonial-card__quote">
-                    <?php echo e($tCard['review']); ?>
-
-                  </p>
-
-                  <span class="testimonial-card__mark" aria-hidden="true">
-                    <span class="testimonial-card__mark-ring"></span>
-                    <span class="testimonial-card__mark-ring is-offset"></span>
-                  </span>
-                </div>
-              </div>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonials__dots" data-testimonials-dots></div>
-      </div>
-    </div>
-  </div>
-</section>
+<?php if (isset($component)) { $__componentOriginalc207468f474da9cd17b6cfa1c602bc89 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalc207468f474da9cd17b6cfa1c602bc89 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.testimonial-v2','data' => ['testimonials' => $testimonials,'testi' => $testi]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('frontend.testimonial-v2'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['testimonials' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($testimonials),'testi' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($testi)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalc207468f474da9cd17b6cfa1c602bc89)): ?>
+<?php $attributes = $__attributesOriginalc207468f474da9cd17b6cfa1c602bc89; ?>
+<?php unset($__attributesOriginalc207468f474da9cd17b6cfa1c602bc89); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc207468f474da9cd17b6cfa1c602bc89)): ?>
+<?php $component = $__componentOriginalc207468f474da9cd17b6cfa1c602bc89; ?>
+<?php unset($__componentOriginalc207468f474da9cd17b6cfa1c602bc89); ?>
+<?php endif; ?>
 
 
 <!-- ===================== Awards ===================== -->
@@ -788,6 +513,12 @@ $packageCards = $featuredPackages->isNotEmpty()
   <div class="container mx-auto">
     <div class="awards__grid">
       <div class="awards__intro">
+        <?php if(!empty($award['award_badge'])): ?>
+        <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-2">
+          <?php echo e($award['award_badge']); ?>
+
+        </p>
+        <?php endif; ?>
         <h2 class="awards__title"><?php echo e(($award['award_title'] ?? null) ?: __('frontend.home.awards_title')); ?></h2>
         <p class="awards__desc">
           <?php echo e(($award['award_desc'] ?? null) ?: __('frontend.home.awards_desc')); ?>
@@ -829,97 +560,26 @@ $packageCards = $featuredPackages->isNotEmpty()
 </section>
 
 <!-- ===================== Blog ===================== -->
-<?php
-$blogFallbackImages = [asset('assets/img/blog-one.png'), asset('assets/img/blog-2.png'), null, asset('assets/img/blog-4.jpg')];
-$blogCards = $latestBlogs->isNotEmpty()
-? $latestBlogs->values()->map(fn ($b, $i) => [
-'title' => $b->title,
-'date' => ($b->published_at ?: $b->created_at)->format('F j, Y'),
-'image' => $b->feature_image ? asset('storage/' . $b->feature_image) : ($blogFallbackImages[$i % 4] ?? asset('assets/img/blog-2.png')),
-'url' => route('blog-details', $b->slug),
-])
-: collect([
-['title' => 'The Skincare Routine That Works Expert Tips.', 'date' => 'July 6, 2025', 'image' => asset('assets/img/blog-one.png'), 'url' => '#'],
-['title' => 'The Art of Managing Business and Patient Care', 'date' => 'July 9, 2025', 'image' => asset('assets/img/blog-2.png'), 'url' => '#'],
-['title' => 'Strategies for Balancing Business Demands wit …', 'date' => 'July 9, 2025', 'image' => null, 'url' => '#'],
-['title' => 'Effective Healthcare Tips', 'date' => 'July 9, 2025', 'image' => asset('assets/img/blog-4.jpg'), 'url' => '#'],
-]);
-?>
-<section class="blog">
-  <div class="container mx-auto">
-    <div class="blog__head">
-      <h2 class="blog__title"><?php echo e($blog['blog_home_title'] ?? __('frontend.home.blog_title')); ?></h2>
-      <a href="<?php echo e(route('blog-list')); ?>" class="btn-view-all">
-        <?php echo e(__('frontend.common.view_all')); ?>
-
-        <span class="btn-view-all__icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </span>
-      </a>
-    </div>
-
-    <div class="blog__grid">
-      <?php $__currentLoopData = $blogCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-      <?php if($loop->index === 0): ?>
-      <!-- Card A: full-bleed photo with a dark navy title overlaid at
-                 the top over a soft white scrim (so it stays legible no
-                 matter what's behind it) and a Read More CTA at the bottom,
-                 mirroring cards B/D's overlay pattern but light-on-photo. -->
-      <article class="blog-card blog-card--split is-tall">
-        <img src="<?php echo e($card['image']); ?>" alt="<?php echo e($card['title']); ?>" class="blog-card__img" />
-        <span class="blog-card--split__scrim" aria-hidden="true"></span>
-        <div class="blog-card--split__top">
-          <span class="blog-card__date"><span class="blog-card__date-dot"></span><?php echo e($card['date']); ?></span>
-          <h3 class="blog-card--split__title"><?php echo e($card['title']); ?></h3>
-        </div>
-        <a href="<?php echo e($card['url']); ?>" class="blog-card--split__cta">
-          <?php echo e(__('frontend.common.read_more')); ?>
-
-          <span class="blog-card--split__cta-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </span>
-        </a>
-        <span class="blog-card--split__bubble"></span>
-      </article>
-      <?php elseif($loop->index === 2): ?>
-      <!-- Card C: plain copy card, no image -->
-      <article class="blog-card blog-card--plain">
-        <div>
-          <span class="blog-card__date"><span class="blog-card__date-dot"></span><?php echo e($card['date']); ?></span>
-          <h3 class="blog-card--plain__title"><?php echo e($card['title']); ?></h3>
-        </div>
-        <div class="blog-card--plain__footer">
-          <a href="<?php echo e($card['url']); ?>" class="blog-card__arrow" aria-label="Read more">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </a>
-        </div>
-      </article>
-      <?php else: ?>
-      <!-- Card B/D: full-bleed photo, overlay content -->
-      <article class="blog-card blog-card--photo <?php echo e($loop->index === 1 ? 'is-tall' : ''); ?>">
-        <img src="<?php echo e($card['image']); ?>" alt="<?php echo e($card['title']); ?>" class="blog-card__img" <?php if($loop->index === 1): ?> style="object-position: 50% 20%;" <?php endif; ?> />
-        <span class="blog-card__overlay"></span>
-        <span class="blog-card__date relative z-10 w-fit"><span class="blog-card__date-dot"></span><?php echo e($card['date']); ?></span>
-        <div class="blog-card--photo__footer">
-          <h3 class="blog-card--photo__title"><?php echo e($card['title']); ?></h3>
-          <a href="<?php echo e($card['url']); ?>" class="blog-card__arrow" aria-label="Read more">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </a>
-        </div>
-      </article>
-      <?php endif; ?>
-      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-    </div>
-  </div>
-</section>
+<?php if (isset($component)) { $__componentOriginal913ca2b5fd10c2b01861efbcef1dc425 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal913ca2b5fd10c2b01861efbcef1dc425 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.blog-v2','data' => ['latestBlogs' => $latestBlogs,'blog' => $blog]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('frontend.blog-v2'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['latest-blogs' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($latestBlogs),'blog' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($blog)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal913ca2b5fd10c2b01861efbcef1dc425)): ?>
+<?php $attributes = $__attributesOriginal913ca2b5fd10c2b01861efbcef1dc425; ?>
+<?php unset($__attributesOriginal913ca2b5fd10c2b01861efbcef1dc425); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal913ca2b5fd10c2b01861efbcef1dc425)): ?>
+<?php $component = $__componentOriginal913ca2b5fd10c2b01861efbcef1dc425; ?>
+<?php unset($__componentOriginal913ca2b5fd10c2b01861efbcef1dc425); ?>
+<?php endif; ?>
 
 <!-- ===================== Scroll Animation Script ===================== -->
 <script>

@@ -1,74 +1,83 @@
   <!-- ===================== Header ===================== -->
   <header class="site-header">
     <!-- Top info bar -->
-    <div class="border-b border-gray-100 hidden lg:block py-2">
-      <div class="container mx-auto flex justify-between items-center text-sm font-medium text-navy">
-        <div class="flex items-center gap-6">
-          <a href="{{ route('about') }}" class="hover:text-brand-cyan transition">About</a>
-          <a href="{{ route('doctors') }}" class="hover:text-brand-cyan transition">Doctors</a>
-          <a href="{{ route('contact') }}" class="hover:text-brand-cyan transition">Contact</a>
-          <a href="{{ route('faq') }}" class="hover:text-brand-cyan transition">FAQ</a>
+    <div class="top-header border-b border-gray-100 bg-white">
+      <div class="top-header__inner">
+        <div class="top-header__left">
+          <span class="top-header__item">
+            <span class="top-header__value text-navy">
+              {{ $headerSettings['header_tagline'] ?? 'Human Life, Humane Care' }}
+            </span>
+          </span>
+          <span class="top-header__item">
+            <span class="top-header__icon top-header__icon--emergency">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6" />
+              </svg>
+            </span>
+            <span class="top-header__value text-navy">
+              Call : <a href="tel:{{ preg_replace('/[^0-9+]/', '', $headerSettings['header_phone'] ?? '01849-727858') }}" style="color: #2563eb; text-decoration: none;">{{ $headerSettings['header_phone'] ?? '01849-727858' }}</a>
+            </span>
+          </span>
         </div>
-        <div class="flex items-center gap-6">
-          <a href="tel:{{ $headerSettings['header_phone'] ?? '+880 1234 56789' }}" class="flex items-center gap-2 hover:text-brand-cyan transition">
-            <svg class="w-4 h-4 text-brand-cyan" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.489-1.761-1.663-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
-            </svg>
-            {{ $headerSettings['header_phone'] ?? '+880 1234 56789' }}
+
+        <div class="top-header__right">
+          <span class="top-header__item">
+            <span class="top-header__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" />
+                <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+              </svg>
+            </span>
+            <span class="top-header__value text-navy">
+              {{ $headerSettings['header_hours'] ?? 'Open 24 Hours, Everyday' }}
+            </span>
+          </span>
+          <a href="{{ route('login') }}" class="top-header__item" style="color: #2563eb; font-weight: 700; text-decoration: none;" title="Agent Login Portal">
+            Login
           </a>
-          <a href="mailto:{{ $headerSettings['header_email'] ?? 'support@yourmail.com' }}" class="flex items-center gap-2 hover:text-brand-cyan transition">
-            <svg class="w-4 h-4 text-brand-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            {{ $headerSettings['header_email'] ?? 'support@yourmail.com' }}
-          </a>
-          <!-- Language Switcher -->
-          @if(isset($languages) && count($languages) > 0)
-          <div class="flex items-center gap-2 border-l border-gray-300 pl-4">
-            @foreach ($languages as $lang)
-            <a href="{{ route('language.switch', $lang->code) }}" class="{{ app()->getLocale() === $lang->code ? 'text-brand-cyan font-bold' : 'text-navy hover:text-brand-cyan transition' }} uppercase">{{ $lang->code }}</a>
-            @endforeach
-          </div>
-          @endif
+          @foreach ($languages ?? [] as $lang)
+          <a href="{{ route('language.switch', $lang->code) }}" class="top-header__lang {{ app()->getLocale() === $lang->code ? 'is-active' : '' }} uppercase">{{ strtoupper($lang->code) }}</a>
+          @endforeach
         </div>
       </div>
     </div>
 
     <!-- Middle bar -->
-    <div class="hidden lg:block py-2 bg-white">
+    <div class="header-middle hidden lg:block py-2 bg-white">
       <div class="container mx-auto flex justify-between items-center">
         <!-- Logo -->
         <a href="{{ route('home') }}" class="site-logo">
-          <img src="{{ !empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png') }}" alt="{{ $headerSettings['header_site_name'] ?? 'Medicare Lab Ltd.' }}" height="42" style="height:95px;width:auto" />
+          <img src="{{ !empty($headerSettings['header_logo']) ? asset('storage/' . $headerSettings['header_logo']) : asset('assets/img/logo.png') }}" alt="{{ $headerSettings['header_site_name'] ?? 'Medicare Lab Ltd.' }}" height="42" class="site-header__logo-img" style="height:95px;width:auto" />
         </a>
 
         <!-- Info & CTA -->
         <div class="flex items-center gap-8">
-          <div class="flex items-center gap-3">
-            <div class="w-11 h-11 bg-brand-cyan rounded flex items-center justify-center text-white shrink-0">
+          <div class="header-info-item flex items-center gap-3">
+            <div class="header-info-icon w-11 h-11 bg-brand-cyan rounded flex items-center justify-center text-white shrink-0">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.489-1.761-1.663-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
               </svg>
             </div>
             <div>
-              <div class="text-[13px] text-gray-500">Call Us Anytime</div>
-              <div class="font-bold text-[15px] text-navy">{{ $headerSettings['header_phone'] ?? '+880123-467-789' }}</div>
+              <div class="header-info-label text-[13px] text-gray-500">Call Us Anytime</div>
+              <div class="header-info-value font-bold text-[15px] text-navy">{{ $headerSettings['header_phone'] ?? '+880123-467-789' }}</div>
             </div>
           </div>
 
-          <div class="flex items-center gap-3">
-            <div class="w-11 h-11 bg-brand-cyan rounded flex items-center justify-center text-white shrink-0">
+          <div class="header-info-item flex items-center gap-3">
+            <div class="header-info-icon w-11 h-11 bg-brand-cyan rounded flex items-center justify-center text-white shrink-0">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div>
-              <div class="text-[13px] text-gray-500">Opening Time</div>
-              <div class="font-bold text-[15px] text-navy">{{ $headerSettings['header_hours'] ?? 'Mon-Sat: 9.00-18.00' }}</div>
+              <div class="header-info-label text-[13px] text-gray-500">Opening Time</div>
+              <div class="header-info-value font-bold text-[15px] text-navy">{{ $headerSettings['header_hours'] ?? 'Mon-Sat: 9.00-18.00' }}</div>
             </div>
           </div>
 
-          <a href="{{ $headerSettings['header_book_btn_url'] ?? route('appointment') }}" class="inline-flex items-center justify-center bg-brand-cyan text-white font-semibold py-[11px] px-8 rounded transition hover:bg-navy text-[15px]">
+          <a href="{{ $headerSettings['header_book_btn_url'] ?? route('appointment') }}" class="header-appointment-btn inline-flex items-center justify-center bg-brand-cyan text-white font-semibold py-[11px] px-8 rounded transition hover:bg-navy text-[15px]">
             {{ $headerSettings['header_book_btn_text'] ?? 'Appointment' }}
           </a>
         </div>
@@ -146,9 +155,9 @@
 
       <div class="site-header__actions">
         <!-- Inline Search Form (desktop) -->
-        <form action="{{ route('search') }}" method="GET" class="hidden lg:flex items-center h-10 shadow-sm rounded">
-          <input type="search" name="q" value="{{ request('q') }}" class="h-full border border-gray-200 border-r-0 px-4 py-2 text-[14px] text-gray-700 focus:outline-none w-56 rounded-l placeholder-gray-400" placeholder="search" required />
-          <button type="submit" class="w-12 h-full bg-brand-cyan text-white rounded-r flex items-center justify-center hover:bg-navy transition">
+        <form action="{{ route('search') }}" method="GET" class="hidden lg:flex items-center h-10 shadow-sm rounded-md overflow-hidden bg-white">
+          <input type="search" name="q" value="{{ request('q') }}" class="h-full border-0 bg-white px-4 py-2 text-[14px] text-gray-800 focus:outline-none focus:ring-0 w-52 placeholder-gray-400" placeholder="search" required />
+          <button type="submit" class="w-12 h-full bg-brand-green text-white flex items-center justify-center hover:opacity-90 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
@@ -168,8 +177,8 @@
     <div class="header-search-bar hidden lg:hidden border-t border-gray-100 bg-white py-4 px-4 absolute w-full left-0 top-full shadow-md z-40">
       <div class="container mx-auto">
         <form action="{{ route('search') }}" method="GET" class="flex items-center gap-2 max-w-xl mx-auto">
-          <input type="search" name="q" value="{{ request('q') }}" class="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-brand-cyan" placeholder="Search..." required />
-          <button type="submit" class="bg-brand-cyan text-white px-6 py-2 rounded hover:bg-navy transition">Search</button>
+          <input type="search" name="q" value="{{ request('q') }}" class="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-brand-green" placeholder="Search..." required />
+          <button type="submit" class="bg-brand-green text-white px-6 py-2 rounded hover:opacity-90 transition">Search</button>
         </form>
       </div>
     </div>
