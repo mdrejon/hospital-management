@@ -102,7 +102,9 @@
                                 <label :for="'test-' + t.id" class="flex items-center gap-3 cursor-pointer flex-1">
                                     <input :id="'test-' + t.id" type="checkbox" :value="t.id" v-model="form.test_ids" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
                                     <div>
-                                        <div class="text-sm font-semibold text-gray-900">{{ localized(t.name) }}</div>
+                                        <div class="text-sm font-semibold text-gray-900">
+                                            {{ localized(t.name) }}
+                                        </div>
                                         <div class="text-xs text-gray-400 font-mono">Code: {{ t.code }} &bull; Sample: {{ t.sample_type || 'N/A' }}</div>
                                     </div>
                                 </label>
@@ -125,53 +127,95 @@
                         <h2 class="text-sm font-bold uppercase tracking-wider text-emerald-700 border-b pb-3">Billing Summary</h2>
 
                         <!-- Agent Discount (private to agent) -->
+                        <!-- Patient Discount -->
                         <div class="border-t pt-4 space-y-3">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-purple-700">
-                                🎁 Agent Discount (Optional)
-                            </h3>
-                            
-                            <!-- Discount Type Selector -->
-                            <div class="flex gap-2">
-                                <button type="button" @click="form.agent_discount_type = 'none'; form.agent_discount_value = 0" 
-                                    :class="form.agent_discount_type === 'none' ? 'bg-gray-200 font-bold' : 'bg-gray-50 hover:bg-gray-100'"
-                                    class="flex-1 py-1.5 text-xs rounded border text-gray-700 transition-colors">None</button>
-                                <button type="button" @click="form.agent_discount_type = 'percentage'"
-                                    :class="form.agent_discount_type === 'percentage' ? 'bg-purple-100 text-purple-700 font-bold border-purple-400' : 'bg-gray-50 hover:bg-gray-100'"
-                                    class="flex-1 py-1.5 text-xs rounded border transition-colors">%</button>
-                                <button type="button" @click="form.agent_discount_type = 'fixed'"
-                                    :class="form.agent_discount_type === 'fixed' ? 'bg-blue-100 text-blue-700 font-bold border-blue-400' : 'bg-gray-50 hover:bg-gray-100'"
-                                    class="flex-1 py-1.5 text-xs rounded border transition-colors">BDT</button>
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-purple-700">
+                                    🎁 Discount
+                                </h3>
                             </div>
-                            
-                            <!-- Discount Value Input -->
-                            <div v-if="form.agent_discount_type !== 'none'" class="relative">
-                                <span class="absolute left-3 top-2 text-gray-400 text-xs font-mono">
-                                    {{ form.agent_discount_type === 'percentage' ? '%' : 'BDT' }}
-                                </span>
-                                <input v-model.number="form.agent_discount_value" type="number" min="0"
-                                    :max="form.agent_discount_type === 'percentage' ? maxDiscountPct : maxDiscountFixed"
-                                    step="0.01" class="w-full pl-10 pr-3 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none" 
-                                    :placeholder="form.agent_discount_type === 'percentage' ? `Max ${maxDiscountPct}%` : `Max BDT ${maxDiscountFixed}`" />
+
+                            <!-- Discount Mode Selector (Overall vs Per-Test) -->
+                            <div v-if="form.test_ids.length > 1" class="flex gap-2">
+                                <button type="button" @click="discountMode = 'overall'; resetDiscountValues()" 
+                                    :class="discountMode === 'overall' ? 'bg-purple-100 text-purple-800 font-bold border-purple-300' : 'bg-gray-50 text-gray-600 border-gray-200'"
+                                    class="flex-1 py-1 text-2xs rounded border transition-colors">
+                                    Overall Ratio Discount
+                                </button>
+                                <button type="button" @click="discountMode = 'per_item'; resetDiscountValues()" 
+                                    :class="discountMode === 'per_item' ? 'bg-purple-100 text-purple-800 font-bold border-purple-300' : 'bg-gray-50 text-gray-600 border-gray-200'"
+                                    class="flex-1 py-1 text-2xs rounded border transition-colors">
+                                    Per-Test Custom Discount
+                                </button>
+                            </div>
+
+                            <!-- Overall Mode Controls -->
+                            <div v-if="discountMode === 'overall'" class="space-y-2">
+                                <div class="flex gap-2">
+                                    <button type="button" @click="form.agent_discount_type = 'none'; form.agent_discount_value = 0" 
+                                        :class="form.agent_discount_type === 'none' ? 'bg-gray-200 font-bold' : 'bg-gray-50 hover:bg-gray-100'"
+                                        class="flex-1 py-1.5 text-xs rounded border text-gray-700 transition-colors">None</button>
+                                    <button type="button" @click="form.agent_discount_type = 'percentage'"
+                                        :class="form.agent_discount_type === 'percentage' ? 'bg-purple-100 text-purple-700 font-bold border-purple-400' : 'bg-gray-50 hover:bg-gray-100'"
+                                        class="flex-1 py-1.5 text-xs rounded border transition-colors">%</button>
+                                    <button type="button" @click="form.agent_discount_type = 'fixed'"
+                                        :class="form.agent_discount_type === 'fixed' ? 'bg-blue-100 text-blue-700 font-bold border-blue-400' : 'bg-gray-50 hover:bg-gray-100'"
+                                        class="flex-1 py-1.5 text-xs rounded border transition-colors">BDT</button>
+                                </div>
+                                
+                                <div v-if="form.agent_discount_type !== 'none'" class="relative">
+                                    <span class="absolute left-3 top-2 text-gray-400 text-xs font-mono">
+                                        {{ form.agent_discount_type === 'percentage' ? '%' : 'BDT' }}
+                                    </span>
+                                    <input v-model.number="form.agent_discount_value" type="number" lang="en" min="0"
+                                        :max="form.agent_discount_type === 'percentage' ? effectiveMaxPct : effectiveMaxFixed"
+                                        step="0.01" class="w-full pl-10 pr-3 py-1.5 text-sm border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none" 
+                                        :placeholder="form.agent_discount_type === 'percentage' ? `Max ${effectiveMaxPct}%` : `Max BDT ${effectiveMaxFixed}`" />
+                                </div>
+
+                                <p v-if="form.agent_discount_type === 'percentage' && form.agent_discount_value > 0" class="text-3xs text-purple-700 bg-purple-50 p-2 rounded border border-purple-200">
+                                    💡 <strong>{{ form.agent_discount_value }}% discount</strong> is applied to each test.
+                                </p>
+                            </div>
+
+                            <!-- Per-Item Mode Controls -->
+                            <div v-if="discountMode === 'per_item'" class="space-y-2">
+                                <div class="space-y-2 max-h-48 overflow-y-auto border rounded-lg p-2 bg-gray-50">
+                                    <div v-for="t in selectedTestObjects" :key="t.id" class="p-2 bg-white rounded border border-gray-200 text-xs space-y-1">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-semibold text-gray-900 truncate max-w-[140px]">{{ localized(t.name) }}</span>
+                                            <span class="text-gray-400 font-medium text-3xs">Max: BDT {{ getTestGrossCommission(t) }}</span>
+                                        </div>
+                                        <div class="flex items-center justify-between gap-2">
+                                            <span class="text-2xs text-gray-500">Discount (BDT):</span>
+                                            <input type="number" lang="en" min="0" :max="getTestGrossCommission(t)" step="0.5"
+                                                v-model.number="itemDiscounts[t.id]"
+                                                class="w-24 px-2 py-0.5 text-xs border rounded text-right focus:outline-none focus:ring-1 focus:ring-purple-500"
+                                                :placeholder="'Max ' + getTestGrossCommission(t)" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Applied discount preview -->
                             <div v-if="agentDiscountAmount > 0" class="flex justify-between text-purple-700 text-xs">
-                                <span>Agent Discount Applied:</span>
+                                <span>Discount Applied:</span>
                                 <span class="font-bold">-BDT {{ agentDiscountAmount.toLocaleString() }}</span>
                             </div>
                         </div>
 
+                        <!-- Patient Billing Summary -->
                         <div class="space-y-2 text-xs border-t pt-4">
                             <div class="flex justify-between text-gray-500">
                                 <span>Subtotal ({{ form.test_ids.length }} tests):</span>
                                 <span class="font-semibold text-gray-900">BDT {{ totalSubtotal.toLocaleString() }}</span>
                             </div>
                             <div v-if="totalDiscounts > 0" class="flex justify-between text-emerald-600">
-                                <span>System Discounts:</span>
+                                <span>Catalog Discounts:</span>
                                 <span class="font-semibold">- BDT {{ totalDiscounts.toLocaleString() }}</span>
                             </div>
                             <div v-if="agentDiscountAmount > 0" class="flex justify-between text-purple-600">
-                                <span>Agent Discount:</span>
+                                <span>Discount:</span>
                                 <span class="font-semibold">- BDT {{ agentDiscountAmount.toLocaleString() }}</span>
                             </div>
                             <div class="border-t pt-3 flex justify-between items-baseline">
@@ -258,6 +302,8 @@ const props = defineProps({
 
 const today = new Date().toISOString().split('T')[0];
 const testSearch = ref('');
+const discountMode = ref('overall'); // 'overall' or 'per_item'
+const itemDiscounts = ref({});
 
 const agentRate = computed(() => Number(props.agent?.test_commission_rate || 15));
 
@@ -283,6 +329,22 @@ function localized(val) {
 const testsList = computed(() => {
     return Array.isArray(props.allTests) ? props.allTests : (props.allTests?.data || []);
 });
+
+function getTestCommissionRate(t) {
+    if (t.agent_commission_rate !== undefined && t.agent_commission_rate !== null) {
+        return Number(t.agent_commission_rate);
+    }
+    if (t.commission_rate !== undefined && t.commission_rate !== null) {
+        return Number(t.commission_rate);
+    }
+    return agentRate.value;
+}
+
+function getTestGrossCommission(t) {
+    const price = parseFloat(t.final_price) || 0;
+    const rate = getTestCommissionRate(t);
+    return Math.round((price * rate / 100) * 100) / 100;
+}
 
 const filteredTests = computed(() => {
     if (!testSearch.value) return testsList.value;
@@ -315,11 +377,12 @@ const form = useForm({
     notes: '',
     agent_discount_type: 'none',
     agent_discount_value: 0,
+    item_discounts: {},
     payment_type: props.paymentSettings?.allow_without_pay !== false ? 'without_pay' : 'online',
     payment_gateway: defaultGateway.value || 'bkash',
 });
 
-// Calculate totals based on selected checkboxes
+// Selected tests
 const selectedTestObjects = computed(() => {
     return testsList.value.filter(t => form.test_ids.includes(t.id));
 });
@@ -336,23 +399,70 @@ const totalDiscounts = computed(() => {
     }, 0);
 });
 
+const totalCatalogAmount = computed(() => {
+    return Math.max(0, totalSubtotal.value - totalDiscounts.value);
+});
+
+const totalGrossCommission = computed(() => {
+    return selectedTestObjects.value.reduce((acc, t) => {
+        return acc + getTestGrossCommission(t);
+    }, 0);
+});
+
+// Effective maximum discount cap: Cannot exceed commission
+const effectiveMaxPct = computed(() => {
+    if (selectedTestObjects.value.length === 0) return props.maxDiscountPct;
+    // An overall percentage discount cannot exceed the minimum commission rate among selected tests
+    // so no single test drops below zero commission.
+    const minRate = Math.min(...selectedTestObjects.value.map(t => getTestCommissionRate(t)));
+    return Math.min(props.maxDiscountPct, minRate);
+});
+
+const effectiveMaxFixed = computed(() => {
+    return Math.min(props.maxDiscountFixed, totalGrossCommission.value, totalCatalogAmount.value);
+});
+
 const agentDiscountAmount = computed(() => {
-    if (form.agent_discount_type === 'none' || !form.agent_discount_value) return 0;
-    const afterCatalog = totalSubtotal.value - totalDiscounts.value;
-    if (form.agent_discount_type === 'percentage') {
-        const pct = Math.min(form.agent_discount_value, props.maxDiscountPct);
-        return Math.round(afterCatalog * pct / 100);
+    if (discountMode.value === 'per_item') {
+        let sum = 0;
+        for (const t of selectedTestObjects.value) {
+            const maxForTest = getTestGrossCommission(t);
+            const val = parseFloat(itemDiscounts.value[t.id]) || 0;
+            sum += Math.min(val, maxForTest);
+        }
+        return Math.round(sum * 100) / 100;
     }
-    return Math.min(form.agent_discount_value, afterCatalog, props.maxDiscountFixed);
+
+    if (form.agent_discount_type === 'none' || !form.agent_discount_value) return 0;
+    if (form.agent_discount_type === 'percentage') {
+        const pct = Math.min(form.agent_discount_value, effectiveMaxPct.value);
+        return Math.round(totalCatalogAmount.value * pct / 100);
+    }
+    return Math.min(form.agent_discount_value, effectiveMaxFixed.value);
+});
+
+const netAgentCommission = computed(() => {
+    return Math.max(0, Math.round((totalGrossCommission.value - agentDiscountAmount.value) * 100) / 100);
 });
 
 const netPayable = computed(() => {
-    return Math.max(0, totalSubtotal.value - totalDiscounts.value - agentDiscountAmount.value);
+    return Math.max(0, totalCatalogAmount.value - agentDiscountAmount.value);
 });
 
-
+function resetDiscountValues() {
+    form.agent_discount_type = 'none';
+    form.agent_discount_value = 0;
+    itemDiscounts.value = {};
+}
 
 function submit() {
+    if (discountMode.value === 'per_item') {
+        form.item_discounts = itemDiscounts.value;
+        form.agent_discount_type = 'fixed';
+        form.agent_discount_value = agentDiscountAmount.value;
+    } else {
+        form.item_discounts = {};
+    }
     form.post(route('agent.test.store'));
 }
 </script>

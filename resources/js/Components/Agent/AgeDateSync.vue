@@ -15,15 +15,15 @@
             </div>
             <div>
                 <label class="block text-2xs font-bold text-gray-700 mb-1">Age (Y)</label>
-                <input type="number" v-model.number="ageY" min="0" max="150" @input="updateDobFromAge" class="w-full px-2.5 py-1.5 text-xs border border-gray-200 rounded focus:ring-1 focus:ring-purple-500 outline-none bg-white" />
+                <input type="number" lang="en" v-model.number="ageY" min="0" max="150" placeholder="e.g. 28" @input="updateDobFromAge" class="w-full px-2.5 py-1.5 text-xs border border-gray-200 rounded focus:ring-1 focus:ring-purple-500 outline-none bg-white" />
             </div>
             <div>
                 <label class="block text-2xs font-bold text-gray-700 mb-1">Age (M)</label>
-                <input type="number" v-model.number="ageM" min="0" max="11" @input="updateDobFromAge" class="w-full px-2.5 py-1.5 text-xs border border-gray-200 rounded focus:ring-1 focus:ring-purple-500 outline-none bg-white" />
+                <input type="number" lang="en" v-model.number="ageM" min="0" max="11" placeholder="0-11" @input="updateDobFromAge" class="w-full px-2.5 py-1.5 text-xs border border-gray-200 rounded focus:ring-1 focus:ring-purple-500 outline-none bg-white" />
             </div>
             <div>
                 <label class="block text-2xs font-bold text-gray-700 mb-1">Age (D)</label>
-                <input type="number" v-model.number="ageD" min="0" max="31" @input="updateDobFromAge" class="w-full px-2.5 py-1.5 text-xs border border-gray-200 rounded focus:ring-1 focus:ring-purple-500 outline-none bg-white" />
+                <input type="number" lang="en" v-model.number="ageD" min="0" max="31" placeholder="0-31" @input="updateDobFromAge" class="w-full px-2.5 py-1.5 text-xs border border-gray-200 rounded focus:ring-1 focus:ring-purple-500 outline-none bg-white" />
             </div>
         </div>
     </div>
@@ -84,10 +84,17 @@ function calculateAgeFromDob(dobStr) {
 function updateDobFromAge() {
     isUpdatingFromAge = true;
     
-    const y = parseInt(ageY.value) || 0;
+    let y = parseInt(ageY.value) || 0;
     const m = parseInt(ageM.value) || 0;
     const d = parseInt(ageD.value) || 0;
     
+    const today = new Date();
+    // If user mistakenly entered birth year (e.g. 1997) instead of age in years
+    if (y >= 1900 && y <= today.getFullYear()) {
+        y = today.getFullYear() - y;
+        ageY.value = y;
+    }
+
     if (y === 0 && m === 0 && d === 0 && !ageY.value && !ageM.value && !ageD.value) {
         dobDate.value = '';
         emit('update:modelValue', '');
@@ -95,7 +102,6 @@ function updateDobFromAge() {
         return;
     }
 
-    const today = new Date();
     // Calculate new date by subtracting years, months, days
     let targetDate = new Date(today.getFullYear() - y, today.getMonth() - m, today.getDate() - d);
     

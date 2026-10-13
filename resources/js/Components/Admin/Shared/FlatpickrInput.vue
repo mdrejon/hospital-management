@@ -3,6 +3,7 @@
         <input
             ref="inputRef"
             type="text"
+            lang="en"
             :placeholder="placeholder"
             :class="inputClass"
             readonly
@@ -51,8 +52,14 @@ onMounted(() => {
         onChange: (selectedDates, dateStr) => {
             emit('update:modelValue', dateStr);
         },
-        onReady: (_, __, fp) => {
-            if (props.modelValue) fp.setDate(props.modelValue, false);
+        onReady: (_, __, instance) => {
+            if (instance?.calendarContainer) {
+                instance.calendarContainer.setAttribute('lang', 'en');
+            }
+            if (instance?.altInput) {
+                instance.altInput.setAttribute('lang', 'en');
+            }
+            if (props.modelValue) instance.setDate(props.modelValue, false);
         },
     });
 });

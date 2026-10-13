@@ -7,6 +7,7 @@ use App\Models\AgentCommission;
 use App\Models\AgentProfile;
 use App\Models\AgentWithdrawal;
 use App\Models\GlobalSetting;
+use App\Models\MedicalTestBooking;
 use App\Models\MedicalTestBookingItem;
 use App\Services\CommissionService;
 use Illuminate\Http\RedirectResponse;
@@ -45,11 +46,73 @@ class AgentWalletController extends Controller
             ->paginate(15, ['*'], 'com_page')
             ->withQueryString();
 
-        $commissions->getCollection()->transform(function ($com) {
+        $commissions->getCollection()->transform(function ($com) use ($agent) {
             if ($com->source_type === 'medical_test') {
-                $com->booking_items = MedicalTestBookingItem::where('medical_test_booking_id', $com->source_id)
-                    ->get(['test_name', 'test_code', 'unit_price', 'discount_amount', 
-                           'agent_discount_amount', 'commission_rate', 'commission_base_price', 'commission_amount']);
+                $booking = MedicalTestBooking::find($com->source_id);
+                $items = MedicalTestBookingItem::where('medical_test_booking_id', $com->source_id)
+                    ->get([
+                        'test_name', 'test_code', 'unit_price', 'discount_amount', 'final_price',
+                        'agent_discount_amount', 'gross_commission_amount', 'commission_rate',
+                        'commission_base_price', 'commission_amount'
+                    ]);
+
+                $totalGross = 0.0;
+                $totalDisc = 0.0;
+                $totalBase = 0.0;
+                foreach ($items as $item) {
+                    $base = (float) ($item->commission_base_price ?: $item->unit_price);
+                    if ((float) $item->gross_commission_amount <= 0 && (float) $item->commission_rate > 0) {
+                        $item->gross_commission_amount = round($base * (float) $item->commission_rate / 100, 2);
+                    }
+                    $disc = (float) $item->agent_discount_amount;
+                    $item->agent_discount_rate = ($base > 0 && $disc > 0) ? round(($disc / $base) * 100, 2) : 0.00;
+                    $totalGross += (float) $item->gross_commission_amount;
+                    $totalDisc += $disc;
+                    $totalBase += $base;
+                }
+
+                if ((float) $com->commission_rate <= 0 && $totalBase > 0) {
+                    $com->commission_rate = round(($totalGross / $totalBase) * 100, 2);
+                } elseif ((float) $com->commission_rate <= 0) {
+                    $com->commission_rate = (float) $agent->test_commission_rate;
+                }
+
+                $grossAmt = 0.0;
+                if ($booking && (float) $booking->agent_gross_commission_amount > 0) {
+                    $grossAmt = (float) $booking->agent_gross_commission_amount;
+                } elseif ($totalGross > 0) {
+                    $grossAmt = $totalGross;
+                } else {
+                    $grossAmt = (float) $com->amount;
+                }
+
+                $discAmt = 0.0;
+                if ($booking && (float) $booking->agent_discount_amount > 0) {
+                    $discAmt = (float) $booking->agent_discount_amount;
+                } elseif ($totalDisc > 0) {
+                    $discAmt = $totalDisc;
+                }
+
+                $discRate = 0.0;
+                if ($booking && (float) $booking->agent_discount_value > 0) {
+                    $discRate = (float) $booking->agent_discount_value;
+                } elseif ($totalBase > 0 && $discAmt > 0) {
+                    $discRate = round(($discAmt / $totalBase) * 100, 2);
+                }
+
+                $com->gross_commission_amount = $grossAmt;
+                $com->agent_discount_amount = $discAmt;
+                $com->agent_discount_rate = $discRate;
+                $com->net_commission_amount = (float) $com->amount;
+                $com->booking_items = $items;
+            } elseif ($com->source_type === 'appointment') {
+                if ((float) $com->commission_rate <= 0) {
+                    $com->commission_rate = (float) $agent->doctor_commission_rate;
+                }
+                $com->gross_commission_amount = (float) $com->amount;
+                $com->agent_discount_amount = 0.0;
+                $com->agent_discount_rate = 0.0;
+                $com->net_commission_amount = (float) $com->amount;
             }
             return $com;
         });

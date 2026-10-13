@@ -85,8 +85,12 @@
                         <span>BDT {{ Number(booking.subtotal_amount).toLocaleString() }}</span>
                     </div>
                     <div class="total-row discount" v-if="booking.discount_amount > 0">
-                        <span>Discount:</span>
+                        <span>Catalog Discount:</span>
                         <span>- BDT {{ Number(booking.discount_amount).toLocaleString() }}</span>
+                    </div>
+                    <div class="total-row discount" v-if="booking.agent_discount_amount > 0">
+                        <span>Special Discount:</span>
+                        <span>- BDT {{ Number(booking.agent_discount_amount).toLocaleString() }}</span>
                     </div>
                     <div class="total-row grand-total">
                         <span>Net Total:</span>

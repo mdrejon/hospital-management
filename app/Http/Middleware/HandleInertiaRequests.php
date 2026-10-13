@@ -19,6 +19,9 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = $request->user();
+        if ($user && $user->isAgent() && !$user->relationLoaded('agentProfile')) {
+            $user->load('agentProfile');
+        }
 
         return [
             ...parent::share($request),

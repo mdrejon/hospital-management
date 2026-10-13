@@ -28,22 +28,7 @@
                 </div>
             </div>
 
-            <!-- Agent Commission Banner (if booked via agent) -->
-            <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200/80 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-sm">
-                        🧑‍💼
-                    </div>
-                    <div>
-                        <div class="text-xs font-bold uppercase text-emerald-800 tracking-wider">Your Commission</div>
-                        <div class="text-sm font-semibold text-gray-900">For Medical Test Booking</div>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <div class="text-xs text-emerald-700 font-medium">Commission Earned:</div>
-                    <div class="text-lg font-black text-emerald-900">BDT {{ Number(booking.agent_commission_amount || 0).toLocaleString() }}</div>
-                </div>
-            </div>
+
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Left: Test Items & Lab Reports (2 cols) -->
@@ -60,7 +45,11 @@
                                 <div class="space-y-1">
                                     <div class="font-bold text-gray-900 text-sm">{{ item.test_name }}</div>
                                     <div class="text-xs text-gray-400 font-mono">Code: {{ item.test_code }} &bull; Specimen: {{ item.medical_test?.sample_type || 'Blood' }}</div>
-                                    <div class="text-xs text-blue-600">Standard Price: BDT {{ Number(item.unit_price).toLocaleString() }} <span v-if="item.discount_amount > 0" class="text-emerald-600">(- BDT {{ Number(item.discount_amount).toLocaleString() }} discount)</span></div>
+                                    <div class="text-xs text-blue-600 flex items-center gap-2 flex-wrap">
+                                        <span>Standard Price: BDT {{ Number(item.unit_price).toLocaleString() }}</span>
+                                        <span v-if="item.discount_amount > 0" class="text-emerald-600">(- BDT {{ Number(item.discount_amount).toLocaleString() }} discount)</span>
+                                        <span v-if="item.agent_discount_amount > 0" class="text-purple-600">(- BDT {{ Number(item.agent_discount_amount).toLocaleString() }} special discount)</span>
+                                    </div>
                                 </div>
 
                                 <div class="flex items-center gap-3">

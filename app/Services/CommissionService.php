@@ -130,10 +130,12 @@ class CommissionService
 
     /**
      * Handle Medical Test booking commission creation.
+     * Discount given to patient is deducted directly from Agent's Gross Commission:
+     * NetCommission = max(0, GrossCommission - AgentDiscount).
      */
     public static function handleMedicalTestCommission(MedicalTestBooking $booking, float $agentDiscountTotal = 0.0): ?AgentCommission
     {
-        if (!$booking->agent_id || $booking->total_amount <= 0) {
+        if (!$booking->agent_id || $booking->total_amount < 0) {
             return null;
         }
 
@@ -147,45 +149,75 @@ class CommissionService
             return null;
         }
 
-        $totalCommission = 0.0;
-        $effectiveTotal = (float) $booking->total_amount; // already includes agent discount
+        // If not explicitly passed, fallback to booking's stored agent_discount_amount
+        if ($agentDiscountTotal <= 0 && (float) $booking->agent_discount_amount > 0) {
+            $agentDiscountTotal = (float) $booking->agent_discount_amount;
+        }
 
-        // Distribute agent discount proportionally across items
+        $totalGrossCommission = 0.0;
+        $totalNetCommission = 0.0;
         $subtotalAfterCatalogDiscount = $items->sum(fn($item) => (float)$item->final_price);
 
-        foreach ($items as $item) {
+        // Check if items already have item-specific agent discounts stored
+        $existingItemsDiscountSum = $items->sum(fn($item) => (float)$item->agent_discount_amount);
+        $hasCustomItemDiscounts = $existingItemsDiscountSum > 0 && abs($existingItemsDiscountSum - $agentDiscountTotal) < 0.05;
+
+        $accumulatedDiscount = 0.0;
+        $itemCount = $items->count();
+
+        foreach ($items as $index => $item) {
             $test = $item->medicalTest;
             $rate = self::resolveTestCommissionRate($test, $agent);
+            $catalogPrice = (float) $item->final_price;
 
-            // Proportional agent discount for this item
-            $proportion = $subtotalAfterCatalogDiscount > 0
-                ? ((float)$item->final_price / $subtotalAfterCatalogDiscount)
-                : (1 / max(1, $items->count()));
+            // 1. Calculate Gross Commission on test price
+            $itemGrossCommission = round(($catalogPrice * $rate) / 100, 2);
 
-            $itemAgentDiscount = round($agentDiscountTotal * $proportion, 2);
-            $commissionBase   = max(0, (float)$item->final_price - $itemAgentDiscount);
-            $itemCommission   = round($commissionBase * $rate / 100, 2);
-            $totalCommission += $itemCommission;
+            // 2. Determine agent discount for this item
+            if ($hasCustomItemDiscounts) {
+                $itemAgentDiscount = (float) $item->agent_discount_amount;
+            } else {
+                // Distribute overall agent discount proportionally by test price ratio
+                if ($index === $itemCount - 1) {
+                    // Last item absorbs remaining to eliminate 1-cent rounding diffs
+                    $itemAgentDiscount = max(0, round($agentDiscountTotal - $accumulatedDiscount, 2));
+                } else {
+                    $proportion = $subtotalAfterCatalogDiscount > 0
+                        ? ($catalogPrice / $subtotalAfterCatalogDiscount)
+                        : (1 / max(1, $itemCount));
+                    $itemAgentDiscount = round($agentDiscountTotal * $proportion, 2);
+                    $accumulatedDiscount += $itemAgentDiscount;
+                }
+            }
 
-            // Update the booking item with commission breakdown
+            // 3. Deduct agent discount directly from Gross Commission
+            $itemNetCommission = max(0, round($itemGrossCommission - $itemAgentDiscount, 2));
+
+            $totalGrossCommission += $itemGrossCommission;
+            $totalNetCommission += $itemNetCommission;
+            $totalBasePrice = ($totalBasePrice ?? 0.0) + $catalogPrice;
+
+            // 4. Update the booking item with complete commission breakdown
             $item->update([
-                'agent_discount_amount'  => $itemAgentDiscount,
-                'commission_rate'        => $rate,
-                'commission_base_price'  => $commissionBase,
-                'commission_amount'      => $itemCommission,
+                'commission_base_price'   => $catalogPrice,
+                'commission_rate'         => $rate,
+                'gross_commission_amount' => $itemGrossCommission,
+                'agent_discount_amount'   => $itemAgentDiscount,
+                'commission_amount'       => $itemNetCommission,
             ]);
         }
 
-        if ($totalCommission <= 0) {
-            return null;
-        }
+        $overallRate = ($totalBasePrice ?? 0) > 0 
+            ? round(($totalGrossCommission / $totalBasePrice) * 100, 2) 
+            : (float) $agent->test_commission_rate;
 
         $isPaid = $booking->payment_status === MedicalTestBooking::PAYMENT_PAID || $booking->status === MedicalTestBooking::STATUS_COMPLETED;
         $status = $isPaid ? AgentCommission::STATUS_CREDITED : AgentCommission::STATUS_PENDING;
 
-        return DB::transaction(function () use ($booking, $agent, $totalCommission, $status, $isPaid) {
-            $booking->agent_commission_amount = $totalCommission;
-            $booking->agent_commission_status = $status;
+        return DB::transaction(function () use ($booking, $agent, $totalGrossCommission, $totalNetCommission, $agentDiscountTotal, $overallRate, $status, $isPaid) {
+            $booking->agent_gross_commission_amount = $totalGrossCommission;
+            $booking->agent_commission_amount       = $totalNetCommission;
+            $booking->agent_commission_status       = $status;
             $booking->saveQuietly();
 
             $commission = AgentCommission::updateOrCreate(
@@ -196,18 +228,18 @@ class CommissionService
                 ],
                 [
                     'booking_reference' => $booking->booking_number,
-                    'amount'            => $totalCommission,
-                    'commission_rate'   => 0,
+                    'amount'            => $totalNetCommission,
+                    'commission_rate'   => $overallRate,
                     'status'            => $status,
                     'credited_at'       => $isPaid ? now() : null,
-                    'notes'             => "Commission for Medical Test Booking {$booking->booking_number}",
+                    'notes'             => "Commission for Medical Test Booking {$booking->booking_number} (Gross: BDT {$totalGrossCommission}, Discount: -BDT {$agentDiscountTotal}, Net: BDT {$totalNetCommission})",
                 ]
             );
 
-            if ($isPaid) {
+            if ($isPaid && $totalNetCommission > 0) {
                 self::creditWallet(
                     $agent,
-                    $totalCommission,
+                    $totalNetCommission,
                     $commission,
                     "Medical test booking commission: {$booking->booking_number}"
                 );

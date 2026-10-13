@@ -20,6 +20,7 @@ class MedicalTestBookingItem extends Model
         'agent_discount_amount',
         'final_price',
         'commission_rate',
+        'gross_commission_amount',
         'commission_amount',
         'commission_base_price',
         'status',
@@ -27,13 +28,14 @@ class MedicalTestBookingItem extends Model
     ];
 
     protected $casts = [
-        'unit_price'            => 'decimal:2',
-        'discount_amount'       => 'decimal:2',
-        'agent_discount_amount' => 'decimal:2',
-        'final_price'           => 'decimal:2',
-        'commission_rate'       => 'decimal:2',
-        'commission_amount'     => 'decimal:2',
-        'commission_base_price' => 'decimal:2',
+        'unit_price'              => 'decimal:2',
+        'discount_amount'         => 'decimal:2',
+        'agent_discount_amount'   => 'decimal:2',
+        'final_price'             => 'decimal:2',
+        'commission_rate'         => 'decimal:2',
+        'gross_commission_amount' => 'decimal:2',
+        'commission_amount'       => 'decimal:2',
+        'commission_base_price'   => 'decimal:2',
     ];
 
     const STATUS_PENDING          = 'pending';

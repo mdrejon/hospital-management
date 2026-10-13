@@ -1,5 +1,5 @@
 <template>
-    <div class="flex h-screen bg-gray-100 overflow-hidden">
+    <div lang="en" class="flex h-screen bg-gray-100 overflow-hidden font-sans">
         <!-- Mobile backdrop -->
         <div
             v-if="mobileOpen"
@@ -57,7 +57,11 @@ function toggleSidebar() {
 
 let stopNavListener = null;
 onMounted(() => {
-    stopNavListener = router.on('navigate', () => { mobileOpen.value = false; });
+    document.documentElement.lang = 'en';
+    stopNavListener = router.on('navigate', () => { 
+        document.documentElement.lang = 'en';
+        mobileOpen.value = false; 
+    });
 });
 onUnmounted(() => stopNavListener && stopNavListener());
 </script>

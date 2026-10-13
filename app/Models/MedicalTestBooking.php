@@ -35,6 +35,7 @@ class MedicalTestBooking extends Model
         'due_amount',
         'payment_status',
         'payment_method',
+        'agent_gross_commission_amount',
         'agent_commission_amount',
         'agent_commission_status',
         'status',
@@ -43,16 +44,18 @@ class MedicalTestBooking extends Model
     ];
 
     protected $casts = [
-        'booking_date'            => 'date',
-        'preferred_date'          => 'date',
-        'date_of_birth'           => 'date',
-        'report_delivery_date'    => 'date',
-        'subtotal_amount'         => 'decimal:2',
-        'discount_amount'         => 'decimal:2',
-        'total_amount'            => 'decimal:2',
-        'paid_amount'             => 'decimal:2',
-        'due_amount'              => 'decimal:2',
-        'agent_commission_amount' => 'decimal:2',
+        'booking_date'                  => 'date',
+        'preferred_date'                => 'date',
+        'date_of_birth'                 => 'date',
+        'report_delivery_date'          => 'date',
+        'subtotal_amount'               => 'decimal:2',
+        'discount_amount'               => 'decimal:2',
+        'agent_discount_amount'         => 'decimal:2',
+        'total_amount'                  => 'decimal:2',
+        'paid_amount'                   => 'decimal:2',
+        'due_amount'                    => 'decimal:2',
+        'agent_gross_commission_amount' => 'decimal:2',
+        'agent_commission_amount'       => 'decimal:2',
     ];
 
     const STATUS_PENDING          = 'pending';

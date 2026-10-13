@@ -191,18 +191,7 @@
                             </div>
                         </div>
 
-                        <!-- Commission Preview (Agent Specific) -->
-                        <div class="bg-gray-800 text-white rounded-xl p-4 shadow-sm flex items-center justify-between mt-4">
-                            <div>
-                                <div class="text-2xs uppercase tracking-wider text-gray-400 font-semibold">Estimated Agent Commission</div>
-                                <div class="text-lg font-bold text-amber-400">
-                                    BDT {{ selectedDoctor ? estimatedCommission(selectedDoctor.consultation_fee) : '0' }}
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-2xs text-gray-400">Rate: {{ agent?.doctor_commission_rate || 10 }}%</div>
-                            </div>
-                        </div>
+
 
                         <button type="submit" :disabled="form.processing || !form.doctor_id" class="w-full py-3.5 rounded-lg font-bold text-sm bg-[#0b8b6a] text-white hover:bg-emerald-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mt-4">
                             <span v-if="form.processing">Processing...</span>

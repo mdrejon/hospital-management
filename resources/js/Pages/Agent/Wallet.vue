@@ -24,11 +24,11 @@
                 <div class="rounded-lg p-5 text-white bg-emerald-600 flex flex-col justify-between shadow-sm">
                     <div>
                         <p class="text-xs font-medium uppercase tracking-wider text-emerald-100">Available Wallet Balance</p>
-                        <p class="text-2xl font-bold leading-tight mt-1">BDT {{ Number(agent.wallet_balance).toLocaleString() }}</p>
+                        <p class="text-2xl font-bold leading-tight mt-1">BDT {{ Number(stats.wallet_balance ?? agent.wallet_balance).toLocaleString() }}</p>
                     </div>
                     <div class="pt-3 mt-3 border-t border-emerald-500/50 flex items-center justify-between text-xs text-emerald-100">
                         <span>Min: BDT {{ minWithdrawalAmount }}</span>
-                        <button v-if="agent.wallet_balance >= minWithdrawalAmount" @click="openWithdrawModal" class="underline font-semibold hover:text-white">Cash Out &rarr;</button>
+                        <button v-if="(stats.wallet_balance ?? agent.wallet_balance) >= minWithdrawalAmount" @click="openWithdrawModal" class="underline font-semibold hover:text-white">Cash Out &rarr;</button>
                     </div>
                 </div>
 
@@ -36,7 +36,7 @@
                 <div class="rounded-lg p-5 text-white bg-blue-600 flex flex-col justify-between shadow-sm">
                     <div>
                         <p class="text-xs font-medium uppercase tracking-wider text-blue-100">Total Lifetime Earnings</p>
-                        <p class="text-2xl font-bold leading-tight mt-1">BDT {{ Number(agent.total_earned_commission).toLocaleString() }}</p>
+                        <p class="text-2xl font-bold leading-tight mt-1">BDT {{ Number(stats.total_earned_commission ?? agent.total_earned_commission).toLocaleString() }}</p>
                     </div>
                     <div class="pt-3 mt-3 border-t border-blue-500/50 flex items-center justify-between text-xs text-blue-100">
                         <span>Pending:</span>
@@ -48,7 +48,7 @@
                 <div class="rounded-lg p-5 text-white bg-indigo-600 flex flex-col justify-between shadow-sm">
                     <div>
                         <p class="text-xs font-medium uppercase tracking-wider text-indigo-100">Total Paid Out</p>
-                        <p class="text-2xl font-bold leading-tight mt-1">BDT {{ Number(agent.total_withdrawn_commission).toLocaleString() }}</p>
+                        <p class="text-2xl font-bold leading-tight mt-1">BDT {{ Number(stats.total_withdrawn_commission ?? agent.total_withdrawn_commission).toLocaleString() }}</p>
                     </div>
                     <div class="pt-3 mt-3 border-t border-indigo-500/50 flex items-center justify-between text-xs text-indigo-100">
                         <span>In Queue:</span>
@@ -63,11 +63,11 @@
                         <div class="mt-2 space-y-1 text-xs">
                             <div class="flex items-center justify-between">
                                 <span class="text-gray-600">🩺 Doctor Booking:</span>
-                                <span class="font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">{{ agent.doctor_commission_rate }}{{ agent.commission_type === 'percentage' ? '%' : ' BDT' }}</span>
+                                <span class="font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">{{ stats.doctor_rate ?? agent.doctor_commission_rate }}{{ (stats.commission_type ?? agent.commission_type) === 'percentage' ? '%' : ' BDT' }}</span>
                             </div>
                             <div class="flex items-center justify-between">
                                 <span class="text-gray-600">🔬 Medical Test:</span>
-                                <span class="font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded">{{ agent.test_commission_rate }}{{ agent.commission_type === 'percentage' ? '%' : ' BDT' }}</span>
+                                <span class="font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded">{{ stats.test_rate ?? agent.test_commission_rate }}{{ (stats.commission_type ?? agent.commission_type) === 'percentage' ? '%' : ' BDT' }}</span>
                             </div>
                         </div>
                     </div>
@@ -113,19 +113,21 @@
                                     <th class="px-5 py-3">Booking / Reference</th>
                                     <th class="px-5 py-3">Service Type</th>
                                     <th class="px-5 py-3">Details & Remarks</th>
-                                    <th class="px-5 py-3">Rate Applied</th>
+                                    <th class="px-4 py-3 text-center">Rate Applied</th>
+                                    <th class="px-4 py-3 text-right">Gross Comm.</th>
+                                    <th class="px-4 py-3 text-right">Patient Disc.</th>
                                     <th class="px-5 py-3 text-right">Commission Earned</th>
-                                    <th class="px-5 py-3 text-center">Details</th>
-                                    <th class="px-5 py-3 text-center">Status</th>
+                                    <th class="px-4 py-3 text-center">Details</th>
+                                    <th class="px-4 py-3 text-center">Status</th>
                                     <th class="px-5 py-3 text-right">Credited Date</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                <tr v-for="com in commissions?.data || []" :key="com.id" class="hover:bg-gray-50">
-                                    <td class="px-5 py-3.5 font-mono font-semibold text-gray-800">
+                                <tr v-for="com in commissions?.data || []" :key="com.id" class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-5 py-3.5 font-mono font-semibold text-gray-800 whitespace-nowrap">
                                         {{ com.booking_reference || ('#' + com.source_id) }}
                                     </td>
-                                    <td class="px-5 py-3.5">
+                                    <td class="px-5 py-3.5 whitespace-nowrap">
                                         <span 
                                             :class="com.source_type === 'appointment' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-purple-50 text-purple-700 border-purple-200'"
                                             class="px-2 py-0.5 rounded text-2xs font-semibold uppercase border inline-flex items-center gap-1"
@@ -137,37 +139,79 @@
                                     <td class="px-5 py-3.5 text-gray-700 max-w-xs truncate">
                                         {{ com.notes || '—' }}
                                     </td>
-                                    <td class="px-5 py-3.5 font-medium text-gray-700">
-                                        {{ com.commission_rate }}%
+                                    <td class="px-4 py-3.5 text-center whitespace-nowrap">
+                                        <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-800 font-mono">
+                                            {{ getCommissionRateDisplay(com) }}
+                                        </span>
+                                        <div v-if="Number(getCommissionDiscount(com)) > 0" class="text-3xs text-purple-600 font-medium mt-0.5">
+                                            (-{{ getCommissionDiscountRate(com) }}% disc)
+                                        </div>
                                     </td>
-                                    <td class="px-5 py-3.5 text-right font-mono font-bold text-emerald-600">
-                                        +BDT {{ Number(com.amount).toLocaleString() }}
+                                    <td class="px-4 py-3.5 text-right font-mono font-semibold text-gray-800 whitespace-nowrap">
+                                        +BDT {{ Number(getCommissionGross(com)).toLocaleString() }}
                                     </td>
-                                    <td class="px-5 py-3.5 text-center">
+                                    <td class="px-4 py-3.5 text-right font-mono whitespace-nowrap">
+                                        <template v-if="Number(getCommissionDiscount(com)) > 0">
+                                            <span class="text-purple-700 font-bold">
+                                                -BDT {{ Number(getCommissionDiscount(com)).toLocaleString() }}
+                                            </span>
+                                            <span v-if="Number(getCommissionDiscountRate(com)) > 0" class="block text-3xs text-purple-600 font-sans font-medium">
+                                                {{ getCommissionDiscountRate(com) }}% disc
+                                            </span>
+                                        </template>
+                                        <span v-else class="text-gray-300 font-mono">—</span>
+                                    </td>
+                                    <td class="px-5 py-3.5 text-right whitespace-nowrap">
+                                        <span class="font-mono font-bold text-emerald-600 text-sm">
+                                            +BDT {{ Number(com.amount).toLocaleString() }}
+                                        </span>
+                                        <div v-if="Number(getCommissionDiscount(com)) > 0" class="text-3xs text-gray-400 font-sans">
+                                            Net Earned
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3.5 text-center whitespace-nowrap">
                                         <button v-if="com.source_type === 'medical_test' && com.booking_items?.length"
                                             @click="openCommissionDetail(com)"
-                                            class="px-2 py-1 text-2xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded hover:bg-blue-100 transition-colors">
-                                            📋 Details
+                                            class="px-2.5 py-1 text-2xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded hover:bg-blue-100 transition-colors inline-flex items-center gap-1 shadow-2xs">
+                                            <span>📋</span> Details
                                         </button>
                                         <span v-else class="text-gray-300 text-2xs">—</span>
                                     </td>
-                                    <td class="px-5 py-3.5 text-center">
+                                    <td class="px-4 py-3.5 text-center whitespace-nowrap">
                                         <span :class="commissionStatusBadge(com.status)" class="px-2 py-0.5 rounded-full text-2xs font-semibold uppercase">
                                             {{ com.status }}
                                         </span>
                                     </td>
-                                    <td class="px-5 py-3.5 text-right text-gray-400">
+                                    <td class="px-5 py-3.5 text-right text-gray-400 whitespace-nowrap">
                                         {{ com.credited_at ? new Date(com.credited_at).toLocaleString() : (new Date(com.created_at).toLocaleString()) }}
                                     </td>
                                 </tr>
                                 <tr v-if="!commissions?.data || commissions.data.length === 0">
-                                    <td colspan="8" class="px-6 py-12 text-center text-gray-400">
+                                    <td colspan="10" class="px-6 py-12 text-center text-gray-400">
                                         <div class="text-2xl mb-1">🏷️</div>
                                         <div class="font-medium text-gray-600">No commissions recorded yet.</div>
                                         <div class="text-xs text-gray-400 mt-0.5">Book doctor appointments or medical tests to start earning commissions!</div>
                                     </td>
                                 </tr>
                             </tbody>
+                            <tfoot v-if="commissions?.data?.length" class="bg-gray-50/90 border-t-2 border-gray-200 text-xs font-semibold">
+                                <tr>
+                                    <td colspan="4" class="px-5 py-3 text-right text-gray-600 uppercase tracking-wider text-2xs font-bold">
+                                        Total on this page:
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-mono font-bold text-gray-900 whitespace-nowrap">
+                                        +BDT {{ pageGrossTotal.toLocaleString() }}
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-mono font-bold text-purple-700 whitespace-nowrap">
+                                        <span v-if="pageDiscountTotal > 0">-BDT {{ pageDiscountTotal.toLocaleString() }}</span>
+                                        <span v-else class="text-gray-300 font-normal">—</span>
+                                    </td>
+                                    <td class="px-5 py-3 text-right font-mono font-black text-emerald-600 text-sm whitespace-nowrap">
+                                        +BDT {{ pageNetTotal.toLocaleString() }}
+                                    </td>
+                                    <td colspan="3" class="px-4 py-3"></td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
 
@@ -315,18 +359,18 @@
 
             <!-- Per-Test Commission Breakdown Modal -->
             <div v-if="selectedCommission" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
-                <div class="bg-white rounded-xl max-w-3xl w-full shadow-2xl overflow-hidden">
+                <div class="bg-white rounded-xl max-w-3xl sm:max-w-4xl w-full shadow-2xl overflow-hidden">
                     <!-- Header -->
                     <div class="flex items-center justify-between p-5 border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-blue-50">
                         <div>
                             <h3 class="font-bold text-gray-800">Commission Breakdown</h3>
                             <p class="text-xs text-gray-500 mt-0.5">
-                                Booking: <span class="font-mono text-blue-600">{{ selectedCommission.booking_reference }}</span>
+                                Booking: <span class="font-mono text-blue-600 font-semibold">{{ selectedCommission.booking_reference }}</span>
                             </p>
                         </div>
                         <div class="text-right">
-                            <div class="text-xs text-gray-500">Total Commission</div>
-                            <div class="text-xl font-black text-emerald-600">
+                            <div class="text-xs text-gray-500 font-medium">Total Commission</div>
+                            <div class="text-xl font-black text-emerald-600 font-mono">
                                 BDT {{ Number(selectedCommission.amount).toLocaleString() }}
                             </div>
                         </div>
@@ -339,11 +383,12 @@
                             <thead class="bg-gray-50 border-b border-gray-200 sticky top-0">
                                 <tr>
                                     <th class="px-4 py-2.5 text-left font-semibold">Test Name</th>
-                                    <th class="px-4 py-2.5 text-right font-semibold">Test Price</th>
-                                    <th class="px-4 py-2.5 text-right font-semibold">Agent Discount</th>
-                                    <th class="px-4 py-2.5 text-right font-semibold">Commission Base</th>
-                                    <th class="px-4 py-2.5 text-right font-semibold">Rate</th>
-                                    <th class="px-4 py-2.5 text-right font-semibold text-emerald-700">Commission</th>
+                                    <th class="px-4 py-2.5 text-right font-semibold">Price</th>
+                                    <th class="px-4 py-2.5 text-right font-semibold text-blue-700">Rate</th>
+                                    <th class="px-4 py-2.5 text-right font-semibold text-gray-900">Gross Comm.</th>
+                                    <th class="px-4 py-2.5 text-right font-semibold text-purple-700">Disc. Rate</th>
+                                    <th class="px-4 py-2.5 text-right font-semibold text-purple-700">Patient Disc.</th>
+                                    <th class="px-4 py-2.5 text-right font-semibold text-emerald-700">Net Comm.</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -353,31 +398,49 @@
                                         <div class="text-2xs text-gray-400 font-mono">{{ item.test_code }}</div>
                                     </td>
                                     <td class="px-4 py-3 text-right font-mono text-gray-700">
-                                        BDT {{ Number(item.unit_price).toLocaleString() }}
-                                    </td>
-                                    <td class="px-4 py-3 text-right font-mono text-purple-600">
-                                        <span v-if="item.agent_discount_amount > 0">
-                                            -BDT {{ Number(item.agent_discount_amount).toLocaleString() }}
-                                        </span>
-                                        <span v-else class="text-gray-300">—</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-right font-mono text-gray-800 font-semibold">
-                                        BDT {{ Number(item.commission_base_price).toLocaleString() }}
+                                        BDT {{ Number(item.commission_base_price || item.unit_price).toLocaleString() }}
                                     </td>
                                     <td class="px-4 py-3 text-right">
                                         <span class="bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-bold">
                                             {{ item.commission_rate }}%
                                         </span>
                                     </td>
+                                    <td class="px-4 py-3 text-right font-mono font-semibold text-gray-900">
+                                        +BDT {{ Number(item.gross_commission_amount || (Number(item.commission_base_price || item.unit_price) * Number(item.commission_rate) / 100)).toLocaleString() }}
+                                    </td>
+                                    <td class="px-4 py-3 text-right">
+                                        <span v-if="Number(getItemDiscountRate(item)) > 0" class="bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded font-bold">
+                                            {{ getItemDiscountRate(item) }}%
+                                        </span>
+                                        <span v-else class="text-gray-300 font-mono text-xs">—</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-mono text-purple-700 font-semibold">
+                                        <span v-if="item.agent_discount_amount > 0">
+                                            -BDT {{ Number(item.agent_discount_amount).toLocaleString() }}
+                                        </span>
+                                        <span v-else class="text-gray-300">—</span>
+                                    </td>
                                     <td class="px-4 py-3 text-right font-mono font-bold text-emerald-600">
                                         +BDT {{ Number(item.commission_amount).toLocaleString() }}
                                     </td>
                                 </tr>
                             </tbody>
-                            <tfoot class="bg-emerald-50 border-t-2 border-emerald-200">
+                            <tfoot class="bg-emerald-50/70 border-t-2 border-emerald-200">
                                 <tr>
-                                    <td colspan="5" class="px-4 py-3 text-sm font-bold text-right text-gray-700">
-                                        Total Commission Earned:
+                                    <td colspan="3" class="px-4 py-3 text-xs font-bold text-right text-gray-700">
+                                        Totals:
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-mono font-bold text-gray-900">
+                                        +BDT {{ getCommissionGrossTotal(selectedCommission).toLocaleString() }}
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-mono text-xs text-purple-700 font-bold">
+                                        <span v-if="Number(getCommissionAverageDiscountRate(selectedCommission)) > 0">
+                                            {{ getCommissionAverageDiscountRate(selectedCommission) }}%
+                                        </span>
+                                        <span v-else class="text-gray-300">—</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-mono font-bold text-purple-700">
+                                        -BDT {{ getCommissionDiscountTotal(selectedCommission).toLocaleString() }}
                                     </td>
                                     <td class="px-4 py-3 text-right font-mono font-black text-emerald-700 text-sm">
                                         +BDT {{ Number(selectedCommission.amount).toLocaleString() }}
@@ -387,12 +450,28 @@
                         </table>
                     </div>
 
-                    <!-- Status badge -->
-                    <div class="p-4 border-t flex items-center justify-between">
-                        <span :class="commissionStatusBadge(selectedCommission.status)" class="px-3 py-1 rounded-full text-xs font-semibold uppercase">
-                            {{ selectedCommission.status }}
-                        </span>
-                        <button @click="selectedCommission = null" class="px-4 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded transition-colors">Close</button>
+                    <!-- Bottom Summary & Action Bar -->
+                    <div class="p-4 bg-gradient-to-r from-gray-50 via-emerald-50/40 to-blue-50/30 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-gray-500 font-medium">Status:</span>
+                            <span :class="commissionStatusBadge(selectedCommission.status)" class="px-3 py-1 rounded-full text-xs font-semibold uppercase">
+                                {{ selectedCommission.status }}
+                            </span>
+                        </div>
+
+                        <!-- Prominent Total Commission Card at the bottom -->
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-3 bg-white border border-emerald-300 px-4 py-2 rounded-xl shadow-xs">
+                                <span class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">💰</span>
+                                <div>
+                                    <div class="text-3xs text-gray-500 uppercase tracking-wider font-bold">Total Net Commission</div>
+                                    <div class="text-base sm:text-lg font-black text-emerald-600 font-mono leading-tight">
+                                        BDT {{ Number(selectedCommission.amount).toLocaleString() }}
+                                    </div>
+                                </div>
+                            </div>
+                            <button @click="selectedCommission = null" class="px-5 py-2 text-xs font-semibold text-gray-700 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg shadow-xs transition-colors">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -544,7 +623,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import AgentLayout from '@/Layouts/AgentLayout.vue';
 
@@ -585,6 +664,94 @@ const selectedCommission = ref(null);
 function openCommissionDetail(commission) {
     selectedCommission.value = commission;
 }
+
+function getCommissionGrossTotal(com) {
+    if (!com?.booking_items || !Array.isArray(com.booking_items)) return Number(com?.amount || 0);
+    return com.booking_items.reduce((acc, item) => {
+        const gross = Number(item.gross_commission_amount) || (Number(item.commission_base_price || item.unit_price) * Number(item.commission_rate) / 100);
+        return acc + Math.round(gross * 100) / 100;
+    }, 0);
+}
+
+function getCommissionDiscountTotal(com) {
+    if (!com?.booking_items || !Array.isArray(com.booking_items)) return 0;
+    return com.booking_items.reduce((acc, item) => {
+        return acc + (Number(item.agent_discount_amount) || 0);
+    }, 0);
+}
+
+function getItemDiscountRate(item) {
+    if (item.agent_discount_rate !== undefined && item.agent_discount_rate !== null) {
+        return Number(item.agent_discount_rate).toFixed(2);
+    }
+    const base = Number(item.commission_base_price || item.unit_price) || 0;
+    const disc = Number(item.agent_discount_amount) || 0;
+    if (base <= 0 || disc <= 0) return '0.00';
+    return ((disc / base) * 100).toFixed(2);
+}
+
+function getCommissionAverageDiscountRate(com) {
+    if (!com?.booking_items || !Array.isArray(com.booking_items)) return '0.00';
+    const totalBase = com.booking_items.reduce((acc, item) => {
+        return acc + (Number(item.commission_base_price || item.unit_price) || 0);
+    }, 0);
+    const totalDisc = getCommissionDiscountTotal(com);
+    if (totalBase <= 0 || totalDisc <= 0) return '0.00';
+    return ((totalDisc / totalBase) * 100).toFixed(2);
+}
+
+function getCommissionRateDisplay(com) {
+    if (Number(com?.commission_rate) > 0) {
+        return Number(com.commission_rate).toFixed(2) + '%';
+    }
+    if (com?.booking_items?.length) {
+        const gross = getCommissionGrossTotal(com);
+        const totalBase = com.booking_items.reduce((acc, item) => acc + (Number(item.commission_base_price || item.unit_price) || 0), 0);
+        if (totalBase > 0 && gross > 0) {
+            return (Math.round((gross / totalBase) * 100 * 100) / 100).toFixed(2) + '%';
+        }
+    }
+    const defaultRate = com?.source_type === 'appointment' 
+        ? (props.stats?.doctor_rate ?? props.agent?.doctor_commission_rate) 
+        : (props.stats?.test_rate ?? props.agent?.test_commission_rate);
+    return (Number(defaultRate) || 0).toFixed(2) + '%';
+}
+
+function getCommissionGross(com) {
+    if (com?.gross_commission_amount !== undefined && com?.gross_commission_amount !== null && Number(com.gross_commission_amount) > 0) {
+        return Number(com.gross_commission_amount);
+    }
+    return getCommissionGrossTotal(com);
+}
+
+function getCommissionDiscount(com) {
+    if (com?.agent_discount_amount !== undefined && com?.agent_discount_amount !== null) {
+        return Number(com.agent_discount_amount);
+    }
+    return getCommissionDiscountTotal(com);
+}
+
+function getCommissionDiscountRate(com) {
+    if (com?.agent_discount_rate !== undefined && com?.agent_discount_rate !== null && Number(com.agent_discount_rate) > 0) {
+        return Number(com.agent_discount_rate).toFixed(2);
+    }
+    return getCommissionAverageDiscountRate(com);
+}
+
+const pageGrossTotal = computed(() => {
+    if (!props.commissions?.data) return 0;
+    return props.commissions.data.reduce((acc, com) => acc + getCommissionGross(com), 0);
+});
+
+const pageDiscountTotal = computed(() => {
+    if (!props.commissions?.data) return 0;
+    return props.commissions.data.reduce((acc, com) => acc + getCommissionDiscount(com), 0);
+});
+
+const pageNetTotal = computed(() => {
+    if (!props.commissions?.data) return 0;
+    return props.commissions.data.reduce((acc, com) => acc + Number(com.amount || 0), 0);
+});
 
 const paymentMethods = [
     { id: 'bkash',  name: 'bKash',  icon: '📱' },
