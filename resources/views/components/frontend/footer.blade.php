@@ -10,7 +10,7 @@
   @endif
 
   <!-- Main Footer Content -->
-  <div class="relative z-10 container mx-auto px-4 pt-16 lg:pt-24 pb-12">
+  <div class="relative z-10 container mx-auto px-4 pt-section pb-12">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
       
       <!-- Col 1: Brand & Socials -->
@@ -18,10 +18,10 @@
         <a href="{{ route('home') }}" class="inline-block mb-6 bg-white p-2 rounded shadow-sm">
           <img src="{{ !empty($footerSettings['footer_logo']) ? asset('storage/' . $footerSettings['footer_logo']) : asset('assets/img/logo.png') }}" alt="{{ $footerSettings['header_site_name'] ?? 'Medinosi' }}" class="h-14 w-auto" />
         </a>
-        <p class="text-[15px] text-gray-300 mb-6 leading-relaxed">
+        <p class="text-body-sm text-gray-300 mb-6 leading-relaxed">
           {{ $footerSettings['footer_brand_description'] ?? 'Our approach to it is unique around know work an we know doesn\'t work verified factors in play.' }}
         </p>
-        <h4 class="text-white font-bold mb-4">Social Media:</h4>
+        <h4 class="text-h6 text-white font-bold mb-4">Social Media:</h4>
         <div class="flex items-center gap-3">
           @if(!empty($footerSettings['footer_facebook_url']))
           <a href="{{ $footerSettings['footer_facebook_url'] }}" class="w-9 h-9 rounded-full border border-gray-500 flex items-center justify-center text-gray-400 hover:text-white hover:border-white transition" aria-label="Facebook">
@@ -48,29 +48,29 @@
 
       <!-- Col 2: Service Links (Two cols internally) -->
       <div>
-        <h4 class="text-lg font-bold text-white mb-6">Service Links</h4>
+        <h4 class="text-h5 font-bold text-white mb-6">Service Links</h4>
         <div class="grid grid-cols-2 gap-y-3 gap-x-4">
           @forelse(($footerSettings['footer_service_links'] ?? []) as $link)
-          <a href="{{ $link['url'] }}" class="text-gray-300 hover:text-white transition text-[15px]">{{ $link['label'] }}</a>
+          <a href="{{ $link['url'] }}" class="text-gray-300 hover:text-white transition text-body-sm">{{ $link['label'] }}</a>
           @empty
-          <a href="{{ route('faq') }}" class="text-gray-300 hover:text-white transition text-[15px]">Faq</a>
-          <a href="{{ url('privacy') }}" class="text-gray-300 hover:text-white transition text-[15px]">Privacy</a>
-          <a href="{{ url('policy') }}" class="text-gray-300 hover:text-white transition text-[15px]">Policy</a>
-          <a href="{{ route('about') }}" class="text-gray-300 hover:text-white transition text-[15px]">About</a>
-          <a href="{{ route('contact') }}" class="text-gray-300 hover:text-white transition text-[15px]">Support</a>
-          <a href="{{ route('services') }}" class="text-gray-300 hover:text-white transition text-[15px]">Skill</a>
-          <a href="{{ route('doctors') }}" class="text-gray-300 hover:text-white transition text-[15px]">Team</a>
-          <a href="{{ route('blog-list') }}" class="text-gray-300 hover:text-white transition text-[15px]">Blog</a>
-          <a href="{{ route('services') }}" class="text-gray-300 hover:text-white transition text-[15px]">Projects</a>
-          <a href="{{ route('contact') }}" class="text-gray-300 hover:text-white transition text-[15px]">Contact</a>
+          <a href="{{ route('faq') }}" class="text-gray-300 hover:text-white transition text-body-sm">Faq</a>
+          <a href="{{ url('privacy') }}" class="text-gray-300 hover:text-white transition text-body-sm">Privacy</a>
+          <a href="{{ url('policy') }}" class="text-gray-300 hover:text-white transition text-body-sm">Policy</a>
+          <a href="{{ route('about') }}" class="text-gray-300 hover:text-white transition text-body-sm">About</a>
+          <a href="{{ route('contact') }}" class="text-gray-300 hover:text-white transition text-body-sm">Support</a>
+          <a href="{{ route('services') }}" class="text-gray-300 hover:text-white transition text-body-sm">Skill</a>
+          <a href="{{ route('doctors') }}" class="text-gray-300 hover:text-white transition text-body-sm">Team</a>
+          <a href="{{ route('blog-list') }}" class="text-gray-300 hover:text-white transition text-body-sm">Blog</a>
+          <a href="{{ route('services') }}" class="text-gray-300 hover:text-white transition text-body-sm">Projects</a>
+          <a href="{{ route('contact') }}" class="text-gray-300 hover:text-white transition text-body-sm">Contact</a>
           @endforelse
         </div>
       </div>
 
       <!-- Col 3: Open Time -->
       <div>
-        <h4 class="text-lg font-bold text-white mb-6">Open Time</h4>
-        <ul class="text-[15px] text-gray-300 space-y-3">
+        <h4 class="text-h5 font-bold text-white mb-6">Open Time</h4>
+        <ul class="text-body-sm text-gray-300 space-y-3">
           @if(!empty($footerSettings['footer_opening_time']))
            <li class="flex justify-between border-b border-gray-600/50 border-dotted pb-2">
              <span>{{ $footerSettings['footer_opening_time'] }}</span>
@@ -87,13 +87,13 @@
 
       <!-- Col 4: Newsletter -->
       <div>
-        <h4 class="text-lg font-bold text-white mb-6">Newsletter</h4>
-        <p class="text-[15px] text-gray-300 mb-6 leading-relaxed">
+        <h4 class="text-h5 font-bold text-white mb-6">Newsletter</h4>
+        <p class="text-body-sm text-gray-300 mb-6 leading-relaxed">
           {{ $footerSettings['footer_newsletter_title'] ?? 'In alteration insipidity impression by travelling up motionless.' }}
         </p>
         <form action="#" class="flex flex-col gap-3">
-          <input type="email" placeholder="Your email address" class="w-full px-5 py-3.5 rounded-full text-[15px] text-gray-800 focus:outline-none" required>
-          <button type="submit" class="w-full bg-[#f59e0b] hover:bg-[#d97706] text-white px-5 py-3.5 rounded-full text-[15px] font-bold flex items-center justify-center gap-2 transition tracking-wider">
+          <input type="email" placeholder="Your email address" class="w-full px-5 py-3.5 rounded-full text-input text-gray-800 focus:outline-none" required>
+          <button type="submit" class="w-full bg-[#f59e0b] hover:bg-[#d97706] text-white px-5 py-3.5 rounded-full text-btn font-bold flex items-center justify-center gap-2 transition tracking-wider">
             SEND REQUEST
             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           </button>
@@ -105,7 +105,7 @@
 
   <!-- Copyright Bar -->
   <div class="relative z-10 border-t border-gray-700/60 mt-2">
-    <div class="container mx-auto px-4 py-6 text-center text-[15px] text-gray-300">
+    <div class="container mx-auto px-4 py-6 text-center text-small text-gray-300">
       &copy; {{ date('Y') }} Medicare Lab. All rights reserved. | Design & Development by <a href="https://www.wexnix.com" target="_blank" class="text-white hover:text-[#f59e0b] transition-colors underline decoration-gray-500 underline-offset-4">Wexnix Technologies Ltd.</a>
     </div>
   </div>

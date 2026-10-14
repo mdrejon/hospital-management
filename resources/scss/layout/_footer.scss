@@ -20,11 +20,11 @@
 }
 
 .footer-contact__title {
-  @apply text-2xl font-bold text-navy;
+  @apply text-h3 font-bold text-navy;
 }
 
 .footer-contact__subtitle {
-  @apply mt-1 text-sm text-slate-500;
+  @apply mt-1 text-small text-slate-500;
 }
 
 .footer-contact__items {
@@ -40,11 +40,11 @@
 }
 
 .footer-contact__label {
-  @apply text-base font-bold text-navy;
+  @apply text-h6 font-bold text-navy;
 }
 
 .footer-contact__value {
-  @apply mt-0.5 max-w-[210px] text-sm text-slate-500;
+  @apply mt-0.5 max-w-[210px] text-small text-slate-500;
 }
 
 // Columns -------------------------------------------------------------
@@ -57,11 +57,11 @@
 }
 
 .footer-about__desc {
-  @apply mt-4 text-sm leading-relaxed text-slate-500;
+  @apply mt-4 text-small leading-relaxed text-slate-500;
 }
 
 .footer-col__title {
-  @apply text-lg font-bold text-navy;
+  @apply text-h5 font-bold text-navy;
 }
 
 .footer-col__list {
@@ -69,7 +69,7 @@
 }
 
 .footer-col__link {
-  @apply text-sm font-medium text-slate-500 transition-colors duration-150 hover:text-brand-cyan;
+  @apply text-small font-medium text-slate-500 transition-colors duration-150 hover:text-brand-cyan;
 }
 
 // Newsletter ------------------------------------------------------------
@@ -78,11 +78,11 @@
 }
 
 .footer-newsletter__title {
-  @apply text-xl font-bold text-navy;
+  @apply text-h4 font-bold text-navy;
 }
 
 .footer-newsletter__subtitle {
-  @apply mt-1 text-sm text-slate-500;
+  @apply mt-1 text-small text-slate-500;
 
   mark {
     @apply rounded bg-fuchsia-600 px-1 text-white;
@@ -94,16 +94,16 @@
 }
 
 .footer-newsletter__input {
-  @apply w-full flex-1 bg-transparent px-6 py-3 text-sm text-navy placeholder:text-slate-400 focus:outline-none;
+  @apply w-full flex-1 bg-transparent px-6 py-3 text-input text-navy placeholder:text-slate-400 focus:outline-none;
 }
 
 .footer-newsletter__submit {
-  @apply shrink-0 rounded-full bg-brand-cyan px-6 py-3 text-sm font-semibold text-navy transition-all duration-200 hover:scale-105 hover:bg-white hover:ring-2 hover:ring-brand-cyan;
+  @apply shrink-0 rounded-full bg-brand-cyan px-6 py-3 text-btn font-semibold text-navy transition-all duration-200 hover:scale-105 hover:bg-white hover:ring-2 hover:ring-brand-cyan;
 }
 
 // Bottom bar ------------------------------------------------------------
 .footer-bottom {
-  @apply py-6 text-center text-sm text-slate-500;
+  @apply py-6 text-center text-small text-slate-500;
 
   a {
     @apply font-semibold text-brand-cyan;

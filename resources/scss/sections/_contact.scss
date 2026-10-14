@@ -5,7 +5,7 @@
 // ==========================================================================
 
 .contact {
-  @apply bg-white py-20 sm:py-24;
+  @apply bg-white py-section;
 }
 
 // The intro column gets more room than the form so the title holds two
@@ -15,11 +15,11 @@
 }
 
 .contact__title {
-  @apply text-3xl font-extrabold leading-tight text-navy sm:text-4xl;
+  @apply text-h2 font-extrabold text-navy;
 }
 
 .contact__desc {
-  @apply mt-5 max-w-xl text-base leading-relaxed text-muted;
+  @apply mt-5 max-w-xl text-body leading-relaxed text-muted;
 }
 
 // "Talk to over 215 doctor" pill + arrow bubble -------------------------
@@ -28,7 +28,7 @@
 }
 
 .contact__talk {
-  @apply flex items-center gap-8 rounded-full bg-footer-bg/70 py-3.5 pl-5 pr-12;
+  @apply flex items-center gap-4 rounded-full bg-slate-100 border border-slate-200/80 py-3.5 px-7 shadow-sm transition-colors;
 }
 
 .contact__avatars {
@@ -40,18 +40,18 @@
 }
 
 .contact__talk-text {
-  @apply text-lg font-medium text-navy;
+  @apply text-body font-semibold text-navy;
 }
 
 .contact__talk-arrow {
-  @apply flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-footer-bg/70 text-brand-cyan transition-colors duration-200 hover:bg-brand-cyan hover:text-white;
+  @apply flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand-red text-white shadow-md transition-all duration-200 hover:scale-105 hover:bg-black;
 }
 
 .contact__rating {
-  @apply mt-7 flex flex-wrap items-center gap-2 text-[15px] text-navy;
+  @apply mt-7 flex flex-wrap items-center gap-2 text-body-sm text-navy;
 
   strong {
-    @apply font-bold;
+    @apply font-bold text-gray-900;
   }
 }
 
@@ -61,44 +61,46 @@
 
 // Info cards (address / phone / mail / hours) ---------------------------
 .contact__cards {
-  @apply mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2;
+  @apply mt-section-gap grid grid-cols-1 gap-5 sm:grid-cols-2;
 }
 
 .contact-info-card {
-  @apply flex items-center gap-4 rounded-2xl bg-footer-bg/70 p-5;
+  @apply flex items-center gap-4 rounded-2xl bg-white border border-slate-200/90 p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md hover:border-slate-300;
 }
 
 .contact-info-card__icon {
-  @apply flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-brand-cyan transition-colors duration-200;
+  @apply flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-red-50 text-brand-red border border-red-100/80 transition-all duration-200;
 
   .contact-info-card:hover & {
-    @apply bg-brand-cyan text-white;
+    @apply bg-brand-red text-white shadow-md;
   }
 }
 
 .contact-info-card__title {
-  @apply text-lg font-bold text-navy;
+  @apply text-h5 font-bold text-navy;
 }
 
 .contact-info-card__text {
-  @apply mt-1 text-sm leading-relaxed text-muted;
+  @apply mt-1 text-small font-medium leading-relaxed text-slate-600;
 }
 
-// Cyan appointment form card ---------------------------------------------
+// Black appointment / message form card ----------------------------------
 .contact__form-card {
-  @apply rounded-[2rem] bg-brand-cyan p-8 sm:p-10;
+  @apply rounded-[2.25rem] p-8 sm:p-11 shadow-2xl border border-white/10;
+  background-color: #111827 !important; // Sleek modern black theme
 }
 
 .contact__form-title {
-  @apply text-2xl font-extrabold leading-snug text-white sm:text-3xl;
+  @apply text-h3 font-extrabold tracking-tight;
+  color: rgb(var(--color-accent-red, var(--color-secondary, 237 27 36))) !important; // Red title
 }
 
 .contact__form {
-  @apply mt-10 grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2;
+  @apply mt-8 grid grid-cols-1 gap-x-8 gap-y-7 sm:grid-cols-2;
 }
 
 .contact__field {
-  @apply w-full border-0 border-b-2 border-white/70 bg-transparent px-0 pb-3 text-base text-white placeholder-white/80 focus:border-white focus:outline-none focus:ring-0;
+  @apply w-full border-0 border-b-2 border-white/30 bg-transparent px-0 pb-3 text-input font-medium text-white placeholder-white/70 transition-colors duration-200 focus:border-white focus:outline-none focus:ring-0;
 }
 
 .contact__field--full {
@@ -106,11 +108,11 @@
 }
 
 .contact__submit {
-  @apply mt-2 inline-flex w-fit items-center gap-5 rounded-2xl bg-white py-2.5 pl-8 pr-2.5 text-xl font-medium text-navy transition-transform duration-200 hover:scale-105 sm:col-span-2;
+  @apply mt-3 inline-flex w-fit items-center gap-4 rounded-full bg-white py-3 pl-8 pr-3 text-btn-lg font-bold text-navy shadow-lg transition-all duration-200 hover:scale-105 hover:bg-slate-100 sm:col-span-2;
 }
 
 .contact__submit-icon {
-  @apply flex h-12 w-14 items-center justify-center rounded-xl bg-navy text-white;
+  @apply flex h-11 w-11 items-center justify-center rounded-full bg-brand-red text-white shadow;
 }
 
 // ==========================================================================
@@ -130,5 +132,5 @@
 }
 
 .locations__open {
-  @apply absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-bold text-[#1a73e8] shadow-md transition-colors duration-150 hover:text-navy;
+  @apply absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2.5 text-small font-bold text-[#1a73e8] shadow-md transition-colors duration-150 hover:text-navy;
 }

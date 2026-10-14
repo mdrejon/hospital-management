@@ -5,11 +5,11 @@
 @use "../abstracts/mixins" as m;
 
 .video-gallery-section {
-  @apply bg-[#f8fafc] py-20 sm:py-24;
+  @apply bg-[#f8fafc] py-section;
 }
 
 .video-gallery__grid {
-  @apply mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3;
+  @apply mt-section-gap grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3;
 }
 
 .video-card {
@@ -45,11 +45,11 @@
 }
 
 .video-card__badge-type {
-  @apply absolute left-4 top-4 rounded-lg bg-navy/85 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow-md backdrop-blur-sm;
+  @apply absolute left-4 top-4 rounded-lg bg-navy/85 px-3 py-1 text-tiny font-bold uppercase tracking-wider text-white shadow-md backdrop-blur-sm;
 }
 
 .video-card__badge-duration {
-  @apply absolute bottom-3.5 right-3.5 flex items-center gap-1.5 rounded-md bg-black/80 px-2.5 py-1 font-mono text-[11px] font-semibold text-white backdrop-blur-sm;
+  @apply absolute bottom-3.5 right-3.5 flex items-center gap-1.5 rounded-md bg-black/80 px-2.5 py-1 font-mono text-tiny font-semibold text-white backdrop-blur-sm;
 }
 
 .video-card__body {
@@ -61,7 +61,7 @@
 }
 
 .video-card__tag {
-  @apply flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-cyan;
+  @apply flex items-center gap-2 text-caption font-semibold uppercase tracking-wider text-brand-cyan;
 }
 
 .video-card__tag-dot {
@@ -69,11 +69,11 @@
 }
 
 .video-card__featured-pill {
-  @apply rounded-full border border-brand-green/30 bg-brand-green/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand-green;
+  @apply rounded-full border border-brand-green/30 bg-brand-green/10 px-2.5 py-0.5 text-tiny font-bold uppercase tracking-wider text-brand-green;
 }
 
 .video-card__title {
-  @apply mt-3 text-lg font-bold leading-snug text-navy transition-colors duration-200;
+  @apply mt-3 text-h5 font-bold text-navy transition-colors duration-200;
 
   a {
     @apply text-navy transition-colors duration-200 hover:text-brand-cyan;
@@ -81,7 +81,7 @@
 }
 
 .video-card__desc {
-  @apply mt-2 text-sm leading-relaxed text-muted line-clamp-2;
+  @apply mt-2 text-small leading-relaxed text-muted line-clamp-2;
 }
 
 .video-card__footer {
@@ -89,7 +89,7 @@
 }
 
 .video-card__btn {
-  @apply inline-flex items-center gap-2 rounded-full bg-footer-bg px-5 py-2 text-xs font-bold uppercase tracking-wider text-navy transition-all duration-200 hover:bg-brand-cyan hover:text-white;
+  @apply inline-flex items-center gap-2 rounded-full bg-footer-bg px-5 py-2 text-btn-sm font-bold uppercase tracking-wider text-navy transition-all duration-200 hover:bg-brand-cyan hover:text-white;
 }
 
 .video-card__btn-icon {
@@ -101,7 +101,7 @@
 }
 
 .video-card__channel {
-  @apply text-[11px] font-semibold uppercase tracking-wider text-muted;
+  @apply text-tiny font-semibold uppercase tracking-wider text-muted;
 }
 
 // Lightbox Modal for Video ------------------------------------------------
@@ -134,7 +134,7 @@
 }
 
 .video-lightbox__title {
-  @apply truncate text-sm font-bold sm:text-base text-white;
+  @apply truncate text-h6 font-bold text-white;
 }
 
 .video-lightbox__close {

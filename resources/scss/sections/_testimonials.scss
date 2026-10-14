@@ -8,7 +8,7 @@
 @use "../abstracts/variables" as v;
 
 .testimonials {
-  @apply relative overflow-hidden bg-navy pt-20 text-white;
+  @apply relative overflow-hidden bg-navy pt-section text-white;
 }
 
 .testimonials__bg {
@@ -91,7 +91,7 @@
 }
 
 .testimonials__title {
-  @apply max-w-lg text-3xl font-extrabold leading-snug sm:text-4xl;
+  @apply max-w-lg text-h2 font-extrabold;
 }
 
 // Plain thin arrows floating just outside the card (desktop only —
@@ -117,7 +117,7 @@
 // The clipping lives on the viewport, not the slider root, so the
 // absolutely-positioned arrows outside the card stay visible.
 .testimonial-slider {
-  @apply relative mt-10;
+  @apply relative mt-section-gap;
 }
 
 .testimonial-slider__viewport {
@@ -162,7 +162,7 @@
 }
 
 .testimonial-card__play {
-  @apply absolute inset-x-3 bottom-3 flex items-center gap-2 rounded-full bg-white py-1.5 pl-1.5 pr-4 text-xs font-semibold text-navy shadow-lg;
+  @apply absolute inset-x-3 bottom-3 flex items-center gap-2 rounded-full bg-white py-1.5 pl-1.5 pr-4 text-caption font-semibold text-navy shadow-lg;
 }
 
 .testimonial-card__play-icon {
@@ -170,11 +170,11 @@
 }
 
 .testimonial-card__name {
-  @apply mt-3 text-base font-bold text-navy;
+  @apply mt-3 text-h6 font-bold text-navy;
 }
 
 .testimonial-card__role {
-  @apply text-sm text-brand-cyan;
+  @apply text-small text-brand-cyan;
 }
 
 .testimonial-card__body {
@@ -182,11 +182,11 @@
 }
 
 .testimonial-card__title {
-  @apply text-xl font-bold text-navy;
+  @apply text-h4 font-bold text-navy;
 }
 
 .testimonial-card__quote {
-  @apply mt-3 text-[15px] leading-relaxed text-slate-500;
+  @apply mt-3 text-body-sm leading-relaxed text-slate-500;
 }
 
 // Two big overlapping circle outlines — the abstract quotation mark.

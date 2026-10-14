@@ -136,7 +136,7 @@ $doctorCards = $doctors->isNotEmpty()
 @endphp
 
 @if($doctorCards->isNotEmpty())
-<section class="doctors-page bg-gray-50 pt-16 pb-20">
+<section class="doctors-page bg-gray-50 py-section">
   <div class="container mx-auto">
     <div class="team__head">
       <p class="team__eyebrow">
@@ -147,7 +147,7 @@ $doctorCards = $doctors->isNotEmpty()
       <h2 class="team__title">{{ $specialization->name }} Specialists</h2>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 mt-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 mt-section-gap">
       @foreach($doctorCards as $card)
       <article class="bg-white rounded-lg overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.1)] transition-shadow duration-300 group h-full border border-gray-100">
         <!-- Image & Overlay -->
@@ -172,9 +172,9 @@ $doctorCards = $doctors->isNotEmpty()
         </div>
         <!-- Content -->
         <div class="p-6 text-center border-t border-gray-100">
-          <p class="text-gray-500 text-[13px] mb-1.5">{{ $card['role'] }}</p>
+          <p class="text-gray-500 text-small mb-1.5">{{ $card['role'] }}</p>
           <a href="{{ $card['url'] }}" class="inline-block hover:text-brand-cyan transition-colors">
-            <h3 class="text-navy text-[19px] font-bold">{{ $card['name'] }}</h3>
+            <h3 class="text-navy text-h4 font-bold">{{ $card['name'] }}</h3>
           </a>
         </div>
       </article>

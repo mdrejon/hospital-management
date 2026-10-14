@@ -20,6 +20,8 @@ return [
         'service_list' => 'Service List',
         'doctors' => "Doctor's",
         'gallery' => 'Gallery',
+        'photo_gallery' => 'Photo Gallery',
+        'video_gallery' => 'Video Gallery',
         'blog' => 'Blog',
         'contact_us' => 'Contact Us',
     ],
@@ -94,6 +96,7 @@ return [
         'view_all_services' => 'View All Services',
         'watch_video' => 'Watch The Video',
         'lets_talk' => 'Let\'s Talk',
+        'talk' => 'Talk',
 
         'services_badge' => 'Medical & General Care!',
         'services_title' => 'Amazing Services',

@@ -7,15 +7,15 @@
 @use "../abstracts/mixins" as m;
 
 .packages {
-  @apply overflow-hidden bg-footer-bg py-20 sm:py-24;
+  @apply overflow-hidden bg-footer-bg py-section;
 }
 
 .packages__head {
-  @apply container relative mx-auto pb-14 text-center;
+  @apply container relative mx-auto pb-section-gap text-center;
 }
 
 .packages__eyebrow {
-  @apply flex items-center justify-center gap-3 text-base italic font-medium text-navy;
+  @apply flex items-center justify-center gap-3 text-eyebrow italic font-medium text-navy;
 }
 
 .packages__eyebrow-dot {
@@ -23,7 +23,7 @@
 }
 
 .packages__title {
-  @apply relative mt-2 inline-block text-3xl font-extrabold text-navy sm:text-4xl;
+  @apply relative mt-2 inline-block text-h2 font-extrabold text-navy;
 
   .accent {
     @apply text-brand-cyan;
@@ -91,11 +91,11 @@
 }
 
 .package-card__title {
-  @apply text-base font-bold;
+  @apply text-h6 font-bold;
 }
 
 .package-card__desc {
-  @apply mt-1.5 text-xs leading-relaxed text-white/85;
+  @apply mt-1.5 text-caption leading-relaxed text-white/85;
 }
 
 // Pagination dots ----------------------------------------------------------

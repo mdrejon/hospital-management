@@ -1,0 +1,150 @@
+// ==========================================================================
+// RESPONSIVE DESIGN TOKENS — the single place to adjust font sizes, line
+// heights and section spacing for every device and for both languages.
+//
+// HOW TO USE
+//   1. Find the row (what you want to change) and the column (which device).
+//   2. Change the number. Numbers are plain px AT THAT DEVICE.
+//   3. Run `npm run build:frontend`.
+//
+// Every row becomes a CSS variable (--fs-h2, --space-section, ...) that
+// base/_base.scss writes onto :root once per breakpoint, and
+// tailwind.config.js exposes as a utility class:
+//
+//   $font-sizes   row "h2"       ->  text-h2          (Blade or @apply)
+//   $spacing      row "section"  ->  py-section, pt-section, mt-section ...
+//   $line-heights row "heading"  ->  leading-heading  (set automatically by text-h*)
+//
+// Never hard-code a font size (text-[15px], text-3xl, font-size: 18px) in a
+// partial or a Blade view — pick a row from here instead, so one edit in this
+// file keeps the whole site consistent.
+// ==========================================================================
+
+// Device columns — the responsive breakdown table. Keys are the min-width of
+// each range; keep in sync with `screens` in tailwind.config.js.
+//
+//   mobile      320 –  575      laptop      992 – 1199
+//   sm-tablet   576 –  767      desktop    1200 – 1399
+//   tablet      768 –  991      lg-desktop 1400 – 1919
+//                               big-screen 1920+
+$breakpoints: (
+  mobile: 0,
+  sm-tablet: 576px,
+  tablet: 768px,
+  laptop: 992px,
+  desktop: 1200px,
+  lg-desktop: 1400px,
+  big-screen: 1920px,
+);
+
+// Root (html) font size above the last column. Everything sized in rem —
+// spacing, icons, and every token below — grows by this ratio, so 2K / 4K
+// monitors need no extra columns. The big-screen column stays exact at
+// 1920px; 2560px and 3840px are scaled up from it automatically.
+$root-scale: (
+  1920px: 110%,
+  2560px: 120%,
+  3840px: 137.5%,
+);
+
+// --------------------------------------------------------------------------
+// FONT SIZES — English (and the default for every language)
+// --------------------------------------------------------------------------
+//                  mobile  sm-tab  tablet  laptop  desktop lg-desk big
+$font-sizes: (
+  // Hero slider
+  hero-title:      (24,     30,     36,     42,     48,     48,     52),
+  hero-sub:        (17,     19,     21,     24,     26,     28,     30),
+  hero-text:       (14,     15,     15,     16,     16,     16,     18),
+  hero-btn:        (14,     15,     15,     16,     16,     16,     18),
+
+  // Headings
+  h1:              (26,     30,     34,     38,     42,     44,     48),   // inner-page banner title
+  h2:              (24,     26,     30,     32,     36,     38,     42),   // section title
+  h3:              (20,     21,     22,     23,     24,     24,     26),   // block / large card title
+  h4:              (18,     18,     19,     19,     20,     20,     22),   // card title
+  h5:              (16,     17,     17,     17,     18,     18,     20),   // small card / widget title
+  h6:              (15,     15,     16,     16,     16,     16,     18),   // list item title
+
+  // Sub headings
+  subheading:      (18,     20,     22,     24,     26,     28,     30),   // italic script line above a title
+  eyebrow:         (12,     13,     13,     14,     14,     14,     15.5), // small uppercase label above a title
+
+  // Body copy
+  lead:            (16,     16,     17,     17,     18,     18,     20),   // intro / article text
+  body:            (16,     16,     16,     16,     16,     16,     18),   // default paragraph
+  body-sm:         (14,     14,     15,     15,     15,     15,     16.5), // secondary text, lists
+  small:           (13,     13,     14,     14,     14,     14,     15.5), // card descriptions, labels
+  caption:         (12,     12,     12,     13,     13,     13,     14),   // meta, dates, hints
+  tiny:            (10,     10,     11,     11,     11,     11,     12),   // badges
+
+  // Controls
+  btn-lg:          (15,     15,     16,     16,     16,     16,     18),
+  btn:             (14,     14,     14,     15,     15,     15,     16.5),
+  btn-sm:          (12,     12,     12,     13,     13,     13,     14),
+  input:           (16,     16,     16,     15,     15,     15,     16.5), // 16px below laptop stops iOS zooming on focus
+
+  // Menu — the mobile / sm-tab / tablet columns size the off-canvas side
+  // panel (hamburger menu); laptop and wider size the header menu bar.
+  menu:            (16,     16,     16,     16,     16,     16,     22), // top-level menu link
+  submenu:         (14,     14,     14,     15,     15.5,   15.5,   17),   // dropdown link / side-panel sub link
+);
+
+// --------------------------------------------------------------------------
+// FONT SIZES — Bangla overrides
+// Only list the rows that should differ from English; every other row falls
+// back to the table above. Hind Siliguri reads smaller than Poppins at small
+// sizes, so text of 16px and under is set a step larger. To tune any other
+// row for Bangla, copy it here and edit the numbers.
+// --------------------------------------------------------------------------
+//                  mobile  sm-tab  tablet  laptop  desktop lg-desk big
+$font-sizes-bn: (
+  hero-text:       (15,     16,     16,     17,     17,     17,     19),
+  hero-btn:        (15,     16,     16,     17,     17,     17,     19),
+
+  h6:              (16,     16,     17,     17,     17,     17,     19),
+  eyebrow:         (13,     14,     14,     15,     15,     15,     16.5),
+
+  body:            (17,     17,     17,     17,     17,     17,     19),
+  body-sm:         (15,     15,     16,     16,     16,     16,     17.5),
+  small:           (14,     14,     15,     15,     15,     15,     16.5),
+  caption:         (13,     13,     13,     14,     14,     14,     15),
+  tiny:            (11,     11,     12,     12,     12,     12,     13),
+
+  btn-lg:          (16,     16,     17,     17,     17,     17,     19),
+  btn:             (15,     15,     15,     16,     16,     16,     17.5),
+  btn-sm:          (13,     13,     13,     14,     14,     14,     15),
+  input:           (16,     16,     16,     16,     16,     16,     17.5),
+
+  menu:            (16.5,   16.5,   16.5,   15.5,   16.5,   16.5,   19.5),
+  submenu:         (15,     15,     15,     15.5,   16,     16,     18),
+);
+
+// --------------------------------------------------------------------------
+// LINE HEIGHTS (unitless, same on every device)
+// Bangla needs more room: its vowel signs and conjuncts reach further above
+// and below the line than Latin letters do.
+// --------------------------------------------------------------------------
+$line-heights: (
+  display: 1.2,   // hero title
+  heading: 1.3,   // h1 – h6, sub headings
+  body: 1.65,     // lead, body, body-sm, hero text
+  ui: 1.45,       // small, caption, eyebrow, buttons, menu, inputs
+);
+
+$line-heights-bn: (
+  display: 1.35,
+  heading: 1.4,
+  body: 1.75,
+  ui: 1.55,
+);
+
+// --------------------------------------------------------------------------
+// SECTION SPACING
+// --------------------------------------------------------------------------
+//                  mobile  sm-tab  tablet  laptop  desktop lg-desk big
+$spacing: (
+  section:         (48,     56,     64,     72,     80,     96,     104),  // top + bottom padding of a page section
+  section-sm:      (32,     36,     40,     48,     48,     56,     64),   // compact bands (strips, sub-blocks)
+  section-gap:     (28,     32,     40,     48,     56,     56,     64),   // section heading block -> its content
+);

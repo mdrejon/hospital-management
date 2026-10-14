@@ -5,7 +5,7 @@
 // ==========================================================================
 
 .book-appointment {
-  @apply relative overflow-hidden bg-footer-bg py-20 sm:py-24;
+  @apply relative overflow-hidden bg-footer-bg py-section;
 }
 
 .book-appointment__watermark {
@@ -18,16 +18,16 @@
 }
 
 .book-appointment__eyebrow {
-  @apply text-sm font-bold text-brand-cyan;
+  @apply text-eyebrow font-bold text-brand-cyan;
 }
 
 .book-appointment__title {
-  @apply mt-2 text-3xl font-bold text-navy sm:text-4xl;
+  @apply mt-2 text-h2 font-bold text-navy;
 }
 
 // Card ----------------------------------------------------------------
 .book-appointment__card {
-  @apply relative z-10 mt-12 flex flex-col gap-8 rounded-2xl bg-white p-6 shadow-xl sm:p-8 lg:flex-row;
+  @apply relative z-10 mt-section-gap flex flex-col gap-8 rounded-2xl bg-white p-6 shadow-xl sm:p-8 lg:flex-row;
 }
 
 .book-appointment__form-col {
@@ -35,11 +35,11 @@
 }
 
 .book-appointment__form-title {
-  @apply text-2xl font-bold text-navy;
+  @apply text-h3 font-bold text-navy;
 }
 
 .book-appointment__subtitle {
-  @apply mt-1.5 text-sm text-muted;
+  @apply mt-1.5 text-small text-muted;
 }
 
 // Media ---------------------------------------------------------------
@@ -57,7 +57,7 @@
 }
 
 .book-appointment__field {
-  @apply relative flex items-center gap-2.5 rounded-lg border border-[#E7EAF0] bg-white px-4 py-3.5 text-sm text-navy transition-colors duration-150 focus-within:border-brand-cyan;
+  @apply relative flex items-center gap-2.5 rounded-lg border border-[#E7EAF0] bg-white px-4 py-3.5 text-small text-navy transition-colors duration-150 focus-within:border-brand-cyan;
 }
 
 .book-appointment__radio-group {
@@ -65,7 +65,7 @@
 }
 
 .book-appointment__radio {
-  @apply flex cursor-pointer items-center gap-2 text-sm font-medium text-navy;
+  @apply flex cursor-pointer items-center gap-2 text-small font-medium text-navy;
   
   input[type="radio"] {
     @apply h-4 w-4 cursor-pointer text-brand-cyan focus:ring-brand-cyan focus:ring-offset-1;
@@ -77,11 +77,11 @@
 }
 
 .book-appointment__input {
-  @apply w-full border-0 bg-transparent p-0 text-sm text-navy placeholder-[#8894AB] focus:outline-none focus:ring-0;
+  @apply w-full border-0 bg-transparent p-0 text-input text-navy placeholder-[#8894AB] focus:outline-none focus:ring-0;
 }
 
 .book-appointment__select {
-  @apply w-full cursor-pointer appearance-none border-0 bg-transparent p-0 pr-5 text-sm text-navy focus:outline-none focus:ring-0;
+  @apply w-full cursor-pointer appearance-none border-0 bg-transparent p-0 pr-5 text-input text-navy focus:outline-none focus:ring-0;
 
   option {
     @apply text-navy;
@@ -105,7 +105,7 @@
 }
 
 .book-appointment__textarea {
-  @apply h-20 w-full resize-y border-0 bg-transparent p-0 text-sm leading-relaxed text-navy placeholder-[#8894AB] focus:outline-none focus:ring-0;
+  @apply h-20 w-full resize-y border-0 bg-transparent p-0 text-input leading-relaxed text-navy placeholder-[#8894AB] focus:outline-none focus:ring-0;
 }
 
 // File dropzone ---------------------------------------------------------
@@ -152,7 +152,7 @@
 }
 
 .book-appointment__dropzone-text {
-  @apply text-sm text-navy;
+  @apply text-small text-navy;
 }
 
 .book-appointment__dropzone-browse {
@@ -160,7 +160,7 @@
 }
 
 .book-appointment__dropzone-hint {
-  @apply mt-1 text-xs leading-relaxed text-muted;
+  @apply mt-1 text-caption leading-relaxed text-muted;
 
   .book-appointment__dropzone.has-file & {
     @apply hidden;
@@ -180,7 +180,7 @@
 }
 
 .book-appointment__dropzone-file-name {
-  @apply min-w-0 flex-1 truncate text-sm font-medium text-navy;
+  @apply min-w-0 flex-1 truncate text-small font-medium text-navy;
 }
 
 .book-appointment__dropzone-remove {
@@ -192,7 +192,7 @@
 }
 
 .book-appointment__submit {
-  @apply inline-flex items-center gap-3 rounded-full bg-brand-cyan px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-cyan/30 transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
+  @apply inline-flex items-center gap-3 rounded-full bg-brand-cyan px-8 py-3.5 text-btn font-semibold text-white shadow-lg shadow-brand-cyan/30 transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
 
   &:hover .book-appointment__submit-icon {
     @apply text-brand-cyan;

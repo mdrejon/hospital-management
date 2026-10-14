@@ -5,15 +5,15 @@
 // ==========================================================================
 
 .gallery {
-  @apply bg-white py-20 sm:py-24;
+  @apply bg-white py-section;
 }
 
 .gallery__desc {
-  @apply mx-auto mt-4 max-w-xl text-center text-[15px] leading-relaxed text-muted;
+  @apply mx-auto mt-4 max-w-xl text-center text-body leading-relaxed text-muted;
 }
 
 .gallery__grid {
-  @apply mt-14 columns-1 gap-6 sm:columns-2 lg:columns-3;
+  @apply mt-section-gap columns-1 gap-6 sm:columns-2 lg:columns-3;
 }
 
 .gallery-item {
@@ -60,7 +60,7 @@
 }
 
 .gallery-item__tag {
-  @apply flex items-center gap-2 text-sm font-medium text-white/90;
+  @apply flex items-center gap-2 text-small font-medium text-white/90;
 }
 
 .gallery-item__tag-dot {
@@ -68,7 +68,7 @@
 }
 
 .gallery-item__title {
-  @apply text-xl font-bold leading-snug text-white sm:text-2xl;
+  @apply text-h3 font-bold text-white;
 }
 
 // Fullscreen lightbox ----------------------------------------------------

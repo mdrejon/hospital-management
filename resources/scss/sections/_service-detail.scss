@@ -3,7 +3,7 @@
 // ==========================================================================
 
 .service-detail {
-  @apply bg-white py-20;
+  @apply bg-white py-section;
 }
 
 .service-detail__grid {
@@ -20,11 +20,11 @@
 }
 
 .service-sidebar__title {
-  @apply px-2 pb-2 text-xl font-extrabold text-white;
+  @apply px-2 pb-2 text-h4 font-extrabold text-white;
 }
 
 .service-sidebar__link {
-  @apply flex items-center justify-between gap-3 border-t border-white/10 px-2 py-3.5 text-[15px] font-bold text-white transition-colors duration-150 hover:text-brand-cyan;
+  @apply flex items-center justify-between gap-3 border-t border-white/10 px-2 py-3.5 text-body-sm font-bold text-white transition-colors duration-150 hover:text-brand-cyan;
 }
 
 .service-sidebar__link-icon {
@@ -40,7 +40,7 @@
 }
 
 .service-sidebar__help-title {
-  @apply mt-3 text-lg font-extrabold text-white;
+  @apply mt-3 text-h5 font-extrabold text-white;
 }
 
 .service-sidebar__help-divider {
@@ -48,11 +48,11 @@
 }
 
 .service-sidebar__help-contact {
-  @apply mt-4 space-y-1 text-sm font-semibold text-white;
+  @apply mt-4 space-y-1 text-small font-semibold text-white;
 }
 
 .service-sidebar__help-btn {
-  @apply mt-6 inline-flex items-center gap-4 rounded-full bg-white py-1.5 pl-6 pr-1.5 text-sm font-bold text-navy transition-transform duration-200 hover:scale-105;
+  @apply mt-6 inline-flex items-center gap-4 rounded-full bg-white py-1.5 pl-6 pr-1.5 text-btn font-bold text-navy transition-transform duration-200 hover:scale-105;
 }
 
 .service-sidebar__help-btn-icon {
@@ -61,15 +61,15 @@
 
 // Content -------------------------------------------------------------------
 .service-detail__title {
-  @apply text-3xl font-extrabold text-navy sm:text-4xl;
+  @apply text-h2 font-extrabold text-navy;
 }
 
 .service-detail__desc {
-  @apply mt-5 max-w-3xl text-[15px] leading-relaxed text-muted;
+  @apply mt-5 max-w-3xl text-body leading-relaxed text-muted;
 }
 
 .service-detail__subtitle {
-  @apply mt-12 text-2xl font-extrabold text-navy sm:text-[26px];
+  @apply mt-12 text-h3 font-extrabold text-navy;
 }
 
 // Doctors grid ------------------------------------------------------------

@@ -32,7 +32,7 @@
 }
 
 .faq-item {
-  @apply overflow-hidden rounded-xl bg-footer-bg;
+  @apply overflow-hidden rounded-xl;
 
   &.is-open {
     @apply bg-white ring-1 ring-slate-100;

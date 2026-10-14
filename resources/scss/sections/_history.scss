@@ -7,11 +7,11 @@
 @use "../abstracts/mixins" as m;
 
 .history {
-  @apply overflow-hidden bg-white py-20;
+  @apply overflow-hidden bg-white py-section;
 }
 
 .history__eyebrow {
-  @apply flex items-center justify-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-brand-cyan;
+  @apply flex items-center justify-center gap-3 text-eyebrow font-semibold uppercase tracking-[0.2em] text-brand-cyan;
 }
 
 .history__eyebrow-dot {
@@ -19,7 +19,7 @@
 }
 
 .history__title {
-  @apply mx-auto mt-3 max-w-2xl text-center text-3xl font-extrabold leading-snug text-navy sm:text-4xl;
+  @apply mx-auto mt-3 max-w-2xl text-center text-h2 font-extrabold text-navy;
 
   .accent {
     @apply text-brand-cyan;
@@ -28,11 +28,11 @@
 }
 
 .history__desc {
-  @apply mx-auto mt-6 max-w-2xl text-center text-[15px] leading-relaxed text-muted;
+  @apply mx-auto mt-6 max-w-2xl text-center text-body leading-relaxed text-muted;
 }
 
 .history__timeline {
-  @apply relative mt-16 space-y-16 lg:mt-20 lg:space-y-28;
+  @apply relative mt-section-gap space-y-16 lg:space-y-28;
 }
 
 // Vertical spine: hugs the left edge on mobile, moves to center on lg.
@@ -57,7 +57,7 @@
 }
 
 .history-item__year {
-  @apply relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-navy text-sm font-bold tracking-wide text-white lg:h-24 lg:w-24 lg:text-xl;
+  @apply relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-navy text-h5 font-bold tracking-wide text-white lg:h-24 lg:w-24;
   box-shadow:
     0 0 0 4px #fff,
     0 0 0 5.5px rgb(var(--color-navy)),
@@ -69,15 +69,15 @@
 }
 
 .history-item__badge {
-  @apply inline-block rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-brand-cyan;
+  @apply inline-block rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3.5 py-1.5 text-caption font-bold uppercase tracking-[0.18em] text-brand-cyan;
 }
 
 .history-item__title {
-  @apply mt-4 text-2xl font-extrabold leading-snug text-navy sm:text-3xl;
+  @apply mt-4 text-h3 font-extrabold text-navy;
 }
 
 .history-item__desc {
-  @apply mt-3 max-w-lg text-[15px] leading-relaxed text-muted;
+  @apply mt-3 max-w-lg text-body-sm leading-relaxed text-muted;
 }
 
 .history-item__tags {
@@ -85,7 +85,7 @@
 }
 
 .history-item__tag {
-  @apply rounded-full bg-footer-bg px-4 py-1.5 text-xs font-semibold text-navy;
+  @apply rounded-full bg-footer-bg px-4 py-1.5 text-caption font-semibold text-navy;
 }
 
 // Alternate entry: media flips to the right, content right-aligns against

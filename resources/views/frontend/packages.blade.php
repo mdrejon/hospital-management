@@ -95,28 +95,31 @@ $packageCards = $packages->isNotEmpty()
 ['title' => 'Emergency Response Package', 'desc' => 'Round-the-clock critical care when it matters most.', 'image' => asset('assets/img/slider-1.3.jpg'), 'url' => '#'],
 ]);
 @endphp
-<section class="packages py-24 bg-cyan-50/40 relative overflow-hidden">
+<section class="packages py-section bg-cyan-50/40 relative overflow-hidden">
   <!-- Animated Floating Element -->
   <div class="absolute top-1/2 left-10 opacity-10 animate-pulse text-navy pointer-events-none z-0" style="animation-duration: 5s;">
-    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/></svg>
+    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+    </svg>
   </div>
   <div class="container mx-auto px-4 lg:px-0">
-    <div class="text-center mb-14 max-w-2xl mx-auto">
+    <div class="text-center mb-section-gap max-w-2xl mx-auto">
       @if(!empty($pkg['pkg_badge']))
-      <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-3">
+      <p class="text-brand-cyan font-bold tracking-widest uppercase text-eyebrow mb-3">
         {{ $pkg['pkg_badge'] }}
       </p>
       @endif
-      <h2 class="text-3xl lg:text-[40px] font-bold text-navy mb-4 leading-[1.2]">
+      <h2 class="text-h2 font-bold text-navy mb-4">
         {{ $pkg['pkg_desc'] ?? 'Complete Health Solutions — Because You Deserve the Best' }}
       </h2>
       <div class="flex justify-center items-center gap-1.5 mb-4 text-brand-cyan">
         <!-- Heartbeat Line -->
-        <span class="text-lg font-bold tracking-tighter">--</span>
+        <span class="text-h5 font-bold tracking-tighter">--</span>
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h3l2.5-4.5 3 9 2.5-4.5h4" />
         </svg>
-        <span class="text-lg font-bold tracking-tighter">--</span>
+        <span class="text-h5 font-bold tracking-tighter">--</span>
       </div>
     </div>
 
@@ -130,11 +133,11 @@ $packageCards = $packages->isNotEmpty()
         <!-- Hover Overlay -->
         <div class="absolute inset-0 bg-[#2b88f3]/85 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center backdrop-blur-[1px]">
           <!-- Hidden Title that appears on hover for context -->
-          <h3 class="text-white font-bold text-xl mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 group-hover:opacity-100 text-center px-4">
+          <h3 class="text-white font-bold text-h4 mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 group-hover:opacity-100 text-center px-4">
             {{ $card['title'] }}
           </h3>
           <!-- View Details Button -->
-          <a href="{{ $card['url'] }}" class="bg-white text-[#2b88f3] text-[14px] font-bold py-2.5 px-6 rounded transition-colors duration-300 hover:bg-navy hover:text-white shadow-lg shadow-black/10 translate-y-4 group-hover:translate-y-0 transform">
+          <a href="{{ $card['url'] }}" class="bg-white text-[#2b88f3] text-btn font-bold py-2.5 px-6 rounded transition-colors duration-300 hover:bg-navy hover:text-white shadow-lg shadow-black/10 translate-y-4 group-hover:translate-y-0 transform">
             View Details
           </a>
         </div>
@@ -150,7 +153,7 @@ $packageCards = $packages->isNotEmpty()
     const containers = document.querySelectorAll('section > .container');
     containers.forEach(el => {
       // Avoid hero section and testimonials since they have custom structure
-      if(!el.closest('.hero') && !el.closest('.page-header') && !el.closest('.testimonials')) {
+      if (!el.closest('.hero') && !el.closest('.page-header') && !el.closest('.testimonials')) {
         el.classList.add('transition-all', 'duration-[1200ms]', 'ease-out', 'opacity-0', 'translate-y-12');
       }
     });
@@ -163,10 +166,13 @@ $packageCards = $packages->isNotEmpty()
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+    }, {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px"
+    });
 
     containers.forEach(el => {
-      if(!el.closest('.hero') && !el.closest('.page-header') && !el.closest('.testimonials')) {
+      if (!el.closest('.hero') && !el.closest('.page-header') && !el.closest('.testimonials')) {
         observer.observe(el);
       }
     });

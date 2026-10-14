@@ -100,18 +100,18 @@ $serviceCards = $services->isNotEmpty()
 ['title' => 'Surgery Care', 'desc' => 'Our Surgery Care services provide expert, compassionate treatment.', 'icon_svg' => null, 'image' => asset('assets/img/sr-1-1.jpg'), 'url' => '#'],
 ]);
 @endphp
-<section class="services py-24 bg-slate-50 relative overflow-hidden">
+<section class="services py-section bg-slate-50 relative overflow-hidden">
   <!-- Animated Floating Element -->
   <div class="absolute top-20 left-10 opacity-20 animate-bounce text-navy pointer-events-none z-0" style="animation-duration: 4s;">
     <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 8v8m-4-4h8"/></svg>
   </div>
   <div class="container mx-auto px-4">
     <!-- Heading Area -->
-    <div class="text-center mb-16 max-w-2xl mx-auto">
-      <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-3">
+    <div class="text-center mb-section-gap max-w-2xl mx-auto">
+      <p class="text-brand-cyan font-bold tracking-widest uppercase text-eyebrow mb-3">
         Explore Medical Department
       </p>
-      <h2 class="text-3xl lg:text-[40px] font-bold text-navy mb-6 leading-[1.2]">
+      <h2 class="text-h2 font-bold text-navy mb-6">
         Complete Health Solutions — Because You Deserve the Best
       </h2>
     </div>
@@ -138,14 +138,14 @@ $serviceCards = $services->isNotEmpty()
 
         <!-- Content Area -->
         <div class="pt-14 pb-8 px-6 text-center transition-colors duration-300 group-hover:bg-brand-cyan flex-grow flex flex-col items-center relative z-0 bg-white">
-          <h3 class="text-navy text-[20px] font-bold mb-3 transition-colors duration-300 group-hover:text-white">
+          <h3 class="text-navy text-h4 font-bold mb-3 transition-colors duration-300 group-hover:text-white">
             {{ $card['title'] }}
           </h3>
-          <p class="text-gray-500 text-[14px] leading-relaxed mb-6 transition-colors duration-300 group-hover:text-white/90 line-clamp-3">
+          <p class="text-gray-500 text-small leading-relaxed mb-6 transition-colors duration-300 group-hover:text-white/90 line-clamp-3">
             {{ $card['desc'] }}
           </p>
 
-          <a href="{{ $card['url'] }}" class="mt-auto inline-flex items-center gap-2 text-navy text-[14px] font-bold transition-colors duration-300 group-hover:text-white group-hover:opacity-90">
+          <a href="{{ $card['url'] }}" class="mt-auto inline-flex items-center gap-2 text-navy text-btn font-bold transition-colors duration-300 group-hover:text-white group-hover:opacity-90">
             <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>

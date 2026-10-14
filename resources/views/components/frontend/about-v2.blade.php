@@ -39,7 +39,7 @@ $aboutBtnUrl = ($about['about_more_btn_url'] ?? null) ?: route('about');
 $aboutExpYears = $about['about_exp_years'] ?? '25+';
 @endphp
 
-<section class="about-v2 py-16 lg:py-24 bg-white relative overflow-hidden" data-about-v2>
+<section class="about-v2 py-section bg-white relative overflow-hidden" data-about-v2>
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
@@ -59,7 +59,7 @@ $aboutExpYears = $about['about_exp_years'] ?? '25+';
           <!-- Top-Left Floating Experience Badge -->
           <div class="absolute top-0 left-0 z-20 bg-[#3b1263] text-white p-5 sm:p-6 rounded-2xl shadow-2xl flex flex-col justify-between w-44 sm:w-52">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-none">{{ $aboutExpYears }}</span>
+              <span class="text-h2 font-extrabold tracking-tight text-white leading-none">{{ $aboutExpYears }}</span>
               <span class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
                 <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -67,7 +67,7 @@ $aboutExpYears = $about['about_exp_years'] ?? '25+';
                 </svg>
               </span>
             </div>
-            <span class="text-xs sm:text-sm font-semibold text-white/90 leading-tight">Years Of Experience</span>
+            <span class="text-small font-semibold text-white/90 leading-tight">Years Of Experience</span>
           </div>
 
           <!-- Bottom-Right Overlapping Doctor Photo -->
@@ -86,12 +86,12 @@ $aboutExpYears = $about['about_exp_years'] ?? '25+';
       <div class="lg:col-span-6 flex flex-col">
         
         <!-- Eyebrow -->
-        <span class="text-xs sm:text-sm font-bold tracking-wider text-gray-500 mb-2">
+        <span class="text-eyebrow font-bold tracking-wider text-gray-500 mb-2">
           {{ $aboutEyebrow }}
         </span>
 
         <!-- Main Title -->
-        <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-navy leading-[1.2] mb-6">
+        <h2 class="text-h2 font-extrabold text-navy mb-6">
           {{ $aboutTitle }}
         </h2>
 
@@ -100,7 +100,7 @@ $aboutExpYears = $about['about_exp_years'] ?? '25+';
           @foreach($mvCards as $idx => $card)
           <button 
             type="button" 
-            class="about-tab-btn flex items-center gap-2 pb-3 font-semibold text-sm sm:text-base border-b-2 whitespace-nowrap {{ $loop->first ? 'border-[#3b1263] text-[#3b1263] font-bold' : 'border-transparent text-gray-500 hover:text-navy' }} transition-colors"
+            class="about-tab-btn flex items-center gap-2 pb-3 font-semibold text-btn-lg border-b-2 whitespace-nowrap {{ $loop->first ? 'border-[#3b1263] text-[#3b1263] font-bold' : 'border-transparent text-gray-500 hover:text-navy' }} transition-colors"
             data-tab-target="tab-{{ $idx }}"
           >
             @if($idx === 0)
@@ -128,7 +128,7 @@ $aboutExpYears = $about['about_exp_years'] ?? '25+';
         <div class="mb-8 min-h-[90px]" data-about-tab-content>
           @foreach($mvCards as $idx => $card)
           <div 
-            class="about-tab-pane {{ $loop->first ? 'block' : 'hidden' }} text-gray-600 text-[15px] sm:text-base leading-relaxed" 
+            class="about-tab-pane {{ $loop->first ? 'block' : 'hidden' }} text-gray-600 text-body leading-relaxed" 
             data-tab-pane="tab-{{ $idx }}"
           >
             {{ $card['description'] }}
@@ -141,7 +141,7 @@ $aboutExpYears = $about['about_exp_years'] ?? '25+';
         <div class="pt-2">
           <a 
             href="{{ $aboutBtnUrl }}" 
-            class="inline-flex items-center gap-2.5 bg-[#3b1263] hover:bg-[#2a0c49] text-white font-semibold text-[14px] sm:text-[15px] px-8 py-3.5 rounded-full shadow-lg shadow-[#3b1263]/20 transition-all duration-200 group"
+            class="inline-flex items-center gap-2.5 bg-[#3b1263] hover:bg-[#2a0c49] text-white font-semibold text-btn px-8 py-3.5 rounded-full shadow-lg shadow-[#3b1263]/20 transition-all duration-200 group"
           >
             <span>{{ $aboutBtnText }}</span>
             <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">

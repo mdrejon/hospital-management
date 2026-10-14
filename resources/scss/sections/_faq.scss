@@ -3,7 +3,7 @@
 // ==========================================================================
 
 .faq {
-  @apply relative overflow-hidden bg-white py-20;
+  @apply relative overflow-hidden bg-white py-section;
 }
 
 .faq__bg {
@@ -20,11 +20,11 @@
 }
 
 .faq__title {
-  @apply text-3xl font-extrabold leading-snug text-navy sm:text-4xl;
+  @apply text-h2 font-extrabold text-navy;
 }
 
 .faq__desc {
-  @apply mt-4 max-w-lg text-sm leading-relaxed text-slate-500;
+  @apply mt-4 max-w-lg text-body leading-relaxed text-slate-500;
 }
 
 .faq__list {
@@ -32,7 +32,7 @@
 }
 
 .faq-item {
-  @apply overflow-hidden rounded-xl bg-footer-bg;
+  @apply overflow-hidden rounded-xl bg-[#F0F4FF];
 
   &.is-open {
     @apply bg-white ring-1 ring-slate-100;
@@ -40,7 +40,7 @@
 }
 
 .faq-item__question {
-  @apply flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-bold text-navy;
+  @apply flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-h6 font-bold text-navy;
 }
 
 .faq-item__icon {
@@ -52,7 +52,7 @@
 }
 
 .faq-item__answer {
-  @apply grid grid-rows-[0fr] px-5 text-sm leading-relaxed text-slate-500 transition-all duration-300;
+  @apply grid grid-rows-[0fr] px-5 text-body-sm leading-relaxed text-slate-500 transition-all duration-300;
 
   .is-open & {
     @apply grid-rows-[1fr] pb-4;
@@ -87,15 +87,15 @@
 }
 
 .faq__contact-label {
-  @apply text-xs text-slate-500;
+  @apply text-caption text-slate-500;
 }
 
 .faq__contact-value {
-  @apply text-sm font-bold text-navy;
+  @apply text-small font-bold text-navy;
 }
 
 .faq__contact-btn {
-  @apply flex shrink-0 items-center gap-2 rounded-full bg-brand-cyan py-2 pl-4 pr-2 text-sm font-semibold text-navy transition-all duration-200 hover:scale-105 hover:bg-white hover:ring-2 hover:ring-brand-cyan;
+  @apply flex shrink-0 items-center gap-2 rounded-full bg-brand-cyan py-2 pl-4 pr-2 text-btn font-semibold text-navy transition-all duration-200 hover:scale-105 hover:bg-white hover:ring-2 hover:ring-brand-cyan;
 }
 
 .faq__contact-btn-icon {

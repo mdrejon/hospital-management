@@ -5,7 +5,7 @@
 // ==========================================================================
 
 .about {
-  @apply relative overflow-hidden bg-white py-20 sm:py-24;
+  @apply relative overflow-hidden bg-white py-section;
 }
 
 .about__decor {
@@ -35,7 +35,7 @@
 }
 
 .about__video-tag-text {
-  @apply text-[11px] font-bold uppercase tracking-widest text-white;
+  @apply text-tiny font-bold uppercase tracking-widest text-white;
   writing-mode: vertical-rl;
 }
 
@@ -74,11 +74,11 @@
 }
 
 .about__hours-title {
-  @apply text-lg font-bold;
+  @apply text-h5 font-bold;
 }
 
 .about__hours-list {
-  @apply mt-4 flex flex-col gap-2.5 text-sm;
+  @apply mt-4 flex flex-col gap-2.5 text-small;
 }
 
 .about__hours-row {
@@ -95,11 +95,11 @@
 
 // Content column ------------------------------------------------------------
 .about__title {
-  @apply text-4xl font-extrabold leading-tight text-navy sm:text-[42px];
+  @apply text-h2 font-extrabold text-navy;
 }
 
 .about__desc {
-  @apply mt-6 max-w-xl text-base leading-relaxed text-slate-500;
+  @apply mt-6 max-w-xl text-body leading-relaxed text-slate-500;
 }
 
 // Rich-text variant (About page only) — TipTap output from the admin's
@@ -110,11 +110,11 @@
   }
 
   > h2 {
-    @apply mt-8 text-2xl font-extrabold text-navy first:mt-0;
+    @apply mt-8 text-h3 font-extrabold text-navy first:mt-0;
   }
 
   > h3 {
-    @apply mt-6 text-xl font-bold text-navy first:mt-0;
+    @apply mt-6 text-h4 font-bold text-navy first:mt-0;
   }
 
   > ul,
@@ -144,7 +144,7 @@
 }
 
 .about__feature {
-  @apply flex items-center gap-3 text-[15px] font-semibold text-navy;
+  @apply flex items-center gap-3 text-body-sm font-semibold text-navy;
 }
 
 .about__feature-check {
@@ -156,7 +156,7 @@
 }
 
 .about__btn {
-  @apply inline-flex items-center gap-6 rounded-full bg-navy py-2 pl-8 pr-2 text-base font-semibold text-white transition-transform duration-200 hover:scale-105;
+  @apply inline-flex items-center gap-6 rounded-full bg-navy py-2 pl-8 pr-2 text-btn-lg font-semibold text-white transition-transform duration-200 hover:scale-105;
 }
 
 .about__btn-icon {
@@ -172,9 +172,9 @@
 }
 
 .about__contact-label {
-  @apply block text-sm text-slate-400;
+  @apply block text-small text-slate-400;
 }
 
 .about__contact-value {
-  @apply block text-base font-bold text-navy;
+  @apply block text-body font-bold text-navy;
 }

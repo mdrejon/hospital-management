@@ -92,7 +92,7 @@ $galleryCards = $images->values()->map(fn ($img, $i) => [
   <div class="container mx-auto">
     @if($galleryCards->isEmpty())
     <div class="py-16 text-center">
-      <h3 class="text-2xl font-bold text-gray-500">No photo gallery available at this moment</h3>
+      <h3 class="text-h3 font-bold text-gray-500">No photo gallery available at this moment</h3>
     </div>
     @else
     <div class="team__head">

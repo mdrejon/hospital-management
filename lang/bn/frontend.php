@@ -21,6 +21,8 @@ return [
         'doctors' => 'ডাক্তারগণ',
         'doctors_list' => 'ডাক্তারদের তালিকা',
         'gallery' => 'গ্যালারি',
+        'photo_gallery' => 'ফটো গ্যালারি',
+        'video_gallery' => 'ভিডিও গ্যালারি',
         'blog' => 'ব্লগ',
         'contact_us' => 'যোগাযোগ করুন',
     ],
@@ -95,6 +97,7 @@ return [
         'view_all_services' => 'সব সেবা দেখুন',
         'watch_video' => 'ভিডিও দেখুন',
         'lets_talk' => 'কথা বলুন',
+        'talk' => 'টক',
 
         'services_badge' => 'চিকিৎসা এবং সাধারণ যত্ন!',
         'services_title' => 'অসাধারণ সেবাসমূহ',

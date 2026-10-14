@@ -82,11 +82,11 @@ return [
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl 2xl:max-w-7xl 2k:max-w-[1720px] 4k:max-w-[2160px] relative z-10">
 
     <!-- Section Header (Centered) -->
-    <div class="text-center max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto mb-14 sm:mb-16">
-      <p class="text-xs sm:text-sm font-bold tracking-widest text-white uppercase mb-3 inline-block px-4 py-1.5 rounded-full bg-red-600/90 border border-red-400/40 shadow-sm">
+    <div class="text-center max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto mb-section-gap">
+      <p class="text-eyebrow font-bold tracking-widest text-white uppercase mb-3 inline-block px-4 py-1.5 rounded-full bg-red-600/90 border border-red-400/40 shadow-sm">
         {{ $testiEyebrow }}
       </p>
-      <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-white leading-[1.25] tracking-tight">
+      <h2 class="text-h2 font-extrabold text-white tracking-tight">
         {!! $testiTitle !!}
       </h2>
     </div>
@@ -140,12 +140,12 @@ return [
               </div>
 
               <!-- Quote Title (Purple Heading) -->
-              <h3 class="text-[#4a1272] text-xl sm:text-2xl font-bold mb-5 leading-snug">
+              <h3 class="text-[#4a1272] text-h3 font-bold mb-5">
                 <!-- &ldquo;{{ $card['title'] }}&rdquo; -->
               </h3>
 
               <!-- Review Quote Body -->
-              <p class="text-[#0f172a] text-base sm:text-[18px] font-bold leading-relaxed mb-8">
+              <p class="text-[#0f172a] text-lead font-bold leading-relaxed mb-8">
                 &ldquo;{{ $card['review'] }}&rdquo;
               </p>
 
@@ -165,7 +165,7 @@ return [
                   </svg>
                 </div>
                 <!-- Author Name and Role -->
-                <p class="text-sm sm:text-base">
+                <p class="text-body">
                   <span class="font-bold text-[#0f172a]">{{ $card['name'] }}</span><span class="text-gray-400 font-normal">, {{ $card['role'] }}</span>
                 </p>
               </div>

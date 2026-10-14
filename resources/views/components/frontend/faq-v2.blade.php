@@ -33,7 +33,7 @@ $defaultFaqs = [
 $faqCards = (!empty($faqInfo['items']) && $faqInfo['items']->isNotEmpty()) ? $faqInfo['items'] : collect($defaultFaqs);
 @endphp
 
-<section class="faq-v2 py-20 lg:py-28 bg-white relative overflow-hidden" data-faq-v2>
+<section class="faq-v2 py-section bg-white relative overflow-hidden" data-faq-v2>
   <!-- Subtle circular lines background decoration (bottom left) -->
   <svg class="absolute -bottom-20 -left-20 w-[400px] h-[400px] text-brand-cyan/5 pointer-events-none" viewBox="0 0 100 100" fill="none">
     <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="1.5" />
@@ -60,12 +60,12 @@ $faqCards = (!empty($faqInfo['items']) && $faqInfo['items']->isNotEmpty()) ? $fa
         @if(!empty($faqBadge) || !empty($faqTitle))
         <div class="mb-2">
           @if(!empty($faqBadge))
-          <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-2">
+          <p class="text-brand-cyan font-bold tracking-widest uppercase text-eyebrow mb-2">
             {{ $faqBadge }}
           </p>
           @endif
           @if(!empty($faqTitle))
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-navy leading-[1.25] tracking-tight">
+          <h2 class="text-h2 font-extrabold text-navy tracking-tight">
             {{ $faqTitle }}
           </h2>
           @endif
@@ -82,7 +82,7 @@ $faqCards = (!empty($faqInfo['items']) && $faqInfo['items']->isNotEmpty()) ? $fa
           >
             <div class="flex items-center gap-4">
               <!-- Unopened Icon: Number (Red Pill) -->
-              <span class="flex items-center justify-center w-8 h-8 shrink-0 rounded-full bg-[#c61d35] text-white text-xs sm:text-[13px] font-bold group-[.is-open]:hidden shadow-sm">
+              <span class="flex items-center justify-center w-8 h-8 shrink-0 rounded-full bg-[#c61d35] text-white text-caption font-bold group-[.is-open]:hidden shadow-sm">
                 {{ str_pad($faqIndex + 1, 2, '0', STR_PAD_LEFT) }}
               </span>
               <!-- Opened Icon: Checkmark (White Pill with Red Icon) -->
@@ -93,7 +93,7 @@ $faqCards = (!empty($faqInfo['items']) && $faqInfo['items']->isNotEmpty()) ? $fa
               </span>
 
               <!-- Title -->
-              <span class="text-base sm:text-[17px] font-bold text-navy group-[.is-open]:text-white text-left leading-snug transition-colors">
+              <span class="text-h6 font-bold text-navy group-[.is-open]:text-white text-left transition-colors">
                 {{ $faqCard['question'] ?? '' }}
               </span>
             </div>
@@ -109,7 +109,7 @@ $faqCards = (!empty($faqInfo['items']) && $faqInfo['items']->isNotEmpty()) ? $fa
           <!-- Answer Wrapper -->
           <div class="faq-item__answer px-0 pb-0 bg-white">
             <div class="overflow-hidden">
-              <div class="px-6 pb-6 pt-4 text-gray-500 text-sm sm:text-[15px] leading-relaxed border-t border-gray-100">
+              <div class="px-6 pb-6 pt-4 text-gray-500 text-body-sm leading-relaxed border-t border-gray-100">
                 <p>{{ $faqCard['answer'] ?? '' }}</p>
               </div>
             </div>

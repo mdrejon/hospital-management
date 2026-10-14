@@ -8272,8 +8272,8 @@ ul {
 
 .awards {
   --tw-bg-opacity: 1;
-  background-color: rgb(var(--color-secondary) / var(--tw-bg-opacity, 1));
-  padding-top: 5rem;
+background-color: rgba(188, 186, 167, 0.28);
+.faq-item.faq-item  padding-top: 5rem;
   padding-bottom: 5rem;
 }
 

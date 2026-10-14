@@ -101,7 +101,7 @@ $doctorCards = $doctors->isNotEmpty()
 ['name' => 'Dr. Sara Owens', 'role' => 'Neurologist', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
 ]));
 @endphp
-<section class="doctors-page !py-24 bg-white relative overflow-hidden">
+<section class="doctors-page py-section bg-white relative overflow-hidden">
   <!-- Animated Floating Element -->
   <div class="absolute bottom-20 right-10 opacity-[0.08] animate-spin text-brand-cyan pointer-events-none z-0" style="animation-duration: 20s;">
     <svg width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10" stroke-dasharray="4 4"/></svg>
@@ -115,7 +115,7 @@ $doctorCards = $doctors->isNotEmpty()
       </p>
       <h2 class="team__title">{{ $doc['doc_title'] ?? 'Meet Our Doctor Meeting' }}</h2>
       @if(isset($specialization) && $specialization)
-      <p class="mt-3 text-sm text-muted">
+      <p class="mt-3 text-small text-muted">
         Showing: <strong class="text-navy">{{ $specialization->name }}</strong>
         <a href="{{ route('doctors') }}" class="text-brand-cyan hover:underline ml-2">Clear filter</a>
       </p>
@@ -125,7 +125,7 @@ $doctorCards = $doctors->isNotEmpty()
     @if(isset($specialization) && $specialization && $doctorCards->isEmpty())
     <p class="text-center text-muted py-12">No doctors found under "{{ $specialization->name }}" yet. Please check back soon.</p>
     @else
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 mt-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 mt-section-gap">
       @foreach($doctorCards as $card)
       <article class="bg-white rounded-lg overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.1)] transition-shadow duration-300 group h-full border border-gray-100">
         <!-- Image & Overlay -->
@@ -150,9 +150,9 @@ $doctorCards = $doctors->isNotEmpty()
         </div>
         <!-- Content -->
         <div class="p-6 text-center border-t border-gray-100">
-          <p class="text-gray-500 text-[13px] mb-1.5">{{ $card['role'] }}</p>
+          <p class="text-gray-500 text-small mb-1.5">{{ $card['role'] }}</p>
           <a href="{{ $card['url'] }}" class="inline-block hover:text-brand-cyan transition-colors">
-            <h3 class="text-navy text-[19px] font-bold">{{ $card['name'] }}</h3>
+            <h3 class="text-navy text-h4 font-bold">{{ $card['name'] }}</h3>
           </a>
         </div>
       </article>

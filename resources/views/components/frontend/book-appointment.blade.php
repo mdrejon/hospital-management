@@ -26,14 +26,14 @@
       <h2 class="book-appointment__title">{{ $apptTitle }}</h2>
     </div>
 
-    <div class="relative z-10 mt-12 bg-white rounded-2xl shadow-[0_4px_25px_rgba(0,0,0,0.05)] border border-gray-100 p-6 md:p-10 mb-10 w-full max-w-4xl mx-auto">
+    <div class="relative z-10 mt-section-gap bg-white rounded-2xl shadow-[0_4px_25px_rgba(0,0,0,0.05)] border border-gray-100 p-6 md:p-10 mb-10 w-full max-w-4xl mx-auto">
       <div class="w-full">
         @if(session('success'))
         <div class="flex items-start gap-3 p-4 mb-6 text-green-800 bg-green-50 border border-green-200 rounded-lg shadow-sm">
           <svg class="w-5 h-5 shrink-0 text-green-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <div class="text-[15px] font-medium leading-relaxed">{{ session('success') }}</div>
+          <div class="text-body-sm font-medium leading-relaxed">{{ session('success') }}</div>
         </div>
         @endif
 
@@ -42,7 +42,7 @@
           <svg class="w-5 h-5 shrink-0 text-red-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <div class="text-[15px] font-medium leading-relaxed">{{ $errors->first() }}</div>
+          <div class="text-body-sm font-medium leading-relaxed">{{ $errors->first() }}</div>
         </div>
         @endif
 
@@ -51,15 +51,15 @@
           <input type="hidden" name="source" value="{{ $source }}" />
           <input type="hidden" name="time_slot" data-field="time_slot" />
 
-          <h3 class="text-[18px] font-bold text-navy mb-1">{{ $apptFormTitle }}</h3>
-          <p class="text-sm text-gray-500 mb-6">{{ $apptFormSubtitle }}</p>
+          <h3 class="text-h5 font-bold text-navy mb-1">{{ $apptFormTitle }}</h3>
+          <p class="text-small text-gray-500 mb-6">{{ $apptFormSubtitle }}</p>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
             <!-- Patient Name -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-[14px] font-semibold text-navy">{{ __('frontend.appointment_form.patient_name') }} <span class="text-red-500">*</span></label>
+              <label class="text-small font-semibold text-navy">{{ __('frontend.appointment_form.patient_name') }} <span class="text-red-500">*</span></label>
               <div class="flex items-center justify-between w-full bg-[#F7F8FA] rounded-lg px-4 h-[54px] border border-transparent focus-within:border-brand-cyan transition-colors">
-                <input type="text" name="patient_name" value="{{ old('patient_name') }}" class="w-full bg-transparent border-none outline-none focus:ring-0 text-[15px] text-gray-700 placeholder-gray-400 p-0" placeholder="e.g. John Doe" required />
+                <input type="text" name="patient_name" value="{{ old('patient_name') }}" class="w-full bg-transparent border-none outline-none focus:ring-0 text-input text-gray-700 placeholder-gray-400 p-0" placeholder="e.g. John Doe" required />
                 <span class="text-gray-400 ml-2 shrink-0">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/>
@@ -71,9 +71,9 @@
 
             <!-- Email -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-[14px] font-semibold text-navy">{{ __('frontend.appointment_form.email') }} <span class="text-gray-400 font-normal text-xs">(Optional)</span></label>
+              <label class="text-small font-semibold text-navy">{{ __('frontend.appointment_form.email') }} <span class="text-gray-400 font-normal text-caption">(Optional)</span></label>
               <div class="flex items-center justify-between w-full bg-[#F7F8FA] rounded-lg px-4 h-[54px] border border-transparent focus-within:border-brand-cyan transition-colors">
-                <input type="email" name="email" value="{{ old('email') }}" class="w-full bg-transparent border-none outline-none focus:ring-0 text-[15px] text-gray-700 placeholder-gray-400 p-0" placeholder="e.g. john@example.com" />
+                <input type="email" name="email" value="{{ old('email') }}" class="w-full bg-transparent border-none outline-none focus:ring-0 text-input text-gray-700 placeholder-gray-400 p-0" placeholder="e.g. john@example.com" />
                 <span class="text-gray-400 ml-2 shrink-0">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
@@ -85,9 +85,9 @@
 
             <!-- Date of Birth -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-[14px] font-semibold text-navy">{{ __('frontend.appointment_form.dob') }} <span class="text-gray-400 font-normal text-xs">(Optional)</span></label>
+              <label class="text-small font-semibold text-navy">{{ __('frontend.appointment_form.dob') }} <span class="text-gray-400 font-normal text-caption">(Optional)</span></label>
               <div class="flex items-center justify-between w-full bg-[#F7F8FA] rounded-lg px-4 h-[54px] border border-transparent focus-within:border-brand-cyan transition-colors">
-                <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" class="w-full bg-transparent border-none outline-none focus:ring-0 text-[15px] text-gray-700 placeholder-gray-400 p-0" data-field="dob" max="{{ now()->toDateString() }}" />
+                <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" class="w-full bg-transparent border-none outline-none focus:ring-0 text-input text-gray-700 placeholder-gray-400 p-0" data-field="dob" max="{{ now()->toDateString() }}" />
                 <span class="text-gray-400 ml-2 shrink-0">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="3.5" y="5" width="17" height="16" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
@@ -99,9 +99,9 @@
 
             <!-- Phone Number -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-[14px] font-semibold text-navy">{{ __('frontend.appointment_form.mobile') }} <span class="text-red-500">*</span></label>
+              <label class="text-small font-semibold text-navy">{{ __('frontend.appointment_form.mobile') }} <span class="text-red-500">*</span></label>
               <div class="flex items-center justify-between w-full bg-[#F7F8FA] rounded-lg px-4 h-[54px] border border-transparent focus-within:border-brand-cyan transition-colors">
-                <input type="tel" name="phone" value="{{ old('phone') }}" class="w-full bg-transparent border-none outline-none focus:ring-0 text-[15px] text-gray-700 placeholder-gray-400 p-0" placeholder="e.g. +8801XXXXXXXXX" required />
+                <input type="tel" name="phone" value="{{ old('phone') }}" class="w-full bg-transparent border-none outline-none focus:ring-0 text-input text-gray-700 placeholder-gray-400 p-0" placeholder="e.g. +8801XXXXXXXXX" required />
                 <span class="text-gray-400 ml-2 shrink-0">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6"/>
@@ -113,16 +113,16 @@
 
           <!-- Gender & Age -->
           <div class="flex flex-wrap items-center gap-6 mb-6">
-            <span class="font-bold text-navy text-[15px]">Gender <span class="text-red-500">*</span></span>
-            <label class="flex items-center gap-2 cursor-pointer text-gray-600 text-[15px]">
+            <span class="font-bold text-navy text-small">Gender <span class="text-red-500">*</span></span>
+            <label class="flex items-center gap-2 cursor-pointer text-gray-600 text-small">
               <input type="radio" name="gender" value="male" class="text-brand-cyan focus:ring-brand-cyan w-4 h-4 rounded border-gray-300" {{ old('gender') !== 'female' && old('gender') !== 'other' ? 'checked' : '' }} required />
               {{ __('frontend.appointment_form.male') }}
             </label>
-            <label class="flex items-center gap-2 cursor-pointer text-gray-600 text-[15px]">
+            <label class="flex items-center gap-2 cursor-pointer text-gray-600 text-small">
               <input type="radio" name="gender" value="female" class="text-brand-cyan focus:ring-brand-cyan w-4 h-4 rounded border-gray-300" {{ old('gender') === 'female' ? 'checked' : '' }} />
               {{ __('frontend.appointment_form.female') }}
             </label>
-            <label class="flex items-center gap-2 cursor-pointer text-gray-600 text-[15px]">
+            <label class="flex items-center gap-2 cursor-pointer text-gray-600 text-small">
               <input type="radio" name="gender" value="other" class="text-brand-cyan focus:ring-brand-cyan w-4 h-4 rounded border-gray-300" {{ old('gender') === 'other' ? 'checked' : '' }} />
               {{ __('frontend.appointment_form.other') }}
             </label>
@@ -133,14 +133,14 @@
 
           <div class="flex flex-col gap-5 mb-5">
             <!-- Appt Type (OPD / Follow up) -->
-            <div class="flex items-center justify-between w-full bg-[#F7F8FA] rounded-lg px-4 h-[54px]">
-              <span class="font-semibold text-navy text-[14px] shrink-0">{{ __('frontend.appointment_form.appt_details') }} <span class="text-red-500">*</span></span>
-              <div class="flex gap-4">
-                <label class="flex items-center gap-2 cursor-pointer text-gray-600 text-[14px]">
+            <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 w-full bg-[#F7F8FA] rounded-lg px-4 py-3 min-h-[54px]">
+              <span class="font-semibold text-navy text-small shrink-0">{{ __('frontend.appointment_form.appt_details') }} <span class="text-red-500">*</span></span>
+              <div class="flex flex-wrap gap-x-4 gap-y-2">
+                <label class="flex items-center gap-2 cursor-pointer text-gray-600 text-small">
                   <input type="radio" name="appointment_type" value="opd" class="text-brand-cyan focus:ring-brand-cyan w-4 h-4 rounded border-gray-300" {{ old('appointment_type') !== 'follow_up' ? 'checked' : '' }} required />
                   {{ __('frontend.appointment_form.opd') }}
                 </label>
-                <label class="flex items-center gap-2 cursor-pointer text-gray-600 text-[14px]">
+                <label class="flex items-center gap-2 cursor-pointer text-gray-600 text-small">
                   <input type="radio" name="appointment_type" value="follow_up" class="text-brand-cyan focus:ring-brand-cyan w-4 h-4 rounded border-gray-300" {{ old('appointment_type') === 'follow_up' ? 'checked' : '' }} />
                   {{ __('frontend.appointment_form.follow_up') }}
                 </label>
@@ -149,9 +149,9 @@
 
             <!-- Select Service / Specialization -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-[14px] font-semibold text-navy">Service / Specialization <span class="text-gray-400 font-normal text-xs">(Optional)</span></label>
+              <label class="text-small font-semibold text-navy">Service / Specialization <span class="text-gray-400 font-normal text-caption">(Optional)</span></label>
               <div class="relative flex items-center justify-between w-full bg-[#F7F8FA] rounded-lg px-4 h-[54px] border border-transparent focus-within:border-brand-cyan transition-colors">
-                <select class="w-full bg-transparent border-none outline-none focus:ring-0 text-[15px] text-gray-700 p-0 appearance-none" data-field="specialization">
+                <select class="w-full bg-transparent border-none outline-none focus:ring-0 text-input text-gray-700 p-0 appearance-none" data-field="specialization">
                   <option value="">Select Service / {{ __('frontend.appointment_form.all_spec') }}</option>
                   @foreach($apptSpecializations as $spec)
                   <option value="{{ $spec->id }}">{{ $spec->name }}</option>
@@ -167,12 +167,12 @@
 
             <!-- Select Doctor -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-[14px] font-semibold text-navy">Select Doctor <span class="text-red-500">*</span></label>
+              <label class="text-small font-semibold text-navy">Select Doctor <span class="text-red-500">*</span></label>
               <div class="relative flex items-center justify-between w-full bg-[#F7F8FA] rounded-lg px-4 h-[54px] border border-transparent focus-within:border-brand-cyan transition-colors">
                 @php
                   $selectedDoctorId = old('doctor_id') ?: data_get($preselectedDoctor, 'id');
                 @endphp
-                <select name="doctor_id" class="w-full bg-transparent border-none outline-none focus:ring-0 text-[15px] text-gray-700 p-0 appearance-none" data-field="doctor" required>
+                <select name="doctor_id" class="w-full bg-transparent border-none outline-none focus:ring-0 text-input text-gray-700 p-0 appearance-none" data-field="doctor" required>
                   <option value="" {{ $selectedDoctorId ? '' : 'selected' }} hidden>Select Doctor</option>
                   @forelse($apptDoctors as $doc)
                   <option value="{{ $doc->id }}" data-spec-id="{{ $doc->doctor_specialization_id }}" data-fee="{{ $doc->consultation_fee }}" {{ (string) $selectedDoctorId === (string) $doc->id ? 'selected' : '' }}>
@@ -188,14 +188,14 @@
                   </svg>
                 </span>
               </div>
-              <p class="text-[13px] text-red-500" data-field="doctor-hint"></p>
+              <p class="text-caption text-red-500" data-field="doctor-hint"></p>
             </div>
 
             <!-- Appointment Date -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-[14px] font-semibold text-navy">{{ __('frontend.appointment_form.appt_date') }} <span class="text-red-500">*</span></label>
+              <label class="text-small font-semibold text-navy">{{ __('frontend.appointment_form.appt_date') }} <span class="text-red-500">*</span></label>
               <div class="flex items-center justify-between w-full bg-[#F7F8FA] rounded-lg px-4 h-[54px] border border-transparent focus-within:border-brand-cyan transition-colors">
-                <input type="date" name="appointment_date" value="{{ old('appointment_date') }}" class="w-full bg-transparent border-none outline-none focus:ring-0 text-[15px] text-gray-700 placeholder-gray-400 p-0" placeholder="mm/dd/yyyy" data-field="date" disabled required />
+                <input type="date" name="appointment_date" value="{{ old('appointment_date') }}" class="w-full bg-transparent border-none outline-none focus:ring-0 text-input text-gray-700 placeholder-gray-400 p-0" placeholder="mm/dd/yyyy" data-field="date" disabled required />
                 <span class="text-gray-400 ml-2 shrink-0">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="3.5" y="5" width="17" height="16" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
@@ -203,20 +203,20 @@
                   </svg>
                 </span>
               </div>
-              <p class="text-[13px] text-red-500" data-field="date-hint"></p>
+              <p class="text-caption text-red-500" data-field="date-hint"></p>
             </div>
 
             <!-- Time Slots (Dynamic) -->
             <div class="w-full">
-              <p class="font-bold text-navy text-[15px] mb-2" data-field="slots-label" style="display:none;">Doctor Availability</p>
+              <p class="font-bold text-navy text-small mb-2" data-field="slots-label" style="display:none;">Doctor Availability</p>
               <div class="flex flex-wrap gap-2" data-field="slots"></div>
             </div>
 
             <!-- Note To Doctor -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-[14px] font-semibold text-navy">{{ __('frontend.appointment_form.symptoms') }} <span class="text-gray-400 font-normal text-xs">(Optional)</span></label>
+              <label class="text-small font-semibold text-navy">{{ __('frontend.appointment_form.symptoms') }} <span class="text-gray-400 font-normal text-caption">(Optional)</span></label>
               <div class="w-full bg-[#F7F8FA] rounded-lg p-4 border border-transparent focus-within:border-brand-cyan transition-colors">
-                <textarea name="symptoms" class="w-full bg-transparent border-none outline-none focus:ring-0 text-[15px] text-gray-700 placeholder-gray-400 p-0 resize-none" placeholder="Describe any symptoms or note for the doctor..." rows="4">{{ old('symptoms') }}</textarea>
+                <textarea name="symptoms" class="w-full bg-transparent border-none outline-none focus:ring-0 text-input text-gray-700 placeholder-gray-400 p-0 resize-none" placeholder="Describe any symptoms or note for the doctor..." rows="4">{{ old('symptoms') }}</textarea>
               </div>
             </div>
             
@@ -225,7 +225,7 @@
 
             <!-- Dropzone -->
             <div class="flex flex-col gap-1.5">
-              <label class="text-[14px] font-semibold text-navy">Medical Documents <span class="text-gray-400 font-normal text-xs">(Optional)</span></label>
+              <label class="text-small font-semibold text-navy">Medical Documents <span class="text-gray-400 font-normal text-caption">(Optional)</span></label>
               <div class="book-appointment__dropzone w-full bg-[#F7F8FA] rounded-lg border-dashed border-2 border-gray-200" data-field="dropzone" tabindex="0" role="button" aria-label="Upload medical documents">
                 <input type="file" name="medical_documents[]" class="book-appointment__dropzone-input" data-field="file-input" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" multiple hidden />
                 <div class="book-appointment__dropzone-prompt" data-field="dropzone-empty">
@@ -235,11 +235,11 @@
                   <p class="book-appointment__dropzone-text" data-field="dropzone-label">
                     <span class="book-appointment__dropzone-browse text-brand-cyan font-semibold">{{ __('frontend.appointment_form.upload_docs') }}</span> {!! __('frontend.appointment_form.drag_drop') !!}
                   </p>
-                  <p class="book-appointment__dropzone-hint text-xs text-gray-400 mt-1">{{ __('frontend.appointment_form.upload_hint') }}</p>
+                  <p class="book-appointment__dropzone-hint text-caption text-gray-400 mt-1">{{ __('frontend.appointment_form.upload_hint') }}</p>
                 </div>
                 <div class="book-appointment__dropzone-list" data-field="dropzone-list"></div>
               </div>
-              <p class="text-[13px] text-red-500" data-field="file-hint"></p>
+              <p class="text-caption text-red-500" data-field="file-hint"></p>
             </div>
 
             <!-- Payment -->
@@ -248,18 +248,18 @@
             @endphp
             @if($paymentSettings['has_online'] || $paymentSettings['allow_without_pay'])
             <div class="w-full mt-2">
-              <p class="font-bold text-navy text-[15px] mb-2">{{ __('frontend.appointment_form.payment_option') }}</p>
+              <p class="font-bold text-navy text-small mb-2">{{ __('frontend.appointment_form.payment_option') }}</p>
               <div class="flex flex-wrap gap-4">
                 @if($paymentSettings['allow_without_pay'])
                 <label class="flex items-center gap-2 px-4 py-2 bg-[#F7F8FA] border border-gray-200 rounded-lg cursor-pointer transition-colors hover:bg-gray-100">
                   <input type="radio" name="payment_type" value="without_pay" class="text-brand-cyan focus:ring-brand-cyan" checked data-payment-type />
-                  <span class="text-gray-700 text-[14px]">🏥 {{ __('frontend.appointment_form.pay_hospital') }}</span>
+                  <span class="text-gray-700 text-small">🏥 {{ __('frontend.appointment_form.pay_hospital') }}</span>
                 </label>
                 @endif
                 @if($paymentSettings['has_online'])
                 <label class="flex items-center gap-2 px-4 py-2 bg-[#F7F8FA] border border-gray-200 rounded-lg cursor-pointer transition-colors hover:bg-gray-100">
                   <input type="radio" name="payment_type" value="online" class="text-brand-cyan focus:ring-brand-cyan" {{ !$paymentSettings['allow_without_pay'] ? 'checked' : '' }} data-payment-type />
-                  <span class="text-gray-700 text-[14px]">💳 {{ __('frontend.appointment_form.pay_online') }}</span>
+                  <span class="text-gray-700 text-small">💳 {{ __('frontend.appointment_form.pay_online') }}</span>
                 </label>
                 @endif
               </div>
@@ -267,13 +267,13 @@
               @if($paymentSettings['has_online'])
               <div class="flex gap-4 mt-3" data-gateway-selector style="{{ !$paymentSettings['allow_without_pay'] ? '' : 'display:none;' }}">
                 @if(!empty($paymentSettings['gateways']['bkash']))
-                <label class="flex items-center gap-2 px-4 py-2 bg-pink-50 border border-pink-200 rounded-lg cursor-pointer text-pink-600 font-semibold text-[13px] transition-colors hover:bg-pink-100">
+                <label class="flex items-center gap-2 px-4 py-2 bg-pink-50 border border-pink-200 rounded-lg cursor-pointer text-pink-600 font-semibold text-caption transition-colors hover:bg-pink-100">
                   <input type="radio" name="payment_gateway" value="bkash" class="text-pink-600 focus:ring-pink-600" checked />
                   <span>{{ __('frontend.appointment_form.bkash') }}</span>
                 </label>
                 @endif
                 @if(!empty($paymentSettings['gateways']['sslcommerz']))
-                <label class="flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer text-blue-600 font-semibold text-[13px] transition-colors hover:bg-blue-100">
+                <label class="flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer text-blue-600 font-semibold text-caption transition-colors hover:bg-blue-100">
                   <input type="radio" name="payment_gateway" value="sslcommerz" class="text-blue-600 focus:ring-blue-600" {{ empty($paymentSettings['gateways']['bkash']) ? 'checked' : '' }} />
                   <span>{{ __('frontend.appointment_form.sslcommerz') }}</span>
                 </label>
@@ -286,12 +286,12 @@
             <!-- Terms & Conditions -->
             <label class="flex items-center gap-3 mt-4 mb-2 cursor-pointer">
               <input type="checkbox" required class="w-4 h-4 text-[#00c853] border-gray-300 rounded focus:ring-[#00c853]">
-              <span class="text-[14px] text-gray-600">I accept <a href="{{ url('privacy') }}" class="text-brand-cyan hover:underline">Privacy Policy</a> and <a href="{{ url('policy') }}" class="text-brand-cyan hover:underline">Terms & Conditions</a></span>
+              <span class="text-small text-gray-600">I accept <a href="{{ url('privacy') }}" class="text-brand-cyan hover:underline">Privacy Policy</a> and <a href="{{ url('policy') }}" class="text-brand-cyan hover:underline">Terms & Conditions</a></span>
             </label>
 
             <!-- Submit Button -->
             <div class="mt-2">
-              <button type="submit" class="inline-flex items-center justify-center gap-2 bg-[#00c853] hover:bg-green-600 text-white font-semibold text-[15px] px-8 py-3.5 rounded disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors shadow-sm" data-field="submit" disabled>
+              <button type="submit" class="inline-flex items-center justify-center gap-2 bg-[#00c853] hover:bg-green-600 text-white font-semibold text-btn px-8 py-3.5 rounded disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors shadow-sm" data-field="submit" disabled>
                 Book Appointment
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

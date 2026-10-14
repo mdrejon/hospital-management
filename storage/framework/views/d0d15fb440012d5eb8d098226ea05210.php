@@ -53,15 +53,15 @@ $whyFeatures = !empty($about['why_features']) ? $about['why_features'] : [
 
       <!-- Left Content (White Text) -->
       <div class="lg:w-1/2">
-        <p class="text-brand-cyan italic text-2xl lg:text-[28px] mb-3" style="font-family: 'Georgia', serif;">
+        <p class="text-brand-cyan italic text-subheading mb-3" style="font-family: 'Georgia', serif;">
           <?php echo e($whyBadge); ?>
 
         </p>
-        <h2 class="text-3xl lg:text-[44px] font-bold text-white mb-6 leading-[1.2] tracking-tight">
+        <h2 class="text-h2 font-bold text-white mb-6 tracking-tight">
           <?php echo e($whyTitle); ?>
 
         </h2>
-        <p class="text-gray-300 text-[15px] leading-relaxed mb-12 max-w-[520px]">
+        <p class="text-gray-300 text-body leading-relaxed mb-12 max-w-[520px]">
           <?php echo e($whyDesc); ?>
 
         </p>
@@ -91,8 +91,8 @@ $whyFeatures = !empty($about['why_features']) ? $about['why_features'] : [
 
             </div>
             <div>
-              <h3 class="text-white font-bold text-[16px] mb-2 leading-snug"><?php echo e($feature['title']); ?></h3>
-              <p class="text-gray-300 text-[13px] leading-relaxed"><?php echo e($feature['description']); ?></p>
+              <h3 class="text-white font-bold text-h6 mb-2"><?php echo e($feature['title']); ?></h3>
+              <p class="text-gray-300 text-small leading-relaxed"><?php echo e($feature['description']); ?></p>
             </div>
           </div>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -118,8 +118,8 @@ $whyFeatures = !empty($about['why_features']) ? $about['why_features'] : [
         <!-- Floating Experience Badge -->
         <?php if(!empty($whyBadgeNumber)): ?>
         <div class="absolute -bottom-5 left-4 sm:-bottom-6 sm:left-6 z-20 flex flex-col items-center justify-center rounded-2xl bg-brand-cyan px-5 py-4 text-center shadow-2xl border-2 border-white/30 backdrop-blur-md">
-          <span class="text-2xl sm:text-3xl font-extrabold text-white leading-none"><?php echo e($whyBadgeNumber); ?></span>
-          <span class="text-xs font-semibold text-white/95 mt-1"><?php echo e($whyBadgeLabel); ?></span>
+          <span class="text-h3 font-extrabold text-white leading-none"><?php echo e($whyBadgeNumber); ?></span>
+          <span class="text-caption font-semibold text-white/95 mt-1"><?php echo e($whyBadgeLabel); ?></span>
         </div>
         <?php endif; ?>
 

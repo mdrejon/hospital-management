@@ -19,6 +19,49 @@ export default {
                 // admin panel's font-sans.
                 poppins: ['Poppins', 'Hind Siliguri', 'SolaimanLipi', 'Kalpurush', 'SutonnyOMJ', 'SutonnyMJ', 'Segoe UI', 'sans-serif'],
             },
+            // Responsive type + spacing scale for the public frontend. The values
+            // live in resources/scss/abstracts/_tokens.scss (one row per token,
+            // one column per device, separate Bangla rows) and reach here as
+            // CSS custom properties written by resources/scss/base/_base.scss.
+            // Edit the numbers there only — these entries just name the
+            // utilities: text-h2, text-body, leading-heading, py-section, ...
+            fontSize: {
+                'hero-title': ['var(--fs-hero-title)', { lineHeight: 'var(--lh-display)' }],
+                'hero-sub': ['var(--fs-hero-sub)', { lineHeight: 'var(--lh-heading)' }],
+                'hero-text': ['var(--fs-hero-text)', { lineHeight: 'var(--lh-body)' }],
+                'hero-btn': ['var(--fs-hero-btn)', { lineHeight: 'var(--lh-ui)' }],
+                h1: ['var(--fs-h1)', { lineHeight: 'var(--lh-heading)' }],
+                h2: ['var(--fs-h2)', { lineHeight: 'var(--lh-heading)' }],
+                h3: ['var(--fs-h3)', { lineHeight: 'var(--lh-heading)' }],
+                h4: ['var(--fs-h4)', { lineHeight: 'var(--lh-heading)' }],
+                h5: ['var(--fs-h5)', { lineHeight: 'var(--lh-heading)' }],
+                h6: ['var(--fs-h6)', { lineHeight: 'var(--lh-heading)' }],
+                subheading: ['var(--fs-subheading)', { lineHeight: 'var(--lh-heading)' }],
+                eyebrow: ['var(--fs-eyebrow)', { lineHeight: 'var(--lh-ui)' }],
+                lead: ['var(--fs-lead)', { lineHeight: 'var(--lh-body)' }],
+                body: ['var(--fs-body)', { lineHeight: 'var(--lh-body)' }],
+                'body-sm': ['var(--fs-body-sm)', { lineHeight: 'var(--lh-body)' }],
+                small: ['var(--fs-small)', { lineHeight: 'var(--lh-ui)' }],
+                caption: ['var(--fs-caption)', { lineHeight: 'var(--lh-ui)' }],
+                tiny: ['var(--fs-tiny)', { lineHeight: 'var(--lh-ui)' }],
+                'btn-lg': ['var(--fs-btn-lg)', { lineHeight: 'var(--lh-ui)' }],
+                btn: ['var(--fs-btn)', { lineHeight: 'var(--lh-ui)' }],
+                'btn-sm': ['var(--fs-btn-sm)', { lineHeight: 'var(--lh-ui)' }],
+                input: ['var(--fs-input)', { lineHeight: 'var(--lh-ui)' }],
+                menu: ['var(--fs-menu)', { lineHeight: 'var(--lh-ui)' }],
+                submenu: ['var(--fs-submenu)', { lineHeight: 'var(--lh-ui)' }],
+            },
+            lineHeight: {
+                display: 'var(--lh-display)',
+                heading: 'var(--lh-heading)',
+                body: 'var(--lh-body)',
+                ui: 'var(--lh-ui)',
+            },
+            spacing: {
+                section: 'var(--space-section)',
+                'section-sm': 'var(--space-section-sm)',
+                'section-gap': 'var(--space-section-gap)',
+            },
             colors: {
                 // Values come from CSS custom properties defined once in
                 // resources/scss/base/_base.scss (:root), themselves generated
@@ -31,9 +74,10 @@ export default {
                     dark: 'rgb(var(--color-navy-dark) / <alpha-value>)',
                 },
                 brand: {
-                    cyan: 'rgb(var(--color-primary) / <alpha-value>)',
+                    cyan: 'rgb(var(--color-secondary) / <alpha-value>)',
                     green: 'rgb(var(--color-accent-green) / <alpha-value>)',
                     red: 'rgb(var(--color-accent-red) / <alpha-value>)',
+                    primary: 'rgb(var(--color-primary) / <alpha-value>)',
                 },
                 footer: {
                     bg: 'rgb(var(--color-secondary) / <alpha-value>)',
@@ -68,7 +112,7 @@ export default {
                     md: '1.5rem',
                     lg: '2rem',
                     xl: '2rem',
-                    '2xl': '2.5rem',
+                    '2xl': '2rem',
                     '3xl': '2.5rem',
                     '2k': '2.5rem',
                     'qhd': '3rem',

@@ -3,7 +3,7 @@
 // ==========================================================================
 
 .ceo-message {
-  @apply bg-white py-20;
+  @apply bg-white py-section;
 }
 
 .ceo-message__grid {
@@ -23,15 +23,15 @@
 }
 
 .ceo-message__badge-value {
-  @apply text-2xl font-extrabold text-brand-cyan;
+  @apply text-h3 font-extrabold text-brand-cyan;
 }
 
 .ceo-message__badge-label {
-  @apply text-xs font-medium leading-tight text-muted;
+  @apply text-caption font-medium leading-tight text-muted;
 }
 
 .ceo-message__eyebrow {
-  @apply flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-brand-cyan;
+  @apply flex items-center gap-3 text-eyebrow font-semibold uppercase tracking-[0.2em] text-brand-cyan;
 }
 
 .ceo-message__eyebrow-dot {
@@ -39,15 +39,15 @@
 }
 
 .ceo-message__title {
-  @apply mt-3 text-3xl font-extrabold text-navy sm:text-4xl;
+  @apply mt-3 text-h2 font-extrabold text-navy;
 }
 
 .ceo-message__desc {
-  @apply mt-4 max-w-lg text-[15px] leading-relaxed text-muted;
+  @apply mt-4 max-w-lg text-body leading-relaxed text-muted;
 }
 
 .ceo-message__focus-label {
-  @apply mt-8 text-sm font-bold text-brand-cyan;
+  @apply mt-8 text-small font-bold text-brand-cyan;
 }
 
 .ceo-message__checklist {
@@ -55,7 +55,7 @@
 }
 
 .ceo-message__check {
-  @apply flex items-center gap-2.5 text-sm font-medium text-navy;
+  @apply flex items-center gap-2.5 text-small font-medium text-navy;
 }
 
 .ceo-message__check-icon {
@@ -75,13 +75,13 @@
 }
 
 .ceo-message__award-year {
-  @apply text-sm font-extrabold text-navy;
+  @apply text-small font-extrabold text-navy;
 }
 
 .ceo-message__award-org {
-  @apply text-xs text-muted;
+  @apply text-caption text-muted;
 }
 
 .ceo-message__award-link {
-  @apply text-xs font-semibold text-brand-cyan underline-offset-2 hover:underline;
+  @apply text-caption font-semibold text-brand-cyan underline-offset-2 hover:underline;
 }

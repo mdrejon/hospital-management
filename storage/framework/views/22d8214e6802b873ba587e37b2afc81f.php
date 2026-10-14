@@ -1,45 +1,45 @@
   <!-- ===================== Header ===================== -->
   <header class="site-header">
     <!-- Top info bar -->
-    <div class="top-header border-b border-gray-100 bg-white">
+    <div class="top-header border-b border-white/10 bg-black text-white">
       <div class="top-header__inner">
         <div class="top-header__left">
           <span class="top-header__item">
-            <span class="top-header__value text-navy">
+            <span class="top-header__value text-white">
               <?php echo e($headerSettings['header_tagline'] ?? 'Human Life, Humane Care'); ?>
 
             </span>
           </span>
           <span class="top-header__item">
-            <span class="top-header__icon top-header__icon--emergency">
+            <span class="top-header__icon top-header__icon--emergency text-white">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6" />
               </svg>
             </span>
-            <span class="top-header__value text-navy">
-              Call : <a href="tel:<?php echo e(preg_replace('/[^0-9+]/', '', $headerSettings['header_phone'] ?? '01849-727858')); ?>" style="color: #2563eb; text-decoration: none;"><?php echo e($headerSettings['header_phone'] ?? '01849-727858'); ?></a>
+            <span class="top-header__value text-white">
+              Call : <a href="tel:<?php echo e(preg_replace('/[^0-9+]/', '', $headerSettings['header_phone'] ?? '01849-727858')); ?>" class="text-white hover:text-white/80 transition-colors" style="color: #ffffff; text-decoration: none;"><?php echo e($headerSettings['header_phone'] ?? '01849-727858'); ?></a>
             </span>
           </span>
         </div>
 
         <div class="top-header__right">
           <span class="top-header__item">
-            <span class="top-header__icon">
+            <span class="top-header__icon text-white">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" />
                 <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
               </svg>
             </span>
-            <span class="top-header__value text-navy">
+            <span class="top-header__value text-white">
               <?php echo e($headerSettings['header_hours'] ?? 'Open 24 Hours, Everyday'); ?>
 
             </span>
           </span>
-          <a href="<?php echo e(route('login')); ?>" class="top-header__item" style="color: #2563eb; font-weight: 700; text-decoration: none;" title="Agent Login Portal">
+          <a href="<?php echo e(route('login')); ?>" class="top-header__item text-white hover:text-white/80 transition-colors" style="color: #ffffff; font-weight: 700; text-decoration: none;" title="Agent Login Portal">
             Login
           </a>
           <?php $__currentLoopData = $languages ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lang): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <a href="<?php echo e(route('language.switch', $lang->code)); ?>" class="top-header__lang <?php echo e(app()->getLocale() === $lang->code ? 'is-active' : ''); ?> uppercase"><?php echo e(strtoupper($lang->code)); ?></a>
+          <a href="<?php echo e(route('language.switch', $lang->code)); ?>" class="top-header__lang <?php echo e(app()->getLocale() === $lang->code ? 'is-active !font-bold !text-white' : 'text-white/80 hover:text-white'); ?> uppercase" style="color: <?php echo e(app()->getLocale() === $lang->code ? '#ffffff' : 'rgba(255,255,255,0.85)'); ?>;"><?php echo e(strtoupper($lang->code)); ?></a>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
       </div>
@@ -62,8 +62,8 @@
               </svg>
             </div>
             <div>
-              <div class="header-info-label text-[13px] text-gray-500">Call Us Anytime</div>
-              <div class="header-info-value font-bold text-[15px] text-navy"><?php echo e($headerSettings['header_phone'] ?? '+880123-467-789'); ?></div>
+              <div class="header-info-label text-caption text-gray-500">Call Us Anytime</div>
+              <div class="header-info-value font-bold text-body-sm text-navy"><?php echo e($headerSettings['header_phone'] ?? '+880123-467-789'); ?></div>
             </div>
           </div>
 
@@ -74,12 +74,12 @@
               </svg>
             </div>
             <div>
-              <div class="header-info-label text-[13px] text-gray-500">Opening Time</div>
-              <div class="header-info-value font-bold text-[15px] text-navy"><?php echo e($headerSettings['header_hours'] ?? 'Mon-Sat: 9.00-18.00'); ?></div>
+              <div class="header-info-label text-caption text-gray-500">Opening Time</div>
+              <div class="header-info-value font-bold text-body-sm text-navy"><?php echo e($headerSettings['header_hours'] ?? 'Mon-Sat: 9.00-18.00'); ?></div>
             </div>
           </div>
 
-          <a href="<?php echo e($headerSettings['header_book_btn_url'] ?? route('appointment')); ?>" class="header-appointment-btn inline-flex items-center justify-center bg-brand-cyan text-white font-semibold py-[11px] px-8 rounded transition hover:bg-navy text-[15px]">
+          <a href="<?php echo e($headerSettings['header_book_btn_url'] ?? route('appointment')); ?>" class="header-appointment-btn inline-flex items-center justify-center bg-brand-cyan text-white font-semibold py-[11px] px-8 rounded transition hover:bg-navy text-btn">
             <?php echo e($headerSettings['header_book_btn_text'] ?? 'Appointment'); ?>
 
           </a>
@@ -149,8 +149,8 @@
               </svg></span>
           </button>
           <div class="dropdown-menu">
-            <a href="<?php echo e(route('gallery')); ?>" class="dropdown-menu__link">Photo Gallery</a>
-            <a href="<?php echo e(route('video-gallery')); ?>" class="dropdown-menu__link">Video Gallery</a>
+            <a href="<?php echo e(route('gallery')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.photo_gallery')); ?></a>
+            <a href="<?php echo e(route('video-gallery')); ?>" class="dropdown-menu__link"><?php echo e(__('frontend.nav.video_gallery')); ?></a>
           </div>
         </div>
 
@@ -162,8 +162,8 @@
       <div class="site-header__actions">
         <!-- Inline Search Form (desktop) -->
         <form action="<?php echo e(route('search')); ?>" method="GET" class="hidden lg:flex items-center h-10 shadow-sm rounded-md overflow-hidden bg-white">
-          <input type="search" name="q" value="<?php echo e(request('q')); ?>" class="h-full border-0 bg-white px-4 py-2 text-[14px] text-gray-800 focus:outline-none focus:ring-0 w-52 placeholder-gray-400" placeholder="search" required />
-          <button type="submit" class="w-12 h-full bg-brand-green text-white flex items-center justify-center hover:opacity-90 transition">
+          <input type="search" name="q" value="<?php echo e(request('q')); ?>" class="h-full border-0 bg-white px-4 py-2 text-small text-gray-800 focus:outline-none focus:ring-0 w-44 xl:w-52 placeholder-gray-400" placeholder="<?php echo e(__('frontend.header.search_placeholder')); ?>" required />
+          <button type="submit" class="w-12 h-full bg-brand-red text-white flex items-center justify-center hover:opacity-90 transition" aria-label="Search">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
@@ -183,8 +183,8 @@
     <div class="header-search-bar hidden lg:hidden border-t border-gray-100 bg-white py-4 px-4 absolute w-full left-0 top-full shadow-md z-40">
       <div class="container mx-auto">
         <form action="<?php echo e(route('search')); ?>" method="GET" class="flex items-center gap-2 max-w-xl mx-auto">
-          <input type="search" name="q" value="<?php echo e(request('q')); ?>" class="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-brand-green" placeholder="Search..." required />
-          <button type="submit" class="bg-brand-green text-white px-6 py-2 rounded hover:opacity-90 transition">Search</button>
+          <input type="search" name="q" value="<?php echo e(request('q')); ?>" class="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-brand-red" placeholder="Search..." required />
+          <button type="submit" class="bg-brand-red text-white px-6 py-2 rounded hover:opacity-90 transition">Search</button>
         </form>
       </div>
     </div>
@@ -233,7 +233,7 @@
       </div>
 
       <a href="<?php echo e(route('services')); ?>" class="side-panel__nav-link"><?php echo e(__('frontend.nav.our_service')); ?></a>
-      <a href="<?php echo e(route('packages')); ?>" class="side-panel__nav-link">Packages</a>
+      <a href="<?php echo e(route('packages')); ?>" class="side-panel__nav-link"><?php echo e(__('frontend.breadcrumb.packages')); ?></a>
 
       <div>
         <button type="button" class="side-panel__nav-link" data-submenu-toggle>
@@ -265,8 +265,8 @@
           </span>
         </button>
         <div class="side-panel__submenu">
-          <a href="<?php echo e(route('gallery')); ?>" class="side-panel__nav-sublink">Photo Gallery</a>
-          <a href="<?php echo e(route('video-gallery')); ?>" class="side-panel__nav-sublink">Video Gallery</a>
+          <a href="<?php echo e(route('gallery')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.photo_gallery')); ?></a>
+          <a href="<?php echo e(route('video-gallery')); ?>" class="side-panel__nav-sublink"><?php echo e(__('frontend.nav.video_gallery')); ?></a>
         </div>
       </div>
 

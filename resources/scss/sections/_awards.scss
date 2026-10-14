@@ -7,7 +7,7 @@
 // ==========================================================================
 
 .awards {
-  @apply bg-footer-bg py-20;
+  @apply  py-section;
 }
 
 .awards__grid {
@@ -19,7 +19,7 @@
 }
 
 .awards__title {
-  @apply text-3xl font-extrabold text-navy;
+  @apply text-h2 font-extrabold text-navy;
 
   mark {
     @apply rounded bg-brand-cyan px-3 py-1 text-navy;
@@ -27,7 +27,7 @@
 }
 
 .awards__desc {
-  @apply mt-4 max-w-xs text-sm leading-relaxed text-slate-500;
+  @apply mt-4 max-w-xs text-body leading-relaxed text-slate-500;
 }
 
 // Slider -------------------------------------------------------------
@@ -87,13 +87,13 @@
 }
 
 .award-card__title {
-  @apply mt-5 text-lg font-bold text-navy;
+  @apply mt-5 text-h5 font-bold text-navy;
 }
 
 .award-card__subtitle {
-  @apply mt-2 text-sm leading-relaxed text-slate-500;
+  @apply mt-2 text-small leading-relaxed text-slate-500;
 }
 
 .award-card__link {
-  @apply mt-3 text-sm font-semibold text-brand-cyan;
+  @apply mt-3 text-btn font-semibold text-brand-cyan;
 }

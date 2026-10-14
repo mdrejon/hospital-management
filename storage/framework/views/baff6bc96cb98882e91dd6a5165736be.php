@@ -86,16 +86,16 @@ $primaryCard = $blogCards->first();
 $secondaryCards = $blogCards->slice(1, 3);
 ?>
 
-<section class="blog-v2 py-20 lg:py-28 bg-white relative overflow-hidden" data-blog-v2>
+<section class="blog-v2 py-section bg-white relative overflow-hidden" data-blog-v2>
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl 2xl:max-w-7xl 2k:max-w-[1720px] 4k:max-w-[2160px] relative z-10">
     
     <!-- Section Header (Centered) -->
-    <div class="text-center max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto mb-12 sm:mb-16">
-      <p class="text-xs sm:text-sm font-bold tracking-wider text-[#ef4444] uppercase mb-2 inline-block">
+    <div class="text-center max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto mb-section-gap">
+      <p class="text-eyebrow font-bold tracking-wider text-[#ef4444] uppercase mb-2 inline-block">
         <?php echo e($blogEyebrow); ?>
 
       </p>
-      <h2 class="text-3xl sm:text-4xl lg:text-[42px] 2k:text-5xl font-extrabold text-navy leading-[1.25] tracking-tight">
+      <h2 class="text-h2 font-extrabold text-navy tracking-tight">
         <?php echo $blogTitle; ?>
 
       </h2>
@@ -123,7 +123,7 @@ $secondaryCards = $blogCards->slice(1, 3);
             <h3 class="mb-4">
               <a 
                 href="<?php echo e($primaryCard['url']); ?>" 
-                class="text-white font-bold text-xl sm:text-2xl lg:text-[26px] 2k:text-3xl leading-snug hover:text-brand-cyan transition-colors line-clamp-2 drop-shadow-sm"
+                class="text-white font-bold text-h3 hover:text-brand-cyan transition-colors line-clamp-2 drop-shadow-sm"
               >
                 <?php echo e($primaryCard['title']); ?>
 
@@ -134,7 +134,7 @@ $secondaryCards = $blogCards->slice(1, 3);
             <div class="w-full h-px bg-white/20 mb-3.5"></div>
 
             <!-- Meta Row -->
-            <div class="text-white/85 text-xs sm:text-sm font-medium flex flex-wrap items-center gap-2.5 sm:gap-3">
+            <div class="text-white/85 text-small font-medium flex flex-wrap items-center gap-2.5 sm:gap-3">
               <span><?php echo e($primaryCard['category']); ?></span>
               <span class="inline-block w-1 h-1 rounded-full bg-white/60"></span>
               <span><?php echo e($primaryCard['date']); ?></span>
@@ -173,7 +173,7 @@ $secondaryCards = $blogCards->slice(1, 3);
             <h3 class="mb-2.5">
               <a 
                 href="<?php echo e($secCard['url']); ?>" 
-                class="text-navy font-bold text-[15px] sm:text-base lg:text-[17px] 2k:text-lg leading-snug line-clamp-2 hover:text-brand-cyan transition-colors"
+                class="text-navy font-bold text-h6 line-clamp-2 hover:text-brand-cyan transition-colors"
               >
                 <?php echo e($secCard['title']); ?>
 
@@ -181,7 +181,7 @@ $secondaryCards = $blogCards->slice(1, 3);
             </h3>
 
             <!-- Bottom Meta Row -->
-            <div class="flex items-center gap-2 text-xs sm:text-[13px] text-gray-500 font-medium pt-2 border-t border-cyan-900/5">
+            <div class="flex items-center gap-2 text-caption text-gray-500 font-medium pt-2 border-t border-cyan-900/5">
               <span><?php echo e($secCard['date']); ?></span>
               <span class="inline-block w-1 h-1 rounded-full bg-gray-400"></span>
               <span class="inline-flex items-center gap-1">

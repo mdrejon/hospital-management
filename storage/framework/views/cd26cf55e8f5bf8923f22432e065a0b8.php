@@ -54,7 +54,7 @@ $heroSlides = $sliders->isNotEmpty()
         <div class="hero-slide__inner !max-w-none w-full !px-4 lg:!px-16 flex items-center h-full relative z-10">
           <div class="hero-slide__content pl-8 lg:pl-16 !max-w-2xl 2k:!max-w-3xl 4k:!max-w-4xl" data-hero-content>
             <?php if($slide['eyebrow']): ?>
-            <p class="hero-slide__eyebrow !block !text-brand-cyan !italic !text-2xl lg:!text-[28px] !mb-4" style="font-family: 'Georgia', serif;">
+            <p class="hero-slide__eyebrow !block !text-brand-cyan !italic !mb-4" style="font-family: 'Georgia', serif;">
               <?php echo e($slide['eyebrow']); ?>
 
             </p>
@@ -68,7 +68,7 @@ $heroSlides = $sliders->isNotEmpty()
               <?php endif; ?>
             </h1>
             <?php if($slide['desc']): ?>
-            <p class="hero-slide__desc !text-gray-500 !text-sm lg:!text-base !max-w-[480px] 2k:!max-w-[680px] 4k:!max-w-[900px]">
+            <p class="hero-slide__desc !text-gray-500 !max-w-[480px] 2k:!max-w-[680px] 4k:!max-w-[900px]">
               <?php echo e($slide['desc']); ?>
 
             </p>
@@ -79,7 +79,7 @@ $heroSlides = $sliders->isNotEmpty()
                   <path d="M13 2L3 14h8v8l10-12h-8V2z" />
                 </svg>
               </span>
-              <span class="!font-bold !text-sm lg:!text-base !normal-case !tracking-normal !text-white"><?php echo e($slide['button_text'] ?: 'View All Services'); ?></span>
+              <span class="!font-bold !normal-case !tracking-normal !text-white"><?php echo e($slide['button_text'] ?: 'View All Services'); ?></span>
             </a>
           </div>
         </div>
@@ -165,7 +165,7 @@ $deptCards = $featuredServices->isNotEmpty()
 </svg>', 'image' => asset('assets/img/about-image.webp'), 'url' => route('services')],
 ]);
 ?>
-<section class="departments py-24 bg-slate-50 relative overflow-hidden">
+<section class="departments py-section bg-slate-50 relative overflow-hidden">
   <!-- Animated Floating Element -->
   <div class="absolute top-20 left-10 opacity-20 animate-bounce text-navy pointer-events-none z-0" style="animation-duration: 4s;">
     <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -175,16 +175,16 @@ $deptCards = $featuredServices->isNotEmpty()
   </div>
   <div class="container mx-auto px-4">
     <!-- Heading Area -->
-    <div class="text-center mb-16 max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto">
-      <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-3">
+    <div class="text-center mb-section-gap max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto">
+      <p class="text-brand-cyan font-bold tracking-widest uppercase text-eyebrow mb-3">
         <?php echo e($svc['svc_badge'] ?? __('frontend.home.services_badge')); ?>
 
       </p>
-      <h2 class="text-3xl lg:text-[40px] font-bold text-navy mb-6 leading-[1.2]">
+      <h2 class="text-h2 font-bold text-navy mb-6">
         <?php echo e($svc['svc_title'] ?? __('frontend.home.services_title')); ?>
 
       </h2>
-      <p class="text-gray-500 text-[15px] mb-8 leading-relaxed">
+      <p class="text-gray-500 text-body mb-8 leading-relaxed">
         <?php echo e($svc['svc_desc'] ?? __('frontend.home.services_desc')); ?>
 
       </p>
@@ -220,16 +220,16 @@ $deptCards = $featuredServices->isNotEmpty()
 
         <!-- Content Area -->
         <div class="pt-14 pb-8 px-6 text-center transition-colors duration-300 group-hover:bg-brand-cyan flex-grow flex flex-col items-center relative z-0 bg-white">
-          <h3 class="text-navy text-[20px] font-bold mb-3 transition-colors duration-300 group-hover:text-white">
+          <h3 class="text-navy text-h4 font-bold mb-3 transition-colors duration-300 group-hover:text-white">
             <?php echo e($card['title']); ?>
 
           </h3>
-          <p class="text-gray-500 text-[14px] leading-relaxed mb-6 transition-colors duration-300 group-hover:text-white/90 line-clamp-3">
+          <p class="text-gray-500 text-small leading-relaxed mb-6 transition-colors duration-300 group-hover:text-white/90 line-clamp-3">
             <?php echo e($card['desc']); ?>
 
           </p>
 
-          <a href="<?php echo e($card['url']); ?>" class="mt-auto inline-flex items-center gap-2 text-navy text-[14px] font-bold transition-colors duration-300 group-hover:text-white group-hover:opacity-90">
+          <a href="<?php echo e($card['url']); ?>" class="mt-auto inline-flex items-center gap-2 text-navy text-btn font-bold transition-colors duration-300 group-hover:text-white group-hover:opacity-90">
             <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
@@ -264,7 +264,7 @@ $teamCards = $featuredDoctors->isNotEmpty()
 ['name' => 'Sara Owens', 'role' => 'Neurologist', 'photo' => asset('assets/img/team-3.png'), 'url' => '#', 'facebook' => null, 'youtube' => null, 'linkedin' => null],
 ]);
 ?>
-<section class="team !py-24 bg-white relative overflow-hidden">
+<section class="team py-section bg-white relative overflow-hidden">
   <!-- Animated Floating Element -->
   <div class="absolute bottom-20 right-10 opacity-[0.08] animate-spin text-brand-cyan pointer-events-none z-0" style="animation-duration: 20s;">
     <svg width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
@@ -273,29 +273,29 @@ $teamCards = $featuredDoctors->isNotEmpty()
   </div>
   <div class="container mx-auto px-4">
     <!-- Centered Heading Area -->
-    <div class="text-center mb-14 max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto">
+    <div class="text-center mb-section-gap max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto">
       <?php if(!empty($doc['doc_home_badge'])): ?>
-      <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-3">
+      <p class="text-brand-cyan font-bold tracking-widest uppercase text-eyebrow mb-3">
         <?php echo e($doc['doc_home_badge']); ?>
 
       </p>
       <?php endif; ?>
-      <h2 class="text-3xl lg:text-[40px] font-bold text-navy mb-4 leading-[1.2]">
+      <h2 class="text-h2 font-bold text-navy mb-4">
         <?php echo e($doc['doc_home_title'] ?? 'We Have Specialist Doctors To Solve Your Problems'); ?>
 
       </h2>
       <div class="flex justify-center items-center gap-1.5 mb-4 text-brand-cyan">
         <!-- Heartbeat Line -->
-        <span class="text-lg font-bold tracking-tighter">--</span>
+        <span class="text-h5 font-bold tracking-tighter">--</span>
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h3l2.5-4.5 3 9 2.5-4.5h4" />
         </svg>
-        <span class="text-lg font-bold tracking-tighter">--</span>
+        <span class="text-h5 font-bold tracking-tighter">--</span>
       </div>
-      <p class="text-gray-500 text-[15px]">
+      <!-- <p class="text-gray-500 text-body">
         <?php echo e($doc['doc_home_desc'] ?? 'Lorem ipsum dolor sit amet consectetur adipiscing elit praesent aliquet. pretiumts'); ?>
 
-      </p>
+      </p> -->
     </div>
 
     <!-- Slider -->
@@ -332,8 +332,8 @@ $teamCards = $featuredDoctors->isNotEmpty()
               </div>
               <!-- Content -->
               <div class="p-6 text-center border-t border-gray-100">
-                <p class="text-gray-500 text-[13px] mb-1.5"><?php echo e($card['role']); ?></p>
-                <h3 class="text-navy text-[19px] font-bold"><?php echo e($card['name']); ?></h3>
+                <p class="text-gray-500 text-small mb-1.5"><?php echo e($card['role']); ?></p>
+                <h3 class="text-navy text-h4 font-bold"><?php echo e($card['name']); ?></h3>
               </div>
             </article>
           </div>
@@ -360,7 +360,8 @@ $teamCards = $featuredDoctors->isNotEmpty()
   </div>
 </section>
 
-<!-- ===================== Health Packages ===================== -->
+<!-- ===================== Health Packages (V2 — modern card style) ===================== -->
+
 <?php
 $packageCards = $featuredPackages->isNotEmpty()
 ? $featuredPackages->map(fn ($p) => [
@@ -370,94 +371,35 @@ $packageCards = $featuredPackages->isNotEmpty()
 'url' => route('package-details', $p->slug),
 ])
 : collect([
-['title' => 'Full Body Checkup', 'desc' => 'Comprehensive screening to catch health issues early.', 'image' => asset('assets/img/sr-1-2.jpg'), 'url' => route('packages')],
-['title' => 'Dermatology & Wellness', 'desc' => 'Specialized skin and wellness treatments for every age.', 'image' => asset('assets/img/sr-1-3.jpg'), 'url' => route('packages')],
-['title' => 'Cardiac Care Package', 'desc' => 'Complete heart health evaluation and monitoring.', 'image' => asset('assets/img/about-image.webp'),'url' => route('packages')],
-['title' => 'Pediatric Care Package', 'desc' => 'Gentle, thorough checkups designed for children.', 'image' => asset('assets/img/slider-1.2.jpg'), 'url' => route('packages')],
-['title' => 'Surgical Care Package', 'desc' => 'Pre and post-operative care from expert surgeons.', 'image' => asset('assets/img/sr-1-1.jpg'), 'url' => route('packages')],
-['title' => 'Emergency Response Package', 'desc' => 'Round-the-clock critical care when it matters most.', 'image' => asset('assets/img/slider-1.3.jpg'), 'url' => route('packages')],
+['title' => 'Full Body Checkup Package', 'desc' => 'Comprehensive screening covering blood tests, ECG and ultrasonography.', 'image' => asset('assets/img/sr-1-2.jpg'), 'url' => route('packages')],
+['title' => 'Antenatal Care Package', 'desc' => 'Complete pregnancy care from check-up to delivery, guided by our Gynecology & Obstetrics team.', 'image' => asset('assets/img/sr-1-3.jpg'), 'url' => route('packages')],
+['title' => 'Cardiac Care Package', 'desc' => 'Full heart health evaluation and monitoring by our Cardiology specialists.', 'image' => asset('assets/img/about-image.webp'), 'url' => route('packages')],
+['title' => 'Diabetic Care Package', 'desc' => 'Regular diabetes monitoring and consultation from our Diabetic Center.', 'image' => asset('assets/img/slider-1.2.jpg'), 'url' => route('packages')],
+['title' => 'Emergency & Ambulance Package', 'desc' => '24-hour emergency response with ambulance pickup for critical situations.', 'image' => asset('assets/img/sr-1-1.jpg'), 'url' => route('packages')],
+['title' => 'Pediatric Care Package', 'desc' => 'Gentle, thorough checkups designed for children of every age.', 'image' => asset('assets/img/slider-1.3.jpg'), 'url' => route('packages')],
 ]);
 ?>
-<section class="packages py-24 bg-cyan-50/40 relative overflow-hidden">
-  <!-- Animated Floating Element -->
-  <div class="absolute top-1/2 left-10 opacity-10 animate-pulse text-navy pointer-events-none z-0" style="animation-duration: 5s;">
-    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
-    </svg>
-  </div>
-  <div class="container mx-auto px-4 lg:px-0">
-    <!-- Centered Heading Area -->
-    <div class="text-center mb-14 max-w-2xl 2k:max-w-3xl 4k:max-w-4xl mx-auto">
-      <?php if(!empty($pkg['pkg_badge'])): ?>
-      <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-3">
-        <?php echo e($pkg['pkg_badge']); ?>
+<?php if (isset($component)) { $__componentOriginal8d1b819d4d8a54d09f6be4b4b7c3959e = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal8d1b819d4d8a54d09f6be4b4b7c3959e = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.packages-v2','data' => ['packageCards' => $packageCards,'pkg' => $pkg]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('frontend.packages-v2'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['package-cards' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($packageCards),'pkg' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($pkg)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal8d1b819d4d8a54d09f6be4b4b7c3959e)): ?>
+<?php $attributes = $__attributesOriginal8d1b819d4d8a54d09f6be4b4b7c3959e; ?>
+<?php unset($__attributesOriginal8d1b819d4d8a54d09f6be4b4b7c3959e); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal8d1b819d4d8a54d09f6be4b4b7c3959e)): ?>
+<?php $component = $__componentOriginal8d1b819d4d8a54d09f6be4b4b7c3959e; ?>
+<?php unset($__componentOriginal8d1b819d4d8a54d09f6be4b4b7c3959e); ?>
+<?php endif; ?>
 
-      </p>
-      <?php endif; ?>
-      <h2 class="text-3xl lg:text-[40px] font-bold text-navy mb-4 leading-[1.2]">
-        <?php echo e($pkg['pkg_title'] ?? 'We Maintain Cleanliness Rules Inside Our Hospital'); ?>
-
-      </h2>
-      <div class="flex justify-center items-center gap-1.5 mb-4 text-brand-cyan">
-        <!-- Heartbeat Line -->
-        <span class="text-lg font-bold tracking-tighter">--</span>
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h3l2.5-4.5 3 9 2.5-4.5h4" />
-        </svg>
-        <span class="text-lg font-bold tracking-tighter">--</span>
-      </div>
-      <p class="text-gray-400 text-[15px]">
-        <?php echo e($pkg['pkg_desc'] ?? 'Lorem ipsum dolor sit amet consectetur adipiscing elit praesent aliquet. pretiumts'); ?>
-
-      </p>
-    </div>
-
-    <!-- Packages Slider -->
-    <div class="packages__slider relative px-0" data-packages-slider>
-      <div class="packages__viewport overflow-hidden">
-        <div class="packages__track flex" data-packages-track>
-          <?php $__currentLoopData = $packageCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <div class="packages__slide w-full sm:w-1/2 md:w-1/3 2xl:w-1/4 shrink-0">
-            <div class="group relative overflow-hidden aspect-square lg:aspect-auto lg:h-[350px] w-full border-r-[2px] border-white">
-              <!-- Background Image -->
-              <img src="<?php echo e($card['image']); ?>" alt="<?php echo e($card['title']); ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-
-              <!-- Hover Overlay -->
-              <div class="absolute inset-0 bg-[#2b88f3]/85 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center backdrop-blur-[1px]">
-                <!-- Hidden Title that appears on hover for context -->
-                <h3 class="text-white font-bold text-xl mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 group-hover:opacity-100 text-center px-4">
-                  <?php echo e($card['title']); ?>
-
-                </h3>
-                <!-- View Details Button -->
-                <a href="<?php echo e($card['url']); ?>" class="bg-white text-[#2b88f3] text-[14px] font-bold py-2.5 px-6 rounded transition-colors duration-300 hover:bg-navy hover:text-white shadow-lg shadow-black/10 translate-y-4 group-hover:translate-y-0 transform">
-                  View Details
-                </a>
-              </div>
-            </div>
-          </div>
-          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </div>
-      </div>
-
-      <!-- Navigation Arrows -->
-      <button type="button" class="packages__nav is-prev !absolute !top-1/2 !left-4 !-translate-y-1/2 !w-12 !h-12 !rounded-full !bg-white shadow-[0_4px_15px_rgba(0,0,0,0.1)] flex items-center justify-center text-navy hover:!bg-brand-cyan hover:!text-white transition z-10" data-packages-prev aria-label="Previous packages">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-      <button type="button" class="packages__nav is-next !absolute !top-1/2 !right-4 !-translate-y-1/2 !w-12 !h-12 !rounded-full !bg-white shadow-[0_4px_15px_rgba(0,0,0,0.1)] flex items-center justify-center text-navy hover:!bg-brand-cyan hover:!text-white transition z-10" data-packages-next aria-label="Next packages">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Dots -->
-    <div class="packages__dots mt-10 flex justify-center gap-2" data-packages-dots></div>
-  </div>
-</section>
 
 <!-- ===================== FAQ ===================== -->
 
@@ -514,7 +456,7 @@ $packageCards = $featuredPackages->isNotEmpty()
     <div class="awards__grid">
       <div class="awards__intro">
         <?php if(!empty($award['award_badge'])): ?>
-        <p class="text-brand-cyan font-bold tracking-widest uppercase text-sm mb-2">
+        <p class="text-brand-cyan font-bold tracking-widest uppercase text-eyebrow mb-2">
           <?php echo e($award['award_badge']); ?>
 
         </p>
@@ -615,25 +557,5 @@ $packageCards = $featuredPackages->isNotEmpty()
 </script>
 
 <!-- ===================== Make an Appointment ===================== -->
-<!-- <?php if (isset($component)) { $__componentOriginald60bc4ce403b880ef3c1cf57c71fbc24 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginald60bc4ce403b880ef3c1cf57c71fbc24 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.book-appointment','data' => ['settings' => $appt,'doctors' => $appointmentDoctors,'specializations' => $appointmentSpecializations,'source' => 'home']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
-<?php $component->withName('frontend.book-appointment'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
-<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['settings' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($appt),'doctors' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($appointmentDoctors),'specializations' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($appointmentSpecializations),'source' => 'home']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginald60bc4ce403b880ef3c1cf57c71fbc24)): ?>
-<?php $attributes = $__attributesOriginald60bc4ce403b880ef3c1cf57c71fbc24; ?>
-<?php unset($__attributesOriginald60bc4ce403b880ef3c1cf57c71fbc24); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginald60bc4ce403b880ef3c1cf57c71fbc24)): ?>
-<?php $component = $__componentOriginald60bc4ce403b880ef3c1cf57c71fbc24; ?>
-<?php unset($__componentOriginald60bc4ce403b880ef3c1cf57c71fbc24); ?>
-<?php endif; ?> -->
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.frontend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laragon-new\laragon\www\hospital-management\resources\views/frontend/home.blade.php ENDPATH**/ ?>

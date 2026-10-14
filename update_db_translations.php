@@ -1,6 +1,6 @@
 <?php
-require __DIR__.'/vendor/autoload.php';
-$app = require_once __DIR__.'/bootstrap/app.php';
+require __DIR__ . '/vendor/autoload.php';
+$app = require_once __DIR__ . '/bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 $kernel->bootstrap();
 
@@ -22,17 +22,9 @@ $globalUpdates = [
         'en' => 'We Have Specialist Doctors To Solve Your Problems',
         'bn' => 'আপনার সমস্যার সমাধানে আমাদের রয়েছে বিশেষজ্ঞ ডাক্তার'
     ],
-    'doc_home_desc' => [
-        'en' => 'Lorem ipsum dolor sit amet consectetur adipiscing elit praesent aliquet. pretiumts',
-        'bn' => 'আপনার সুস্বাস্থ্যের জন্য আমাদের বিশেষজ্ঞ চিকিৎসকরা সর্বদা প্রস্তুত। আমরা সর্বোচ্চ মানসম্পন্ন সেবা নিশ্চিত করি।'
-    ],
     'pkg_title' => [
         'en' => 'We Maintain Cleanliness Rules Inside Our Hospital',
         'bn' => 'আমরা আমাদের হাসপাতালের ভিতরে পরিষ্কার-পরিচ্ছন্নতার নিয়ম মেনে চলি'
-    ],
-    'pkg_desc' => [
-        'en' => 'Lorem ipsum dolor sit amet consectetur adipiscing elit praesent aliquet. pretiumts',
-        'bn' => 'রোগীদের সুরক্ষার জন্য আমাদের হাসপাতাল সর্বদা জীবাণুমুক্ত এবং পরিষ্কার রাখা হয়।'
     ],
     'svc_badge' => [
         'en' => 'Departments',
