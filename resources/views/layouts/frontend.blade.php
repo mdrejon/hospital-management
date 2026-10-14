@@ -76,17 +76,14 @@
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
     }
 
-    /* WhatsApp Pill on Bottom-Right */
+    /* WhatsApp Pill on Bottom-Left (the scroll-to-top button owns the right) */
     .floating-btn--whatsapp {
-      right: 24px;
+      left: 24px;
       bottom: 24px;
       background-color: #25D366;
       padding: 7px 16px 7px 7px;
       box-shadow: 0 4px 14px rgba(37, 211, 102, 0.45);
-      transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-    }
-    .floating-btn--whatsapp.is-raised {
-      bottom: 78px;
+      transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
     }
     .floating-btn--whatsapp:hover {
       background-color: #1ea952;
@@ -163,7 +160,6 @@
   <script>
     (function () {
       var scrollBtn = document.getElementById('scrollToTopBtn');
-      var waBtn = document.getElementById('floatingWhatsappBtn');
 
       function checkScroll() {
         var isScrolled = window.scrollY > 180;
@@ -172,13 +168,6 @@
             scrollBtn.classList.add('is-visible');
           } else {
             scrollBtn.classList.remove('is-visible');
-          }
-        }
-        if (waBtn) {
-          if (isScrolled) {
-            waBtn.classList.add('is-raised');
-          } else {
-            waBtn.classList.remove('is-raised');
           }
         }
       }

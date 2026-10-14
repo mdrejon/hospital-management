@@ -427,8 +427,11 @@ html:lang(bn) .main-nav__link {
     transform: rotate(180deg);
   }
 
+  // Sized to its longest link (doctor specialisations can be long), capped
+  // at 28rem / the viewport — past that a link wraps instead of spilling
+  // out of the white panel.
   .dropdown-menu {
-    @apply invisible absolute left-0 top-full z-20 min-w-[16rem] w-max max-w-xs rounded-b-lg bg-white py-2.5 opacity-0 shadow-2xl transition-all duration-200;
+    @apply invisible absolute left-0 top-full z-20 min-w-[16rem] w-max max-w-[min(28rem,calc(100vw-2rem))] rounded-b-lg bg-white py-2.5 opacity-0 shadow-2xl transition-all duration-200;
     border-top: 3px solid rgb(var(--color-accent-red, var(--color-secondary, 237 27 36)));
 
     @media (min-width: 1920px) {
@@ -455,8 +458,7 @@ html:lang(bn) .main-nav__link {
   }
 
   .dropdown-menu__link {
-    @apply block px-5 py-3 text-submenu font-semibold text-gray-700 transition-all duration-150 whitespace-nowrap;
-    white-space: nowrap !important;
+    @apply block px-5 py-3 text-submenu font-semibold text-gray-700 transition-all duration-150;
 
     @media (min-width: 1920px) {
       padding: 0.65rem 1.4rem;

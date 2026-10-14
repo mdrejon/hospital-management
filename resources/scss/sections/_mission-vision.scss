@@ -5,7 +5,7 @@
 @use "../abstracts/mixins" as m;
 
 .mission-vision {
-  @apply bg-footer-bg py-section;
+  @apply bg-gray-50 py-section;
 }
 
 .mission-vision__grid {
