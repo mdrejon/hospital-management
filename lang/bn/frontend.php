@@ -95,6 +95,7 @@ return [
         'view_all_services' => 'সব সেবা দেখুন',
         'watch_video' => 'ভিডিও দেখুন',
         'lets_talk' => 'কথা বলুন',
+        'talk' => 'কথা বলুন',
 
         'services_badge' => 'চিকিৎসা এবং সাধারণ যত্ন!',
         'services_title' => 'অসাধারণ সেবাসমূহ',

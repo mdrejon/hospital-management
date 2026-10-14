@@ -3,7 +3,7 @@
 // ==========================================================================
 
 .services {
-  @apply bg-white py-20;
+  @apply bg-white py-section;
 }
 
 .services__head {
@@ -11,15 +11,15 @@
 }
 
 .services__eyebrow {
-  @apply text-sm font-bold uppercase tracking-[0.08em] text-[#ff5a44];
+  @apply text-eyebrow font-bold uppercase tracking-[0.08em] text-[#ff5a44];
 }
 
 .services__title {
-  @apply mt-3 text-3xl font-extrabold leading-snug text-navy sm:text-4xl;
+  @apply mt-3 text-h2 font-extrabold text-navy;
 }
 
 .services__grid {
-  @apply mt-14 grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3;
+  @apply mt-section-gap grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3;
 }
 
 // Card -------------------------------------------------------------------
@@ -48,15 +48,15 @@
 }
 
 .service-card__title {
-  @apply text-lg font-bold text-navy;
+  @apply text-h5 font-bold text-navy;
 }
 
 .service-card__desc {
-  @apply mx-auto mt-2 max-w-[230px] text-sm leading-relaxed text-muted;
+  @apply mx-auto mt-2 max-w-[230px] text-small leading-relaxed text-muted;
 }
 
 .service-card__btn {
-  @apply mt-5 inline-flex items-center gap-2 rounded-full bg-[#EAF1F6] px-5 py-2.5 text-sm font-semibold text-navy transition-colors duration-200 hover:bg-[#ff5a44] hover:text-white;
+  @apply mt-5 inline-flex items-center gap-2 rounded-full bg-[#EAF1F6] px-5 py-2.5 text-btn font-semibold text-navy transition-colors duration-200 hover:bg-[#ff5a44] hover:text-white;
 }
 
 .service-card__btn-icon {

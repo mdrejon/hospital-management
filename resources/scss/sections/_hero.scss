@@ -36,14 +36,11 @@
 }
 
 // Content aligns to the same container edges as the header rows above.
+// Up to 1599px the container's margin is too narrow to clear the
+// "Follow Social" rail on the left (24–64px), so the side padding grows
+// there; from 1600px the container's own padding lines it up with the logo.
 .hero-slide__inner {
-  @apply container relative z-10 mx-auto flex h-full items-center;
-
-  @media (min-width: 1024px) {
-    max-width: 1024px;
-    padding-right: 5rem;
-    padding-left: 5rem;
-  }
+  @apply container relative z-10 mx-auto flex h-full items-center lg:px-20 2xl:px-12 3xl:px-10 qhd:px-12 4k:px-14;
 }
 
 // Copy block — everything inside starts invisible and only animates in
@@ -84,7 +81,7 @@
 }
 
 .hero-slide__eyebrow {
-  @apply flex items-center gap-3 text-base italic font-medium text-white/90;
+  @apply flex items-center gap-3 text-hero-sub italic font-medium text-white/90;
 }
 
 .hero-slide__eyebrow-dot {
@@ -92,13 +89,7 @@
 }
 
 .hero-slide__title {
-  @apply mt-4 font-extrabold text-white;
-  font-size: 18px;
-  line-height: 1.3;
-
-  @media (min-width: 768px) {
-    font-size: 3rem;
-  }
+  @apply mt-4 text-hero-title font-extrabold text-white;
 
   // Accent word gets an EKG-style pulse trace instead of a plain underline
   // (see abstracts/_mixins.scss for the shared ::before/::after effect).
@@ -109,11 +100,11 @@
 }
 
 .hero-slide__desc {
-  @apply mt-6 max-w-lg text-base leading-relaxed text-white/75;
+  @apply mt-6 max-w-lg text-hero-text leading-relaxed text-white/75;
 }
 
 .hero-slide__cta {
-  @apply mt-9 inline-flex items-center gap-4 rounded-full bg-brand-cyan py-2 pl-8 pr-2 text-base font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
+  @apply mt-9 inline-flex items-center gap-4 rounded-full bg-brand-cyan py-2 pl-8 pr-2 text-hero-btn font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
 }
 
 .hero-slide__cta-icon {
@@ -134,7 +125,7 @@
 }
 
 .hero__social-label {
-  @apply mt-2 rotate-180 text-xs font-semibold uppercase tracking-widest text-white;
+  @apply mt-2 rotate-180 text-caption font-semibold uppercase tracking-widest text-white;
   writing-mode: vertical-rl;
 }
 

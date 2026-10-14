@@ -3,7 +3,7 @@
 // ==========================================================================
 
 .blog {
-  @apply bg-white py-20;
+  @apply bg-white py-section;
 }
 
 .blog__head {
@@ -11,7 +11,7 @@
 }
 
 .blog__title {
-  @apply max-w-xl text-3xl font-extrabold leading-snug text-navy sm:text-4xl;
+  @apply max-w-xl text-h2 font-extrabold text-navy;
 
   mark {
     @apply rounded bg-brand-cyan px-2 text-white;
@@ -23,11 +23,11 @@
 // card A reads as a taller, narrower "editorial" card with its title
 // wrapping across more lines, matching the reference design.
 .blog__grid {
-  @apply mt-10 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1.32fr_1fr] lg:grid-rows-2;
+  @apply mt-section-gap grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1.32fr_1fr] lg:grid-rows-2;
 }
 
 .btn-view-all {
-  @apply inline-flex shrink-0 items-center gap-3 rounded-full bg-brand-cyan py-2 pl-5 pr-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
+  @apply inline-flex shrink-0 items-center gap-3 rounded-full bg-brand-cyan py-2 pl-5 pr-2 text-btn font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
 }
 
 .btn-view-all__icon {
@@ -52,7 +52,7 @@
 }
 
 .blog-card__date {
-  @apply inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-navy;
+  @apply inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-caption font-semibold text-navy;
 }
 
 .blog-card__date-dot {
@@ -79,11 +79,11 @@
 }
 
 .blog-card--split__title {
-  @apply mt-3 text-xl font-bold leading-snug text-navy;
+  @apply mt-3 text-h4 font-bold text-navy;
 }
 
 .blog-card--split__cta {
-  @apply relative z-10 inline-flex w-fit items-center gap-3 rounded-full bg-brand-cyan py-2 pl-5 pr-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
+  @apply relative z-10 inline-flex w-fit items-center gap-3 rounded-full bg-brand-cyan py-2 pl-5 pr-2 text-btn font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
 }
 
 .blog-card--split__cta-icon {
@@ -104,7 +104,7 @@
 }
 
 .blog-card--photo__title {
-  @apply relative z-10 mt-auto max-w-[75%] text-lg font-bold leading-snug text-white;
+  @apply relative z-10 mt-auto max-w-[75%] text-h5 font-bold text-white;
 }
 
 .blog-card--photo__footer {
@@ -117,7 +117,7 @@
 }
 
 .blog-card--plain__title {
-  @apply mt-3 text-base font-bold leading-snug text-navy;
+  @apply mt-3 text-h6 font-bold text-navy;
 }
 
 .blog-card--plain__footer {

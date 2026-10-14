@@ -38,7 +38,7 @@
 }
 
 .top-header__value {
-  @apply text-sm font-medium;
+  @apply text-small font-medium;
 }
 
 .top-header__right {
@@ -46,7 +46,7 @@
 }
 
 .top-header__lang {
-  @apply flex items-center gap-1.5 text-sm font-medium text-black/90 transition-colors duration-150 hover:text-brand-cyan;
+  @apply flex items-center gap-1.5 text-small font-medium text-black/90 transition-colors duration-150 hover:text-brand-cyan;
 
   &.is-active {
     @apply font-bold text-brand-cyan;
@@ -66,7 +66,7 @@
 }
 
 .top-header__search {
-  @apply flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white/90 transition-colors duration-150 hover:bg-brand-cyan hover:text-navy;
+  @apply flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-caption font-medium text-white/90 transition-colors duration-150 hover:bg-brand-cyan hover:text-navy;
 }
 
 // Top info bar (new 5-icon style) --------------------------------------
@@ -77,13 +77,14 @@
 
 .top-info-bar__inner {
   @apply container mx-auto grid items-stretch;
-  // Info items size to their content so nothing truncates; the search
-  // pill absorbs whatever width is left.
-  grid-template-columns: auto auto auto minmax(0, 1fr);
+  // Info items size to their content and the search pill takes what is
+  // left — but never less than 14rem: on laptops the email / support
+  // values give way first (they truncate with an ellipsis).
+  grid-template-columns: auto minmax(0, auto) minmax(0, auto) minmax(14rem, 1fr);
 }
 
 .top-info-bar__item {
-  @apply flex items-center gap-3 border-r px-6 py-[0.9rem];
+  @apply flex min-w-0 items-center gap-3 border-r px-4 py-[0.9rem] xl:px-6;
   border-color: rgb(var(--color-navy) / 0.08);
 
   // First and last items hug the container edges so the logo lines up
@@ -98,7 +99,7 @@
 }
 
 .top-info-bar__icon {
-  @apply flex h-9 w-9 shrink-0 items-center justify-center  ;
+  @apply flex h-9 w-9 shrink-0 items-center justify-center;
 
   &--accent {
     @apply text-brand-cyan;
@@ -110,11 +111,11 @@
 }
 
 .top-info-bar__label {
-  @apply whitespace-nowrap text-[0.8rem] font-medium leading-4 text-brand-cyan;
+  @apply whitespace-nowrap text-caption font-medium leading-4 text-brand-cyan;
 }
 
 .top-info-bar__value {
-  @apply overflow-hidden text-ellipsis whitespace-nowrap text-[0.9rem] font-bold leading-[1.2rem] ;
+  @apply overflow-hidden text-ellipsis whitespace-nowrap text-small font-bold leading-[1.2rem];
 }
 
 // Search pill filling the bar's remaining space --------------------------
@@ -127,7 +128,7 @@
 }
 
 .header-search__input {
-  @apply w-full min-w-0 flex-1 bg-transparent text-sm text-navy placeholder:text-slate-400 focus:outline-none;
+  @apply w-full min-w-0 flex-1 bg-transparent text-small text-navy placeholder:text-slate-400 focus:outline-none;
   border: none !important;
 } 
 
@@ -152,7 +153,7 @@
 
 // Logo -----------------------------------------------------------------
 .site-logo {
-  @apply flex items-center gap-2 text-2xl font-bold text-white whitespace-nowrap;
+  @apply flex items-center gap-2 text-h3 font-bold text-white whitespace-nowrap;
 
   &__accent {
     @apply text-brand-cyan;
@@ -167,11 +168,11 @@
 
 // Primary nav ------------------------------------------------------------
 .main-nav {
-  @apply hidden items-center gap-6 lg:flex;
+  @apply hidden items-center gap-4 lg:flex xl:gap-6;
 }
 
 .main-nav__link {
-  @apply flex items-center gap-[0.3rem] text-[18px] font-bold text-white transition-colors duration-200 hover:text-brand-cyan;
+  @apply flex items-center gap-[0.3rem] whitespace-nowrap text-menu font-bold text-white transition-colors duration-200 hover:text-brand-cyan;
 
   // Current page — logo green (#87C540) so it stands apart from the cyan hover.
   &.is-active {
@@ -180,7 +181,7 @@
 }
 
 .main-nav__caret {
-  @apply text-[16px] font-medium leading-none text-white/70;
+  @apply text-caption font-medium leading-none text-white/70;
 }
 
 // Dropdown ------------------------------------------------------------
@@ -196,7 +197,7 @@
   }
 
   .dropdown-menu__link {
-    @apply block px-5 py-2 text-[18px] font-medium text-navy transition-colors duration-150 hover:bg-footer-bg hover:text-brand-cyan;
+    @apply block px-5 py-2 text-submenu font-medium text-navy transition-colors duration-150 hover:bg-footer-bg hover:text-brand-cyan;
   }
 }
 
@@ -206,7 +207,19 @@
 }
 
 .btn-appointment {
-  @apply hidden items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-semibold text-navy transition-transform duration-200 hover:scale-105 sm:inline-flex;
+  @apply hidden items-center gap-2 whitespace-nowrap rounded-full bg-white px-7 py-3 text-btn font-semibold text-navy transition-transform duration-200 hover:scale-105 sm:inline-flex;
+
+  // The full menu bar needs this room on laptops (992–1199), and Bangla's
+  // longer labels need it up to 1399 too. The side panel repeats the link.
+  @media (min-width: 992px) and (max-width: 1199.98px) {
+    display: none;
+  }
+
+  html:lang(bn) & {
+    @media (min-width: 992px) and (max-width: 1399.98px) {
+      display: none;
+    }
+  }
 }
 
 .menu-toggle {

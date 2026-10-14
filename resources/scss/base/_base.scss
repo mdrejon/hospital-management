@@ -1,5 +1,9 @@
 @use "../abstracts/variables" as v;
+@use "../abstracts/tokens" as t;
 @use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
 
 // CSS custom properties bridge: exposes the Sass tokens above to
 // tailwind.config.js (which can't read .scss files) and to plain CSS.
@@ -8,6 +12,61 @@
 // so that opacity modifiers like bg-navy/90 keep working.
 @function channels($c) {
   @return "#{color.channel($c, 'red', $space: rgb)} #{color.channel($c, 'green', $space: rgb)} #{color.channel($c, 'blue', $space: rgb)}";
+}
+
+// Root font size (in px) in effect from a given min-width, per t.$root-scale.
+@function root-px($min) {
+  $scale: 100%;
+  @each $at, $value in t.$root-scale {
+    @if $min >= $at {
+      $scale: $value;
+    }
+  }
+  @return math.div($scale, 100%) * 16;
+}
+
+// A token's px value as rem, divided by the root size of its own breakpoint
+// so the number typed in abstracts/_tokens.scss is the px actually rendered
+// there (rem keeps the reader's browser font-size preference working).
+// A value typed with its unit (22px) is read the same as a bare 22.
+@function token-rem($px, $min) {
+  $px: math.div($px, $px * 0 + 1);
+
+  @return math.div(math.round(math.div($px, root-px($min)) * 10000), 10000) * 1rem;
+}
+
+// Writes one custom property per row of a token table, then re-declares
+// only the rows whose value changes at each wider breakpoint.
+@mixin responsive-vars($prefix, $table) {
+  $mins: map.values(t.$breakpoints);
+
+  @for $i from 1 through list.length($mins) {
+    $min: list.nth($mins, $i);
+
+    @if $i == 1 {
+      @each $name, $values in $table {
+        --#{$prefix}-#{$name}: #{token-rem(list.nth($values, 1), $min)};
+      }
+    } @else {
+      $changed: ();
+
+      @each $name, $values in $table {
+        $now: token-rem(list.nth($values, $i), $min);
+
+        @if $now != token-rem(list.nth($values, $i - 1), list.nth($mins, $i - 1)) {
+          $changed: map.merge($changed, ($name: $now));
+        }
+      }
+
+      @if list.length($changed) > 0 {
+        @media (min-width: $min) {
+          @each $name, $value in $changed {
+            --#{$prefix}-#{$name}: #{$value};
+          }
+        }
+      }
+    }
+  }
 }
 
 :root {
@@ -20,20 +79,52 @@
   --color-accent-green: #{channels(v.$color-accent-green)};
   --color-accent-red: #{channels(v.$color-accent-red)};
   --header-height: #{v.$header-height};
+
+  // Responsive type + spacing scale (abstracts/_tokens.scss).
+  @each $name, $value in t.$line-heights {
+    --lh-#{$name}: #{$value};
+  }
+
+  @include responsive-vars("fs", t.$font-sizes);
+  @include responsive-vars("space", t.$spacing);
+}
+
+// Bangla: its own line heights, plus the font-size rows listed in
+// t.$font-sizes-bn (every other row keeps the :root value above).
+html:lang(bn) {
+  @each $name, $value in t.$line-heights-bn {
+    --lh-#{$name}: #{$value};
+  }
+
+  @include responsive-vars("fs", t.$font-sizes-bn);
 }
 
 html {
   scroll-behavior: smooth;
+  font-size: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  // Proportional scaling for high-resolution displays: every rem on the page
+  // (type tokens, spacing, icon sizes) grows together.
+  @each $at, $scale in t.$root-scale {
+    @media (min-width: $at) {
+      font-size: $scale;
+    }
+  }
 }
 
 body {
   font-family: "Poppins", "Hind Siliguri", "SolaimanLipi", "Kalpurush", "Segoe UI", sans-serif;
   color: v.$color-navy;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
 }
 
-html:lang(bn) {
-  font-family: "Hind Siliguri", "SolaimanLipi", sans-serif;
-  font-size: 80%;
+// Letter-spacing splits Bangla conjuncts apart, so the tracking utilities
+// used for Latin eyebrows and labels are neutralised on Bangla pages.
+html:lang(bn) body * {
+  letter-spacing: normal;
 }
 
 a {

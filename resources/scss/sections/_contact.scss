@@ -5,7 +5,7 @@
 // ==========================================================================
 
 .contact {
-  @apply bg-white py-20 sm:py-24;
+  @apply bg-white py-section;
 }
 
 // The intro column gets more room than the form so the title holds two
@@ -15,11 +15,11 @@
 }
 
 .contact__title {
-  @apply text-3xl font-extrabold leading-tight text-navy sm:text-4xl;
+  @apply text-h2 font-extrabold text-navy;
 }
 
 .contact__desc {
-  @apply mt-5 max-w-xl text-base leading-relaxed text-muted;
+  @apply mt-5 max-w-xl text-body leading-relaxed text-muted;
 }
 
 // "Talk to over 215 doctor" pill + arrow bubble -------------------------
@@ -40,7 +40,7 @@
 }
 
 .contact__talk-text {
-  @apply text-lg font-medium text-navy;
+  @apply text-body font-medium text-navy;
 }
 
 .contact__talk-arrow {
@@ -48,7 +48,7 @@
 }
 
 .contact__rating {
-  @apply mt-7 flex flex-wrap items-center gap-2 text-[15px] text-navy;
+  @apply mt-7 flex flex-wrap items-center gap-2 text-body-sm text-navy;
 
   strong {
     @apply font-bold;
@@ -61,7 +61,7 @@
 
 // Info cards (address / phone / mail / hours) ---------------------------
 .contact__cards {
-  @apply mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2;
+  @apply mt-section-gap grid grid-cols-1 gap-5 sm:grid-cols-2;
 }
 
 .contact-info-card {
@@ -77,11 +77,11 @@
 }
 
 .contact-info-card__title {
-  @apply text-lg font-bold text-navy;
+  @apply text-h5 font-bold text-navy;
 }
 
 .contact-info-card__text {
-  @apply mt-1 text-sm leading-relaxed text-muted;
+  @apply mt-1 text-small leading-relaxed text-muted;
 }
 
 // Cyan appointment form card ---------------------------------------------
@@ -90,7 +90,7 @@
 }
 
 .contact__form-title {
-  @apply text-2xl font-extrabold leading-snug text-white sm:text-3xl;
+  @apply text-h3 font-extrabold text-white;
 }
 
 .contact__form {
@@ -98,7 +98,7 @@
 }
 
 .contact__field {
-  @apply w-full border-0 border-b-2 border-white/70 bg-transparent px-0 pb-3 text-base text-white placeholder-white/80 focus:border-white focus:outline-none focus:ring-0;
+  @apply w-full border-0 border-b-2 border-white/70 bg-transparent px-0 pb-3 text-input text-white placeholder-white/80 focus:border-white focus:outline-none focus:ring-0;
 }
 
 .contact__field--full {
@@ -106,7 +106,7 @@
 }
 
 .contact__submit {
-  @apply mt-2 inline-flex w-fit items-center gap-5 rounded-2xl bg-white py-2.5 pl-8 pr-2.5 text-xl font-medium text-navy transition-transform duration-200 hover:scale-105 sm:col-span-2;
+  @apply mt-2 inline-flex w-fit items-center gap-5 rounded-2xl bg-white py-2.5 pl-8 pr-2.5 text-btn-lg font-medium text-navy transition-transform duration-200 hover:scale-105 sm:col-span-2;
 }
 
 .contact__submit-icon {
@@ -130,5 +130,5 @@
 }
 
 .locations__open {
-  @apply absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-bold text-[#1a73e8] shadow-md transition-colors duration-150 hover:text-navy;
+  @apply absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-md bg-white px-4 py-2.5 text-small font-bold text-[#1a73e8] shadow-md transition-colors duration-150 hover:text-navy;
 }

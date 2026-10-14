@@ -226,13 +226,13 @@
           <p class="book-appointment__section-label">{{ __('frontend.appointment_form.payment_option') }}</p>
           <div class="book-appointment__radio-group" style="grid-column: span 2; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
             @if($paymentSettings['allow_without_pay'])
-            <label class="book-appointment__radio" style="padding: 10px 14px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500;">
+            <label class="book-appointment__radio" style="padding: 10px 14px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: var(--fs-small); font-weight: 500;">
               <input type="radio" name="payment_type" value="without_pay" checked data-payment-type />
               <span>🏥 {{ __('frontend.appointment_form.pay_hospital') }}</span>
             </label>
             @endif
             @if($paymentSettings['has_online'])
-            <label class="book-appointment__radio" style="padding: 10px 14px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500;">
+            <label class="book-appointment__radio" style="padding: 10px 14px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: var(--fs-small); font-weight: 500;">
               <input type="radio" name="payment_type" value="online" {{ !$paymentSettings['allow_without_pay'] ? 'checked' : '' }} data-payment-type />
               <span>💳 {{ __('frontend.appointment_form.pay_online') }}</span>
             </label>
@@ -242,13 +242,13 @@
           @if($paymentSettings['has_online'])
           <div class="book-appointment__gateway-group" data-gateway-selector style="{{ !$paymentSettings['allow_without_pay'] ? 'display:grid;' : 'display:none;' }} grid-column: span 2; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 4px; margin-bottom: 8px;">
             @if(!empty($paymentSettings['gateways']['bkash']))
-            <label style="padding: 10px 14px; border: 1px solid #fbcfe8; background: #fdf2f8; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #be185d;">
+            <label style="padding: 10px 14px; border: 1px solid #fbcfe8; background: #fdf2f8; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: var(--fs-small); font-weight: 600; color: #be185d;">
               <input type="radio" name="payment_gateway" value="bkash" checked />
               <span>{{ __('frontend.appointment_form.bkash') }}</span>
             </label>
             @endif
             @if(!empty($paymentSettings['gateways']['sslcommerz']))
-            <label style="padding: 10px 14px; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #1d4ed8;">
+            <label style="padding: 10px 14px; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: var(--fs-small); font-weight: 600; color: #1d4ed8;">
               <input type="radio" name="payment_gateway" value="sslcommerz" {{ empty($paymentSettings['gateways']['bkash']) ? 'checked' : '' }} />
               <span>{{ __('frontend.appointment_form.sslcommerz') }}</span>
             </label>

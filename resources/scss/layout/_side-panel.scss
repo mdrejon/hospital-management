@@ -28,11 +28,17 @@
 }
 
 .side-panel__desc {
-  @apply mt-6 text-sm leading-relaxed text-muted;
+  @apply mt-6 text-small leading-relaxed text-muted;
+}
+
+// Same call-to-action as the header button, which the header drops on
+// laptops (and on Bangla desktops) where the menu bar needs the room.
+.side-panel__cta {
+  @apply mt-6 inline-flex items-center justify-center rounded-full bg-navy px-7 py-3 text-btn font-semibold text-white transition-colors duration-200 hover:bg-brand-cyan;
 }
 
 .side-panel__title {
-  @apply mt-8 text-lg font-bold text-navy;
+  @apply mt-8 text-h5 font-bold text-navy;
 }
 
 // Nav links inside the panel — redundant with .main-nav on large screens,
@@ -42,7 +48,7 @@
 }
 
 .side-panel__nav-link {
-  @apply flex w-full items-center justify-between rounded-lg px-2 py-3 text-base font-semibold text-navy transition-all duration-200 hover:bg-footer-bg hover:pl-4 hover:text-brand-cyan;
+  @apply flex w-full items-center justify-between rounded-lg px-2 py-3 text-menu font-semibold text-navy transition-all duration-200 hover:bg-footer-bg hover:pl-4 hover:text-brand-cyan;
 
   &.is-open .side-panel__nav-caret {
     @apply rotate-180 text-brand-cyan;
@@ -50,7 +56,7 @@
 }
 
 .side-panel__nav-caret {
-  @apply text-xs text-muted transition-transform duration-200;
+  @apply text-caption text-muted transition-transform duration-200;
 }
 
 .side-panel__submenu {
@@ -62,7 +68,7 @@
 }
 
 .side-panel__nav-sublink {
-  @apply rounded-md px-3 py-1.5 text-sm text-muted transition-all duration-200 hover:bg-footer-bg hover:pl-4 hover:text-brand-cyan;
+  @apply rounded-md px-3 py-1.5 text-submenu text-muted transition-all duration-200 hover:bg-footer-bg hover:pl-4 hover:text-brand-cyan;
 }
 
 // Contact list ------------------------------------------------------------
@@ -71,7 +77,7 @@
 }
 
 .side-panel__contact-item {
-  @apply flex items-center gap-3 text-sm font-medium text-navy/90;
+  @apply flex items-center gap-3 text-small font-medium text-navy/90;
 }
 
 .side-panel__check {
@@ -84,7 +90,7 @@
 }
 
 .side-panel__lang-link {
-  @apply rounded-full border border-navy/10 bg-footer-bg px-4 py-1.5 text-sm font-semibold text-navy/90 transition-colors duration-150 hover:border-brand-cyan hover:text-brand-cyan;
+  @apply rounded-full border border-navy/10 bg-footer-bg px-4 py-1.5 text-small font-semibold text-navy/90 transition-colors duration-150 hover:border-brand-cyan hover:text-brand-cyan;
 
   &.is-active {
     @apply border-brand-cyan bg-brand-cyan text-white;

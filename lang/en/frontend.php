@@ -94,6 +94,7 @@ return [
         'view_all_services' => 'View All Services',
         'watch_video' => 'Watch The Video',
         'lets_talk' => 'Let\'s Talk',
+        'talk' => 'Talk',
 
         'services_badge' => 'Medical & General Care!',
         'services_title' => 'Amazing Services',

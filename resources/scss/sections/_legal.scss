@@ -5,7 +5,7 @@
 // ==========================================================================
 
 .legal {
-  @apply bg-white py-20;
+  @apply bg-white py-section;
 }
 
 .legal__inner {
@@ -13,11 +13,11 @@
 }
 
 .legal__updated {
-  @apply text-sm font-semibold uppercase tracking-wide text-brand-cyan;
+  @apply text-small font-semibold uppercase tracking-wide text-brand-cyan;
 }
 
 .legal__intro {
-  @apply mt-4 text-[15px] leading-relaxed text-muted;
+  @apply mt-4 text-body leading-relaxed text-muted;
 }
 
 .legal__section {
@@ -25,35 +25,35 @@
 }
 
 .legal__heading {
-  @apply text-2xl font-extrabold text-navy;
+  @apply text-h3 font-extrabold text-navy;
 }
 
 .legal__text {
-  @apply mt-3 text-[15px] leading-relaxed text-muted;
+  @apply mt-3 text-body leading-relaxed text-muted;
 }
 
 .legal__list {
-  @apply mt-3 list-disc space-y-2 pl-5 text-[15px] leading-relaxed text-muted;
+  @apply mt-3 list-disc space-y-2 pl-5 text-body leading-relaxed text-muted;
 }
 
 // Generic prose styling for rich-text content coming from the admin "Pages"
 // CMS editor (TipTap output: raw h2/p/ul/strong/em tags, no BEM classes).
 .page-content {
   > p {
-    @apply mt-4 text-[15px] leading-relaxed text-muted;
+    @apply mt-4 text-body leading-relaxed text-muted;
   }
 
   > h2 {
-    @apply mt-10 text-2xl font-extrabold text-navy;
+    @apply mt-10 text-h3 font-extrabold text-navy;
   }
 
   > h3 {
-    @apply mt-8 text-xl font-bold text-navy;
+    @apply mt-8 text-h4 font-bold text-navy;
   }
 
   > ul,
   > ol {
-    @apply mt-3 space-y-2 pl-5 text-[15px] leading-relaxed text-muted;
+    @apply mt-3 space-y-2 pl-5 text-body leading-relaxed text-muted;
   }
 
   > ul {

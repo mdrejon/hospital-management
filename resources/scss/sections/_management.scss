@@ -5,11 +5,11 @@
 // ==========================================================================
 
 .management {
-  @apply bg-white py-20 sm:py-24;
+  @apply bg-white py-section;
 }
 
 .management__grid {
-  @apply mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4;
+  @apply mt-section-gap grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4;
 }
 
 .mgmt-card {
@@ -37,7 +37,7 @@
 }
 
 .mgmt-card__name {
-  @apply text-lg font-bold leading-snug text-navy transition-colors duration-300;
+  @apply text-h5 font-bold text-navy transition-colors duration-300;
 
   .mgmt-card:hover & {
     @apply text-white;
@@ -45,7 +45,7 @@
 }
 
 .mgmt-card__role {
-  @apply mt-0.5 text-sm font-medium text-brand-cyan;
+  @apply mt-0.5 text-small font-medium text-brand-cyan;
 }
 
 .mgmt-card__arrow {

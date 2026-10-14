@@ -490,8 +490,8 @@ function initTeamSlider() {
     dotClass: "team__dot",
     base: 1,
     breakpoints: [
-      { width: 1024, count: 3 },
-      { width: 640, count: 2 },
+      { width: 992, count: 3 },
+      { width: 576, count: 2 },
     ],
   });
 }
@@ -507,9 +507,9 @@ function initPackagesSlider() {
     base: 1,
     autoplay: 2000,
     breakpoints: [
-      { width: 1536, count: 4 },
+      { width: 1400, count: 4 },
       { width: 768, count: 3 },
-      { width: 640, count: 2 },
+      { width: 576, count: 2 },
     ],
   });
 }
@@ -524,8 +524,8 @@ function initDepartmentsSlider() {
     dotClass: "departments__dot",
     base: 1,
     breakpoints: [
-      { width: 1024, count: 3 },
-      { width: 640, count: 2 },
+      { width: 992, count: 3 },
+      { width: 576, count: 2 },
     ],
   });
 }
@@ -719,7 +719,7 @@ function initStickySidebar() {
 
   const HEADER_OFFSET = 110; // 90px fixed header + breathing room
   const BOTTOM_GAP = 24;
-  const media = window.matchMedia("(min-width: 1024px)");
+  const media = window.matchMedia("(min-width: 992px)");
 
   const update = () => {
     if (!media.matches) {
@@ -919,6 +919,30 @@ function initVideoModal() {
   });
 }
 
+function initScrollToTop() {
+  const btn = document.getElementById("scrollToTopBtn");
+  if (!btn) return;
+
+  const toggleVisibility = () => {
+    if (window.scrollY > 250) {
+      btn.classList.add("is-visible");
+    } else {
+      btn.classList.remove("is-visible");
+    }
+  };
+
+  window.addEventListener("scroll", toggleVisibility, { passive: true });
+  toggleVisibility();
+
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initSidePanel();
   initFaqAccordion();
@@ -932,4 +956,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initGalleryLightbox();
   initVideoModal();
   initScrollReveal();
+  initScrollToTop();
 });

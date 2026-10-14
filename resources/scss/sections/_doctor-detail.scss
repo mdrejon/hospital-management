@@ -3,7 +3,7 @@
 // ==========================================================================
 
 .doctor-detail {
-  @apply bg-white py-20;
+  @apply bg-white py-section;
 }
 
 .doctor-detail__grid {
@@ -36,11 +36,11 @@
 }
 
 .doctor-schedule__title {
-  @apply text-lg font-extrabold text-white;
+  @apply text-h5 font-extrabold text-white;
 }
 
 .doctor-schedule__row {
-  @apply flex items-center justify-between border-t border-white/10 py-3 text-sm;
+  @apply flex items-center justify-between border-t border-white/10 py-3 text-small;
 }
 
 .doctor-schedule__day {
@@ -64,24 +64,24 @@
 }
 
 .doctor-contact__label {
-  @apply text-sm font-extrabold text-navy;
+  @apply text-small font-extrabold text-navy;
 }
 
 .doctor-contact__value {
-  @apply mt-0.5 text-sm text-muted;
+  @apply mt-0.5 text-small text-muted;
 }
 
 // Content -------------------------------------------------------------------
 .doctor-detail__name {
-  @apply text-3xl font-extrabold text-navy sm:text-4xl;
+  @apply text-h2 font-extrabold text-navy;
 }
 
 .doctor-detail__specialty {
-  @apply mt-2 text-base font-semibold text-brand-cyan;
+  @apply mt-2 text-body font-semibold text-brand-cyan;
 }
 
 .doctor-detail__desc {
-  @apply mt-5 max-w-3xl text-[15px] leading-relaxed text-muted;
+  @apply mt-5 max-w-3xl text-body leading-relaxed text-muted;
 }
 
 // Info table ----------------------------------------------------------------
@@ -98,7 +98,7 @@
 }
 
 .doctor-info-table__label {
-  @apply text-sm font-extrabold text-navy;
+  @apply text-small font-extrabold text-navy;
 }
 
 // Stacks the entries when a field carries more than one (e.g. several degrees).
@@ -107,7 +107,7 @@
 }
 
 .doctor-info-table__value {
-  @apply text-sm text-muted;
+  @apply text-small text-muted;
 }
 
 // Full schedule (content column) --------------------------------------------
@@ -116,7 +116,7 @@
 }
 
 .doctor-schedule-full__row {
-  @apply flex items-center justify-between py-3.5 text-sm first:pt-0 last:pb-0;
+  @apply flex items-center justify-between py-3.5 text-small first:pt-0 last:pb-0;
 }
 
 .doctor-schedule-full__day {

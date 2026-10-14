@@ -5,7 +5,7 @@
 @use "../abstracts/mixins" as m;
 
 .appointment {
-  @apply bg-white py-20;
+  @apply bg-white py-section;
 }
 
 .appointment__grid {
@@ -36,7 +36,7 @@
 }
 
 .appointment__tab {
-  @apply mt-10 hidden h-28 w-12 shrink-0 items-center justify-center rounded-xl bg-navy text-xs font-semibold tracking-[0.3em] text-white lg:flex;
+  @apply mt-10 hidden h-28 w-12 shrink-0 items-center justify-center rounded-xl bg-navy text-btn-sm font-semibold tracking-[0.3em] text-white lg:flex;
   writing-mode: vertical-rl;
   transform: rotate(180deg);
 }
@@ -46,7 +46,7 @@
 }
 
 .appointment__title {
-  @apply text-2xl font-extrabold leading-snug text-white sm:text-3xl;
+  @apply text-h2 font-extrabold text-white;
 
   .accent {
     @apply text-[#eaff4f];
@@ -67,11 +67,11 @@
 }
 
 .appointment__field {
-  @apply w-full border-b border-white/40 bg-transparent pb-2 text-sm text-white placeholder-white/70 transition-colors duration-150 focus:border-white focus:outline-none;
+  @apply w-full border-b border-white/40 bg-transparent pb-2 text-input text-white placeholder-white/70 transition-colors duration-150 focus:border-white focus:outline-none;
 }
 
 .appointment__submit {
-  @apply mt-8 inline-flex items-center gap-4 rounded-full bg-white py-2 pl-6 pr-2 text-sm font-semibold text-navy transition-transform duration-200 hover:scale-105;
+  @apply mt-8 inline-flex items-center gap-4 rounded-full bg-white py-2 pl-6 pr-2 text-btn font-semibold text-navy transition-transform duration-200 hover:scale-105;
 }
 
 .appointment__submit-icon {

@@ -6,7 +6,7 @@
 // ==========================================================================
 
 .departments {
-  @apply relative overflow-hidden bg-white pb-20;
+  @apply relative overflow-hidden bg-white pb-section;
 }
 
 .departments__decor {
@@ -32,16 +32,16 @@
 }
 
 .departments__eyebrow {
-  @apply text-xl italic text-brand-cyan;
+  @apply text-subheading italic text-brand-cyan;
   font-family: "Georgia", "Times New Roman", serif;
 }
 
 .departments__title {
-  @apply mt-1 text-4xl font-extrabold text-white sm:text-5xl;
+  @apply mt-1 text-h2 font-extrabold text-white;
 }
 
 .departments__desc {
-  @apply mx-auto mt-5 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base;
+  @apply mx-auto mt-5 max-w-xl text-body leading-relaxed text-white/80;
 }
 
 // Card slider, pulled up over the banner ----------------------------------
@@ -107,7 +107,7 @@
 }
 
 .department-card__title {
-  @apply text-2xl font-bold text-navy transition-colors duration-200;
+  @apply text-h3 font-bold text-navy transition-colors duration-200;
 
   .department-card:hover & {
     @apply text-brand-cyan;
@@ -115,7 +115,7 @@
 }
 
 .department-card__desc {
-  @apply mx-auto mt-4 max-w-xs text-sm leading-relaxed text-slate-500;
+  @apply mx-auto mt-4 max-w-xs text-small leading-relaxed text-slate-500;
 }
 
 .department-card__media {
@@ -170,7 +170,7 @@
 }
 
 .departments__notice {
-  @apply flex flex-wrap items-center gap-3 rounded-2xl bg-white px-6 py-4 text-sm text-slate-500 shadow-md md:rounded-full;
+  @apply flex flex-wrap items-center gap-3 rounded-2xl bg-white px-6 py-4 text-small text-slate-500 shadow-md md:rounded-full;
 }
 
 .departments__notice-icon {
@@ -182,7 +182,7 @@
 }
 
 .departments__cta {
-  @apply inline-flex items-center gap-3 rounded-full bg-brand-cyan py-2 pl-2 pr-7 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
+  @apply inline-flex items-center gap-3 rounded-full bg-brand-cyan py-2 pl-2 pr-7 text-btn font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-white hover:text-brand-cyan hover:ring-2 hover:ring-brand-cyan;
 }
 
 .departments__cta-icon {
