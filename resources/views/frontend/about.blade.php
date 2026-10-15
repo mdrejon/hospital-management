@@ -57,26 +57,16 @@ $seoDesc = $about['about_seo_description'] ?? "Learn about Medicare Lab Ltd.'s m
 <!-- ===================== About Us ===================== -->
 @php
 $aboutPhoto = !empty($about['about_photo']) ? asset('storage/' . $about['about_photo']) : asset('assets/img/about-image.webp');
-$aboutHoursTitle = $about['about_hours_title'] ?? 'Open Hours';
-$aboutHours = !empty($about['about_hours']) ? $about['about_hours'] : [
-['day' => 'Monday', 'time' => '09:30 - 07:30'],
-['day' => 'Tuesday', 'time' => '09:30 - 07:30'],
-['day' => 'Wednesday', 'time' => '09:30 - 07:30'],
-['day' => 'Thursday', 'time' => '09:30 - 07:30'],
-['day' => 'Friday', 'time' => '09:30 - 07:30'],
-['day' => 'Saturday', 'time' => '09:30 - 07:30'],
-];
-$aboutTitle = $about['about_title'] ?? 'World Class Patient Facilities Designed For You';
-$aboutDesc = $about['about_desc'] ?? "Experience the future of healthcare. Our state-of-the-art facilities are equipped with the latest technology, ensuring you receive the world's best quality treatment. Here, cutting-edge tools meet unparalleled expertise, providing a comfortable and effective path to optimal health.";
+$aboutHoursTitle = !empty(trim($about['about_hours_title'] ?? '')) ? $about['about_hours_title'] : null;
+$aboutHours = !empty($about['about_hours']) ? $about['about_hours'] : [];
+$aboutTitle = !empty(trim($about['about_title'] ?? '')) ? $about['about_title'] : null;
+$aboutDesc = !empty(trim($about['about_desc'] ?? '')) ? $about['about_desc'] : null;
 // About-page-only rich description: replaces the shared plain desc here (never on Home)
 // when the admin actually typed something — an empty TipTap doc still saves "<p></p>".
 $aboutRichDesc = trim(strip_tags($about['about_page_desc'] ?? '')) !== '' ? $about['about_page_desc'] : null;
-$aboutFeatures = !empty($about['about_features']) ? $about['about_features'] : [
-'Comprehensive Specialties', 'Emergency Services', 'Intensive Care Units (ICUs)', 'Telemedicine Facilities', 'Multidisciplinary Team',
-'Research and Development', 'Advanced Imaging Services', 'Rehabilitation Services', 'Patient-Centric Approach', 'Health Information Technology',
-];
-$aboutFeatureCols = collect($aboutFeatures)->chunk((int) ceil(count($aboutFeatures) / 2));
-$aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
+$aboutFeatures = !empty($about['about_features']) ? $about['about_features'] : [];
+$aboutFeatureCols = !empty($aboutFeatures) ? collect($aboutFeatures)->chunk((int) ceil(count($aboutFeatures) / 2)) : collect([]);
+$aboutPhone = !empty(trim($headerSettings['header_phone'] ?? '')) ? $headerSettings['header_phone'] : null;
 @endphp
 <section class="about bg-blue-50/40 relative overflow-hidden">
   <!-- Animated Floating Medical Cross -->
@@ -94,9 +84,9 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
     <div class="about__grid">
       <div class="about__media">
         <div class="about__photo-wrap">
-          <img src="{{ $aboutPhoto }}" alt="Smiling male doctor with arms crossed" class="about__photo" />
+          <img src="{{ $aboutPhoto }}" alt="{{ $aboutTitle ?? 'About Us' }}" class="about__photo" />
 
-
+          @if(!empty($aboutHours))
           <div class="about__hours-card">
             <span class="about__hours-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -104,7 +94,9 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
                 <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
               </svg>
             </span>
+            @if(!empty($aboutHoursTitle))
             <h3 class="about__hours-title">{{ $aboutHoursTitle }}</h3>
+            @endif
             <div class="about__hours-list">
               @foreach($aboutHours as $row)
               <div class="about__hours-row">
@@ -114,19 +106,23 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
               @endforeach
             </div>
           </div>
+          @endif
         </div>
       </div>
 
       <div class="about__content">
+        @if(!empty($aboutTitle))
         <h2 class="about__title">{{ $aboutTitle }}</h2>
+        @endif
         @if($aboutRichDesc)
         <div class="about__desc about__desc--rich">{!! $aboutRichDesc !!}</div>
-        @else
+        @elseif(!empty($aboutDesc))
         <p class="about__desc">
           {{ $aboutDesc }}
         </p>
         @endif
 
+        @if(!empty($aboutFeatures))
         <div class="about__features">
           @foreach($aboutFeatureCols as $col)
           <div>
@@ -143,10 +139,12 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
           </div>
           @endforeach
         </div>
+        @endif
 
         {{-- CTA button intentionally omitted here — it only shows on the Home page's About section. --}}
+        @if(!empty($aboutPhone))
         <div class="about__cta-row">
-          <a href="tel:{{ $aboutPhone }}" class="about__contact">
+          <a href="tel:{{ preg_replace('/[^0-9+]/', '', $aboutPhone) }}" class="about__contact">
             <span class="about__contact-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6" />
@@ -158,6 +156,7 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
             </span>
           </a>
         </div>
+        @endif
       </div>
     </div>
   </div>
@@ -165,9 +164,9 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
 
 <!-- ===================== Mission & Vision ===================== -->
 @php
-$mvTitle = $about['about_mv_title'] ?? 'Inspirational Health Our Vision And Mission';
-$mvDesc = $about['about_mv_desc'] ?? 'To enhance the health and well-being of our community by providing compassionate, high-quality healthcare services through dedicated professionals and advanced medical practices.';
-$mvImage = !empty($about['about_mv_image']) ? asset('storage/' . $about['about_mv_image']) : asset('assets/img/sr-1-2.jpg');
+$mvTitle = !empty(trim($about['about_mv_title'] ?? '')) ? $about['about_mv_title'] : null;
+$mvDesc = !empty(trim($about['about_mv_desc'] ?? '')) ? $about['about_mv_desc'] : null;
+$mvImage = !empty($about['about_mv_image']) ? asset('storage/' . $about['about_mv_image']) : null;
 $mvIcons = [
 '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
   <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6" />
@@ -183,21 +182,23 @@ $mvIcons = [
   <path d="M2 9h20M9 3l-3 6 6 12 6-12-3-6" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" />
 </svg>',
 ];
-$mvCards = !empty($about['about_mv_cards']) ? $about['about_mv_cards'] : [
-['title' => 'Mission', 'description' => 'Delivering compassionate, patient-centred care through skilled professionals and dependable, modern medical practices for every member of our community.'],
-['title' => 'Vision', 'description' => "To be the region's most trusted healthcare partner, recognised for clinical excellence, innovation, and genuine care for every patient we serve."],
-['title' => 'Values', 'description' => 'Integrity, compassion, and accountability guide every decision we make, from the bedside to the boardroom.'],
-];
+$mvCards = !empty($about['about_mv_cards']) ? $about['about_mv_cards'] : [];
 @endphp
+@if(!empty($mvTitle) || !empty($mvDesc) || !empty($mvCards) || !empty($mvImage))
 <section class="mission-vision">
   <div class="container mx-auto">
     <div class="mission-vision__grid">
       <div>
+        @if(!empty($mvTitle))
         <h2 class="mission-vision__title">{{ $mvTitle }}</h2>
+        @endif
+        @if(!empty($mvDesc))
         <p class="mission-vision__desc">
           {{ $mvDesc }}
         </p>
+        @endif
 
+        @if(!empty($mvCards))
         <div class="mission-vision__list">
           @foreach($mvCards as $i => $card)
           <div class="mission-vision__card">
@@ -205,76 +206,98 @@ $mvCards = !empty($about['about_mv_cards']) ? $about['about_mv_cards'] : [
               {!! $mvIcons[$i] ?? $mvIcons[0] !!}
             </span>
             <div>
+              @if(!empty(trim($card['title'] ?? '')))
               <h3 class="mission-vision__card-title">{{ $card['title'] }}</h3>
+              @endif
+              @if(!empty(trim($card['description'] ?? '')))
               <p class="mission-vision__card-desc">
                 {{ $card['description'] }}
               </p>
+              @endif
             </div>
           </div>
           @endforeach
         </div>
+        @endif
       </div>
 
+      @if(!empty($mvImage))
       <div class="mission-vision__media">
-        <img src="{{ $mvImage }}" alt="Doctor speaking with a patient" class="mission-vision__img" />
+        <img src="{{ $mvImage }}" alt="{{ $mvTitle ?? 'Mission and Vision' }}" class="mission-vision__img" />
       </div>
+      @endif
     </div>
   </div>
 </section>
+@endif
 
 <!-- ===================== Our CEO Message ===================== -->
 @php
 $ceoImage = !empty($about['ceo_image']) ? asset('storage/' . $about['ceo_image']) : asset('assets/img/about-image.webp');
-$ceoBadgeValue = $about['ceo_badge_value'] ?? '16+';
-$ceoBadgeLabel = $about['ceo_badge_label'] ?? 'Years Experienced';
-$ceoEyebrow = $about['ceo_eyebrow'] ?? 'Our CEO Message';
-$ceoTitle = $about['ceo_title'] ?? 'Meet Dr. Natali Jackson';
-$ceoMessage = $about['ceo_message'] ?? "As CEO of Medicare Lab Ltd., I'm committed to building a hospital where compassionate care meets clinical excellence. Every decision we make, from staffing to technology, starts with what's best for the patients and families who trust us with their health.";
-$ceoFocusLabel = $about['ceo_focus_label'] ?? 'Leadership Focus';
-$ceoFocusItems = !empty($about['ceo_focus_items']) ? $about['ceo_focus_items'] : [
-'Patient-Centered Care', 'Clinical Innovation', 'Operational Excellence', 'Community Outreach', 'Quality Assurance', 'Strategic Growth',
-];
-$ceoAwards = !empty($about['ceo_awards']) ? $about['ceo_awards'] : [
-['year' => 'Medicare Lab Ltd. 2024', 'org' => 'Quality and Accreditation Institute', 'label' => 'Healthcare Leadership Award'],
-['year' => 'Medicare Lab Ltd. 2023', 'org' => 'National Hospital Federation', 'label' => 'Excellence in Patient Care'],
-];
+$ceoBadgeValue = !empty(trim($about['ceo_badge_value'] ?? '')) ? $about['ceo_badge_value'] : null;
+$ceoBadgeLabel = !empty(trim($about['ceo_badge_label'] ?? '')) ? $about['ceo_badge_label'] : null;
+$ceoEyebrow = !empty(trim($about['ceo_eyebrow'] ?? '')) ? $about['ceo_eyebrow'] : null;
+$ceoTitle = !empty(trim($about['ceo_title'] ?? '')) ? $about['ceo_title'] : null;
+$ceoMessage = !empty(trim($about['ceo_message'] ?? '')) ? $about['ceo_message'] : null;
+$ceoFocusLabel = !empty(trim($about['ceo_focus_label'] ?? '')) ? $about['ceo_focus_label'] : null;
+$ceoFocusItems = !empty($about['ceo_focus_items']) ? array_filter($about['ceo_focus_items'], fn($item) => !empty(trim((string)$item))) : [];
+$ceoAwards = !empty($about['ceo_awards']) ? array_filter($about['ceo_awards'], function($award) {
+    return !empty(trim($award['year'] ?? '')) || !empty(trim($award['org'] ?? '')) || !empty(trim($award['label'] ?? ''));
+}) : [];
 @endphp
 <section class="ceo-message">
   <div class="container mx-auto">
     <div class="ceo-message__grid">
       <div class="ceo-message__media">
-        <img src="{{ $ceoImage }}" alt="{{ $ceoTitle }}" class="ceo-message__img" />
+        <img src="{{ $ceoImage }}" alt="{{ $ceoTitle ?? 'CEO' }}" class="ceo-message__img" />
+        @if(!empty($ceoBadgeValue))
         <div class="ceo-message__badge">
           <span class="ceo-message__badge-value">{{ $ceoBadgeValue }}</span>
+          @if(!empty($ceoBadgeLabel))
           <span class="ceo-message__badge-label">{!! nl2br(e($ceoBadgeLabel)) !!}</span>
+          @endif
         </div>
+        @endif
       </div>
 
       <div>
+        @if(!empty($ceoEyebrow))
         <p class="ceo-message__eyebrow">
           <span class="ceo-message__eyebrow-dot"></span>
           {{ $ceoEyebrow }}
           <span class="ceo-message__eyebrow-dot"></span>
         </p>
+        @endif
+
+        @if(!empty($ceoTitle))
         <h2 class="ceo-message__title">{{ $ceoTitle }}</h2>
+        @endif
+
+        @if(!empty($ceoMessage))
         <p class="ceo-message__desc">
           {{ $ceoMessage }}
         </p>
+        @endif
 
-        <p class="ceo-message__focus-label">{{ $ceoFocusLabel }}</p>
-        <div class="ceo-message__checklist">
-          @foreach($ceoFocusItems as $item)
-          <span class="ceo-message__check">
-            <span class="ceo-message__check-icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
+        @if(!empty($ceoFocusItems))
+          @if(!empty($ceoFocusLabel))
+          <p class="ceo-message__focus-label">{{ $ceoFocusLabel }}</p>
+          @endif
+          <div class="ceo-message__checklist">
+            @foreach($ceoFocusItems as $item)
+            <span class="ceo-message__check">
+              <span class="ceo-message__check-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              {{ $item }}
             </span>
-            {{ $item }}
-          </span>
-          @endforeach
-        </div>
+            @endforeach
+          </div>
+        @endif
 
+        @if(!empty($ceoAwards))
         <div class="ceo-message__awards">
           @foreach($ceoAwards as $award)
           <div class="ceo-message__award">
@@ -284,13 +307,20 @@ $ceoAwards = !empty($about['ceo_awards']) ? $about['ceo_awards'] : [
               </svg>
             </span>
             <div>
+              @if(!empty(trim($award['year'] ?? '')))
               <p class="ceo-message__award-year">{{ $award['year'] }}</p>
+              @endif
+              @if(!empty(trim($award['org'] ?? '')))
               <p class="ceo-message__award-org">{{ $award['org'] }}</p>
+              @endif
+              @if(!empty(trim($award['label'] ?? '')))
               <a href="{{ route('achievements') }}" class="ceo-message__award-link">{{ $award['label'] }}</a>
+              @endif
             </div>
           </div>
           @endforeach
         </div>
+        @endif
       </div>
     </div>
   </div>
@@ -298,17 +328,11 @@ $ceoAwards = !empty($about['ceo_awards']) ? $about['ceo_awards'] : [
 
 <!-- ===================== FAQ ===================== -->
 @php
-$aboutFaqTitle = $aboutFaq['title'] ?: 'Frequently Asked Questions';
-$aboutFaqDesc = $aboutFaq['description'] ?: 'Answers to the questions our patients ask us most about visiting Medicare Lab Ltd..';
-$aboutFaqPhoto = $aboutFaq['image'] ?: asset('assets/img/faq.webp');
-$aboutFaqPhotoAlt = $aboutFaq['image_alt'] ?: 'Smiling doctor on a call, ready to answer your questions';
-$aboutFaqDefaults = [
-['question' => 'What insurance plans do you accept?', 'answer' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution'],
-['question' => 'Do I need a referral to see a specialist?', 'answer' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution'],
-['question' => 'What should I bring to my first visit?', 'answer' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution'],
-['question' => 'How can I access my medical records?', 'answer' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution'],
-];
-$aboutFaqCards = (!empty($aboutFaq['items']) && $aboutFaq['items']->isNotEmpty()) ? $aboutFaq['items'] : collect($aboutFaqDefaults);
+$aboutFaqTitle = !empty(trim($aboutFaq['title'] ?? '')) ? $aboutFaq['title'] : 'Frequently Asked Questions';
+$aboutFaqDesc = !empty(trim($aboutFaq['description'] ?? '')) ? $aboutFaq['description'] : null;
+$aboutFaqPhoto = !empty($aboutFaq['image']) ? $aboutFaq['image'] : asset('assets/img/faq.webp');
+$aboutFaqPhotoAlt = !empty($aboutFaq['image_alt']) ? $aboutFaq['image_alt'] : $aboutFaqTitle;
+$aboutFaqCards = (!empty($aboutFaq['items']) && $aboutFaq['items']->isNotEmpty()) ? $aboutFaq['items'] : collect([]);
 @endphp
 <section class="faq">
   <img src="{{ asset('assets/img/faq-bg.png') }}" alt="" class="faq__bg" aria-hidden="true" />
@@ -317,10 +341,13 @@ $aboutFaqCards = (!empty($aboutFaq['items']) && $aboutFaq['items']->isNotEmpty()
     <div class="faq__grid">
       <div class="faq__copy">
         <h2 class="faq__title">{{ $aboutFaqTitle }}</h2>
+        @if(!empty($aboutFaqDesc))
         <p class="faq__desc">
           {{ $aboutFaqDesc }}
         </p>
+        @endif
 
+        @if($aboutFaqCards->isNotEmpty())
         <div class="faq__list">
           @foreach($aboutFaqCards as $faqIndex => $faqCard)
           <div class="faq-item @if($faqIndex === 0) is-open @endif">
@@ -338,6 +365,7 @@ $aboutFaqCards = (!empty($aboutFaq['items']) && $aboutFaq['items']->isNotEmpty()
           </div>
           @endforeach
         </div>
+        @endif
       </div>
 
       <div class="faq__media">

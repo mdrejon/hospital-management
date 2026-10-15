@@ -202,7 +202,7 @@ class FrontendController extends Controller
 
         foreach ([
             'about_hero_title', 'about_seo_title', 'about_seo_description',
-            'about_title', 'about_desc', 'about_page_desc', 'about_hours_title', 'about_more_btn_text',
+            'about_title', 'about_desc', 'about_page_desc', 'about_exp_label', 'about_hours_title', 'about_more_btn_text',
             'about_mv_title', 'about_mv_desc',
             'ceo_badge_label', 'ceo_eyebrow', 'ceo_title', 'ceo_message', 'ceo_focus_label',
             'why_badge', 'why_title', 'why_desc', 'why_badge_number', 'why_badge_label',
@@ -219,25 +219,48 @@ class FrontendController extends Controller
         // Reshape repeater text sub-fields to the resolved-locale string (mirrors the {en,bn} shape written by AboutSettingController).
         $tr = fn ($v) => is_array($v) ? ($v[app()->getLocale()] ?: $v[config('app.fallback_locale')] ?? '') : $v;
 
-        $settings['about_hours'] = collect($settings['about_hours'] ?? [])->map(fn ($item) => [
-            'day' => $tr($item['day'] ?? ''), 'time' => $tr($item['time'] ?? ''),
-        ])->values()->all();
+        $settings['about_hours'] = collect($settings['about_hours'] ?? [])
+            ->map(fn ($item) => [
+                'day' => $tr($item['day'] ?? ''),
+                'time' => $tr($item['time'] ?? ''),
+            ])
+            ->filter(fn ($item) => !empty(trim($item['day'] ?? '')) || !empty(trim($item['time'] ?? '')))
+            ->values()->all();
 
-        $settings['about_features'] = collect($settings['about_features'] ?? [])->map($tr)->values()->all();
+        $settings['about_features'] = collect($settings['about_features'] ?? [])
+            ->map($tr)
+            ->filter(fn ($item) => !empty(trim((string)$item)))
+            ->values()->all();
 
-        $settings['about_mv_cards'] = collect($settings['about_mv_cards'] ?? [])->map(fn ($item) => [
-            'title' => $tr($item['title'] ?? ''), 'description' => $tr($item['description'] ?? ''),
-        ])->values()->all();
+        $settings['about_mv_cards'] = collect($settings['about_mv_cards'] ?? [])
+            ->map(fn ($item) => [
+                'title' => $tr($item['title'] ?? ''),
+                'description' => $tr($item['description'] ?? ''),
+            ])
+            ->filter(fn ($item) => !empty(trim($item['title'] ?? '')) || !empty(trim($item['description'] ?? '')))
+            ->values()->all();
 
-        $settings['ceo_focus_items'] = collect($settings['ceo_focus_items'] ?? [])->map($tr)->values()->all();
+        $settings['ceo_focus_items'] = collect($settings['ceo_focus_items'] ?? [])
+            ->map($tr)
+            ->filter(fn ($item) => !empty(trim((string)$item)))
+            ->values()->all();
 
-        $settings['ceo_awards'] = collect($settings['ceo_awards'] ?? [])->map(fn ($item) => array_merge($item, [
-            'label' => $tr($item['label'] ?? ''),
-        ]))->values()->all();
+        $settings['ceo_awards'] = collect($settings['ceo_awards'] ?? [])
+            ->map(fn ($item) => array_merge($item, [
+                'label' => $tr($item['label'] ?? ''),
+            ]))
+            ->filter(function ($item) {
+                return !empty(trim($item['year'] ?? '')) || !empty(trim($item['org'] ?? '')) || !empty(trim($item['label'] ?? ''));
+            })
+            ->values()->all();
 
-        $settings['why_features'] = collect($settings['why_features'] ?? [])->map(fn ($item) => array_merge($item, [
-            'title' => $tr($item['title'] ?? ''), 'description' => $tr($item['description'] ?? ''),
-        ]))->values()->all();
+        $settings['why_features'] = collect($settings['why_features'] ?? [])
+            ->map(fn ($item) => array_merge($item, [
+                'title' => $tr($item['title'] ?? ''),
+                'description' => $tr($item['description'] ?? ''),
+            ]))
+            ->filter(fn ($item) => !empty(trim($item['title'] ?? '')) || !empty(trim($item['description'] ?? '')))
+            ->values()->all();
 
         return $settings;
     }

@@ -50,7 +50,7 @@ class GlobalSetting extends Model
             return static::get($key, $default);
         }
 
-        return $decoded[$locale] ?: ($decoded[$fallback] ?? $default);
+        return ($decoded[$locale] ?? null) ?: ($decoded[$fallback] ?? $default);
     }
 
     /** Store a translatable key from an ['en' => ..., 'bn' => ...] array as JSON. */

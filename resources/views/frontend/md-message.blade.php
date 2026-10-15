@@ -2,27 +2,26 @@
 
 @php
 $ceoImage = !empty($about['ceo_image']) ? asset('storage/' . $about['ceo_image']) : asset('assets/img/about-image.webp');
-$ceoBadgeValue = $about['ceo_badge_value'] ?? '16+';
-$ceoBadgeLabel = $about['ceo_badge_label'] ?? "Years\nExperienced";
-$ceoEyebrow = $about['ceo_eyebrow'] ?? 'A Message From Our MD/CEO';
-$ceoTitle = $about['ceo_title'] ?? 'Dr. Natali Jackson';
-$ceoMessage = $about['ceo_message'] ?? "As CEO of Medicare Lab Ltd., I'm committed to building a hospital where compassionate care meets clinical excellence. Every decision we make, from staffing to technology, starts with what's best for the patients and families who trust us with their health.\n\nWhen we opened our doors over a decade ago, our promise was simple: treat every patient like family. That promise has guided every expansion, every new department, and every hire since — and it's why thousands of families continue to choose Medicare Lab Ltd. for their care today.\n\nI'm proud of what our doctors, nurses, and support staff accomplish every single day. Whether you're here for a routine check-up or a life-changing procedure, you have my personal commitment that you'll be treated with the dignity, honesty, and warmth every patient deserves.";
-$ceoFocusLabel = $about['ceo_focus_label'] ?? 'Leadership Focus';
-$ceoFocusItems = !empty($about['ceo_focus_items']) ? $about['ceo_focus_items'] : [
-'Patient-Centered Care', 'Clinical Innovation', 'Operational Excellence', 'Community Outreach', 'Quality Assurance', 'Strategic Growth',
-];
-$ceoAwards = !empty($about['ceo_awards']) ? $about['ceo_awards'] : [
-['year' => 'Medicare Lab Ltd. 2024', 'org' => 'Quality and Accreditation Institute', 'label' => 'Healthcare Leadership Award'],
-['year' => 'Medicare Lab Ltd. 2023', 'org' => 'National Hospital Federation', 'label' => 'Excellence in Patient Care'],
-];
-$seoTitle = $about['about_seo_title'] ?? ($ceoTitle . ' | Message From MD/CEO | ' . config('app.name'));
-$seoDesc = \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMessage), 160);
+$ceoBadgeValue = !empty(trim($about['ceo_badge_value'] ?? '')) ? $about['ceo_badge_value'] : null;
+$ceoBadgeLabel = !empty(trim($about['ceo_badge_label'] ?? '')) ? $about['ceo_badge_label'] : null;
+$ceoEyebrow = !empty(trim($about['ceo_eyebrow'] ?? '')) ? $about['ceo_eyebrow'] : null;
+$ceoTitle = !empty(trim($about['ceo_title'] ?? '')) ? $about['ceo_title'] : null;
+$ceoMessage = !empty(trim($about['ceo_message'] ?? '')) ? $about['ceo_message'] : null;
+$ceoFocusLabel = !empty(trim($about['ceo_focus_label'] ?? '')) ? $about['ceo_focus_label'] : null;
+$ceoFocusItems = !empty($about['ceo_focus_items']) ? array_filter($about['ceo_focus_items'], fn($item) => !empty(trim((string)$item))) : [];
+$ceoAwards = !empty($about['ceo_awards']) ? array_filter($about['ceo_awards'], function($award) {
+    return !empty(trim($award['year'] ?? '')) || !empty(trim($award['org'] ?? '')) || !empty(trim($award['label'] ?? ''));
+}) : [];
+$seoTitle = $about['about_seo_title'] ?? (($ceoTitle ? $ceoTitle . ' | ' : '') . 'Message From MD/CEO | ' . config('app.name'));
+$seoDesc = $ceoMessage ? \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMessage), 160) : '';
 @endphp
 
 @section('title', $seoTitle)
+@if($seoDesc)
 @section('meta_description', $seoDesc)
-@section('og_title', $seoTitle)
 @section('og_description', $seoDesc)
+@endif
+@section('og_title', $seoTitle)
 
 @section('content')
 
@@ -65,40 +64,57 @@ $seoDesc = \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMes
   <div class="container mx-auto">
     <div class="ceo-message__grid">
       <div class="ceo-message__media">
-        <img src="{{ $ceoImage }}" alt="{{ $ceoTitle }}" class="ceo-message__img" />
+        <img src="{{ $ceoImage }}" alt="{{ $ceoTitle ?? 'CEO' }}" class="ceo-message__img" />
+        @if(!empty($ceoBadgeValue))
         <div class="ceo-message__badge">
           <span class="ceo-message__badge-value">{{ $ceoBadgeValue }}</span>
+          @if(!empty($ceoBadgeLabel))
           <span class="ceo-message__badge-label">{!! nl2br(e($ceoBadgeLabel)) !!}</span>
+          @endif
         </div>
+        @endif
       </div>
 
       <div>
+        @if(!empty($ceoEyebrow))
         <p class="ceo-message__eyebrow">
           <span class="ceo-message__eyebrow-dot"></span>
           {{ $ceoEyebrow }}
           <span class="ceo-message__eyebrow-dot"></span>
         </p>
+        @endif
+
+        @if(!empty($ceoTitle))
         <h2 class="ceo-message__title">{{ $ceoTitle }}</h2>
-        @foreach(preg_split('/\n{2,}/', $ceoMessage) as $paragraph)
-        <p class="ceo-message__desc">
-          {{ trim($paragraph) }}
-        </p>
-        @endforeach
+        @endif
 
-        <p class="ceo-message__focus-label">{{ $ceoFocusLabel }}</p>
-        <div class="ceo-message__checklist">
-          @foreach($ceoFocusItems as $item)
-          <span class="ceo-message__check">
-            <span class="ceo-message__check-icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </span>
-            {{ $item }}
-          </span>
+        @if(!empty($ceoMessage))
+          @foreach(preg_split('/\n{2,}/', $ceoMessage) as $paragraph)
+          <p class="ceo-message__desc">
+            {{ trim($paragraph) }}
+          </p>
           @endforeach
-        </div>
+        @endif
 
+        @if(!empty($ceoFocusItems))
+          @if(!empty($ceoFocusLabel))
+          <p class="ceo-message__focus-label">{{ $ceoFocusLabel }}</p>
+          @endif
+          <div class="ceo-message__checklist">
+            @foreach($ceoFocusItems as $item)
+            <span class="ceo-message__check">
+              <span class="ceo-message__check-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              {{ $item }}
+            </span>
+            @endforeach
+          </div>
+        @endif
+
+        @if(!empty($ceoAwards))
         <div class="ceo-message__awards">
           @foreach($ceoAwards as $award)
           <div class="ceo-message__award">
@@ -108,13 +124,20 @@ $seoDesc = \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMes
               </svg>
             </span>
             <div>
+              @if(!empty(trim($award['year'] ?? '')))
               <p class="ceo-message__award-year">{{ $award['year'] }}</p>
+              @endif
+              @if(!empty(trim($award['org'] ?? '')))
               <p class="ceo-message__award-org">{{ $award['org'] }}</p>
+              @endif
+              @if(!empty(trim($award['label'] ?? '')))
               <a href="{{ route('achievements') }}" class="ceo-message__award-link">{{ $award['label'] }}</a>
+              @endif
             </div>
           </div>
           @endforeach
         </div>
+        @endif
       </div>
     </div>
   </div>

@@ -27,30 +27,26 @@ $seoDesc = $about['about_seo_description'] ?? "Learn about Medicare Lab Ltd.'s m
 
   <span class="page-header__badge">24/7 Emergency Service</span>
 
-  <div class="page-header__social">
-    <a href="#" class="page-header__social-link" aria-label="Facebook">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z" />
-      </svg>
-    </a>
-    <a href="#" class="page-header__social-link" aria-label="Twitter">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1c.5 1.7 2.1 2.9 4 2.9A8.2 8.2 0 0 1 2 18.6a11.6 11.6 0 0 0 6.3 1.8c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.1z" />
-      </svg>
-    </a>
-    <a href="#" class="page-header__social-link" aria-label="LinkedIn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z" />
-      </svg>
-    </a>
-    <a href="#" class="page-header__social-link" aria-label="Instagram">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-        <circle cx="12" cy="12" r="4" />
-        <circle cx="17.2" cy="6.8" r="1" />
-      </svg>
-    </a>
-  </div>
+  <?php if (isset($component)) { $__componentOriginalf541cdfc2c462e982d1ee013ac35e2c5 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalf541cdfc2c462e982d1ee013ac35e2c5 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.page-header-social','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('frontend.page-header-social'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalf541cdfc2c462e982d1ee013ac35e2c5)): ?>
+<?php $attributes = $__attributesOriginalf541cdfc2c462e982d1ee013ac35e2c5; ?>
+<?php unset($__attributesOriginalf541cdfc2c462e982d1ee013ac35e2c5); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalf541cdfc2c462e982d1ee013ac35e2c5)): ?>
+<?php $component = $__componentOriginalf541cdfc2c462e982d1ee013ac35e2c5; ?>
+<?php unset($__componentOriginalf541cdfc2c462e982d1ee013ac35e2c5); ?>
+<?php endif; ?>
 
   <div class="page-header__inner">
     <h1 class="page-header__title"><?php echo e($heroTitle); ?></h1>
@@ -78,26 +74,16 @@ $seoDesc = $about['about_seo_description'] ?? "Learn about Medicare Lab Ltd.'s m
 <!-- ===================== About Us ===================== -->
 <?php
 $aboutPhoto = !empty($about['about_photo']) ? asset('storage/' . $about['about_photo']) : asset('assets/img/about-image.webp');
-$aboutHoursTitle = $about['about_hours_title'] ?? 'Open Hours';
-$aboutHours = !empty($about['about_hours']) ? $about['about_hours'] : [
-['day' => 'Monday', 'time' => '09:30 - 07:30'],
-['day' => 'Tuesday', 'time' => '09:30 - 07:30'],
-['day' => 'Wednesday', 'time' => '09:30 - 07:30'],
-['day' => 'Thursday', 'time' => '09:30 - 07:30'],
-['day' => 'Friday', 'time' => '09:30 - 07:30'],
-['day' => 'Saturday', 'time' => '09:30 - 07:30'],
-];
-$aboutTitle = $about['about_title'] ?? 'World Class Patient Facilities Designed For You';
-$aboutDesc = $about['about_desc'] ?? "Experience the future of healthcare. Our state-of-the-art facilities are equipped with the latest technology, ensuring you receive the world's best quality treatment. Here, cutting-edge tools meet unparalleled expertise, providing a comfortable and effective path to optimal health.";
+$aboutHoursTitle = !empty(trim($about['about_hours_title'] ?? '')) ? $about['about_hours_title'] : null;
+$aboutHours = !empty($about['about_hours']) ? $about['about_hours'] : [];
+$aboutTitle = !empty(trim($about['about_title'] ?? '')) ? $about['about_title'] : null;
+$aboutDesc = !empty(trim($about['about_desc'] ?? '')) ? $about['about_desc'] : null;
 // About-page-only rich description: replaces the shared plain desc here (never on Home)
 // when the admin actually typed something — an empty TipTap doc still saves "<p></p>".
 $aboutRichDesc = trim(strip_tags($about['about_page_desc'] ?? '')) !== '' ? $about['about_page_desc'] : null;
-$aboutFeatures = !empty($about['about_features']) ? $about['about_features'] : [
-'Comprehensive Specialties', 'Emergency Services', 'Intensive Care Units (ICUs)', 'Telemedicine Facilities', 'Multidisciplinary Team',
-'Research and Development', 'Advanced Imaging Services', 'Rehabilitation Services', 'Patient-Centric Approach', 'Health Information Technology',
-];
-$aboutFeatureCols = collect($aboutFeatures)->chunk((int) ceil(count($aboutFeatures) / 2));
-$aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
+$aboutFeatures = !empty($about['about_features']) ? $about['about_features'] : [];
+$aboutFeatureCols = !empty($aboutFeatures) ? collect($aboutFeatures)->chunk((int) ceil(count($aboutFeatures) / 2)) : collect([]);
+$aboutPhone = !empty(trim($headerSettings['header_phone'] ?? '')) ? $headerSettings['header_phone'] : null;
 ?>
 <section class="about bg-blue-50/40 relative overflow-hidden">
   <!-- Animated Floating Medical Cross -->
@@ -115,9 +101,9 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
     <div class="about__grid">
       <div class="about__media">
         <div class="about__photo-wrap">
-          <img src="<?php echo e($aboutPhoto); ?>" alt="Smiling male doctor with arms crossed" class="about__photo" />
+          <img src="<?php echo e($aboutPhoto); ?>" alt="<?php echo e($aboutTitle ?? 'About Us'); ?>" class="about__photo" />
 
-
+          <?php if(!empty($aboutHours)): ?>
           <div class="about__hours-card">
             <span class="about__hours-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -125,7 +111,9 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
                 <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
               </svg>
             </span>
+            <?php if(!empty($aboutHoursTitle)): ?>
             <h3 class="about__hours-title"><?php echo e($aboutHoursTitle); ?></h3>
+            <?php endif; ?>
             <div class="about__hours-list">
               <?php $__currentLoopData = $aboutHours; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <div class="about__hours-row">
@@ -135,20 +123,24 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
           </div>
+          <?php endif; ?>
         </div>
       </div>
 
       <div class="about__content">
+        <?php if(!empty($aboutTitle)): ?>
         <h2 class="about__title"><?php echo e($aboutTitle); ?></h2>
+        <?php endif; ?>
         <?php if($aboutRichDesc): ?>
         <div class="about__desc about__desc--rich"><?php echo $aboutRichDesc; ?></div>
-        <?php else: ?>
+        <?php elseif(!empty($aboutDesc)): ?>
         <p class="about__desc">
           <?php echo e($aboutDesc); ?>
 
         </p>
         <?php endif; ?>
 
+        <?php if(!empty($aboutFeatures)): ?>
         <div class="about__features">
           <?php $__currentLoopData = $aboutFeatureCols; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $col): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <div>
@@ -166,10 +158,12 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
           </div>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
+        <?php endif; ?>
 
         
+        <?php if(!empty($aboutPhone)): ?>
         <div class="about__cta-row">
-          <a href="tel:<?php echo e($aboutPhone); ?>" class="about__contact">
+          <a href="tel:<?php echo e(preg_replace('/[^0-9+]/', '', $aboutPhone)); ?>" class="about__contact">
             <span class="about__contact-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6" />
@@ -181,6 +175,7 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
             </span>
           </a>
         </div>
+        <?php endif; ?>
       </div>
     </div>
   </div>
@@ -188,9 +183,9 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
 
 <!-- ===================== Mission & Vision ===================== -->
 <?php
-$mvTitle = $about['about_mv_title'] ?? 'Inspirational Health Our Vision And Mission';
-$mvDesc = $about['about_mv_desc'] ?? 'To enhance the health and well-being of our community by providing compassionate, high-quality healthcare services through dedicated professionals and advanced medical practices.';
-$mvImage = !empty($about['about_mv_image']) ? asset('storage/' . $about['about_mv_image']) : asset('assets/img/sr-1-2.jpg');
+$mvTitle = !empty(trim($about['about_mv_title'] ?? '')) ? $about['about_mv_title'] : null;
+$mvDesc = !empty(trim($about['about_mv_desc'] ?? '')) ? $about['about_mv_desc'] : null;
+$mvImage = !empty($about['about_mv_image']) ? asset('storage/' . $about['about_mv_image']) : null;
 $mvIcons = [
 '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
   <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6" />
@@ -206,22 +201,24 @@ $mvIcons = [
   <path d="M2 9h20M9 3l-3 6 6 12 6-12-3-6" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" />
 </svg>',
 ];
-$mvCards = !empty($about['about_mv_cards']) ? $about['about_mv_cards'] : [
-['title' => 'Mission', 'description' => 'Delivering compassionate, patient-centred care through skilled professionals and dependable, modern medical practices for every member of our community.'],
-['title' => 'Vision', 'description' => "To be the region's most trusted healthcare partner, recognised for clinical excellence, innovation, and genuine care for every patient we serve."],
-['title' => 'Values', 'description' => 'Integrity, compassion, and accountability guide every decision we make, from the bedside to the boardroom.'],
-];
+$mvCards = !empty($about['about_mv_cards']) ? $about['about_mv_cards'] : [];
 ?>
+<?php if(!empty($mvTitle) || !empty($mvDesc) || !empty($mvCards) || !empty($mvImage)): ?>
 <section class="mission-vision">
   <div class="container mx-auto">
     <div class="mission-vision__grid">
       <div>
+        <?php if(!empty($mvTitle)): ?>
         <h2 class="mission-vision__title"><?php echo e($mvTitle); ?></h2>
+        <?php endif; ?>
+        <?php if(!empty($mvDesc)): ?>
         <p class="mission-vision__desc">
           <?php echo e($mvDesc); ?>
 
         </p>
+        <?php endif; ?>
 
+        <?php if(!empty($mvCards)): ?>
         <div class="mission-vision__list">
           <?php $__currentLoopData = $mvCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <div class="mission-vision__card">
@@ -230,80 +227,102 @@ $mvCards = !empty($about['about_mv_cards']) ? $about['about_mv_cards'] : [
 
             </span>
             <div>
+              <?php if(!empty(trim($card['title'] ?? ''))): ?>
               <h3 class="mission-vision__card-title"><?php echo e($card['title']); ?></h3>
+              <?php endif; ?>
+              <?php if(!empty(trim($card['description'] ?? ''))): ?>
               <p class="mission-vision__card-desc">
                 <?php echo e($card['description']); ?>
 
               </p>
+              <?php endif; ?>
             </div>
           </div>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
+        <?php endif; ?>
       </div>
 
+      <?php if(!empty($mvImage)): ?>
       <div class="mission-vision__media">
-        <img src="<?php echo e($mvImage); ?>" alt="Doctor speaking with a patient" class="mission-vision__img" />
+        <img src="<?php echo e($mvImage); ?>" alt="<?php echo e($mvTitle ?? 'Mission and Vision'); ?>" class="mission-vision__img" />
       </div>
+      <?php endif; ?>
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- ===================== Our CEO Message ===================== -->
 <?php
 $ceoImage = !empty($about['ceo_image']) ? asset('storage/' . $about['ceo_image']) : asset('assets/img/about-image.webp');
-$ceoBadgeValue = $about['ceo_badge_value'] ?? '16+';
-$ceoBadgeLabel = $about['ceo_badge_label'] ?? 'Years Experienced';
-$ceoEyebrow = $about['ceo_eyebrow'] ?? 'Our CEO Message';
-$ceoTitle = $about['ceo_title'] ?? 'Meet Dr. Natali Jackson';
-$ceoMessage = $about['ceo_message'] ?? "As CEO of Medicare Lab Ltd., I'm committed to building a hospital where compassionate care meets clinical excellence. Every decision we make, from staffing to technology, starts with what's best for the patients and families who trust us with their health.";
-$ceoFocusLabel = $about['ceo_focus_label'] ?? 'Leadership Focus';
-$ceoFocusItems = !empty($about['ceo_focus_items']) ? $about['ceo_focus_items'] : [
-'Patient-Centered Care', 'Clinical Innovation', 'Operational Excellence', 'Community Outreach', 'Quality Assurance', 'Strategic Growth',
-];
-$ceoAwards = !empty($about['ceo_awards']) ? $about['ceo_awards'] : [
-['year' => 'Medicare Lab Ltd. 2024', 'org' => 'Quality and Accreditation Institute', 'label' => 'Healthcare Leadership Award'],
-['year' => 'Medicare Lab Ltd. 2023', 'org' => 'National Hospital Federation', 'label' => 'Excellence in Patient Care'],
-];
+$ceoBadgeValue = !empty(trim($about['ceo_badge_value'] ?? '')) ? $about['ceo_badge_value'] : null;
+$ceoBadgeLabel = !empty(trim($about['ceo_badge_label'] ?? '')) ? $about['ceo_badge_label'] : null;
+$ceoEyebrow = !empty(trim($about['ceo_eyebrow'] ?? '')) ? $about['ceo_eyebrow'] : null;
+$ceoTitle = !empty(trim($about['ceo_title'] ?? '')) ? $about['ceo_title'] : null;
+$ceoMessage = !empty(trim($about['ceo_message'] ?? '')) ? $about['ceo_message'] : null;
+$ceoFocusLabel = !empty(trim($about['ceo_focus_label'] ?? '')) ? $about['ceo_focus_label'] : null;
+$ceoFocusItems = !empty($about['ceo_focus_items']) ? array_filter($about['ceo_focus_items'], fn($item) => !empty(trim((string)$item))) : [];
+$ceoAwards = !empty($about['ceo_awards']) ? array_filter($about['ceo_awards'], function($award) {
+    return !empty(trim($award['year'] ?? '')) || !empty(trim($award['org'] ?? '')) || !empty(trim($award['label'] ?? ''));
+}) : [];
 ?>
 <section class="ceo-message">
   <div class="container mx-auto">
     <div class="ceo-message__grid">
       <div class="ceo-message__media">
-        <img src="<?php echo e($ceoImage); ?>" alt="<?php echo e($ceoTitle); ?>" class="ceo-message__img" />
+        <img src="<?php echo e($ceoImage); ?>" alt="<?php echo e($ceoTitle ?? 'CEO'); ?>" class="ceo-message__img" />
+        <?php if(!empty($ceoBadgeValue)): ?>
         <div class="ceo-message__badge">
           <span class="ceo-message__badge-value"><?php echo e($ceoBadgeValue); ?></span>
+          <?php if(!empty($ceoBadgeLabel)): ?>
           <span class="ceo-message__badge-label"><?php echo nl2br(e($ceoBadgeLabel)); ?></span>
+          <?php endif; ?>
         </div>
+        <?php endif; ?>
       </div>
 
       <div>
+        <?php if(!empty($ceoEyebrow)): ?>
         <p class="ceo-message__eyebrow">
           <span class="ceo-message__eyebrow-dot"></span>
           <?php echo e($ceoEyebrow); ?>
 
           <span class="ceo-message__eyebrow-dot"></span>
         </p>
+        <?php endif; ?>
+
+        <?php if(!empty($ceoTitle)): ?>
         <h2 class="ceo-message__title"><?php echo e($ceoTitle); ?></h2>
+        <?php endif; ?>
+
+        <?php if(!empty($ceoMessage)): ?>
         <p class="ceo-message__desc">
           <?php echo e($ceoMessage); ?>
 
         </p>
+        <?php endif; ?>
 
-        <p class="ceo-message__focus-label"><?php echo e($ceoFocusLabel); ?></p>
-        <div class="ceo-message__checklist">
-          <?php $__currentLoopData = $ceoFocusItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <span class="ceo-message__check">
-            <span class="ceo-message__check-icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
+        <?php if(!empty($ceoFocusItems)): ?>
+          <?php if(!empty($ceoFocusLabel)): ?>
+          <p class="ceo-message__focus-label"><?php echo e($ceoFocusLabel); ?></p>
+          <?php endif; ?>
+          <div class="ceo-message__checklist">
+            <?php $__currentLoopData = $ceoFocusItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <span class="ceo-message__check">
+              <span class="ceo-message__check-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <?php echo e($item); ?>
+
             </span>
-            <?php echo e($item); ?>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </div>
+        <?php endif; ?>
 
-          </span>
-          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </div>
-
+        <?php if(!empty($ceoAwards)): ?>
         <div class="ceo-message__awards">
           <?php $__currentLoopData = $ceoAwards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $award): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <div class="ceo-message__award">
@@ -313,13 +332,20 @@ $ceoAwards = !empty($about['ceo_awards']) ? $about['ceo_awards'] : [
               </svg>
             </span>
             <div>
+              <?php if(!empty(trim($award['year'] ?? ''))): ?>
               <p class="ceo-message__award-year"><?php echo e($award['year']); ?></p>
+              <?php endif; ?>
+              <?php if(!empty(trim($award['org'] ?? ''))): ?>
               <p class="ceo-message__award-org"><?php echo e($award['org']); ?></p>
+              <?php endif; ?>
+              <?php if(!empty(trim($award['label'] ?? ''))): ?>
               <a href="<?php echo e(route('achievements')); ?>" class="ceo-message__award-link"><?php echo e($award['label']); ?></a>
+              <?php endif; ?>
             </div>
           </div>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
+        <?php endif; ?>
       </div>
     </div>
   </div>
@@ -327,17 +353,11 @@ $ceoAwards = !empty($about['ceo_awards']) ? $about['ceo_awards'] : [
 
 <!-- ===================== FAQ ===================== -->
 <?php
-$aboutFaqTitle = $aboutFaq['title'] ?: 'Frequently Asked Questions';
-$aboutFaqDesc = $aboutFaq['description'] ?: 'Answers to the questions our patients ask us most about visiting Medicare Lab Ltd..';
-$aboutFaqPhoto = $aboutFaq['image'] ?: asset('assets/img/faq.webp');
-$aboutFaqPhotoAlt = $aboutFaq['image_alt'] ?: 'Smiling doctor on a call, ready to answer your questions';
-$aboutFaqDefaults = [
-['question' => 'What insurance plans do you accept?', 'answer' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution'],
-['question' => 'Do I need a referral to see a specialist?', 'answer' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution'],
-['question' => 'What should I bring to my first visit?', 'answer' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution'],
-['question' => 'How can I access my medical records?', 'answer' => 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its. The point of using Lorem Ipsum is that it has a more-or-less normal distribution'],
-];
-$aboutFaqCards = (!empty($aboutFaq['items']) && $aboutFaq['items']->isNotEmpty()) ? $aboutFaq['items'] : collect($aboutFaqDefaults);
+$aboutFaqTitle = !empty(trim($aboutFaq['title'] ?? '')) ? $aboutFaq['title'] : 'Frequently Asked Questions';
+$aboutFaqDesc = !empty(trim($aboutFaq['description'] ?? '')) ? $aboutFaq['description'] : null;
+$aboutFaqPhoto = !empty($aboutFaq['image']) ? $aboutFaq['image'] : asset('assets/img/faq.webp');
+$aboutFaqPhotoAlt = !empty($aboutFaq['image_alt']) ? $aboutFaq['image_alt'] : $aboutFaqTitle;
+$aboutFaqCards = (!empty($aboutFaq['items']) && $aboutFaq['items']->isNotEmpty()) ? $aboutFaq['items'] : collect([]);
 ?>
 <section class="faq">
   <img src="<?php echo e(asset('assets/img/faq-bg.png')); ?>" alt="" class="faq__bg" aria-hidden="true" />
@@ -346,11 +366,14 @@ $aboutFaqCards = (!empty($aboutFaq['items']) && $aboutFaq['items']->isNotEmpty()
     <div class="faq__grid">
       <div class="faq__copy">
         <h2 class="faq__title"><?php echo e($aboutFaqTitle); ?></h2>
+        <?php if(!empty($aboutFaqDesc)): ?>
         <p class="faq__desc">
           <?php echo e($aboutFaqDesc); ?>
 
         </p>
+        <?php endif; ?>
 
+        <?php if($aboutFaqCards->isNotEmpty()): ?>
         <div class="faq__list">
           <?php $__currentLoopData = $aboutFaqCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $faqIndex => $faqCard): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <div class="faq-item <?php if($faqIndex === 0): ?> is-open <?php endif; ?>">
@@ -369,6 +392,7 @@ $aboutFaqCards = (!empty($aboutFaq['items']) && $aboutFaq['items']->isNotEmpty()
           </div>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
+        <?php endif; ?>
       </div>
 
       <div class="faq__media">

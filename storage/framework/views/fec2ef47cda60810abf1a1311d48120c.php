@@ -1,26 +1,25 @@
 <?php
 $ceoImage = !empty($about['ceo_image']) ? asset('storage/' . $about['ceo_image']) : asset('assets/img/about-image.webp');
-$ceoBadgeValue = $about['ceo_badge_value'] ?? '16+';
-$ceoBadgeLabel = $about['ceo_badge_label'] ?? "Years\nExperienced";
-$ceoEyebrow = $about['ceo_eyebrow'] ?? 'A Message From Our MD/CEO';
-$ceoTitle = $about['ceo_title'] ?? 'Dr. Natali Jackson';
-$ceoMessage = $about['ceo_message'] ?? "As CEO of Medicare Lab Ltd., I'm committed to building a hospital where compassionate care meets clinical excellence. Every decision we make, from staffing to technology, starts with what's best for the patients and families who trust us with their health.\n\nWhen we opened our doors over a decade ago, our promise was simple: treat every patient like family. That promise has guided every expansion, every new department, and every hire since — and it's why thousands of families continue to choose Medicare Lab Ltd. for their care today.\n\nI'm proud of what our doctors, nurses, and support staff accomplish every single day. Whether you're here for a routine check-up or a life-changing procedure, you have my personal commitment that you'll be treated with the dignity, honesty, and warmth every patient deserves.";
-$ceoFocusLabel = $about['ceo_focus_label'] ?? 'Leadership Focus';
-$ceoFocusItems = !empty($about['ceo_focus_items']) ? $about['ceo_focus_items'] : [
-'Patient-Centered Care', 'Clinical Innovation', 'Operational Excellence', 'Community Outreach', 'Quality Assurance', 'Strategic Growth',
-];
-$ceoAwards = !empty($about['ceo_awards']) ? $about['ceo_awards'] : [
-['year' => 'Medicare Lab Ltd. 2024', 'org' => 'Quality and Accreditation Institute', 'label' => 'Healthcare Leadership Award'],
-['year' => 'Medicare Lab Ltd. 2023', 'org' => 'National Hospital Federation', 'label' => 'Excellence in Patient Care'],
-];
-$seoTitle = $about['about_seo_title'] ?? ($ceoTitle . ' | Message From MD/CEO | ' . config('app.name'));
-$seoDesc = \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMessage), 160);
+$ceoBadgeValue = !empty(trim($about['ceo_badge_value'] ?? '')) ? $about['ceo_badge_value'] : null;
+$ceoBadgeLabel = !empty(trim($about['ceo_badge_label'] ?? '')) ? $about['ceo_badge_label'] : null;
+$ceoEyebrow = !empty(trim($about['ceo_eyebrow'] ?? '')) ? $about['ceo_eyebrow'] : null;
+$ceoTitle = !empty(trim($about['ceo_title'] ?? '')) ? $about['ceo_title'] : null;
+$ceoMessage = !empty(trim($about['ceo_message'] ?? '')) ? $about['ceo_message'] : null;
+$ceoFocusLabel = !empty(trim($about['ceo_focus_label'] ?? '')) ? $about['ceo_focus_label'] : null;
+$ceoFocusItems = !empty($about['ceo_focus_items']) ? array_filter($about['ceo_focus_items'], fn($item) => !empty(trim((string)$item))) : [];
+$ceoAwards = !empty($about['ceo_awards']) ? array_filter($about['ceo_awards'], function($award) {
+    return !empty(trim($award['year'] ?? '')) || !empty(trim($award['org'] ?? '')) || !empty(trim($award['label'] ?? ''));
+}) : [];
+$seoTitle = $about['about_seo_title'] ?? (($ceoTitle ? $ceoTitle . ' | ' : '') . 'Message From MD/CEO | ' . config('app.name'));
+$seoDesc = $ceoMessage ? \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMessage), 160) : '';
 ?>
 
 <?php $__env->startSection('title', $seoTitle); ?>
+<?php if($seoDesc): ?>
 <?php $__env->startSection('meta_description', $seoDesc); ?>
-<?php $__env->startSection('og_title', $seoTitle); ?>
 <?php $__env->startSection('og_description', $seoDesc); ?>
+<?php endif; ?>
+<?php $__env->startSection('og_title', $seoTitle); ?>
 
 <?php $__env->startSection('content'); ?>
 
@@ -33,30 +32,26 @@ $seoDesc = \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMes
 
   <span class="page-header__badge">24/7 Emergency Service</span>
 
-  <div class="page-header__social">
-    <a href="#" class="page-header__social-link" aria-label="Facebook">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.35C16.3 4.24 15.4 4.15 14.3 4.15c-2.3 0-3.9 1.4-3.9 4v2.35H8v3h2.4V21h3.1z" />
-      </svg>
-    </a>
-    <a href="#" class="page-header__social-link" aria-label="Twitter">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1c.5 1.7 2.1 2.9 4 2.9A8.2 8.2 0 0 1 2 18.6a11.6 11.6 0 0 0 6.3 1.8c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.1z" />
-      </svg>
-    </a>
-    <a href="#" class="page-header__social-link" aria-label="LinkedIn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M6.9 8.4H3.5V20h3.4V8.4zM5.2 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM20.5 20h-3.4v-6.1c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.9 1.3-.1.2-.1.6-.1.9V20H9.9s.1-10.6 0-11.6h3.4v1.6c.5-.7 1.3-1.8 3.1-1.8 2.3 0 4 1.5 4 4.6V20z" />
-      </svg>
-    </a>
-    <a href="#" class="page-header__social-link" aria-label="Instagram">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-        <circle cx="12" cy="12" r="4" />
-        <circle cx="17.2" cy="6.8" r="1" />
-      </svg>
-    </a>
-  </div>
+  <?php if (isset($component)) { $__componentOriginalf541cdfc2c462e982d1ee013ac35e2c5 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalf541cdfc2c462e982d1ee013ac35e2c5 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.page-header-social','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('frontend.page-header-social'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalf541cdfc2c462e982d1ee013ac35e2c5)): ?>
+<?php $attributes = $__attributesOriginalf541cdfc2c462e982d1ee013ac35e2c5; ?>
+<?php unset($__attributesOriginalf541cdfc2c462e982d1ee013ac35e2c5); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalf541cdfc2c462e982d1ee013ac35e2c5)): ?>
+<?php $component = $__componentOriginalf541cdfc2c462e982d1ee013ac35e2c5; ?>
+<?php unset($__componentOriginalf541cdfc2c462e982d1ee013ac35e2c5); ?>
+<?php endif; ?>
 
   <div class="page-header__inner">
     <h1 class="page-header__title">Message From MD/CEO</h1>
@@ -86,43 +81,60 @@ $seoDesc = \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMes
   <div class="container mx-auto">
     <div class="ceo-message__grid">
       <div class="ceo-message__media">
-        <img src="<?php echo e($ceoImage); ?>" alt="<?php echo e($ceoTitle); ?>" class="ceo-message__img" />
+        <img src="<?php echo e($ceoImage); ?>" alt="<?php echo e($ceoTitle ?? 'CEO'); ?>" class="ceo-message__img" />
+        <?php if(!empty($ceoBadgeValue)): ?>
         <div class="ceo-message__badge">
           <span class="ceo-message__badge-value"><?php echo e($ceoBadgeValue); ?></span>
+          <?php if(!empty($ceoBadgeLabel)): ?>
           <span class="ceo-message__badge-label"><?php echo nl2br(e($ceoBadgeLabel)); ?></span>
+          <?php endif; ?>
         </div>
+        <?php endif; ?>
       </div>
 
       <div>
+        <?php if(!empty($ceoEyebrow)): ?>
         <p class="ceo-message__eyebrow">
           <span class="ceo-message__eyebrow-dot"></span>
           <?php echo e($ceoEyebrow); ?>
 
           <span class="ceo-message__eyebrow-dot"></span>
         </p>
+        <?php endif; ?>
+
+        <?php if(!empty($ceoTitle)): ?>
         <h2 class="ceo-message__title"><?php echo e($ceoTitle); ?></h2>
-        <?php $__currentLoopData = preg_split('/\n{2,}/', $ceoMessage); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $paragraph): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <p class="ceo-message__desc">
-          <?php echo e(trim($paragraph)); ?>
+        <?php endif; ?>
 
-        </p>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <?php if(!empty($ceoMessage)): ?>
+          <?php $__currentLoopData = preg_split('/\n{2,}/', $ceoMessage); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $paragraph): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <p class="ceo-message__desc">
+            <?php echo e(trim($paragraph)); ?>
 
-        <p class="ceo-message__focus-label"><?php echo e($ceoFocusLabel); ?></p>
-        <div class="ceo-message__checklist">
-          <?php $__currentLoopData = $ceoFocusItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <span class="ceo-message__check">
-            <span class="ceo-message__check-icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </span>
-            <?php echo e($item); ?>
-
-          </span>
+          </p>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </div>
+        <?php endif; ?>
 
+        <?php if(!empty($ceoFocusItems)): ?>
+          <?php if(!empty($ceoFocusLabel)): ?>
+          <p class="ceo-message__focus-label"><?php echo e($ceoFocusLabel); ?></p>
+          <?php endif; ?>
+          <div class="ceo-message__checklist">
+            <?php $__currentLoopData = $ceoFocusItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <span class="ceo-message__check">
+              <span class="ceo-message__check-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <?php echo e($item); ?>
+
+            </span>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </div>
+        <?php endif; ?>
+
+        <?php if(!empty($ceoAwards)): ?>
         <div class="ceo-message__awards">
           <?php $__currentLoopData = $ceoAwards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $award): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <div class="ceo-message__award">
@@ -132,13 +144,20 @@ $seoDesc = \Illuminate\Support\Str::limit(str_replace(["\n", "\r"], ' ', $ceoMes
               </svg>
             </span>
             <div>
+              <?php if(!empty(trim($award['year'] ?? ''))): ?>
               <p class="ceo-message__award-year"><?php echo e($award['year']); ?></p>
+              <?php endif; ?>
+              <?php if(!empty(trim($award['org'] ?? ''))): ?>
               <p class="ceo-message__award-org"><?php echo e($award['org']); ?></p>
+              <?php endif; ?>
+              <?php if(!empty(trim($award['label'] ?? ''))): ?>
               <a href="<?php echo e(route('achievements')); ?>" class="ceo-message__award-link"><?php echo e($award['label']); ?></a>
+              <?php endif; ?>
             </div>
           </div>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
+        <?php endif; ?>
       </div>
     </div>
   </div>

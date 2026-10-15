@@ -154,12 +154,67 @@ class AboutSettingController extends Controller
             );
         }
 
-        // Encode array fields as JSON
-        foreach ($this->jsonKeys as $key) {
-            if (isset($data[$key]) && is_array($data[$key])) {
-                $data[$key] = json_encode(array_values($data[$key]));
+        // Explicitly handle ceo_awards so removing them or having empty fields works correctly
+        $rawAwards = $request->input('ceo_awards', []);
+        $filteredAwards = [];
+        if (is_array($rawAwards)) {
+            foreach ($rawAwards as $award) {
+                $year = trim($award['year'] ?? '');
+                $org = trim($award['org'] ?? '');
+                $label = $award['label'] ?? [];
+                $hasLabel = false;
+                if (is_array($label)) {
+                    foreach ($label as $txt) {
+                        if (!empty(trim((string)$txt))) {
+                            $hasLabel = true;
+                            break;
+                        }
+                    }
+                } elseif (!empty(trim((string)$label))) {
+                    $hasLabel = true;
+                }
+
+                if ($year !== '' || $org !== '' || $hasLabel) {
+                    $filteredAwards[] = [
+                        'year'  => $year ?: null,
+                        'org'   => $org ?: null,
+                        'label' => is_array($label) ? $label : ['en' => $label, 'bn' => ''],
+                    ];
+                }
             }
         }
+        $data['ceo_awards'] = json_encode(array_values($filteredAwards));
+
+        // Explicitly handle ceo_focus_items so removing all focus items works correctly
+        $rawFocus = $request->input('ceo_focus_items', []);
+        $filteredFocus = [];
+        if (is_array($rawFocus)) {
+            foreach ($rawFocus as $item) {
+                if (is_array($item)) {
+                    $hasText = false;
+                    foreach ($item as $txt) {
+                        if (!empty(trim((string)$txt))) {
+                            $hasText = true;
+                            break;
+                        }
+                    }
+                    if ($hasText) {
+                        $filteredFocus[] = $item;
+                    }
+                } elseif (!empty(trim((string)$item))) {
+                    $filteredFocus[] = $item;
+                }
+            }
+        }
+        $data['ceo_focus_items'] = json_encode(array_values($filteredFocus));
+
+        // Explicitly handle about_mv_cards
+        $rawMvCards = $request->input('about_mv_cards', []);
+        $data['about_mv_cards'] = json_encode(is_array($rawMvCards) ? array_values($rawMvCards) : []);
+
+        // Always handle ceo_badge_value (null if empty or whitespace)
+        $badgeVal = $request->input('ceo_badge_value');
+        $data['ceo_badge_value'] = (is_string($badgeVal) && trim($badgeVal) !== '') ? trim($badgeVal) : null;
 
         GlobalSetting::setMany($data);
 

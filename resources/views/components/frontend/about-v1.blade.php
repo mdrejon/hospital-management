@@ -5,25 +5,15 @@
 
 @php
 $aboutPhoto = !empty($about['about_photo']) ? asset('storage/' . $about['about_photo']) : asset('assets/img/about-image.webp');
-$aboutHoursTitle = $about['about_hours_title'] ?? 'Open Hours';
-$aboutHours = !empty($about['about_hours']) ? $about['about_hours'] : [
-    ['day' => 'Monday', 'time' => '09:30 - 07:30'],
-    ['day' => 'Tuesday', 'time' => '09:30 - 07:30'],
-    ['day' => 'Wednesday', 'time' => '09:30 - 07:30'],
-    ['day' => 'Thursday', 'time' => '09:30 - 07:30'],
-    ['day' => 'Friday', 'time' => '09:30 - 07:30'],
-    ['day' => 'Saturday', 'time' => '09:30 - 07:30'],
-];
-$aboutTitle = $about['about_title'] ?? __('frontend.home.about_title');
-$aboutDesc = $about['about_desc'] ?? __('frontend.home.about_desc');
-$aboutFeatures = !empty($about['about_features']) ? $about['about_features'] : [
-    'Comprehensive Specialties', 'Emergency Services', 'Intensive Care Units (ICUs)', 'Telemedicine Facilities', 'Multidisciplinary Team',
-    'Research and Development', 'Advanced Imaging Services', 'Rehabilitation Services', 'Patient-Centric Approach', 'Health Information Technology',
-];
-$aboutFeatureCols = collect($aboutFeatures)->chunk((int) ceil(count($aboutFeatures) / 2));
-$aboutBtnText = $about['about_more_btn_text'] ?? __('frontend.common.read_more');
+$aboutHoursTitle = !empty(trim($about['about_hours_title'] ?? '')) ? $about['about_hours_title'] : null;
+$aboutHours = !empty($about['about_hours']) ? $about['about_hours'] : [];
+$aboutTitle = !empty(trim($about['about_title'] ?? '')) ? $about['about_title'] : null;
+$aboutDesc = !empty(trim($about['about_desc'] ?? '')) ? $about['about_desc'] : null;
+$aboutFeatures = !empty($about['about_features']) ? $about['about_features'] : [];
+$aboutFeatureCols = !empty($aboutFeatures) ? collect($aboutFeatures)->chunk((int) ceil(count($aboutFeatures) / 2)) : collect([]);
+$aboutBtnText = !empty(trim($about['about_more_btn_text'] ?? '')) ? $about['about_more_btn_text'] : null;
 $aboutBtnUrl = ($about['about_more_btn_url'] ?? null) ?: route('about');
-$aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
+$aboutPhone = !empty(trim($headerSettings['header_phone'] ?? '')) ? $headerSettings['header_phone'] : null;
 @endphp
 
 <section class="about bg-blue-50/40 relative overflow-hidden">
@@ -44,8 +34,9 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
     <div class="about__grid">
       <div class="about__media">
         <div class="about__photo-wrap">
-          <img src="{{ $aboutPhoto }}" alt="Smiling male doctor with arms crossed" class="about__photo" />
+          <img src="{{ $aboutPhoto }}" alt="{{ $aboutTitle ?? 'About Us' }}" class="about__photo" />
 
+          @if(!empty($aboutHours))
           <div class="about__hours-card">
             <span class="about__hours-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -53,7 +44,9 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
                 <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
               </svg>
             </span>
+            @if(!empty($aboutHoursTitle))
             <h3 class="about__hours-title">{{ $aboutHoursTitle }}</h3>
+            @endif
             <div class="about__hours-list">
               @foreach($aboutHours as $row)
               <div class="about__hours-row">
@@ -63,15 +56,21 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
               @endforeach
             </div>
           </div>
+          @endif
         </div>
       </div>
 
       <div class="about__content">
+        @if(!empty($aboutTitle))
         <h2 class="about__title">{{ $aboutTitle }}</h2>
+        @endif
+        @if(!empty($aboutDesc))
         <p class="about__desc">
           {{ $aboutDesc }}
         </p>
+        @endif
 
+        @if(!empty($aboutFeatures))
         <div class="about__features">
           @foreach($aboutFeatureCols as $col)
           <div>
@@ -88,8 +87,11 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
           </div>
           @endforeach
         </div>
+        @endif
 
+        @if(!empty($aboutBtnText) || !empty($aboutPhone))
         <div class="about__cta-row">
+          @if(!empty($aboutBtnText))
           <a href="{{ $aboutBtnUrl }}" class="about__btn">
             {{ $aboutBtnText }}
             <span class="about__btn-icon">
@@ -98,8 +100,10 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
               </svg>
             </span>
           </a>
+          @endif
 
-          <a href="tel:{{ $aboutPhone }}" class="about__contact">
+          @if(!empty($aboutPhone))
+          <a href="tel:{{ preg_replace('/[^0-9+]/', '', $aboutPhone) }}" class="about__contact">
             <span class="about__contact-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.6" />
@@ -110,7 +114,9 @@ $aboutPhone = $headerSettings['header_phone'] ?? '1 123 456 7890';
               <span class="about__contact-value">{{ $aboutPhone }}</span>
             </span>
           </a>
+          @endif
         </div>
+        @endif
       </div>
     </div>
   </div>

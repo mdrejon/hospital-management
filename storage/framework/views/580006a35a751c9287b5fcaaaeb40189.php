@@ -1,17 +1,17 @@
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag; ?>
 <?php foreach($attributes->onlyProps([
-    'about' => [],
-    'headerSettings' => [],
+'about' => [],
+'headerSettings' => [],
 ]) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 } ?>
 <?php $attributes = $attributes->exceptProps([
-    'about' => [],
-    'headerSettings' => [],
+'about' => [],
+'headerSettings' => [],
 ]); ?>
 <?php foreach (array_filter(([
-    'about' => [],
-    'headerSettings' => [],
+'about' => [],
+'headerSettings' => [],
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 } ?>
@@ -22,39 +22,40 @@
 <?php unset($__defined_vars); ?>
 
 <?php
-$aboutSurgeryPhoto = !empty($about['about_surgery_photo']) 
-    ? asset('storage/' . $about['about_surgery_photo']) 
-    : asset('assets/img/about-surgery.jpg');
+$aboutSurgeryPhoto = !empty($about['about_surgery_photo'])
+? asset('storage/' . $about['about_surgery_photo'])
+: asset('assets/img/about-surgery.jpg');
 
-$aboutDoctorPhoto = !empty($about['about_doctor_photo']) 
-    ? asset('storage/' . $about['about_doctor_photo']) 
-    : (!empty($about['about_photo']) 
-        ? asset('storage/' . $about['about_photo']) 
-        : asset('assets/img/about-doctor.jpg'));
+$aboutDoctorPhoto = !empty($about['about_doctor_photo'])
+? asset('storage/' . $about['about_doctor_photo'])
+: (!empty($about['about_photo'])
+? asset('storage/' . $about['about_photo'])
+: asset('assets/img/about-doctor.jpg'));
 
 $aboutSiteName = $headerSettings['header_site_name'] ?? 'Medicare Lab';
-$aboutEyebrow = $about['about_mv_title'] ?? ('About ' . strtolower(str_replace(['Ltd.', 'Diagnostic Center', 'Hospital'], '', $aboutSiteName)));
-$aboutTitle = $about['about_title'] ?? 'Committed to Your Health and Well-Being';
+$aboutEyebrow = !empty(trim($about['about_mv_title'] ?? '')) ? $about['about_mv_title'] : null;
+$aboutTitle = !empty(trim($about['about_title'] ?? '')) ? $about['about_title'] : null;
 
 // Tab data loaded dynamically from backend (about_mv_cards)
 $mvCards = !empty($about['about_mv_cards']) ? $about['about_mv_cards'] : [
-    [
-        'title' => 'Our Mission',
-        'description' => 'We are dedicated to providing exceptional healthcare services with compassion, innovation, and excellence. Our mission is to enhance the well-being of our patients through comprehensive medical care, cutting-edge technology.'
-    ],
-    [
-        'title' => 'Our Vision',
-        'description' => 'To build a modern hospital, diagnostic center and an international-standard nursing college on our own land — creating a healthier, disease-free next generation.'
-    ],
-    [
-        'title' => 'Our Goals',
-        'description' => 'To ensure modern, quality healthcare for all patients with complete integrity and dedication — through 24-hour emergency, specialized diagnostics and multidisciplinary expert medical care.'
-    ],
+[
+'title' => 'Our Mission',
+'description' => 'We are dedicated to providing exceptional healthcare services with compassion, innovation, and excellence. Our mission is to enhance the well-being of our patients through comprehensive medical care, cutting-edge technology.'
+],
+[
+'title' => 'Our Vision',
+'description' => 'To build a modern hospital, diagnostic center and an international-standard nursing college on our own land — creating a healthier, disease-free next generation.'
+],
+[
+'title' => 'Our Goals',
+'description' => 'To ensure modern, quality healthcare for all patients with complete integrity and dedication — through 24-hour emergency, specialized diagnostics and multidisciplinary expert medical care.'
+],
 ];
 
 $aboutBtnText = $about['about_more_btn_text'] ?? __('frontend.common.read_more');
 $aboutBtnUrl = ($about['about_more_btn_url'] ?? null) ?: route('about');
-$aboutExpYears = $about['about_exp_years'] ?? '25+';
+$aboutExpYears = !empty(trim($about['about_exp_years'] ?? '')) ? $about['about_exp_years'] : null;
+$aboutExpLabel = !empty(trim($about['about_exp_label'] ?? '')) ? $about['about_exp_label'] : null;
 ?>
 
 <section class="about-v2 py-section bg-white relative overflow-hidden" data-about-v2>
@@ -64,16 +65,16 @@ $aboutExpYears = $about['about_exp_years'] ?? '25+';
       <!-- Left Column: Media & Badges -->
       <div class="lg:col-span-6 relative">
         <div class="relative max-w-lg mx-auto lg:max-w-none pt-6 pl-4 sm:pt-8 sm:pl-6 pb-12 pr-6 sm:pb-16 sm:pr-8">
-          
+
           <!-- Main Surgery Operation Image -->
           <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-gray-100 border border-gray-100">
-            <img 
-              src="<?php echo e($aboutSurgeryPhoto); ?>" 
-              alt="<?php echo e($aboutTitle); ?>" 
-              class="w-full aspect-[4/3] object-cover" 
-            />
+            <img
+              src="<?php echo e($aboutSurgeryPhoto); ?>"
+              alt="<?php echo e($aboutTitle ?? 'About Us'); ?>"
+              class="w-full aspect-[4/3] object-cover" />
           </div>
 
+          <?php if(!empty($aboutExpYears)): ?>
           <!-- Top-Left Floating Experience Badge -->
           <div class="absolute top-0 left-0 z-20 bg-[#3b1263] text-white p-5 sm:p-6 rounded-2xl shadow-2xl flex flex-col justify-between w-44 sm:w-52">
             <div class="flex items-center justify-between mb-2">
@@ -85,16 +86,18 @@ $aboutExpYears = $about['about_exp_years'] ?? '25+';
                 </svg>
               </span>
             </div>
-            <span class="text-small font-semibold text-white/90 leading-tight">Years Of Experience</span>
+            <?php if(!empty($aboutExpLabel)): ?>
+            <span class="text-small font-semibold text-white/90 leading-tight"><?php echo e($aboutExpLabel); ?></span>
+            <?php endif; ?>
           </div>
+          <?php endif; ?>
 
           <!-- Bottom-Right Overlapping Doctor Photo -->
           <div class="absolute -bottom-4 -right-2 sm:-bottom-6 sm:-right-4 z-20 w-44 sm:w-56 md:w-60 rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-white">
-            <img 
-              src="<?php echo e($aboutDoctorPhoto); ?>" 
-              alt="<?php echo e($aboutTitle); ?>" 
-              class="w-full aspect-[3/4] object-cover" 
-            />
+            <img
+              src="<?php echo e($aboutDoctorPhoto); ?>"
+              alt="<?php echo e($aboutTitle ?? 'About Us'); ?>"
+              class="w-full aspect-[3/4] object-cover" />
           </div>
 
         </div>
@@ -102,27 +105,31 @@ $aboutExpYears = $about['about_exp_years'] ?? '25+';
 
       <!-- Right Column: Content & Tabs -->
       <div class="lg:col-span-6 flex flex-col">
-        
+
+        <?php if(!empty($aboutEyebrow)): ?>
         <!-- Eyebrow -->
         <span class="text-eyebrow font-bold tracking-wider text-gray-500 mb-2">
           <?php echo e($aboutEyebrow); ?>
 
         </span>
+        <?php endif; ?>
 
+        <?php if(!empty($aboutTitle)): ?>
         <!-- Main Title -->
         <h2 class="text-h2 font-extrabold text-navy mb-6">
           <?php echo e($aboutTitle); ?>
 
         </h2>
+        <?php endif; ?>
 
+        <?php if(!empty($mvCards)): ?>
         <!-- Tab Navigation (Backend-Driven) -->
         <div class="flex items-center gap-4 sm:gap-8 border-b border-gray-200 mb-6 overflow-x-auto no-scrollbar" data-about-tab-nav>
           <?php $__currentLoopData = $mvCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $idx => $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="about-tab-btn flex items-center gap-2 pb-3 font-semibold text-btn-lg border-b-2 whitespace-nowrap <?php echo e($loop->first ? 'border-[#3b1263] text-[#3b1263] font-bold' : 'border-transparent text-gray-500 hover:text-navy'); ?> transition-colors"
-            data-tab-target="tab-<?php echo e($idx); ?>"
-          >
+            data-tab-target="tab-<?php echo e($idx); ?>">
             <?php if($idx === 0): ?>
             <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
@@ -147,23 +154,22 @@ $aboutExpYears = $about['about_exp_years'] ?? '25+';
         <!-- Tab Contents (Backend-Driven) -->
         <div class="mb-8 min-h-[90px]" data-about-tab-content>
           <?php $__currentLoopData = $mvCards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $idx => $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <div 
-            class="about-tab-pane <?php echo e($loop->first ? 'block' : 'hidden'); ?> text-gray-600 text-body leading-relaxed" 
-            data-tab-pane="tab-<?php echo e($idx); ?>"
-          >
+          <div
+            class="about-tab-pane <?php echo e($loop->first ? 'block' : 'hidden'); ?> text-gray-600 text-body leading-relaxed"
+            data-tab-pane="tab-<?php echo e($idx); ?>">
             <?php echo e($card['description']); ?>
 
           </div>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
+        <?php endif; ?>
 
         <!-- Read More CTA Button (Backend-Driven) -->
         <?php if(!empty($aboutBtnText)): ?>
         <div class="pt-2">
-          <a 
-            href="<?php echo e($aboutBtnUrl); ?>" 
-            class="inline-flex items-center gap-2.5 bg-[#3b1263] hover:bg-[#2a0c49] text-white font-semibold text-btn px-8 py-3.5 rounded-full shadow-lg shadow-[#3b1263]/20 transition-all duration-200 group"
-          >
+          <a
+            href="<?php echo e($aboutBtnUrl); ?>"
+            class="inline-flex items-center gap-2.5 bg-[#3b1263] hover:bg-[#2a0c49] text-white font-semibold text-btn px-8 py-3.5 rounded-full shadow-lg shadow-[#3b1263]/20 transition-all duration-200 group">
             <span><?php echo e($aboutBtnText); ?></span>
             <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <line x1="7" y1="17" x2="17" y2="7"></line>
@@ -180,37 +186,36 @@ $aboutExpYears = $about['about_exp_years'] ?? '25+';
 </section>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const container = document.querySelector('[data-about-v2]');
-  if (!container) return;
+  document.addEventListener('DOMContentLoaded', function() {
+    const container = document.querySelector('[data-about-v2]');
+    if (!container) return;
 
-  const tabs = container.querySelectorAll('.about-tab-btn');
-  const panes = container.querySelectorAll('.about-tab-pane');
+    const tabs = container.querySelectorAll('.about-tab-btn');
+    const panes = container.querySelectorAll('.about-tab-pane');
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = tab.getAttribute('data-tab-target');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.getAttribute('data-tab-target');
 
-      // Update tab styles
-      tabs.forEach(t => {
-        t.classList.remove('border-[#3b1263]', 'text-[#3b1263]', 'font-bold');
-        t.classList.add('border-transparent', 'text-gray-500', 'font-semibold');
-      });
-      tab.classList.remove('border-transparent', 'text-gray-500', 'font-semibold');
-      tab.classList.add('border-[#3b1263]', 'text-[#3b1263]', 'font-bold');
+        // Update tab styles
+        tabs.forEach(t => {
+          t.classList.remove('border-[#3b1263]', 'text-[#3b1263]', 'font-bold');
+          t.classList.add('border-transparent', 'text-gray-500', 'font-semibold');
+        });
+        tab.classList.remove('border-transparent', 'text-gray-500', 'font-semibold');
+        tab.classList.add('border-[#3b1263]', 'text-[#3b1263]', 'font-bold');
 
-      // Update panes
-      panes.forEach(pane => {
-        if (pane.getAttribute('data-tab-pane') === target) {
-          pane.classList.remove('hidden');
-          pane.classList.add('block');
-        } else {
-          pane.classList.remove('block');
-          pane.classList.add('hidden');
-        }
+        // Update panes
+        panes.forEach(pane => {
+          if (pane.getAttribute('data-tab-pane') === target) {
+            pane.classList.remove('hidden');
+            pane.classList.add('block');
+          } else {
+            pane.classList.remove('block');
+            pane.classList.add('hidden');
+          }
+        });
       });
     });
   });
-});
-</script>
-<?php /**PATH D:\laragon-new\laragon\www\hospital-management\resources\views/components/frontend/about-v2.blade.php ENDPATH**/ ?>
+</script><?php /**PATH D:\laragon-new\laragon\www\hospital-management\resources\views/components/frontend/about-v2.blade.php ENDPATH**/ ?>

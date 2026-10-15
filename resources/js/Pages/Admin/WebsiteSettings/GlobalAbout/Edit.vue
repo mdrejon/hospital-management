@@ -32,6 +32,19 @@
                         <InputError :message="form.errors[`about_page_desc.${activeLang}`]" />
                     </div>
 
+                    <div class="border-t pt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="label">Experience Badge Value <span class="text-xs text-gray-400">(Home page — e.g. 8+, 10+ — leave empty to hide badge)</span></label>
+                            <input v-model="form.about_exp_years" type="text" class="input" placeholder="8+" />
+                            <InputError :message="form.errors.about_exp_years" />
+                        </div>
+                        <div>
+                            <label class="label">Experience Badge Label <span class="text-xs text-gray-400">(Home page — e.g. Years Of Experience)</span></label>
+                            <input v-model="form.about_exp_label[activeLang]" type="text" class="input" placeholder="Years Of Experience" />
+                            <InputError :message="form.errors[`about_exp_label.${activeLang}`]" />
+                        </div>
+                    </div>
+
                     <div class="border-t pt-4 space-y-3">
                         <div class="flex items-center justify-between">
                             <label class="label mb-0">Opening Hours Card</label>
@@ -104,6 +117,8 @@ const form = useForm({
     about_title:         seed('about_title'),
     about_desc:           seed('about_desc'),
     about_page_desc:      seed('about_page_desc'),
+    about_exp_years:      s.about_exp_years ?? '',
+    about_exp_label:      seed('about_exp_label'),
     about_hours_title:    seed('about_hours_title'),
     about_hours:          Array.isArray(s.about_hours) ? s.about_hours.map(r => ({ day: { ...emptyTranslatable(languages.value), ...r.day }, time: { ...emptyTranslatable(languages.value), ...r.time } })) : [],
     about_features:       Array.isArray(s.about_features) ? s.about_features.map(f => ({ ...emptyTranslatable(languages.value), ...f })) : [],

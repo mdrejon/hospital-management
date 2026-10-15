@@ -477,16 +477,25 @@ const form = useForm({
     ceo_message: seed("ceo_message"),
     ceo_focus_label: seed("ceo_focus_label"),
     ceo_focus_items: Array.isArray(s.ceo_focus_items)
-        ? s.ceo_focus_items.map((f) => ({
-              ...emptyTranslatable(languages.value),
-              ...f,
-          }))
+        ? s.ceo_focus_items
+              .filter((f) => f && Object.values(f).some((v) => Boolean(v && String(v).trim())))
+              .map((f) => ({
+                  ...emptyTranslatable(languages.value),
+                  ...f,
+              }))
         : [],
     ceo_awards: Array.isArray(s.ceo_awards)
-        ? s.ceo_awards.map((a) => ({
-              ...a,
-              label: { ...emptyTranslatable(languages.value), ...a.label },
-          }))
+        ? s.ceo_awards
+              .filter((a) => {
+                  const hasYear = Boolean(a?.year && a.year.trim());
+                  const hasOrg = Boolean(a?.org && a.org.trim());
+                  const hasLabel = a?.label && Object.values(a.label).some((v) => Boolean(v && String(v).trim()));
+                  return hasYear || hasOrg || hasLabel;
+              })
+              .map((a) => ({
+                  ...a,
+                  label: { ...emptyTranslatable(languages.value), ...a.label },
+              }))
         : [],
 });
 
@@ -522,6 +531,17 @@ const { onMetaTitleInput, onMetaDescInput, onMetaKeywordsInput } =
     );
 
 function submit() {
+    form.ceo_awards = form.ceo_awards.filter((a) => {
+        const hasYear = Boolean(a?.year && a.year.trim());
+        const hasOrg = Boolean(a?.org && a.org.trim());
+        const hasLabel = a?.label && Object.values(a.label).some((v) => Boolean(v && String(v).trim()));
+        return hasYear || hasOrg || hasLabel;
+    });
+
+    form.ceo_focus_items = form.ceo_focus_items.filter((f) => {
+        return f && Object.values(f).some((v) => Boolean(v && String(v).trim()));
+    });
+
     form.post(route("admin.website-settings.about.update"), {
         forceFormData: true,
     });
