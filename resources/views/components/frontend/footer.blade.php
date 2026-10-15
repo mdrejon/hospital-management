@@ -121,6 +121,6 @@
 
 
     <div class="footer-bottom">
-      &copy; {{ date('Y') }} {{ $footerSettings['footer_copyright_text'] ?? 'Smart Freamework Theme. All Rights Reserved.' }}
+      &copy; {{ date('Y') }} {{ $footerSettings['footer_copyright_text'] ?? 'Smart Freamework Theme. All Rights Reserved.' }} | Design & Development by <a href="https://www.wexnix.com" target="_blank" class="">Wexnix Technologies Ltd.</a>
     </div>
   </footer>
